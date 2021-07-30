@@ -1,4 +1,5 @@
-# Sakuria General Purpose Bot
+# 🌸 Sakuria General Purpose Bot
+![image](https://user-images.githubusercontent.com/34042825/127648920-e2917b37-945b-49cd-b032-fb2b62b40ced.png)
 
 ## TODO
 
