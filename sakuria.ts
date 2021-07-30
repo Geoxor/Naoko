@@ -8,7 +8,7 @@ console.clear();
 // Cosmetic Imports
 import chalk from "chalk";
 import {version} from "./package.json";
-import quotes from "./assets/quotes.json";
+import logger from "./classes/Logger.sakuria";
 
 // Print logo
 console.log(chalk.hex('#FF33A7')(`              
@@ -26,12 +26,12 @@ console.log(chalk.hex('#FF33A7')(`
 `));
 
 // Say inspirational anime quote
-console.log(chalk.hex('#32343F')(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
+logger.sakuria.inspiration();
 
 // Main import
 import Sakuria from "./classes/Sakuria.sakuria";
 
 // Create sakuria
-console.log(chalk.hex('#FF90E0')(`  🌸   Creating new Sakuria instance...`));
+logger.sakuria.creating();
 new Sakuria();  
-console.log(chalk.hex('#FF90E0')(`  🌸   Sakuria created\n`));
+logger.sakuria.created();

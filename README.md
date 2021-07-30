@@ -3,7 +3,7 @@
 
 ## TODO
 
-- [ ] Logger Class
+- [x] Logger Class
 - [ ] Args Parser Class
 - [ ] Implement AniList using [AniAPI](https://github.com/AniAPI-Team/AniAPI) or [AniList/APIv2](https://github.com/AniList/ApiV2-GraphQL-Docs)
 - [ ] Implement MP4 to GIF Conversion using [FFmpeg](https://ffmpeg.org/) and [node-gify](https://github.com/tj/node-gify)

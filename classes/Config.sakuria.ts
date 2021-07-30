@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import fs from "fs";
+import logger from "./Logger.sakuria";
 
 interface IConfig {
   prefix: string;
@@ -8,17 +9,17 @@ interface IConfig {
 class Config {
   config!: IConfig;
   constructor() {
-    console.log(chalk.hex('#00B294')(`  🧪   Loading config...`));
+    logger.config.loading();
     try {
       this.config = require("../sakuria.json");
-      console.log(chalk.hex('#00B294')(`  🧪   Config loaded\n`));
+      logger.config.loaded();
     } catch (error) {
       this.createNewConfig();
     }
   }
 
   private async createNewConfig() {
-    console.log(chalk.hex('#00B294')(`  🧪   Creating new config...`));
+    logger.config.creating();
 
     this.config = {
       prefix: "~",
@@ -27,9 +28,9 @@ class Config {
     // save this.config as config.sakuria.json
     try {
       await fs.promises.writeFile("./sakuria.json", JSON.stringify(this.config, null, 2));
-      console.log(chalk.hex('#00B294')(`  🧪   Created new sakuria.json config\n`));
+      logger.config.created();
     } catch (error) {
-      console.log(chalk.hex('#F03A17')(`  👺   Failed to create sakuria.json config`));
+      logger.config.failedCreation();
       console.error(error);
     }
   }
