@@ -1,11 +1,11 @@
 import Discord, { Intents } from 'discord.js';
 import filterForSakuriaCommands from '../middleware/filterForSakuriaCommands.sakuria';
-import { Command, IMessage } from '../types';
+import { ICommand, IMessage } from '../types';
 import fs from 'fs';
 
 export default class Sakuria {
   private bot: Discord.Client;
-  private commands: Discord.Collection<string, Command>;
+  private commands: Discord.Collection<string, ICommand>;
 
   constructor(){
     this.bot = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
@@ -22,7 +22,7 @@ export default class Sakuria {
     const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'));
 
     for (const file of commandFiles) {
-      const command = require(`../commands/${file}`).command as Command;
+      const command = require(`../commands/${file}`).command as ICommand;
       this.commands.set(command.name, command);
     }
   }
@@ -33,11 +33,23 @@ export default class Sakuria {
 
   private onMessage(message: Discord.Message){
     filterForSakuriaCommands(message, async (message: IMessage) => {
+      // Fetch the command
       const command = this.commands.get(message.command);
-      console.log(message.command);
-      console.log(this.commands);
+
+      // If it doesn't exist we respond
       if (!command) return message.reply("that command doesn't exist");
-      command.execute(message);
+      
+      // Notify the user their shit's processing
+      const processingMessage = await message.channel.send("Processing...");
+
+      // Get the result to send from the command
+      const result = await command.execute(message);
+      
+      // Delete the processing message
+      processingMessage.delete();
+
+      // Send the result
+      message.reply(result);
     });
   }
 }
