@@ -3,7 +3,7 @@ import { Readable } from "stream";
 import { IMessage } from "../types";
 
 function randomDickSize(): number {
-  let x = Math.random();
+  const x = Math.random();
   return Math.min( ~~( 1/(1-x) + 30*x ), 1_000_000);
 }
 

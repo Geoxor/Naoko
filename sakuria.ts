@@ -2,14 +2,17 @@
 // https://deploy-preview-680--discordjs-guide.netlify.app/additional-info/changes-in-v13.html
 require("dotenv").config();
 
-// Imports
-import Sakuria from "./classes/Sakuria.sakuria";
-import chalk from "chalk";
-import {version} from "./package.json";
-import quotes from "./assets/quotes.json";
-
+// Clear the console
 console.clear();
-console.log(chalk.hex('#FF33A7')(`              
+
+// Cosmetic Imports
+import chalk from "chalk";
+import { version } from "./package.json";
+import logger from "./classes/Logger.sakuria";
+
+// Print logo
+console.log(
+  chalk.hex("#FF33A7")(`              
           -%#-          
          *@@@@*         
         -@@%%@@-        
@@ -20,13 +23,17 @@ console.log(chalk.hex('#FF33A7')(`
      :#@@%+-%+****:     ▐█ ▀. ▐█ ▀█ █▌▄▌▪█▪██▌▀▄ █·██ ▐█ ▀█ 
     -@@@@%@-@@%@@@@-    ▄▀▀▀█▄▄█▀▀█ ▐▀▀▄·█▌▐█▌▐▀▀▄ ▐█·▄█▀▀█ 
     #@@%%@@=+@@@%@@#    ▐█▄▪▐█▐█ ▪▐▌▐█.█▌▐█▄█▌▐█•█▌▐█▌▐█ ▪▐▌ 
-    #@@@@*:  :#@@@@#     ▀▀▀▀  ▀  ▀ ·▀  ▀ ▀▀▀ .▀  ▀▀▀▀ ▀  ▀  \n
-`));
+    #@@@@*:  :#@@@@#     ▀▀▀▀  ▀  ▀ ·▀  ▀ ▀▀▀ .▀  ▀▀▀▀ ▀  ▀ 
+`)
+);
 
 // Say inspirational anime quote
-console.log(chalk.hex('#32343F')(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
+logger.sakuria.inspiration();
+
+// Main import
+import Sakuria from "./classes/Sakuria.sakuria";
 
 // Create sakuria
-console.log(chalk.hex('#FF90E0')(`  🌸   Creating new Sakuria instance...`));
-new Sakuria();  
-console.log(chalk.hex('#FF90E0')(`  🌸   Sakuria created`));
+logger.sakuria.creating();
+new Sakuria();
+logger.sakuria.created();

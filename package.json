@@ -1,11 +1,12 @@
 {
   "name": "sakuria",
-  "version": "1.0.0",
-  "description": "sakuria general purpose discord bot",
+  "version": "1.0.6",
+  "description": "Sakuria general purpose discord bot",
   "main": "sakuria.ts",
   "scripts": {
     "test": "mocha ./**/*.ts",
     "dev": "nodemon sakuria.ts",
+    "setup": "npm i && npm run prettify && ts-node setup.sakuria.ts",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
   "repository": {
@@ -33,8 +34,10 @@
     "typescript": "^4.3.5"
   },
   "devDependencies": {
+    "@types/mv": "^2.1.2",
     "chai": "^4.3.4",
     "mocha": "^9.0.3",
+    "mv": "^2.1.1",
     "ts-node": "^10.1.0"
   }
 }

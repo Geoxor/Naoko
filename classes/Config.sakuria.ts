@@ -1,25 +1,36 @@
+import chalk from "chalk";
 import fs from "fs";
+import logger from "./Logger.sakuria";
 
 interface IConfig {
   prefix: string;
 }
 
 class Config {
-  config: IConfig;
+  config!: IConfig;
   constructor() {
-    this.config = require("../sakuria.json");
-    if (!this.config) this.createNewConfig();
+    logger.config.loading();
+    try {
+      this.config = require("../sakuria.json");
+      logger.config.loaded();
+    } catch (error) {
+      this.createNewConfig();
+    }
   }
 
   private async createNewConfig() {
+    logger.config.creating();
+
     this.config = {
-      prefix: "saku",
+      prefix: "~",
     };
 
     // save this.config as config.sakuria.json
     try {
-      await fs.promises.writeFile("./config.sakuria.json", JSON.stringify(this.config, null, 2));
+      await fs.promises.writeFile("./sakuria.json", JSON.stringify(this.config, null, 2));
+      logger.config.created();
     } catch (error) {
+      logger.config.failedCreation();
       console.error(error);
     }
   }
