@@ -6,4 +6,4 @@ require('dotenv').config();
 import Sakuria from "./classes/Sakuria.sakuria";
 
 // Create sakuria
-const sakuria = new Sakuria();
+new Sakuria();

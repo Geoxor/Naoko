@@ -1,15 +1,17 @@
 import Discord from 'discord.js';
-import config from "./Config.sakuria";
-
 import MessageParser from './MessageParser.sakuria';
+import filterForSakuriaCommands from '../middleware/filterForSakuriaCommands.sakuria';
+
+interface IMessage extends Discord.Message {
+  command: string;
+  args: string[];
+}
 
 export default class Sakuria {
   private bot: Discord.Client;
-  public prefix: string;
 
   constructor(){
     this.bot = new Discord.Client();
-    this.prefix = '';
     this.bot.on('ready', () => this.onReady);
     this.bot.on('message', message => this.onMessage(message));
     this.bot.login(process.env.DISCORD_TOKEN!);
@@ -20,9 +22,13 @@ export default class Sakuria {
   }
 
   private onMessage(message: Discord.Message){
-    if (message.content.startsWith(config.prefix)) {
+    filterForSakuriaCommands(message, () => {
       const { command, args } = new MessageParser(message.content);
-      console.log(command, args);
-    }
+      (message as IMessage).command = command;
+      (message as IMessage).args = args;
+      
+
+      console.log(message);
+    });
   }
 }
