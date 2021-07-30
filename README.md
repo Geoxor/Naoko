@@ -1,2 +1,2 @@
-# sakura
-Sakura general purpose anime bot
+# sakuria
+sakuria general purpose anime bot

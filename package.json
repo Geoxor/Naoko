@@ -1,0 +1,38 @@
+{
+  "name": "sakuria",
+  "version": "1.0.0",
+  "description": "sakuria general purpose discord bot",
+  "main": "sakuria.ts",
+  "scripts": {
+    "test": "mocha ./**/*.ts",
+    "dev": "nodemon sakuria.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Geoxor/sakuria.git"
+  },
+  "keywords": [
+    "bot",
+    "discord-bot",
+    "anime-bot",
+    "anime"
+  ],
+  "author": "Geoxor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Geoxor/sakuria/issues"
+  },
+  "homepage": "https://github.com/Geoxor/sakuria#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "chalk": "^4.1.1",
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
+    "typescript": "^4.3.5"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.0.3",
+    "ts-node": "^10.1.0"
+  }
+}
