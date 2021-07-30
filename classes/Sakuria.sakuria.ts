@@ -63,6 +63,7 @@ export default class Sakuria {
 
       // Get the result to send from the command
       const result = await command.execute(message);
+      console.log(`  🍵   Executed command ${chalk.hex('#D8E87A')(command.name)}`);
 
       // Delete the processing message if it exists
       // @ts-ignore

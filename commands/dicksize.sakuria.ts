@@ -1,8 +1,8 @@
 import { IMessage } from "../types";
 
 function randomDickSize(): number {
-  let x = Math.random();
-  return Math.min( ~~( 1/(1-x) + 30*x ), 900);
+  const x = Math.random();
+  return Math.min( ~~( 1 / (1 - x) + 30 * x ), 900);
 }
 
 export const command = {
