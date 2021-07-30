@@ -2,6 +2,15 @@ import fs from 'fs'
 import os from "os";
 import chalk from "chalk"
 
+// The reason for this file is that the documentation on
+// having custom icons in the .vscode folder is horrible and
+// i have no clue on how the syntax is supposed to be ../../../../../../
+// to have the fucking icons work properly so its easier to just
+// fuck with the user's settings and append the configs to it and move
+// the files to their global .vscode folder and have it work there
+// you also get a nice bonus that the icons will work on other
+// repos besides this one lol
+
 // TODO: update this to work for linux as well
 const iconPath = `C:/Users/${os.userInfo().username}/.vscode/extensions/icons/`;
 
