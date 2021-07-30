@@ -8,6 +8,7 @@ export interface IMessage extends Discord.Message {
 export interface ICommand {
   execute: Function;
   name: string;
+  requiresProcessing?: boolean,
 }
 
 export interface IAnime {

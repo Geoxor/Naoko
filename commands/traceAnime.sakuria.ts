@@ -9,7 +9,7 @@ async function traceAnime(url: string): Promise<IAnime> {
 
 export const command = {
   name: "trace",
-  usesArgs: true,
+  requiresProcessing: true,
   execute: async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
 
     // Check if they sent shit
