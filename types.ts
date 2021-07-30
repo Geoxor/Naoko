@@ -1,4 +1,4 @@
-import Discord from 'discord.js';
+import Discord from "discord.js";
 
 export interface IMessage extends Discord.Message {
   command: string;
@@ -8,7 +8,7 @@ export interface IMessage extends Discord.Message {
 export interface ICommand {
   execute: Function;
   name: string;
-  requiresProcessing?: boolean,
+  requiresProcessing?: boolean;
 }
 
 export interface IAnime {

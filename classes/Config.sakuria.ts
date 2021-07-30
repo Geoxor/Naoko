@@ -6,16 +6,16 @@ interface IConfig {
 
 class Config {
   config: IConfig;
-  constructor(){
+  constructor() {
     this.config = require("../sakuria.json");
     if (!this.config) this.createNewConfig();
   }
 
-  private async createNewConfig(){
+  private async createNewConfig() {
     this.config = {
-      prefix: "saku"
+      prefix: "saku",
     };
-    
+
     // save this.config as config.sakuria.json
     try {
       await fs.promises.writeFile("./config.sakuria.json", JSON.stringify(this.config, null, 2));
@@ -25,5 +25,5 @@ class Config {
   }
 }
 
-const {config} = new Config();
-export default config
+const { config } = new Config();
+export default config;

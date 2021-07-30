@@ -1,11 +1,9 @@
 import { IMessage } from "../types";
-import Discord from 'discord.js';
 
 export const command = {
   name: "ask",
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<string> => {
-
     // Reply if no args
     if (message.args.length === 0) return "Yeah you gotta ask a question you know? you can't just fuckin tell me the command and ask nothing idiot";
 
@@ -15,16 +13,16 @@ export const command = {
       "no idiot",
       "idfk cunt",
       "yes def uwuwuwuwu",
-      'possibly', 
-      "fUCk yes", 
+      "possibly",
+      "fUCk yes",
       "no :|",
-      "shut up", 
-      "absolutely <3 uwu", 
-      "you wish", 
-      "yyess!!!", 
+      "shut up",
+      "absolutely <3 uwu",
+      "you wish",
+      "yyess!!!",
       "YES!",
       "do I look like siri to you?",
-      "haha no <3", 
+      "haha no <3",
       "no",
       "yes why not",
       "I think so :00!!",
@@ -46,7 +44,7 @@ export const command = {
       "why u ask me this lol",
       "ask ur mom",
       "wtf bro idk",
-      "idk ask paimon", 
+      "idk ask paimon",
       "idk tbh",
       "yes but actually no",
       "da blyat",
@@ -112,9 +110,9 @@ export const command = {
       "You damn degenerate",
       "If you talk shit again, i am going to yeet you in the space",
       "get rekt",
-      "we do a little trolley"
+      "we do a little trolley",
     ];
 
     return answers[~~(Math.random() * answers.length - 1)];
-  }
-}
+  },
+};

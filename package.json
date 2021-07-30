@@ -5,7 +5,8 @@
   "main": "sakuria.ts",
   "scripts": {
     "test": "mocha ./**/*.ts",
-    "dev": "nodemon sakuria.ts"
+    "dev": "nodemon sakuria.ts",
+    "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
   "repository": {
     "type": "git",
