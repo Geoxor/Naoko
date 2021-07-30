@@ -40,14 +40,20 @@ export default class Sakuria {
       if (!command) return message.reply("that command doesn't exist");
       
       // Notify the user their shit's processing
-      if (command.requiresProcessing) var processingMessage = await message.channel.send("Processing...");
+      if (command.requiresProcessing) {
+        var processingMessage = await message.channel.send("Processing...");
+        message.channel.startTyping()
+      }
 
       // Get the result to send from the command
       const result = await command.execute(message);
       
       // Delete the processing message if it exists
       // @ts-ignore
-      if(processingMessage) processingMessage.delete();
+      if(processingMessage) {
+        processingMessage.delete()
+        message.channel.stopTyping()
+      };
 
       // Send the result
       message.reply(result);
