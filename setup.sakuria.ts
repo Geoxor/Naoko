@@ -23,7 +23,7 @@ if (!fs.existsSync(iconPath)) {
 // Install the SVG icons in there
 console.log("Installing custom workspace icons");
 fs.readdirSync("./assets/icons").forEach((file) => {
-  fs.copyFileSync("./assets/icons/" + file, iconPath + file.replace("icons", ""));
+  fs.copyFileSync("./assets/icons/" + file, iconPath + file);
 });
 console.log("Icons installed");
 
@@ -34,8 +34,9 @@ vscodeSettings["material-icon-theme.files.associations"]["sakuria.json"] = "../.
 vscodeSettings["material-icon-theme.files.associations"]["sakuria.ts"] = "../../icons/sakuria";
 vscodeSettings["material-icon-theme.files.associations"]["*.sakuria"] = "../../icons/sakuria";
 vscodeSettings["material-icon-theme.files.associations"]["*.sakuria.ts"] = "../../icons/sakuria";
+vscodeSettings["material-icon-theme.files.associations"]["Logger.sakuria.ts"] = "../../icons/sakuriaLogger";
 fs.writeFileSync(`C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`, JSON.stringify(vscodeSettings, null, 2));
 console.log("Settings updated");
 
 // Inform them to reload their window
-console.log(chalk.red("Please reload your VS Code window"));
+console.log(chalk.red("Please reload your VS Code window if your icons don't work"));
