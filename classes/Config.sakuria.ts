@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import fs from "fs";
 
 interface IConfig {
@@ -5,21 +6,30 @@ interface IConfig {
 }
 
 class Config {
-  config: IConfig;
+  config!: IConfig;
   constructor() {
-    this.config = require("../sakuria.json");
-    if (!this.config) this.createNewConfig();
+    console.log(chalk.hex('#00B294')(`  🧪   Loading config...`));
+    try {
+      this.config = require("../sakuria.json");
+      console.log(chalk.hex('#00B294')(`  🧪   Config loaded\n`));
+    } catch (error) {
+      this.createNewConfig();
+    }
   }
 
   private async createNewConfig() {
+    console.log(chalk.hex('#00B294')(`  🧪   Creating new config...`));
+
     this.config = {
-      prefix: "saku",
+      prefix: "~",
     };
 
     // save this.config as config.sakuria.json
     try {
-      await fs.promises.writeFile("./config.sakuria.json", JSON.stringify(this.config, null, 2));
+      await fs.promises.writeFile("./sakuria.json", JSON.stringify(this.config, null, 2));
+      console.log(chalk.hex('#00B294')(`  🧪   Created new sakuria.json config\n`));
     } catch (error) {
+      console.log(chalk.hex('#F03A17')(`  👺   Failed to create sakuria.json config`));
       console.error(error);
     }
   }

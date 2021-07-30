@@ -27,14 +27,14 @@ export default class Sakuria {
    * Loads all the command files from ./commands
    */
   private loadCommands() {
-    console.log(chalk.hex('#FDCE4C')(`  ⚡   Loading commands...`));
+    console.log(chalk.hex('#FF90E0')(`  🌸   Loading commands...`));
 
     const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".ts"));
 
     for (const file of commandFiles) {
       const command = require(`../commands/${file}`).command as ICommand;
       this.commands.set(command.name, command);
-      console.log(`  ⚡   ┖ Imported command ${chalk.hex('#FDCE4C')(command.name)}`);
+      console.log(`  🌸   ┖ Imported command ${chalk.hex('#FF90E0')(command.name)}`);
     }
   }
 
