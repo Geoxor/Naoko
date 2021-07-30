@@ -2,6 +2,7 @@ import Discord, { Intents } from "discord.js";
 import filterForSakuriaCommands from "../middleware/filterForSakuriaCommands.sakuria";
 import { ICommand, IMessage } from "../types";
 import fs from "fs";
+import chalk from "chalk";
 
 /**
  * Sakuria multi purpose Discord bot
@@ -26,11 +27,14 @@ export default class Sakuria {
    * Loads all the command files from ./commands
    */
   private loadCommands() {
+    console.log(chalk.hex('#FDCE4C')(`  ⚡   Loading commands...`));
+
     const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".ts"));
 
     for (const file of commandFiles) {
       const command = require(`../commands/${file}`).command as ICommand;
       this.commands.set(command.name, command);
+      console.log(`  ⚡   ┖ Imported command ${chalk.hex('#FDCE4C')(command.name)}`);
     }
   }
 
