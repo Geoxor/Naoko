@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha ./**/*.ts",
     "dev": "nodemon sakuria.ts",
-    "setup": "npm i && ts-node setup.sakuria.ts",
+    "setup": "npm i && npm run prettify && ts-node setup.sakuria.ts",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
   "repository": {
