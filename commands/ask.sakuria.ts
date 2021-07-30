@@ -4,7 +4,7 @@ import Discord from 'discord.js';
 export const command = {
   name: "ask",
   requiresProcessing: false,
-  execute: async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
+  execute: async (message: IMessage): Promise<string> => {
 
     // Reply if no args
     if (message.args.length === 0) return "Yeah you gotta ask a question you know? you can't just fuckin tell me the command and ask nothing idiot";
