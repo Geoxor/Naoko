@@ -7,7 +7,7 @@ interface IConfig {
 class Config {
   config: IConfig;
   constructor(){
-    this.config = require("../config.sakuria.json");
+    this.config = require("../sakuria.json");
     if (!this.config) this.createNewConfig();
   }
 
