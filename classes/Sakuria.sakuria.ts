@@ -3,7 +3,6 @@ import filterForSakuriaCommands from '../middleware/filterForSakuriaCommands.sak
 import { ICommand, IMessage } from '../types';
 import fs from 'fs';
 
-
 /**
  * Sakuria multi purpose Discord bot
  * @author Geoxor, Cimok
@@ -40,8 +39,6 @@ export default class Sakuria {
     console.log(`Logged in as ${this.bot.user!.tag}!`);
   }
 
-  
-  
   // onMessage handler
   private onMessage(message: Discord.Message){
     filterForSakuriaCommands(message, async (message: IMessage) => {

@@ -1,6 +1,5 @@
-import { IAnime, IMessage } from "../types";
+import { IMessage } from "../types";
 import Discord from 'discord.js';
-import axios from 'axios';
 
 export const command = {
   name: "ask",
