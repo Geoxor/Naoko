@@ -1,6 +1,6 @@
-import fs from 'fs'
+import fs from "fs";
 import os from "os";
-import chalk from "chalk"
+import chalk from "chalk";
 
 // The reason for this file is that the documentation on
 // having custom icons in the .vscode folder is horrible and
@@ -22,10 +22,10 @@ if (!fs.existsSync(iconPath)) {
 
 // Install the SVG icons in there
 console.log("Installing custom workspace icons");
-fs.readdirSync('./assets/icons').forEach(file => {
-  fs.copyFileSync('./assets/icons/' + file, iconPath + file.replace("icons", ""));
+fs.readdirSync("./assets/icons").forEach((file) => {
+  fs.copyFileSync("./assets/icons/" + file, iconPath + file.replace("icons", ""));
 });
-console.log("Icons installed"); 
+console.log("Icons installed");
 
 // Update the user's VS Code settings to use the new icons for the sakuria files
 const vscodeSettings = require(`C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`);
@@ -35,7 +35,7 @@ vscodeSettings["material-icon-theme.files.associations"]["sakuria.ts"] = "../../
 vscodeSettings["material-icon-theme.files.associations"]["*.sakuria"] = "../../icons/sakuria";
 vscodeSettings["material-icon-theme.files.associations"]["*.sakuria.ts"] = "../../icons/sakuria";
 fs.writeFileSync(`C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`, JSON.stringify(vscodeSettings, null, 2));
-console.log("Settings updated"); 
+console.log("Settings updated");
 
 // Inform them to reload their window
 console.log(chalk.red("Please reload your VS Code window"));

@@ -9,14 +9,14 @@ import chalk from "chalk";
 class Logger {
   protected emoji: string;
   protected color: string;
-  private errorColor: '#F03A17';
-  private errorEmoji: '👺';
+  private errorColor: "#F03A17";
+  private errorEmoji: "👺";
 
-  constructor(){
+  constructor() {
     this.emoji = "🌸";
     this.color = "#FF90E0";
-    this.errorEmoji = '👺';
-    this.errorColor = '#F03A17';
+    this.errorEmoji = "👺";
+    this.errorColor = "#F03A17";
   }
 
   /**
@@ -39,18 +39,18 @@ class Logger {
 }
 
 class SakuriaLogger extends Logger {
-  constructor(){
+  constructor() {
     super();
   }
 
   /**
    * @example example print '🌸 Creating new Sakuria instance...'
    */
-  public creating = () => this.print('Creating new Sakuria instance...');
+  public creating = () => this.print("Creating new Sakuria instance...");
   /**
    * @example example print '🌸 Loading commands...'
    */
-  public loadingCommands = () => this.print('Loading commands...');
+  public loadingCommands = () => this.print("Loading commands...");
   /**
    * @example example print '🌸 ┖ Imported command ask'
    */
@@ -58,7 +58,7 @@ class SakuriaLogger extends Logger {
   /**
    * @example example print '🌸 Sakuria created'
    */
-  public created = () => this.print('Sakuria created\n');
+  public created = () => this.print("Sakuria created\n");
 
   /**
    * Prints a random inspiraation quote
@@ -68,50 +68,49 @@ class SakuriaLogger extends Logger {
       when that time comes, let's not disappear like a firework 
       and continue to shine.. forever.`
    */
-  public inspiration = () => console.log(chalk.hex('#32343F')(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
-
+  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
 }
 
 class ConfigLogger extends Logger {
-  constructor(){
+  constructor() {
     super();
     this.emoji = "🧪";
     this.color = "#00B294";
   }
- 
+
   /**
    * @example example print '🧪 Loading config...'
    */
-  public loading = () => this.print('Loading config...');
-  
+  public loading = () => this.print("Loading config...");
+
   /**
    * @example example print '🧪 Config loaded'
    */
-  public loaded = () => this.print('Config loaded\n');
+  public loaded = () => this.print("Config loaded\n");
 
   /**
    * @example example print '🧪 Creating new config...'
    */
-  public creating = () => this.print('Creating new config...');
+  public creating = () => this.print("Creating new config...");
 
   /**
    * @example example print '🧪 Created new sakuria.json config'
    */
-  public created = () => this.print('Created new sakuria.json config\n');
+  public created = () => this.print("Created new sakuria.json config\n");
 
   /**
    * @example example print '👺 Failed to create sakuria.json config'
    */
-  public failedCreation = () => this.error('Failed to create sakuria.json config');
+  public failedCreation = () => this.error("Failed to create sakuria.json config");
 }
 
 class CommandLogger extends Logger {
-  constructor(){
+  constructor() {
     super();
     this.emoji = "🍵";
-    this.color = '#D8E87A';
+    this.color = "#D8E87A";
   }
- 
+
   /**
    * @example example print '🍵 Executed command trace'
    */
@@ -122,4 +121,4 @@ export default {
   config: new ConfigLogger(),
   sakuria: new SakuriaLogger(),
   command: new CommandLogger(),
-}
+};
