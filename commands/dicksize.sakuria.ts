@@ -1,5 +1,4 @@
 import { IMessage } from "../types";
-import Discord from 'discord.js';
 
 function randomDickSize(): number {
   return ~~(Math.random() * 31) + 1;
