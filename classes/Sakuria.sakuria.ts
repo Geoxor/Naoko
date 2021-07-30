@@ -3,6 +3,11 @@ import filterForSakuriaCommands from '../middleware/filterForSakuriaCommands.sak
 import { ICommand, IMessage } from '../types';
 import fs from 'fs';
 
+
+/**
+ * Sakuria multi purpose Discord bot
+ * @author Geoxor, Cimok
+ */
 export default class Sakuria {
   private bot: Discord.Client;
   private commands: Discord.Collection<string, ICommand>;
@@ -18,6 +23,9 @@ export default class Sakuria {
     this.bot.login(process.env.DISCORD_TOKEN!);
   }
 
+  /**
+   * Loads all the command files from ./commands
+   */
   private loadCommands(){
     const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.ts'));
 
@@ -27,17 +35,25 @@ export default class Sakuria {
     }
   }
 
+  // onMessage handler, doesn't work apparently
   private onReady(){
     console.log(`Logged in as ${this.bot.user!.tag}!`);
   }
 
+  
+  
+  // onMessage handler
   private onMessage(message: Discord.Message){
     filterForSakuriaCommands(message, async (message: IMessage) => {
+
+      // Slurs for idiots
+      const slurs = ["idiot", "baka", 'mennn', "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
+
       // Fetch the command
       const command = this.commands.get(message.command);
 
       // If it doesn't exist we respond
-      if (!command) return message.reply("that command doesn't exist");
+      if (!command) return message.reply(`that command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
       
       // Notify the user their shit's processing
       if (command.requiresProcessing) {
