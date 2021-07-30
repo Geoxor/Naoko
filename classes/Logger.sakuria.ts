@@ -62,7 +62,7 @@ class SakuriaLogger extends Logger {
 
   /**
    * Prints a random inspiraation quote
-   * @example print ` 
+   * @example example print ` 
       We are all like fireworks: we climb, we shine and always go 
       our separate ways and become further apart. But even 
       when that time comes, let's not disappear like a firework 
