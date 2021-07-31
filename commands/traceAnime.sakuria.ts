@@ -50,7 +50,7 @@ export const command = {
 
       // prepare an embed to send to the user
       const embed = new Discord.MessageEmbed()
-        .setColor("#ffffff")
+        .setColor("#FF90E0")
         .setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}\n${animeMeta.externalLinks[0].url}`)
         .setThumbnail(animeMeta.coverImage.large)
         .setDescription(animeMeta.description.replace(/<br>/g, ""))

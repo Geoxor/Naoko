@@ -15,7 +15,8 @@ export default function (message: Discord.Message, next: Function): void {
   if (!message.content.toLowerCase().startsWith(config.prefix)) return;
   if (message.author.bot) return;
   const { command, args } = new MessageParser(message.content);
-  (message as IMessage).command = command.toLowerCase();
-  (message as IMessage).args = args.map((arg) => arg.toLowerCase());
-  next(message as IMessage);
+  const updatedMessage = message as IMessage;
+  updatedMessage.command = command.toLowerCase();
+  updatedMessage.args = args.map((arg) => arg.toLowerCase());
+  next(updatedMessage);
 }
