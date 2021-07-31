@@ -20,7 +20,7 @@ export const command = {
         winner: <@${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}>
       `;
     }
-
+ 
     const dicksize = randomDickSize();
     return `8${"=".repeat(dicksize)}D ${dicksize}cm`;
   },
