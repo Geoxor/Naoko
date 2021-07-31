@@ -20,12 +20,20 @@ class Logger {
   }
 
   /**
+   * Returns a the current time for the log to prefix
+   * @author Geoxor
+   */
+  private time(){
+    return chalk.bold.bgWhite.black(`[${new Date().toLocaleTimeString()}]`);
+  }
+
+  /**
    * prints a log to the console with colors and an emoji
    * @param log the message to print
    * @author Geoxor
    */
   public print(log: string): void {
-    console.log(chalk.hex(this.color)(`  ${this.emoji}   ${log}`));
+    console.log(chalk.hex(this.color)(`  ${this.time()} ${this.emoji}  ${log}`));
   }
 
   /**
@@ -34,7 +42,7 @@ class Logger {
    * @author Geoxor
    */
   public error(log: string): void {
-    console.log(chalk.hex(this.errorColor)(`  ${this.errorEmoji}   ${log}`));
+    console.log(chalk.hex(this.errorColor)(`  ${this.time()} ${this.errorEmoji}  ${log}`));
   }
 }
 
@@ -107,12 +115,12 @@ class ConfigLogger extends Logger {
 class CommandLogger extends Logger {
   constructor() {
     super();
-    this.emoji = "🍵";
-    this.color = "#D8E87A";
+    this.emoji = "🔮";
+    this.color = "#886CE4";
   }
 
   /**
-   * @example example print '🍵 Executed command trace'
+   * @example example print '🔮 Executed command trace'
    */
   public executedCommand = (command: string) => this.print(`Executed command ${command}`);
 }

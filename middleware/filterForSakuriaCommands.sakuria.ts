@@ -13,7 +13,6 @@ import { IMessage } from "../types";
  */
 export default function (message: Discord.Message, next: Function): void {
   if (!message.content.toLowerCase().startsWith(config.prefix)) return;
-  if (message.channel.id !== "444479761880711188") return;
   if (message.author.bot) return;
   const { command, args } = new MessageParser(message.content);
   (message as IMessage).command = command.toLowerCase();
