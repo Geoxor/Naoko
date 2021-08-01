@@ -4,7 +4,7 @@
   "description": "Sakuria general purpose discord bot",
   "main": "sakuria.ts",
   "scripts": {
-    "test": "mocha ./**/*.ts",
+    "test": "ts-mocha -p ./tsconfig.json ./**/*.test.ts",
     "dev": "nodemon sakuria.ts",
     "setup": "npm i && npm run prettify && ts-node setup.sakuria.ts",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
@@ -31,9 +31,12 @@
     "chalk": "^4.1.1",
     "discord.js": "^13.0.0-dev.4886ae2.1627214570",
     "dotenv": "^10.0.0",
+    "ts-mocha": "^8.0.0",
     "typescript": "^4.3.5"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
     "@types/mv": "^2.1.2",
     "chai": "^4.3.4",
     "mocha": "^9.0.3",

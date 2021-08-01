@@ -1,37 +1,6 @@
-import { IAnilistAnime, IAnime, IMessage } from "../types";
+import { IMessage } from "../types";
 import Discord from "discord.js";
-import axios from "axios";
-
-async function traceAnime(url: string): Promise<IAnime> {
-  const { data } = await axios.get(`https://api.trace.moe/search?url=${encodeURIComponent(url)}`);
-  return data.result[0];
-}
-
-async function anilistQuery(animeID: number): Promise<IAnilistAnime> {
-  const variables = {
-    id: animeID,
-  }
-
-  const query = `query ($id: Int) {
-    Media(id: $id, type: ANIME) {
-      id
-      description
-      externalLinks {
-        url
-      }
-      coverImage {
-        large
-      }
-      title {
-        romaji
-        native
-      }
-    }
-  }`
-
-  const {data: response} = await axios.post('https://graphql.anilist.co/', { query, variables });
-  return response.data.Media
-}
+import { anilistQuery, traceAnime } from "../logic/logic.sakuria";
 
 export const command = {
   name: "trace",
@@ -62,7 +31,8 @@ export const command = {
 
       return { embeds: [embed] };
     } catch (error) {
-      return error.response.data.error;
+      console.log(error);
+      return error.response?.data?.error;
     }
   },
 };
