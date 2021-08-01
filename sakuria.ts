@@ -30,7 +30,6 @@ console.log(
 // Say inspirational anime quote
 logger.sakuria.inspiration();
 
-
 // Create sakuria
 logger.sakuria.creating();
 // Main import

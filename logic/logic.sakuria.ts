@@ -42,7 +42,7 @@ export async function traceAnime(url: string): Promise<IAnime> {
  */
 export async function anilistQuery(id: number): Promise<IAnilistAnime> {
   const variables = { id };
-  const query = `query ($id: Int) { Media(id: $id, type: ANIME) { id description externalLinks { url } coverImage { large } title { romaji native } }`;
+  const query = `query ($id: Int) { Media(id: $id, type: ANIME) { id externalLinks { url } description coverImage { large } title { romaji native } } }`;
   const { data: response } = await axios.post("https://graphql.anilist.co/", { query, variables });
   return response.data.Media;
 }
