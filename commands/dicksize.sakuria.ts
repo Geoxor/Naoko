@@ -1,5 +1,7 @@
+import { MessageOptions } from "discord.js";
 import { randomDickSize } from "../logic/logic.sakuria";
 import { IMessage } from "../types";
+import { Readable } from "stream";
 
 export const command = {
   name: "dicksize",
