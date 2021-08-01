@@ -9,9 +9,9 @@ import { IAnilistAnime, IAnime } from "../types";
  */
 export function encodeMorse(string: string): string {
   const strippedString = string.toLowerCase().replace(/[^a-z0-9\s]/g, "");
-  const characterArray = strippedString.split('')
+  const characterArray = strippedString.split("");
   const morseCharacters = characterArray.map((a: string) => (morseCodeTable as any)[a]);
-  return morseCharacters.join(' ');
+  return morseCharacters.join(" ");
 }
 
 /**
@@ -43,6 +43,6 @@ export async function traceAnime(url: string): Promise<IAnime> {
 export async function anilistQuery(id: number): Promise<IAnilistAnime> {
   const variables = { id };
   const query = `query ($id: Int) { Media(id: $id, type: ANIME) { id description externalLinks { url } coverImage { large } title { romaji native } }`;
-  const {data: response} = await axios.post('https://graphql.anilist.co/', { query, variables });
-  return response.data.Media
+  const { data: response } = await axios.post("https://graphql.anilist.co/", { query, variables });
+  return response.data.Media;
 }

@@ -23,7 +23,7 @@ class Logger {
    * Returns a the current time for the log to prefix
    * @author Geoxor
    */
-  private time(){
+  private time() {
     return chalk.bold.bgWhite.black(`[${new Date().toLocaleTimeString()}]`);
   }
 
