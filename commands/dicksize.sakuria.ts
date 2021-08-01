@@ -1,11 +1,5 @@
-import { MessageOptions } from "discord.js";
-import { Readable } from "stream";
+import { randomDickSize } from "../logic/logic.sakuria";
 import { IMessage } from "../types";
-
-function randomDickSize(): number {
-  const x = Math.random();
-  return Math.min( ~~( 1/(1-x) + 30*x ), 1_000_000);
-}
 
 export const command = {
   name: "dicksize",

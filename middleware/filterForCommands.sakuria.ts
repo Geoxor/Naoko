@@ -7,16 +7,16 @@ import { IMessage } from "../types";
  * returns the function if the message doesn't meet requirements
  * or if the message is by a bot and it parsers the message
  * content and appends the args and command to it
- * @param {Discord.Message} message
+ * @param {Discord.Message} message 
  * @param {Function} next
  * @author Geoxor
  */
 export default function (message: Discord.Message, next: Function): void {
   if (!message.content.toLowerCase().startsWith(config.prefix)) return;
-  if (message.channel.id !== "444479761880711188") return;
   if (message.author.bot) return;
   const { command, args } = new MessageParser(message.content);
-  (message as IMessage).command = command.toLowerCase();
-  (message as IMessage).args = args.map((arg) => arg.toLowerCase());
-  next(message as IMessage);
+  const updatedMessage = message as IMessage;
+  updatedMessage.command = command.toLowerCase();
+  updatedMessage.args = args.map((arg) => arg.toLowerCase());
+  next(updatedMessage);
 }

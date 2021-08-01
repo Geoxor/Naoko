@@ -1,5 +1,5 @@
 import Discord, { Intents } from "discord.js";
-import filterForSakuriaCommands from "../middleware/filterForSakuriaCommands.sakuria";
+import filterForSakuriaCommands from "../middleware/filterForCommands.sakuria";
 import { ICommand, IMessage } from "../types";
 import fs from "fs";
 import logger from "../classes/Logger.sakuria";
