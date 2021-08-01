@@ -1,9 +1,5 @@
+import { randomDickSize } from "../logic/logic.sakuria";
 import { IMessage } from "../types";
-
-function randomDickSize(): number {
-  const x = Math.random();
-  return Math.min(~~(1 / (1 - x) + 30 * x), 900);
-}
 
 export const command = {
   name: "dicksize",
