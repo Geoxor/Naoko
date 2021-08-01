@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
@@ -14,13 +16,18 @@ export function encodeMorse(string: string): string {
   const morseCharacters = characterArray.map((a: string) => (morseCodeTable as any)[a]);
   return morseCharacters.join(" ");
 }
+
+/**
+ * Decodes Morse code to an alphanumerical string
+ * @param {string} string a Morse code string
+ * @author Dave69
+ */
 export function decodeMorse(string: string): string {
   const strippedString = string.replace(/[a-z0-9]/g, "");
   const characterArray = strippedString.split(" ");
   const morseCharacters = characterArray.map((a: string) => (morseCodeTableReverse as any)[a]);
   return morseCharacters.join("");
 }
-
 
 /**
  * Gets a random number between 1 and 1.000.000 with an exponential factor
@@ -66,4 +73,22 @@ export async function anilistSearch(search: string): Promise<IAnilistAnime> {
   const query = `query ($search: String) { Media(search: $search, type: ANIME) { id externalLinks { url } description coverImage { large } title { romaji native } bannerImage } }`;
   const { data: response } = await axios.post("https://graphql.anilist.co/", { query, variables });
   return response.data.Media;
+}
+
+/**
+ * Recursive function that looks through directory and its subdirectories for audio files
+ * @param {string} dir The directory what the function is looking
+ * @param {string[]} [filelist] optional parameter, contains the list of already located files and their absolute paths
+ * @author N1kO23
+ */
+export async function walkDirectory(dir: string, filelist: string[] = []): Promise<string[]> {
+  const files = await fs.promises.readdir(dir);
+  files.forEach(async function (file) {
+    if ((await fs.promises.stat(dir + "/" + file)).isDirectory()) {
+      filelist = await walkDirectory(dir + "/" + file, filelist);
+    } else {
+      if (file.endsWith(".flac") || file.endsWith(".mp3") || file.endsWith(".ogg") || file.endsWith(".wav")) filelist.push(path.resolve(dir + "/" + file));
+    }
+  });
+  return filelist;
 }

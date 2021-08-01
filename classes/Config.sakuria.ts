@@ -3,6 +3,7 @@ import logger from "./Logger.sakuria";
 
 interface IConfig {
   prefix: string;
+  musicDirectory: string;
 }
 
 class Config {
@@ -22,6 +23,7 @@ class Config {
 
     this.config = {
       prefix: "~",
+      musicDirectory: "./music",
     };
 
     // save this.config as config.sakuria.json

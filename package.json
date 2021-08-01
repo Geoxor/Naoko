@@ -26,10 +26,11 @@
   },
   "homepage": "https://github.com/Geoxor/sakuria#readme",
   "dependencies": {
+    "@discordjs/voice": "^0.5.5",
     "@types/axios": "^0.14.0",
     "axios": "^0.21.1",
     "chalk": "^4.1.1",
-    "discord.js": "^13.0.0-dev.4886ae2.1627214570",
+    "discord.js": "^13.0.0-dev.t1627831263.774f5b7",
     "dotenv": "^10.0.0",
     "ts-mocha": "^8.0.0",
     "typescript": "^4.3.5"
