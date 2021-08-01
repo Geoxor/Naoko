@@ -66,7 +66,7 @@ class SakuriaLogger extends Logger {
   /**
    * @example example print '🌸 Sakuria created'
    */
-  public created = () => this.print("Sakuria created\n");
+  public created = () => this.print("Sakuria created");
 
   /**
    * Prints a random inspiraation quote
@@ -94,7 +94,7 @@ class ConfigLogger extends Logger {
   /**
    * @example example print '🧪 Config loaded'
    */
-  public loaded = () => this.print("Config loaded\n");
+  public loaded = () => this.print("Config loaded");
 
   /**
    * @example example print '🧪 Creating new config...'
@@ -104,7 +104,7 @@ class ConfigLogger extends Logger {
   /**
    * @example example print '🧪 Created new sakuria.json config'
    */
-  public created = () => this.print("Created new sakuria.json config\n");
+  public created = () => this.print("Created new sakuria.json config");
 
   /**
    * @example example print '👺 Failed to create sakuria.json config'
