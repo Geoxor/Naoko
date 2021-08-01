@@ -4,6 +4,7 @@ export const command = {
   name: "say",
   requiresProcessing: false,
   execute: (message: IMessage): string => {
-    return message.args.join('');
+    message.delete();
+    return message.args.join(' ');
   },
 };
