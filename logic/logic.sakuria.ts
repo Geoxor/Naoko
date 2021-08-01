@@ -14,12 +14,12 @@ export function encodeMorse(string: string): string {
 }
 
 /**
- * Gets a random number between 1 and 900 with an exponential factor
+ * Gets a random number between 1 and 1.000.000 with an exponential factor
  * @author MaidMarija
  */
 export function randomDickSize(): number {
   const x = Math.random();
-  return Math.min(~~(1 / (1 - x) + 30 * x), 900);
+  return Math.min(~~(1 / (1 - x) + 30 * x), 1_000_000);
 }
 
 /**
