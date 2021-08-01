@@ -47,6 +47,12 @@ export async function anilistQuery(id: number): Promise<IAnilistAnime> {
   return response.data.Media;
 }
 
+/**
+ * Fetches Anime metadata for a given anilist anime ID
+ * @param {string} search an anime title
+ * @author cimok
+ * @copyright anilist
+ */
 export async function anilistSearch(search: string): Promise<IAnilistAnime> {
   const variables = { search };
   const query = `query ($search: String) { Media(search: $search, type: ANIME) { id externalLinks { url } description coverImage { large } title { romaji native } bannerImage } }`;
