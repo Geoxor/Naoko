@@ -92,3 +92,23 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
   });
   return filelist;
 }
+
+/**
+ * Uwu-ify sentences
+ * @author azur1s
+ */
+ export async function uwuify(sentence: string): Promise<string> {
+  const normal = sentence;
+  const uwuified = normal
+    .replace(/(?:r|l)/g, "w")
+    .replace(/(?:R|L)/g, "W")
+    .replace(/n([aeiou])/g, "ny$1")
+    .replace(/N([aeiouAEIOU])/g, "Ny$1")
+    .replace(/ove/g, "uv")
+    .split(" ")
+    .map((val) => {
+      return Math.random() < 0.1 ? `${val.charAt(0)}-${val}` : `${val}`;
+    })
+    .join(" ");
+  return uwuified;
+}
