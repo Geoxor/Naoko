@@ -8,9 +8,9 @@ import logger from "../classes/Logger.sakuria";
  * Sakuria multi purpose Discord bot
  * @author Geoxor, Cimok
  */
-export default class Sakuria {
+class Sakuria {
   private bot: Discord.Client;
-  private commands: Discord.Collection<string, ICommand>;
+  public commands: Discord.Collection<string, ICommand>;
 
   constructor() {
     this.bot = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
@@ -77,3 +77,5 @@ export default class Sakuria {
     });
   }
 }
+
+export default new Sakuria();
