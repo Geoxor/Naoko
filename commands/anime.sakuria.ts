@@ -12,10 +12,11 @@ export const command = {
       // prepare an embed to send to the user
       const embed = new Discord.MessageEmbed()
         .setColor("#FF90E0")
-        .setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}\n${animeMeta.externalLinks[0]?.url}`)
         .setThumbnail(animeMeta.coverImage.large)
         .setDescription(animeMeta.description.replace(/<br>/g, ""))
       if(animeMeta.bannerImage) embed.setImage(animeMeta.bannerImage);
+      if(animeMeta.externalLinks[0]?.url) embed.setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}\n${animeMeta.externalLinks[0]?.url}`);
+      else embed.setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}`);
       return { embeds: [embed] };
     } catch (error) {
       return error.response?.data?.error || error.response?.statusText || "Couldn't find anime..";
