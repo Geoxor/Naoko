@@ -1,5 +1,6 @@
 import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
+import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime } from "../types";
 
 /**
@@ -13,6 +14,13 @@ export function encodeMorse(string: string): string {
   const morseCharacters = characterArray.map((a: string) => (morseCodeTable as any)[a]);
   return morseCharacters.join(" ");
 }
+export function decodeMorse(string: string): string {
+  const strippedString = string.replace(/[a-z0-9]/g, "");
+  const characterArray = strippedString.split(" ");
+  const morseCharacters = characterArray.map((a: string) => (morseCodeTableReverse as any)[a]);
+  return morseCharacters.join("");
+}
+
 
 /**
  * Gets a random number between 1 and 1.000.000 with an exponential factor
