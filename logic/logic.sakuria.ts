@@ -46,3 +46,10 @@ export async function anilistQuery(id: number): Promise<IAnilistAnime> {
   const { data: response } = await axios.post("https://graphql.anilist.co/", { query, variables });
   return response.data.Media;
 }
+
+export async function anilistSearch(search: string): Promise<IAnilistAnime> {
+  const variables = { search };
+  const query = `query ($search: String) { Media(search: $search, type: ANIME) { id externalLinks { url } description coverImage { large } title { romaji native } bannerImage } }`;
+  const { data: response } = await axios.post("https://graphql.anilist.co/", { query, variables });
+  return response.data.Media;
+}

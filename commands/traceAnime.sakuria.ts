@@ -31,8 +31,7 @@ export const command = {
 
       return { embeds: [embed] };
     } catch (error) {
-      console.log(error);
-      return error.response?.data?.error;
+      return error.response?.data?.error || error.response?.statusText || "Couldn't find anime..";
     }
   },
 };

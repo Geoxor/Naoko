@@ -41,4 +41,5 @@ export interface IAnilistAnime {
   coverImage: CoverImage;
   title: Title;
   externalLinks: ExternalLinks[];
+  bannerImage?: string;
 }
