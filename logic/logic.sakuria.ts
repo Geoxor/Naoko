@@ -5,6 +5,7 @@ import { IAnilistAnime, IAnime } from "../types";
 /**
  * Encodes an alphanumerical string to Morse code
  * @param {string} string an alphanumerical string to encode
+ * @author Geoxor
  */
 export function encodeMorse(string: string): string {
   const strippedString = string.toLowerCase().replace(/[^a-z0-9\s]/g, "");
@@ -25,6 +26,7 @@ export function randomDickSize(): number {
 /**
  * Tries to find an anime that matches the given URL image
  * @param {string} url a link to a PNG, GIF, JPG or TIFF image
+ * @author Geoxor
  * @copyright trace.moe
  */
 export async function traceAnime(url: string): Promise<IAnime> {
@@ -35,7 +37,8 @@ export async function traceAnime(url: string): Promise<IAnime> {
 /**
  * Fetches Anime metadata for a given anilist anime ID
  * @param {number} animeID an anilist anime ID
- * @copyright trace.moe
+ * @author Geoxor
+ * @copyright anilist
  */
 export async function anilistQuery(id: number): Promise<IAnilistAnime> {
   const variables = { id };
