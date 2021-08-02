@@ -1,7 +1,7 @@
 import Discord, { Intents } from "discord.js";
 import filterForSakuriaCommands from "../middleware/filterForCommands.sakuria";
 import { CommandExecute, ICommand, IMessage } from "../types";
-import logger from "../classes/Logger.sakuria";
+import logger from "../sakuria/Logger.sakuria";
 import { commands } from "../commands";
 
 /**
@@ -53,9 +53,9 @@ class Sakuria {
 
       // If it doesn't exist we respond
       if (!command) {
-        message.reply(`that command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`)
-        return 
-      };
+        message.reply(`that command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
+        return;
+      }
 
       // Notify the user their shit's processing
       if (command.requiresProcessing) {

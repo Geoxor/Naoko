@@ -12,11 +12,11 @@ export default {
     if (isNaN(count)) return `⚠️ when not number`;
 
     try {
-      await (message.channel as TextChannel).bulkDelete(count)
+      await (message.channel as TextChannel).bulkDelete(count);
       return `Cleared ${count} messages!`;
     } catch (error) {
-      const err = (error as DiscordAPIError);
-      return err.message
+      const err = error as DiscordAPIError;
+      return err.message;
     }
   },
 };

@@ -1,4 +1,4 @@
-import { db } from "../classes/Database.sakuria";
+import { db } from "../sakuria/Database.sakuria";
 import { IMessage } from "../types";
 
 export default {

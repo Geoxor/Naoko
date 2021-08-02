@@ -5,9 +5,9 @@
   "main": "sakuria.ts",
   "scripts": {
     "test": "ts-mocha -p ./tsconfig.json ./**/*.test.ts",
-    "dev": "pnpx prisma generate && nodemon sakuria.ts",
-    "setup": "pnpm i && pnpm run prettify && ts-node setup.sakuria.ts && pnpx prisma generate && pnpm run dev",
-    "prettify": "pnpx prettier --write \"./**/*.ts\" && pnpx prettier --write \"./**/*.json\""
+    "dev": "npx prisma generate && nodemon sakuria.ts",
+    "setup": "npm i && npm run prettify && ts-node setup.sakuria.ts && npx prisma generate && npm run dev",
+    "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
   "repository": {
     "type": "git",

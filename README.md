@@ -5,8 +5,8 @@
 ## Installation
 
 1. Make sure you get a discord bot token and put it in your .env file as DISCORD_TOKEN={token}
-2. `pnpm run setup` to prepare the environment
-3. `pnpm run dev` to run the bot
+2. `npm run setup` to prepare the environment
+3. `npm run dev` to run the bot
 
 ## Todo
 

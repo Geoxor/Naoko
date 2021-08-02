@@ -14,7 +14,7 @@ export function encodeMorse(string: string): string {
   const strippedString = string.toLowerCase().replace(/[^a-z0-9\s]/g, "");
   const characterArray = strippedString.split("");
   const morseCharacters = characterArray.map((a: string) => (morseCodeTable as any)[a]);
-  return morseCharacters.join(" ").replace('/ / /', "/");
+  return morseCharacters.join(" ").replace("/ / /", "/");
 }
 
 /**
@@ -98,7 +98,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
  * @param {string} sentence the sentence to uwu-ify
  * @author azur1s
  */
- export function uwufy(sentence: string): string {
+export function uwufy(sentence: string): string {
   const normal = sentence;
   const uwuified = normal
     .replace(/(?:r|l)/g, "w")

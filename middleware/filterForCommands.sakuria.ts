@@ -1,6 +1,6 @@
-import config from "../classes/Config.sakuria";
+import config from "../sakuria/Config.sakuria";
 import Discord from "discord.js";
-import MessageParser from "../classes/MessageParser.sakuria";
+import MessageParser from "../sakuria/MessageParser.sakuria";
 import { IMessage, CommandExecute } from "../types";
 
 /**

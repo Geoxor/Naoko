@@ -8,7 +8,7 @@ console.clear();
 // Cosmetic Imports
 import chalk from "chalk";
 import { version } from "./package.json";
-import logger from "./classes/Logger.sakuria";
+import logger from "./sakuria/Logger.sakuria";
 
 // Print logo
 console.log(
@@ -33,7 +33,7 @@ logger.sakuria.inspiration();
 // Create sakuria
 logger.sakuria.creating();
 // Main import
-import "./classes/Database.sakuria";
+import "./sakuria/Database.sakuria";
 logger.prisma.loaded();
-import "./classes/Sakuria.sakuria";
+import "./sakuria/Sakuria.sakuria";
 logger.sakuria.created();
