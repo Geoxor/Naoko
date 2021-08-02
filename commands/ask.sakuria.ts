@@ -1,7 +1,7 @@
 import { IMessage } from "../types";
 import answers from "../assets/answers.json";
 
-export const command = {
+export default {
   name: "ask",
   description: "Ask sakuria a yes or no question",
   requiresProcessing: false,

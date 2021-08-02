@@ -1,7 +1,7 @@
 import { encodeMorse, decodeMorse } from "../logic/logic.sakuria";
 import { IMessage } from "../types";
 
-export const command = {
+export default {
   name: "mors",
   description: "Encodes a string to morse code",
   requiresProcessing: false,

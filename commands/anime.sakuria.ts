@@ -2,7 +2,7 @@ import { IMessage } from "../types";
 import Discord from "discord.js";
 import { anilistSearch } from "../logic/logic.sakuria";
 
-export const command = {
+export default {
   name: "anime",
   description: "Looks up an anime on Anilist",
   requiresProcessing: true,

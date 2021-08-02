@@ -1,7 +1,7 @@
 import { decodeMorse } from "../logic/logic.sakuria";
 import { IMessage } from "../types";
 
-export const command = {
+export default {
   name: "decode",
   description: "Decodes morse code",
   requiresProcessing: false,

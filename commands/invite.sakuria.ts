@@ -1,4 +1,4 @@
-export const command = {
+export default {
   name: "invite",
   description: "Gives you an invite link for sakuria",
   requiresProcessing: false,

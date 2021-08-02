@@ -1,7 +1,7 @@
 import { DiscordAPIError, TextChannel } from "discord.js";
 import { IMessage } from "../types";
 
-export const command = {
+export default {
   name: "clear",
   description: "Bulk delete messages up to 100",
   requiresProcessing: false,

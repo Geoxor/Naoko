@@ -3,7 +3,7 @@ import { randomDickSize } from "../logic/logic.sakuria";
 import { IMessage } from "../types";
 import { Readable } from "stream";
 
-export const command = {
+export default {
   name: "dicksize",
   description: "Tell's you your dicksize or battle against someone else's dicksize!",
   requiresProcessing: false,

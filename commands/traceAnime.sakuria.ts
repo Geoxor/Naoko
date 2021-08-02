@@ -2,7 +2,7 @@ import { IMessage } from "../types";
 import Discord from "discord.js";
 import { anilistQuery, traceAnime } from "../logic/logic.sakuria";
 
-export const command = {
+export default {
   name: "trace",
   description: "Attempts to find what anime a screenshot or GIF is from",
   requiresProcessing: true,

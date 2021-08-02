@@ -1,7 +1,7 @@
 import { uwufy } from "../logic/logic.sakuria";
 import { IMessage } from "../types";
 
-export const command = {
+export default {
     name: "uwufy",
     description: "Transforms your sentence to uwu",
     requiresProcessing: false,

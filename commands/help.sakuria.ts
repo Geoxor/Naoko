@@ -1,5 +1,5 @@
 import sakuria from "../classes/Sakuria.sakuria";
-export const command = {
+export default {
   name: "help",
   description: "The command you just did",
   requiresProcessing: false,

@@ -1,6 +1,6 @@
 import { IMessage } from "../types";
 
-export const command = {
+export default {
   name: "say",
   description: "Says what you tell it",
   requiresProcessing: false,
