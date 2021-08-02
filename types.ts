@@ -5,10 +5,10 @@ export interface IMessage extends Discord.Message {
   args: string[];
 }
 
-export type TExecute = (message: IMessage) => Promise<string | Discord.ReplyMessageOptions> | Discord.ReplyMessageOptions | string;
+export type CommandExecute = (message: IMessage) => Promise<string | Discord.ReplyMessageOptions> | Discord.ReplyMessageOptions | string;
 
 export interface ICommand {
-  execute: TExecute;
+  execute: CommandExecute;
   name: string;
   description: string;
   requiresProcessing?: boolean;

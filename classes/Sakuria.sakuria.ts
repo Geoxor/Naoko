@@ -1,6 +1,6 @@
 import Discord, { Intents } from "discord.js";
 import filterForSakuriaCommands from "../middleware/filterForCommands.sakuria";
-import { ICommand, IMessage } from "../types";
+import { CommandExecute, ICommand, IMessage } from "../types";
 import logger from "../classes/Logger.sakuria";
 import { commands } from "../commands";
 
@@ -44,7 +44,6 @@ class Sakuria {
 
   // onMessageCreate handler
   private onMessageCreate(message: Discord.Message) {
-    // @ts-ignore
     filterForSakuriaCommands(message, async (message: IMessage) => {
       // Slurs for idiots
       const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
