@@ -14,7 +14,7 @@ export function encodeMorse(string: string): string {
   const strippedString = string.toLowerCase().replace(/[^a-z0-9\s]/g, "");
   const characterArray = strippedString.split("");
   const morseCharacters = characterArray.map((a: string) => (morseCodeTable as any)[a]);
-  return morseCharacters.join(" ");
+  return morseCharacters.join(" ").replace('/ / /', "/");
 }
 
 /**
