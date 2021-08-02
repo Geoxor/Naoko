@@ -17,7 +17,7 @@ class Sakuria {
     this.bot.on("ready", () => {
       this.onReady;
     });
-    this.bot.on("message", (message) => this.onMessage(message));
+    this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.commands = new Discord.Collection();
     this.loadCommands();
     this.bot.login(process.env.DISCORD_TOKEN!);
@@ -38,13 +38,13 @@ class Sakuria {
     }
   }
 
-  // onMessage handler, doesn't work apparently
+  // onMessageCreate handler, doesn't work apparently
   private onReady() {
     console.log(`Logged in as ${this.bot.user!.tag}!`);
   }
 
-  // onMessage handler
-  private onMessage(message: Discord.Message) {
+  // onMessageCreate handler
+  private onMessageCreate(message: Discord.Message) {
     filterForSakuriaCommands(message, async (message: IMessage) => {
       // Slurs for idiots
       const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
@@ -58,7 +58,7 @@ class Sakuria {
       // Notify the user their shit's processing
       if (command.requiresProcessing) {
         var processingMessage = await message.channel.send("Processing...");
-        message.channel.startTyping();
+        var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
       }
 
       // Get the result to send from the command
@@ -69,7 +69,8 @@ class Sakuria {
       // @ts-ignore
       if (processingMessage) {
         processingMessage.delete();
-        message.channel.stopTyping();
+        // @ts-ignore
+        clearInterval(typingInterval);
       }
 
       // Send the result

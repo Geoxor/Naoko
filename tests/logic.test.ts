@@ -12,7 +12,7 @@ describe("⚡ Morse Encoder (encodeMorse)", () => {
     const morseCode = encodeMorse("HeLLo WoRLd");
     chai.expect(morseCode).to.be.equal(".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
   });
-  
+
   it("can handle random characters", async () => {
     const morseCode = encodeMorse("*@(h98(@nf928ndjkniu241i24");
     chai.expect(morseCode).to.be.equal(".... ----. ---.. -. ..-. ----. ..--- ---.. -. -.. .--- -.- -. .. ..- ..--- ....- .---- .. ..--- ....-");
