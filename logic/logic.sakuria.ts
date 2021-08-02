@@ -72,7 +72,7 @@ export async function anilistSearch(search: string): Promise<IAnilistAnime> {
  * Uwu-ify sentences
  * @author azur1s
  */
- export async function uwuify(sentence: string) {
+export async function uwuify(sentence: string) {
   const normal = sentence;
   const uwuified = normal
     .replace(/(?:r|l)/g, "w")
