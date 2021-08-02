@@ -44,6 +44,7 @@ class Sakuria {
 
   // onMessageCreate handler
   private onMessageCreate(message: Discord.Message) {
+    // @ts-ignore
     filterForSakuriaCommands(message, async (message: IMessage) => {
       // Slurs for idiots
       const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
@@ -52,7 +53,10 @@ class Sakuria {
       const command = this.commands.get(message.command);
 
       // If it doesn't exist we respond
-      if (!command) return message.reply(`that command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
+      if (!command) {
+        message.reply(`that command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`)
+        return 
+      };
 
       // Notify the user their shit's processing
       if (command.requiresProcessing) {
