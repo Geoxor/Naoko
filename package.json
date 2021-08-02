@@ -1,47 +1,18 @@
 {
-  "name": "sakuria",
-  "version": "1.0.8",
-  "description": "Sakuria general purpose discord bot",
-  "main": "sakuria.ts",
+  "name": "my-prisma-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "ts-mocha -p ./tsconfig.json ./**/*.test.ts",
-    "dev": "nodemon sakuria.ts",
-    "setup": "npm i && npm run prettify && ts-node setup.sakuria.ts",
-    "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Geoxor/sakuria.git"
-  },
-  "keywords": [
-    "bot",
-    "discord-bot",
-    "anime-bot",
-    "anime"
-  ],
-  "author": "Geoxor",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Geoxor/sakuria/issues"
-  },
-  "homepage": "https://github.com/Geoxor/sakuria#readme",
-  "dependencies": {
-    "@discordjs/voice": "^0.5.5",
-    "@types/axios": "^0.14.0",
-    "axios": "^0.21.1",
-    "chalk": "^4.1.1",
-    "discord.js": "^13.0.0-dev.t1627831263.774f5b7",
-    "dotenv": "^10.0.0",
-    "ts-mocha": "^8.0.0",
-    "typescript": "^4.3.5"
-  },
   "devDependencies": {
-    "@types/chai": "^4.2.21",
-    "@types/mocha": "^9.0.0",
-    "@types/mv": "^2.1.2",
-    "chai": "^4.3.4",
-    "mocha": "^9.0.3",
-    "mv": "^2.1.1",
-    "ts-node": "^10.1.0"
+    "prisma": "^2.28.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^2.28.0"
   }
 }
