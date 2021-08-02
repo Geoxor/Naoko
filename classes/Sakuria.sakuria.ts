@@ -74,7 +74,7 @@ class Sakuria {
       }
 
       // Send the result
-      message.channel.send(result);
+      message.reply(result) || message.channel.send(result);
     });
   }
 }

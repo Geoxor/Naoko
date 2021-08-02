@@ -1,17 +1,21 @@
+import { DiscordAPIError, TextChannel } from "discord.js";
 import { IMessage } from "../types";
 
 export const command = {
   name: "clear",
   requiresProcessing: false,
-  execute: (message: IMessage): string => {
-    // blukDelete can't be used in direct message channel.
-    if (message.channel.type == "dm") return `You can't use clear in a DM channel!`;
-
+  execute: async (message: IMessage): Promise<string> => {
     let count = parseInt(message.args[0]) + 1;
+    count = count > 100 ? 100 : count;
     // Will return if count is not a string.
-    if (isNaN(count)) return `⚠️ when not number`
+    if (isNaN(count)) return `⚠️ when not number`;
 
-    message.channel.bulkDelete(count)
-    return `Cleared ${count} messages!`;
+    try {
+      await (message.channel as TextChannel).bulkDelete(count)
+      return `Cleared ${count} messages!`;
+    } catch (error) {
+      const err = (error as DiscordAPIError);
+      return err.message
+    }
   },
 };

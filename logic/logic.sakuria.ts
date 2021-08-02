@@ -95,9 +95,10 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
 
 /**
  * Uwu-ify sentences
+ * @param {string} sentence the sentence to uwu-ify
  * @author azur1s
  */
- export async function uwuify(sentence: string): Promise<string> {
+ export function uwufy(sentence: string): string {
   const normal = sentence;
   const uwuified = normal
     .replace(/(?:r|l)/g, "w")

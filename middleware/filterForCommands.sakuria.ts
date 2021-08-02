@@ -13,6 +13,7 @@ import { IMessage } from "../types";
  */
 export default function (message: Discord.Message, next: Function): void {
   if (message.content.lastIndexOf(config.prefix) !== 0) return;
+  if (message.channel.type as string === "dm") return;
   if (message.author.bot) return;
   const { command, args } = new MessageParser(message.content);
   const updatedMessage = message as IMessage;
