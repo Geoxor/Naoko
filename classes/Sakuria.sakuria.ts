@@ -1,8 +1,8 @@
 import Discord, { Intents } from "discord.js";
 import filterForSakuriaCommands from "../middleware/filterForCommands.sakuria";
 import { ICommand, IMessage } from "../types";
-import fs from "fs";
 import logger from "../classes/Logger.sakuria";
+import {commands} from "../commands";
 
 /**
  * Sakuria multi purpose Discord bot
@@ -29,10 +29,7 @@ class Sakuria {
   private loadCommands() {
     logger.sakuria.loadingCommands();
 
-    const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".ts"));
-
-    for (const file of commandFiles) {
-      const command = require(`../commands/${file}`).command as ICommand;
+    for (const command of commands) {
       this.commands.set(command.name, command);
       logger.sakuria.importedCommand(command.name);
     }
@@ -74,7 +71,15 @@ class Sakuria {
       }
 
       // Send the result
-      message.reply(result) || message.channel.send(result);
+      try {
+        await message.reply(result)
+      } catch (error) {
+        try {
+          await message.channel.send(result);
+        } catch (error) {
+          await message.channel.send("An error occured");
+        }
+      }
     });
   }
 }
