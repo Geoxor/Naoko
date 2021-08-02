@@ -4,6 +4,7 @@ import { anilistQuery, traceAnime } from "../logic/logic.sakuria";
 
 export const command = {
   name: "trace",
+  description: "Attempts to find what anime a screenshot or GIF is from",
   requiresProcessing: true,
   execute: async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
     // Check if they sent shit

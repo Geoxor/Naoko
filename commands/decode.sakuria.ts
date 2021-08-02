@@ -3,6 +3,7 @@ import { IMessage } from "../types";
 
 export const command = {
   name: "decode",
+  description: "Decodes morse code",
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<string> => {
     // Reply if no args

@@ -4,6 +4,7 @@ import { anilistSearch } from "../logic/logic.sakuria";
 
 export const command = {
   name: "anime",
+  description: "Looks up an anime on Anilist",
   requiresProcessing: true,
   execute: async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
     // Get the anime

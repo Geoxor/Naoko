@@ -5,6 +5,7 @@ import { Readable } from "stream";
 
 export const command = {
   name: "dicksize",
+  description: "Tell's you your dicksize or battle against someone else's dicksize!",
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<string | MessageOptions> => {
     if (message.mentions.members && message.mentions.members.size !== 0) {

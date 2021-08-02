@@ -3,6 +3,7 @@ import { IMessage } from "../types";
 
 export const command = {
   name: "clear",
+  description: "Bulk delete messages up to 100",
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<string> => {
     let count = parseInt(message.args[0]) + 1;

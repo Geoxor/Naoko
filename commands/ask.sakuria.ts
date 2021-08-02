@@ -3,6 +3,7 @@ import answers from "../assets/answers.json";
 
 export const command = {
   name: "ask",
+  description: "Ask sakuria a yes or no question",
   requiresProcessing: false,
   execute: (message: IMessage): string => {
     // Reply if no args
