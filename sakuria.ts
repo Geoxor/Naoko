@@ -33,5 +33,7 @@ logger.sakuria.inspiration();
 // Create sakuria
 logger.sakuria.creating();
 // Main import
+import "./classes/Database.sakuria";
+logger.prisma.loaded();
 import "./classes/Sakuria.sakuria";
 logger.sakuria.created();

@@ -50,7 +50,14 @@ class SakuriaLogger extends Logger {
   constructor() {
     super();
   }
-
+  /**
+   * @example example print '🌸 Instantiated Discord client instance'
+   */
+  public login = () => this.print("Sakuria logging in...");
+  /**
+   * @example example print '🌸 Instantiated Discord client instance'
+   */
+  public instantiated = () => this.print("Instantiated Discord client instance");
   /**
    * @example example print '🌸 Creating new Sakuria instance...'
    */
@@ -125,8 +132,22 @@ class CommandLogger extends Logger {
   public executedCommand = (command: string) => this.print(`Executed command ${command}`);
 }
 
+class PrismaLogger extends Logger {
+  constructor() {
+    super();
+    this.emoji = "💎";
+    this.color = "#31D2F7";
+  }
+
+  /**
+   * @example example print '💎 Prisma loaded'
+   */
+  public loaded = () => this.print(`Prisma loaded`);
+}
+
 export default {
   config: new ConfigLogger(),
   sakuria: new SakuriaLogger(),
   command: new CommandLogger(),
+  prisma: new PrismaLogger(),
 };

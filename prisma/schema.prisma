@@ -8,24 +8,43 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["mongoDb"]
+}
+
+model Guild {
+  // The Discord ID of the guild
+  id          String      @id @unique
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  kicks     Kick[]
-  inventory Inventory?
+  // The Discord ID of the user
+  id         String       @id @unique
+  // the list of past kicks
+  kicks      Kick[]       @relation("kicks")
+  // the kicks they've done to other people
+  auditKicks Kick[]       @relation("auditKicks")
+  // the inventory for the user for G A M E S 🕹️🕹️
+  inventory  Inventory?
 }
 
 model Kick {
-  id        Int       @id @default(autoincrement())
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int
+  // the ID of the Kick
+  id          Int         @id @default(autoincrement())
+  // the Discord ID of the user that got kicked
+  userId      String
+  user        User        @relation("kicks", fields: [userId], references: [id])
+  // the Discord ID of the user who did the kick
+  byUserId    String
+  byUser      User        @relation("auditKicks", fields: [byUserId], references: [id])
+  // When the kick happened
+  timestamp   Int
 }
 
 model Inventory {
-  id        Int       @id @default(autoincrement())
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int
-  balance   Int 
+  // The id of the inventory
+  id          Int         @id @default(autoincrement())
+  // The Discord ID of the user the inventory belongs to
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  // the balance of the user. Never use floats. Floats are evil.
+  balance     Int
 }

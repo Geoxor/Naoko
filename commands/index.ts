@@ -6,21 +6,10 @@ import decode from "./decode.sakuria";
 import dicksize from "./dicksize.sakuria";
 import help from "./help.sakuria";
 import invite from "./invite.sakuria";
+import kick from "./kick.sakuria";
 import mors from "./mors.sakuria";
 import say from "./say.sakuria";
 import traceAnime from "./traceAnime.sakuria";
 import uwuify from "./uwuify.sakuria";
 
-export const commands: ICommand[] = [
-  anime,
-  ask,
-  clear,
-  decode,
-  dicksize,
-  help,
-  invite,
-  mors,
-  say,
-  traceAnime,
-  uwuify,
-]
+export const commands: ICommand[] = [anime, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];

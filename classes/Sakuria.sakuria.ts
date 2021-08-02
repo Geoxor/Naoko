@@ -2,7 +2,7 @@ import Discord, { Intents } from "discord.js";
 import filterForSakuriaCommands from "../middleware/filterForCommands.sakuria";
 import { ICommand, IMessage } from "../types";
 import logger from "../classes/Logger.sakuria";
-import {commands} from "../commands";
+import { commands } from "../commands";
 
 /**
  * Sakuria multi purpose Discord bot
@@ -13,14 +13,16 @@ class Sakuria {
   public commands: Discord.Collection<string, ICommand>;
 
   constructor() {
+    this.commands = new Discord.Collection();
+    this.loadCommands();
     this.bot = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
+    logger.sakuria.instantiated();
     this.bot.on("ready", () => {
       this.onReady;
     });
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
-    this.commands = new Discord.Collection();
-    this.loadCommands();
     this.bot.login(process.env.DISCORD_TOKEN!);
+    logger.sakuria.login();
   }
 
   /**
@@ -72,7 +74,7 @@ class Sakuria {
 
       // Send the result
       try {
-        await message.reply(result)
+        await message.reply(result);
       } catch (error) {
         try {
           await message.channel.send(result);

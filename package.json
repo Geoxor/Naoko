@@ -5,8 +5,8 @@
   "main": "sakuria.ts",
   "scripts": {
     "test": "ts-mocha -p ./tsconfig.json ./**/*.test.ts",
-    "dev": "nodemon sakuria.ts",
-    "setup": "pnpm i && pnpm run prettify && ts-node setup.sakuria.ts",
+    "dev": "pnpx prisma generate && nodemon sakuria.ts",
+    "setup": "pnpm i && pnpm run prettify && ts-node setup.sakuria.ts && pnpx prisma generate && pnpm run dev",
     "prettify": "pnpx prettier --write \"./**/*.ts\" && pnpx prettier --write \"./**/*.json\""
   },
   "repository": {
@@ -43,6 +43,7 @@
     "chai": "^4.3.4",
     "mocha": "^9.0.3",
     "mv": "^2.1.1",
+    "nodemon": "^2.0.12",
     "ts-node": "^10.1.0"
   }
 }
