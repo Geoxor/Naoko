@@ -4,7 +4,7 @@ import MessageParser from "../classes/MessageParser.sakuria";
 import { IMessage, TExecute } from "../types";
 
 /**
- * returns the function if the message doesn't meet requirements
+ * Returns the function if the message doesn't meet requirements
  * or if the message is by a bot and it parsers the message
  * content and appends the args and command to it
  * @param {Discord.Message} message

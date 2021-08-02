@@ -31,15 +31,9 @@ class DB {
    */
   public async newKick(kicker: string, kickee: string) {
     const timestamp = Date.now();
-    const dbKicker = await this.newUser(kicker);
-    const dbKickee = await this.newUser(kickee);
-    await this.prisma.kick.create({
-      data: {
-        byUserId: dbKicker.id,
-        userId: dbKickee.id,
-        timestamp,
-      },
-    });
+    const { id: byUserId } = await this.newUser(kicker);
+    const { id: userId } = await this.newUser(kickee);
+    await this.prisma.kick.create({ data: { byUserId, userId, timestamp } });
   }
 }
 
