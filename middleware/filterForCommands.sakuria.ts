@@ -18,6 +18,6 @@ export default function (message: Discord.Message, next: Function): void {
   const { command, args } = new MessageParser(message.content);
   const updatedMessage = message as IMessage;
   updatedMessage.command = command.toLowerCase();
-  updatedMessage.args = args.map((arg) => arg.toLowerCase());
+  updatedMessage.args = args;
   next(updatedMessage);
 }

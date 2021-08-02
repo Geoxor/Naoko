@@ -33,6 +33,13 @@ describe("⚡ UwU-ifier (uwufy)", () => {
     chai.expect(uwu).to.contain("wannya");
   });
 
+  it("can preserve capitalizations", async () => {
+    const uwu = uwufy("HELLO WORLD, I WANNA BECOME UWU UWUWUUW");
+    chai.expect(uwu).to.contain("HEWWO");
+    chai.expect(uwu).to.contain("WOWWD");
+    chai.expect(uwu).to.contain("WANNYA");
+  });
+
   it("can preserve symbols", async () => {
     const uwu = uwufy("&!*@#&");
     chai.expect(uwu).to.contain("&!*@#&");
