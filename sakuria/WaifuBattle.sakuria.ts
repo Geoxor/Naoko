@@ -36,10 +36,10 @@ export default class WaifuBattle {
 
   /**
    * Returns the waifu embed
-   * @returns {Discord.MessageEmbed} of the waifu
+   * @returns {Discord.MessageOptions} of the waifu
    * @author Geoxor, Cimok
    */
-  getWaifu(){
+  getWaifu(): Discord.MessageOptions {
     return {files: [this.waifu.attachment], embeds: [this.waifu.ui]};
   };
 
