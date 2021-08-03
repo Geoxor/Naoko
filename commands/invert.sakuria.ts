@@ -8,7 +8,7 @@ export default {
   requiresProcessing: true,
   execute: async (message: IMessage): Promise<MessageOptions | string> => {
     const attachedImage = message.attachments.first()?.attachment;
-    const targetImage = await getBufferFromUrl(message.args[0]) || attachedImage || await getLastAttachmentInChannel(message);
+    const targetImage = attachedImage || await getLastAttachmentInChannel(message) || await getBufferFromUrl(message.args[0]);
 
     if (!targetImage) return "You didn't provide an image and/or the last message doesn't contain an image";
 

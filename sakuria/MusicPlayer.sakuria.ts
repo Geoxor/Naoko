@@ -1,13 +1,13 @@
-//requiring path and fs modules
 import { AudioPlayerStatus, AudioPlayerState, AudioPlayer, entersState, createAudioPlayer, joinVoiceChannel, VoiceConnectionStatus, NoSubscriberBehavior, createAudioResource, VoiceConnectionState } from "@discordjs/voice";
 import Discord from "discord.js";
 import { walkDirectory } from "../logic/logic.sakuria";
+import config from "./Config.sakuria";
 
 /**
- * The PlayerHandler class responsible for handling connection and audio playback in a voice channel
+ * The MusicPlayer class responsible for handling connection and audio playback in a voice channel
  * @author N1kO23
  */
-module.exports = class PlayerHandler {
+export default class MusicPlayer {
   private player: AudioPlayer;
   public queue: string[];
   public nowPlaying: string | null;
@@ -47,7 +47,7 @@ module.exports = class PlayerHandler {
    * Generates new audioResource from the array
    * @author N1kO23
    */
-  public async create(voiceChannel: Discord.VoiceChannel) {
+  public async create(voiceChannel: Discord.VoiceChannel | Discord.StageChannel) {
     const connection = joinVoiceChannel({
       channelId: voiceChannel.id,
       guildId: voiceChannel.guild.id,
@@ -56,12 +56,10 @@ module.exports = class PlayerHandler {
     });
     connection.on("stateChange", this.onChange("Voice chat"));
     try {
-      await entersState(connection, VoiceConnectionStatus.Ready, 10e3);
-      // @TODO: Make the bot detect if channel is stage or not and if true -> setSuppressed(false)
-      //
-      // if(voiceChannel && voiceChannel.type == 'stage') {
-      //   await voiceChannel.guild.me.voice.setSuppressed(false).catch(error => console.error(error));
-      // }
+      await entersState(connection, VoiceConnectionStatus.Ready, 10e3);    
+      if(voiceChannel && voiceChannel.type == 'GUILD_STAGE_VOICE' as string && voiceChannel.guild.me) {
+        await voiceChannel.guild.me.voice.setSuppressed(false).catch(error => console.error(error));
+      }
       connection.subscribe(this.player);
     } catch (error) {
       console.error(`[PLAYER HANDLER]` + ` Error with connection: ` + error);
@@ -82,13 +80,13 @@ module.exports = class PlayerHandler {
    * @author N1kO23
    */
   public async addToQueue() {
-    this.queue = await walkDirectory(require("../config.json").musicDirectory);
+    this.queue = await walkDirectory(config.musicDirectory);
     this.nextSong();
     try {
       // Add the event listener to make the playback continuous as long as queue is not empty
       this.player.on(AudioPlayerStatus.Idle, () => this.nextSong());
     } catch (error) {
-      console.error(`[PLAYER HANDLER]` + ` Error with player: ` + error);
+      console.error(`[PLAYER HANDLER] Error with player: ${error}`);
     }
   }
 

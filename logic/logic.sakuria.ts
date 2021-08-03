@@ -84,13 +84,11 @@ export async function anilistSearch(search: string): Promise<IAnilistAnime> {
  */
 export async function walkDirectory(dir: string, filelist: string[] = []): Promise<string[]> {
   const files = await fs.promises.readdir(dir);
-  files.forEach(async function (file) {
-    if ((await fs.promises.stat(dir + "/" + file)).isDirectory()) {
-      filelist = await walkDirectory(dir + "/" + file, filelist);
-    } else {
-      if (file.endsWith(".flac") || file.endsWith(".mp3") || file.endsWith(".ogg") || file.endsWith(".wav")) filelist.push(path.resolve(dir + "/" + file));
-    }
-  });
+  for(let file of files) {
+    const isDirectory = (await fs.promises.stat(dir + "/" + file)).isDirectory();
+    if (isDirectory) filelist = await walkDirectory(dir + "/" + file, filelist);
+    if (file.endsWith(".flac") || file.endsWith(".mp3") || file.endsWith(".ogg") || file.endsWith(".wav")) filelist.push(path.resolve(dir + "/" + file));
+  };
   return filelist;
 }
 
