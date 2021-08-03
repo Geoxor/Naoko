@@ -103,7 +103,6 @@ export default class MusicPlayer {
       currentIndex--;
       [this.queue[currentIndex], this.queue[randomIndex]] = [this.queue[randomIndex], this.queue[currentIndex]];
     }
-    console.log(this.queue);
   }
 
   /**

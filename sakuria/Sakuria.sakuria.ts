@@ -1,5 +1,5 @@
 import Discord, { Intents } from "discord.js";
-import filterForSakuriaCommands from "../middleware/filterForCommands.sakuria";
+import commandMiddleware from "../middleware/commandMiddleware.sakuria";
 import { ICommand, IMessage } from "../types";
 import logger from "../sakuria/Logger.sakuria";
 import { commands } from "../commands";
@@ -47,7 +47,7 @@ class Sakuria {
 
   // onMessageCreate handler
   private onMessageCreate(message: Discord.Message) {
-    filterForSakuriaCommands(message, async (message: IMessage) => {
+    commandMiddleware(message, async (message: IMessage) => {
       // Slurs for idiots
       const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
 
@@ -68,7 +68,7 @@ class Sakuria {
 
       // Get the result to send from the command
       const result = await command.execute(message);
-      logger.command.executedCommand(command.name);
+      logger.command.executedCommand(command.name, message.author.username, message.guild?.name || "dm");
 
       // Delete the processing message if it exists
       // @ts-ignore
@@ -85,7 +85,8 @@ class Sakuria {
         try {
           await message.channel.send(result);
         } catch (error) {
-          await message.channel.send("An error occured");
+          console.log(error);
+          await message.channel.send("⚠️ An error occured");
         }
       }
     });

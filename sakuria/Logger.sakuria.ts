@@ -1,5 +1,6 @@
 import quotes from "../assets/quotes.json";
 import chalk from "chalk";
+import Discord, { Message } from "discord.js";
 
 /**
  * Main logging wrapper that creates beautiful colors and emojis
@@ -77,7 +78,7 @@ class CommandLogger extends Logger {
     this.emoji = "🔮";
     this.color = "#886CE4";
   }
-  public executedCommand = (command: string) => this.print(`Executed command ${command}`);
+  public executedCommand = (command: string, username: string, guild: string) => this.print(`Executed command: ${command} - User: ${username} - Guild: ${guild}`);
 }
 class PrismaLogger extends Logger {
   constructor() {

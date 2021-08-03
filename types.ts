@@ -46,3 +46,14 @@ export interface IAnilistAnime {
   externalLinks: ExternalLinks[];
   bannerImage?: string;
 }
+export interface IRewards {
+  currency: number;
+  xp: number;
+}
+
+export interface IWaifu {
+  name: string;
+  image: string;
+  hp: number;
+  rewards: IRewards;
+}

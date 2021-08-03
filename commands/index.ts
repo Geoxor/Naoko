@@ -15,8 +15,10 @@ import invert from "./invert.sakuria";
 import play from "./play.sakuria";
 import skip from "./skip.sakuria";
 import shuffle from "./shuffle.sakuria";
+import waifu from "./waifu.sakuria";
 
 export const commands: ICommand[] = [
+  waifu, 
   shuffle, 
   skip, 
   play, 
