@@ -17,7 +17,7 @@ const iconPath = `C:/Users/${os.userInfo().username}/.vscode/extensions/icons/`;
 // Create icons folder in .vscode/extensions
 if (!fs.existsSync(iconPath)) {
   console.log("Creating icon folder");
-  fs.mkdirSync(iconPath);
+  fs.mkdirSync(iconPath, { recursive: true });
 }
 
 // Install the SVG icons in there
