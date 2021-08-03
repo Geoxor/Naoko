@@ -3,6 +3,7 @@ import filterForSakuriaCommands from "../middleware/filterForCommands.sakuria";
 import { ICommand, IMessage } from "../types";
 import logger from "../sakuria/Logger.sakuria";
 import { commands } from "../commands";
+import config from "./Config.sakuria";
 
 /**
  * Sakuria multi purpose Discord bot
@@ -17,9 +18,10 @@ class Sakuria {
     this.loadCommands();
     this.bot = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
     logger.sakuria.instantiated();
-    this.bot.on("ready", () => {
+    this.bot.on("ready", async () => {
       this.onReady;
       logger.sakuria.numServers(this.bot.guilds.cache.size);
+      this.bot.user?.setActivity(`for ${config.prefix}help`, { type: 'LISTENING' })
     });
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.bot.login(process.env.DISCORD_TOKEN!);

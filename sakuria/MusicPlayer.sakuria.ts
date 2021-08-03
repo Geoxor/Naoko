@@ -3,7 +3,7 @@ import Discord from "discord.js";
 import { walkDirectory } from "../logic/logic.sakuria";
 import config from "./Config.sakuria";
 import logger from "./Logger.sakuria";
-
+import fs from 'fs';
 /**
  * The MusicPlayer class responsible for handling connection and audio playback in a voice channel
  * @author N1kO23
@@ -24,7 +24,7 @@ export default class MusicPlayer {
     });
     this.queue = [];
     this.nowPlaying = null;
-    this.player.on("stateChange", this.onChange("Audio Player"));
+    // this.player.on("stateChange", this.onChange("Audio Player"));
   }
 
   private onChange = (name: string) => (oldState: AudioPlayerState | VoiceConnectionState, newState: AudioPlayerState | VoiceConnectionState) => {
@@ -35,7 +35,7 @@ export default class MusicPlayer {
    * Generates new audioResource from the array
    * @author N1kO23
    */
-  private generateAudioResource(audioArray: string[]) {
+  private playNextSong(audioArray: string[]) {
     let audio = audioArray[0];
     this.nowPlaying = audio;
     if (this.queue.length !== 0) {
@@ -49,7 +49,7 @@ export default class MusicPlayer {
    * Generates new audioResource from the array
    * @author N1kO23
    */
-  public async create(voiceChannel: Discord.VoiceChannel | Discord.StageChannel) {
+  public async start(voiceChannel: Discord.VoiceChannel | Discord.StageChannel) {
     const connection = joinVoiceChannel({
       channelId: voiceChannel.id,
       guildId: voiceChannel.guild.id,
@@ -72,8 +72,8 @@ export default class MusicPlayer {
    * Starts to play the next song in thr queue
    * @author N1kO23
    */
-  public nextSong() {
-    const newQueue = this.generateAudioResource(this.queue);
+  public skip() {
+    const newQueue = this.playNextSong(this.queue);
     if (newQueue) this.player.play(newQueue);
   }
 
@@ -81,12 +81,12 @@ export default class MusicPlayer {
    * Reads the folder for all the tunes and adds them to the queue
    * @author N1kO23
    */
-  public async addToQueue() {
+  public async initQueue() {
     this.queue = await walkDirectory(config.musicDirectory);
-    this.nextSong();
+    this.skip();
     try {
       // Add the event listener to make the playback continuous as long as queue is not empty
-      this.player.on(AudioPlayerStatus.Idle, () => this.nextSong());
+      this.player.on(AudioPlayerStatus.Idle, () => this.skip());
     } catch (error) {
       console.error(`[PLAYER HANDLER] Error with player: ${error}`);
     }
