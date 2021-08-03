@@ -1,4 +1,3 @@
-import { commands } from "../commands";
 import { PrismaClient } from "@prisma/client";
 
 /**
