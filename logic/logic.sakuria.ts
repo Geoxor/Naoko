@@ -84,11 +84,11 @@ export async function anilistSearch(search: string): Promise<IAnilistAnime> {
  */
 export async function walkDirectory(dir: string, filelist: string[] = []): Promise<string[]> {
   const files = await fs.promises.readdir(dir);
-  for(let file of files) {
+  for (let file of files) {
     const isDirectory = (await fs.promises.stat(dir + "/" + file)).isDirectory();
     if (isDirectory) filelist = await walkDirectory(dir + "/" + file, filelist);
     if (file.endsWith(".flac") || file.endsWith(".mp3") || file.endsWith(".ogg") || file.endsWith(".wav")) filelist.push(path.resolve(dir + "/" + file));
-  };
+  }
   return filelist;
 }
 
@@ -132,7 +132,7 @@ export async function invertImage(image: Buffer): Promise<Buffer | string> {
  * @author Geoxor
  */
 export async function getBufferFromUrl(url: string) {
-  const response = await axios({method: 'GET', url, responseType: "arraybuffer"});
+  const response = await axios({ method: "GET", url, responseType: "arraybuffer" });
   return Buffer.from(response.data);
 }
 
@@ -142,8 +142,11 @@ export async function getBufferFromUrl(url: string) {
  * @returns a buffer of the last attachment
  * @author Geoxor
  */
- export async function getLastAttachmentInChannel(message: IMessage) {
-  const messages = await message.channel.messages.fetch()
-  const lastMessage = messages.sort((a, b) => b.createdTimestamp - a.createdTimestamp).filter((m) => m.attachments.size > 0).first();
+export async function getLastAttachmentInChannel(message: IMessage) {
+  const messages = await message.channel.messages.fetch();
+  const lastMessage = messages
+    .sort((a, b) => b.createdTimestamp - a.createdTimestamp)
+    .filter((m) => m.attachments.size > 0)
+    .first();
   return lastMessage?.attachments.first()?.attachment;
 }

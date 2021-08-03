@@ -10,6 +10,7 @@ import chalk from "chalk";
 import { version } from "./package.json";
 import logger from "./sakuria/Logger.sakuria";
 
+
 // Print logo
 console.log(
   chalk.hex("#FF33A7")(`              

@@ -58,9 +58,9 @@ export default class MusicPlayer {
     });
     connection.on("stateChange", this.onChange("Voice chat"));
     try {
-      await entersState(connection, VoiceConnectionStatus.Ready, 10e3);    
-      if(voiceChannel && voiceChannel.type == 'GUILD_STAGE_VOICE' as string && voiceChannel.guild.me) {
-        await voiceChannel.guild.me.voice.setSuppressed(false).catch(error => console.error(error));
+      await entersState(connection, VoiceConnectionStatus.Ready, 10e3);
+      if (voiceChannel && voiceChannel.type == ("GUILD_STAGE_VOICE" as string) && voiceChannel.guild.me) {
+        await voiceChannel.guild.me.voice.setSuppressed(false).catch((error) => console.error(error));
       }
       connection.subscribe(this.player);
     } catch (error) {
@@ -114,4 +114,4 @@ export default class MusicPlayer {
   public getNowPlayingFile() {
     return this.nowPlaying;
   }
-};
+}
