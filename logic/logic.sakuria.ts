@@ -3,7 +3,7 @@ import path from "path";
 import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
-import { IAnilistAnime, IAnime } from "../types";
+import { IAnilistAnime, IAnime, IMessage } from "../types";
 import Jimp from "jimp";
 
 /**
@@ -118,10 +118,34 @@ export function uwufy(sentence: string): string {
 /**
  * Inverts the colors of an image
  * @param image the image buffer you wanna invert
- * @returns a buffer with the inverted image
+ * @returns a buffer of the inverted image
+ * @author Geoxor
  */
 export async function invertImage(image: Buffer): Promise<Buffer | string> {
   if (!image) throw "image can not be undefined";
   const JimpImage = await Jimp.read(image);
   return JimpImage.invert().getBufferAsync("image/png");
+}
+
+/**
+ * Gets a file from a url and creates a buffer out of it
+ * @param url the url to a file to get a buffer from
+ * @returns a fuffer of the file
+ * @author Geoxor
+ */
+export async function getBufferFromUrl(url: string) {
+  const response = await axios({method: 'GET', url, responseType: "arraybuffer"});
+  return Buffer.from(response.data);
+}
+
+/**
+ * Gets the last image in a channel and creates a buffer out of it
+ * @param message discord message
+ * @returns a buffer of the last attachment
+ * @author Geoxor
+ */
+ export async function getLastAttachmentInChannel(message: IMessage) {
+  const messages = await message.channel.messages.fetch()
+  const lastMessage = messages.sort((a, b) => b.createdTimestamp - a.createdTimestamp).filter((m) => m.attachments.size > 0).first();
+  return lastMessage?.attachments.first()?.attachment;
 }
