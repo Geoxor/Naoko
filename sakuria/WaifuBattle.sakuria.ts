@@ -12,14 +12,16 @@ import { IWaifu } from "../types";
 export default class WaifuBattle {
   public chosenWaifu: IWaifu;
   public waifu: Waifu
-  public participants: Discord.GuildMember[];
+  public participants: Discord.User[];
   public startUser: Discord.User;
   public channel: Discord.TextChannel;
   public thread: Discord.ThreadChannel | null;
+  public collector: Discord.MessageCollector | null;
   public bossbar: NodeJS.Timer | null;
   public battleDuration: number;
   public aftermathTime: number;
   public initialThreadName: string;
+  public ended: boolean;
 
   constructor(startUser: Discord.User, channel: Discord.TextChannel){
     this.chosenWaifu = waifus[~~(Math.random() * waifus.length - 1)];
@@ -29,9 +31,11 @@ export default class WaifuBattle {
     this.channel = channel;
     this.bossbar = null;
     this.thread = null;
+    this.collector = null;
     this.battleDuration = 60000;
     this.aftermathTime = 20000;
     this.initialThreadName = `waifu battle!`;
+    this.ended = false;
   }
 
   /**
@@ -48,9 +52,15 @@ export default class WaifuBattle {
    * @author Geoxor, Cimok
    */
   async startBattle(){
-    await this.initThread()   
-    this.bossbar = setInterval(() => this.updateBossbar(), 5000);
-    setTimeout(async () => await this.endBattle(), this.battleDuration);
+
+    // Create thread
+    await this.initThread()
+
+    // Update the bossbar every second if it changes
+    this.bossbar = setInterval(() => this.updateBossbar(), 1000);
+
+    // End the battle if its been more than the battle duration
+    setTimeout(async () => this.ended && await this.endBattle(), this.battleDuration);
   };
 
   /**
@@ -66,6 +76,32 @@ export default class WaifuBattle {
     await this.thread.join();
     await this.thread.members.add(this.startUser);
     await this.thread.send(this.getWaifu());
+
+    this.initCollector();
+  }
+
+  /**
+   * Initializes the message collector
+   * @author Geoxor, Cimok
+   */
+  async initCollector(){
+
+    // Create the collector on the thread
+    this.collector = new Discord.MessageCollector(this.thread!);
+
+    // Collect messages
+    this.collector.on('collect', message => {
+      if (message.content === '!attack') {
+        this.waifu.dealDamage(100);
+
+        // When the waifu dies finish up
+        if (this.waifu.isDead) {
+          this.collector!.stop();
+          this.ended = true;
+          this.endBattle();
+        }
+      }
+    });
   }
 
   /**
