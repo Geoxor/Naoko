@@ -32,6 +32,8 @@ try {
   var vscodeSettings = require(`C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`);
 } catch (error) {
   console.log("VS Code settings.json not found, creating a new one");
+  // @ts-ignore
+  var vscodeSettings = {};
 }
 vscodeSettings["material-icon-theme.files.associations"] = {};
 vscodeSettings["material-icon-theme.files.associations"]["sakuria.json"] = "../../icons/sakuriaJson";
