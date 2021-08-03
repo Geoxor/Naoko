@@ -48,6 +48,16 @@ export default class WaifuBattle {
    * @author Geoxor, Cimok
    */
   async startBattle(){
+    await this.initThread()   
+    this.bossbar = setInterval(() => this.updateBossbar(), 5000);
+    setTimeout(async () => await this.endBattle(), this.battleDuration);
+  };
+
+  /**
+   * Creates the thread for the battle
+   * @author Geoxor, Cimok
+   */
+  async initThread(){
     this.thread = await this.channel.threads.create({
       name: `${this.initialThreadName} (${this.waifu.hp}hp)`,
       autoArchiveDuration: 60
@@ -56,12 +66,7 @@ export default class WaifuBattle {
     await this.thread.join();
     await this.thread.members.add(this.startUser);
     await this.thread.send(this.getWaifu());
-
-    // Update the bossbar if it changes after 5 seconds
-    this.bossbar = setInterval(() => this.updateBossbar(), 5000);
-
-    setTimeout(async () => await this.endBattle(), this.battleDuration);
-  };
+  }
 
   /**
    * Updates the bossbar with the current battle stats
