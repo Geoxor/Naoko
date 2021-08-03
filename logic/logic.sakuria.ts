@@ -120,8 +120,8 @@ export function uwufy(sentence: string): string {
  * @param image the image buffer you wanna invert
  * @returns a buffer with the inverted image
  */
-export async function invertImage(image: Buffer): Promise<Buffer | string>  {
-  if (!image) throw 'image can not be undefined';
-  const JimpImage = await Jimp.read(image)
-  return JimpImage.invert().getBufferAsync('image/png')
+export async function invertImage(image: Buffer): Promise<Buffer | string> {
+  if (!image) throw "image can not be undefined";
+  const JimpImage = await Jimp.read(image);
+  return JimpImage.invert().getBufferAsync("image/png");
 }
