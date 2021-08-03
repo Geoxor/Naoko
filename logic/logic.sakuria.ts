@@ -4,6 +4,7 @@ import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime } from "../types";
+import Jimp from "jimp";
 
 /**
  * Encodes an alphanumerical string to Morse code
@@ -112,4 +113,15 @@ export function uwufy(sentence: string): string {
     })
     .join(" ");
   return uwuified;
+}
+
+/**
+ * Inverts the colors of an image
+ * @param image the image buffer you wanna invert
+ * @returns a buffer with the inverted image
+ */
+export async function invertImage(image: Buffer): Promise<Buffer | string>  {
+  if (!image) throw 'image can not be undefined';
+  const JimpImage = await Jimp.read(image)
+  return JimpImage.invert().getBufferAsync('image/png')
 }

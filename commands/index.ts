@@ -11,5 +11,6 @@ import mors from "./mors.sakuria";
 import say from "./say.sakuria";
 import traceAnime from "./traceAnime.sakuria";
 import uwuify from "./uwuify.sakuria";
+import invert from "./invert.sakuria";
 
-export const commands: ICommand[] = [anime, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];
+export const commands: ICommand[] = [anime, invert, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];
