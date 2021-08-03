@@ -4,10 +4,9 @@
   "description": "Sakuria general purpose discord bot",
   "main": "sakuria.ts",
   "scripts": {
-    "test": "ts-mocha -p ./tsconfig.json ./**/*.test.ts",
+    "test": "npm i && ts-mocha -p ./tsconfig.json ./**/*.test.ts",
     "dev": "npx prisma generate && nodemon sakuria.ts",
-    "setup": "npm i && npm run prettify && npx prisma generate && npx prisma migrate reset -f",
-    "setup-icons": "ts-node setup.sakuria.ts",
+    "setup": "npm i && npm run prettify && ts-node setup.sakuria.ts && npx prisma generate && npx prisma migrate reset -f",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
   "repository": {

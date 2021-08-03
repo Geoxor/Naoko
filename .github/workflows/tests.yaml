@@ -7,7 +7,5 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm run setup
-      - name: Compile
-        run: npm run tests
+      - name: Install dependencies & test
+        run: npm run test
