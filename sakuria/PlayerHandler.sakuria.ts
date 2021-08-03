@@ -1,8 +1,6 @@
 //requiring path and fs modules
-import { AudioPlayerStatus, AudioResource, AudioPlayerState, AudioPlayer, entersState, createAudioPlayer, joinVoiceChannel, VoiceConnectionStatus, NoSubscriberBehavior, createAudioResource, VoiceConnectionState } from "@discordjs/voice";
+import { AudioPlayerStatus, AudioPlayerState, AudioPlayer, entersState, createAudioPlayer, joinVoiceChannel, VoiceConnectionStatus, NoSubscriberBehavior, createAudioResource, VoiceConnectionState } from "@discordjs/voice";
 import Discord from "discord.js";
-import path from "path";
-import fs from "fs";
 import { walkDirectory } from "../logic/logic.sakuria";
 
 /**
