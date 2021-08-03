@@ -14,5 +14,23 @@ import uwuify from "./uwuify.sakuria";
 import invert from "./invert.sakuria";
 import play from "./play.sakuria";
 import skip from "./skip.sakuria";
+import shuffle from "./shuffle.sakuria";
 
-export const commands: ICommand[] = [skip, play, anime, invert, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];
+export const commands: ICommand[] = [
+  shuffle, 
+  skip, 
+  play, 
+  anime, 
+  invert, 
+  ask, 
+  clear, 
+  decode, 
+  dicksize, 
+  help, 
+  invite, 
+  mors, 
+  say, 
+  traceAnime, 
+  uwuify, 
+  kick
+];

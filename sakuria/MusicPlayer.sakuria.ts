@@ -3,7 +3,6 @@ import Discord from "discord.js";
 import { walkDirectory } from "../logic/logic.sakuria";
 import config from "./Config.sakuria";
 import logger from "./Logger.sakuria";
-import fs from 'fs';
 /**
  * The MusicPlayer class responsible for handling connection and audio playback in a voice channel
  * @author N1kO23
