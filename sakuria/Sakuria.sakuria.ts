@@ -1,6 +1,6 @@
 import Discord, { Intents } from "discord.js";
 import filterForSakuriaCommands from "../middleware/filterForCommands.sakuria";
-import { CommandExecute, ICommand, IMessage } from "../types";
+import { ICommand, IMessage } from "../types";
 import logger from "../sakuria/Logger.sakuria";
 import { commands } from "../commands";
 
@@ -19,6 +19,7 @@ class Sakuria {
     logger.sakuria.instantiated();
     this.bot.on("ready", () => {
       this.onReady;
+      logger.sakuria.numServers(this.bot.guilds.cache.size);
     });
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.bot.login(process.env.DISCORD_TOKEN!);

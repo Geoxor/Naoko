@@ -23,7 +23,7 @@ class Logger {
    * Returns a the current time for the log to prefix
    * @author Geoxor
    */
-  private time() {
+  public time() {
     return chalk.bold.bgWhite.black(`[${new Date().toLocaleTimeString()}]`);
   }
 
@@ -50,6 +50,11 @@ class SakuriaLogger extends Logger {
   constructor() {
     super();
   }
+  /**
+   * @example example print '🌸 Instantiated Discord client instance'
+   */
+   public numServers = (numGuilds: number) => this.print(`Currently in ${numGuilds} servers`);
+
   /**
    * @example example print '🌸 Instantiated Discord client instance'
    */
@@ -84,6 +89,8 @@ class SakuriaLogger extends Logger {
       and continue to shine.. forever.`
    */
   public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
+
+  public generic = (string: string) => console.log(chalk.hex("#32343F")(`  ${this.time()} 👥  ${string}`));
 }
 
 class ConfigLogger extends Logger {

@@ -2,6 +2,7 @@ import { AudioPlayerStatus, AudioPlayerState, AudioPlayer, entersState, createAu
 import Discord from "discord.js";
 import { walkDirectory } from "../logic/logic.sakuria";
 import config from "./Config.sakuria";
+import logger from "./Logger.sakuria";
 
 /**
  * The MusicPlayer class responsible for handling connection and audio playback in a voice channel
@@ -27,7 +28,7 @@ export default class MusicPlayer {
   }
 
   private onChange = (name: string) => (oldState: AudioPlayerState | VoiceConnectionState, newState: AudioPlayerState | VoiceConnectionState) => {
-    console.log(`[${name}]` + ` Changed from ${oldState.status} to ${newState.status}`);
+    logger.sakuria.generic(`[${name}]` + ` Changed from ${oldState.status} to ${newState.status}`);
   };
 
   /**
