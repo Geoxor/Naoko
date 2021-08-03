@@ -50,4 +50,3 @@ describe("⚡ UwU-ifier (uwufy)", () => {
     chai.expect(uwu).to.contain("125812985");
   });
 });
-  

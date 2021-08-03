@@ -6,7 +6,7 @@
   "scripts": {
     "test": "ts-mocha -p ./tsconfig.json ./**/*.test.ts",
     "dev": "npx prisma generate && nodemon sakuria.ts",
-    "setup": "npm i && npm run prettify && ts-node setup.sakuria.ts && npx prisma generate && npx prisma migrate reset && npm run dev",
+    "setup": "npm i && npm run prettify && ts-node setup.sakuria.ts && npx prisma generate && npx prisma migrate reset -f",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
   "repository": {

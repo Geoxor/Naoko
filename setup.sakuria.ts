@@ -28,7 +28,11 @@ fs.readdirSync("./assets/icons").forEach((file) => {
 console.log("Icons installed");
 
 // Update the user's VS Code settings to use the new icons for the sakuria files
-const vscodeSettings = require(`C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`);
+try {
+  var vscodeSettings = require(`C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`);
+} catch (error) {
+  console.log("VS Code settings.json not found, creating a new one");
+}
 vscodeSettings["material-icon-theme.files.associations"] = {};
 vscodeSettings["material-icon-theme.files.associations"]["sakuria.json"] = "../../icons/sakuriaJson";
 vscodeSettings["material-icon-theme.files.associations"]["sakuria.ts"] = "../../icons/sakuria";
