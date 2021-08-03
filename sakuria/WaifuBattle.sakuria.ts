@@ -1,4 +1,4 @@
-import Waifu from "../sakuria/Waifight.sakuria";
+import Waifu from "./Waifu.sakuria";
 import Discord from "discord.js";
 import waifus from "../assets/waifus.json";
 import { IWaifu } from "../types";
