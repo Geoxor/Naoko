@@ -42,7 +42,10 @@ vscodeSettings["material-icon-theme.files.associations"]["*.sakuria"] = "../../i
 vscodeSettings["material-icon-theme.files.associations"]["*.sakuria.ts"] = "../../icons/sakuria";
 vscodeSettings["material-icon-theme.files.associations"]["Logger.sakuria.ts"] = "../../icons/sakuriaLogger";
 vscodeSettings["material-icon-theme.files.associations"]["Sakuria.sakuria.ts"] = "../../icons/sakuriaMain";
+
+vscodeSettings["material-icon-theme.folders.associations"] = {};
 vscodeSettings["material-icon-theme.folders.associations"]["sakuria"] = "../../../../icons/sakuriaFolder";
+
 fs.writeFileSync(`C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`, JSON.stringify(vscodeSettings, null, 2));
 console.log("Settings updated");
 
