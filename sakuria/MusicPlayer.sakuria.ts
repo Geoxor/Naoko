@@ -40,6 +40,7 @@ export default class MusicPlayer {
     this.nowPlaying = audio;
     if (this.queue.length !== 0) {
       this.queue.shift();
+      logger.sakuria.generic(`Playing ${audio}`);
       return createAudioResource(audio);
     }
   }

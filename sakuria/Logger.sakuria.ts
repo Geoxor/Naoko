@@ -45,110 +45,46 @@ class Logger {
     console.log(chalk.hex(this.errorColor)(`  ${this.time()} ${this.errorEmoji}  ${log}`));
   }
 }
-
 class SakuriaLogger extends Logger {
   constructor() {
     super();
   }
-  /**
-   * @example example print '🌸 Instantiated Discord client instance'
-   */
-   public numServers = (numGuilds: number) => this.print(`Currently in ${numGuilds} servers`);
-
-  /**
-   * @example example print '🌸 Instantiated Discord client instance'
-   */
+  public numServers = (numGuilds: number) => this.print(`Currently in ${numGuilds} servers`);
   public login = () => this.print("Sakuria logging in...");
-  /**
-   * @example example print '🌸 Instantiated Discord client instance'
-   */
   public instantiated = () => this.print("Instantiated Discord client instance");
-  /**
-   * @example example print '🌸 Creating new Sakuria instance...'
-   */
   public creating = () => this.print("Creating new Sakuria instance...");
-  /**
-   * @example example print '🌸 Loading commands...'
-   */
   public loadingCommands = () => this.print("Loading commands...");
-  /**
-   * @example example print '🌸 ┖ Imported command ask'
-   */
   public importedCommand = (command: string) => this.print(`┖ Imported command ${command}`);
-  /**
-   * @example example print '🌸 Sakuria created'
-   */
   public created = () => this.print("Sakuria created");
-
-  /**
-   * Prints a random inspiraation quote
-   * @example example print ` 
-      We are all like fireworks: we climb, we shine and always go 
-      our separate ways and become further apart. But even 
-      when that time comes, let's not disappear like a firework 
-      and continue to shine.. forever.`
-   */
   public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
-
   public generic = (string: string) => console.log(chalk.hex("#32343F")(`  ${this.time()} 👥  ${string}`));
 }
-
 class ConfigLogger extends Logger {
   constructor() {
     super();
     this.emoji = "🧪";
     this.color = "#00B294";
   }
-
-  /**
-   * @example example print '🧪 Loading config...'
-   */
   public loading = () => this.print("Loading config...");
-
-  /**
-   * @example example print '🧪 Config loaded'
-   */
   public loaded = () => this.print("Config loaded");
-
-  /**
-   * @example example print '🧪 Creating new config...'
-   */
   public creating = () => this.print("Creating new config...");
-
-  /**
-   * @example example print '🧪 Created new sakuria.json config'
-   */
   public created = () => this.print("Created new sakuria.json config");
-
-  /**
-   * @example example print '👺 Failed to create sakuria.json config'
-   */
   public failedCreation = () => this.error("Failed to create sakuria.json config");
 }
-
 class CommandLogger extends Logger {
   constructor() {
     super();
     this.emoji = "🔮";
     this.color = "#886CE4";
   }
-
-  /**
-   * @example example print '🔮 Executed command trace'
-   */
   public executedCommand = (command: string) => this.print(`Executed command ${command}`);
 }
-
 class PrismaLogger extends Logger {
   constructor() {
     super();
     this.emoji = "💎";
     this.color = "#31D2F7";
   }
-
-  /**
-   * @example example print '💎 Prisma loaded'
-   */
   public loaded = () => this.print(`Prisma loaded`);
 }
 
