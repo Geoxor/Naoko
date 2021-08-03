@@ -19,12 +19,11 @@ class MusicPlayerHandler {
    * @returns {MusicPlayer} the music player for that guild
    */
   public getMusicPlayer(guild: Discord.Guild): MusicPlayer {
-
     // Check if theres an existing instance already
     const musicPlayerInstance = this.collection.get(guild.id);
 
     // If it does exist then return it
-    if(musicPlayerInstance) return musicPlayerInstance;
+    if (musicPlayerInstance) return musicPlayerInstance;
 
     // Otherwise create a new instance
     const newMusicPlayerInstance = new MusicPlayer();
