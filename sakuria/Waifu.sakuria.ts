@@ -14,9 +14,9 @@ export default class Waifu {
   public attachment: Discord.MessageAttachment;
   public hp: number;
   public rewards: IRewards;
-  // public rarity: string; ?
   public isDead: boolean;
   public ui: Discord.MessageEmbed;
+  // public rarity: string; ?
   
   constructor(waifu: IWaifu){
     this.name = waifu.name;
