@@ -78,6 +78,9 @@ class Sakuria {
         clearInterval(typingInterval);
       }
 
+      // If the command returns void we just return
+      if (!result) return;
+
       // Send the result
       try {
         await message.reply(result);

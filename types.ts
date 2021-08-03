@@ -5,7 +5,7 @@ export interface IMessage extends Discord.Message {
   args: string[];
 }
 
-export type CommandExecute = (message: IMessage) => Promise<string | Discord.ReplyMessageOptions> | Discord.ReplyMessageOptions | string;
+export type CommandExecute = (message: IMessage) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
 export interface ICommand {
   execute: CommandExecute;

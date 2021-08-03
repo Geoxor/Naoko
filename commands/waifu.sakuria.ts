@@ -25,7 +25,7 @@ class WaifuBattle {
   };
 
   async startBattle(){
-    const initialThreadName =`⚔️ ${this.waifu.name} battle!`;
+    const initialThreadName = `waifu battle!`;
     this.thread = await this.channel.threads.create({
       name: initialThreadName,
       autoArchiveDuration: 60
@@ -36,13 +36,13 @@ class WaifuBattle {
 
     this.bossbar = setInterval(() => this.thread?.setName(`${initialThreadName} (${this.waifu.hp}hp)`), 5000);
 
-    setTimeout(async () => await this.endBattle(), 60000);
+    setTimeout(async () => await this.endBattle(), 10000);
   };
 
   async endBattle(){
     await this.thread?.send("Battle has ended - deleting thread in 10 seconds");
     clearInterval(this.bossbar as NodeJS.Timeout);
-    setTimeout(() => this.thread?.setArchived(true), 10000);
+    setTimeout(() => this.thread?.delete(), 10000);
   }
 }
 
@@ -50,10 +50,10 @@ export default {
   name: "waifu",
   description: "Waifu battle a random waifu with your friends for rewards!",
   requiresProcessing: false,
-  execute: async (message: IMessage): Promise<Discord.MessageOptions | string> => {
+  execute: async (message: IMessage): Promise<string | void> => {
     if (!(message.channel instanceof Discord.TextChannel)) return "Can't start battles in here!"
     const battle = new WaifuBattle(message.channel);
     await battle.startBattle();
-    return 'battle started!';
+    return;
   },
 };
