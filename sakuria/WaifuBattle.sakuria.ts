@@ -10,6 +10,7 @@ import { IWaifu } from "../types";
  * @author Cimok, Geoxor, azur1s
  */
 export default class WaifuBattle {
+  private lastBossbarMessage: Discord.Message | null;
   public chosenWaifu: IWaifu;
   public waifu: Waifu
   public participants: Discord.User[];
@@ -20,7 +21,7 @@ export default class WaifuBattle {
   public bossbar: NodeJS.Timer | null;
   public battleDuration: number;
   public aftermathTime: number;
-  public initialThreadName: string;
+  public threadName: string;
   public ended: boolean;
 
   constructor(startUser: Discord.User, channel: Discord.TextChannel){
@@ -34,8 +35,9 @@ export default class WaifuBattle {
     this.collector = null;
     this.battleDuration = 60000;
     this.aftermathTime = 20000;
-    this.initialThreadName = `waifu battle!`;
+    this.threadName = `waifu battle!`;
     this.ended = false;
+    this.lastBossbarMessage = null;
   }
 
   /**
@@ -44,7 +46,7 @@ export default class WaifuBattle {
    * @author Geoxor, Cimok
    */
   getWaifu(): Discord.MessageOptions {
-    return {files: [this.waifu.attachment], embeds: [this.waifu.ui]};
+    return {content: 'type !attack to kill her!', files: [this.waifu.attachment], embeds: [this.waifu.ui]};
   };
 
   /**
@@ -72,7 +74,7 @@ export default class WaifuBattle {
    */
   async initThread(){
     this.thread = await this.channel.threads.create({
-      name: `${this.initialThreadName} (${this.waifu.hp}hp)`,
+      name: this.threadName,
       autoArchiveDuration: 60
     });                                                                                                       console.log("Thread created");
 
@@ -96,12 +98,7 @@ export default class WaifuBattle {
     this.collector.on('collect', async message => {
       if (message.content === '!attack') {                                                                    console.log("!attack gotten");
         this.waifu.dealDamage(100);                                                                           console.log(`damage reduced ${this.waifu.hp}`);
-        // When the waifu dies finish up
-        if (this.waifu.isDead) {                                                                              console.log('waifu died');
-          this.ended = true;
-          await this.endBattle();
-          this.collector!.stop();
-        }
+        if (this.waifu.isDead) await this.endBattle();
       }
     });
   }
@@ -111,9 +108,9 @@ export default class WaifuBattle {
    * @author Geoxor, Cimok
    */
   async updateBossbar(){
-    const newBossbar = `${this.initialThreadName} (${this.waifu.hp}hp)`;
-    if (this.thread!.name !== newBossbar) {                                                                   console.log('updating bossbar');
-      this.thread!.setName(newBossbar);                                                                       console.log('updated bossbar');
+    const newBossbar = `${this.waifu.name} still has *${this.waifu.hp}* HP!`;
+    if (!this.ended && this.lastBossbarMessage?.content !== newBossbar) {
+      this.lastBossbarMessage = await this.thread!.send(newBossbar);  
     }
   }
 
@@ -122,8 +119,11 @@ export default class WaifuBattle {
    * @author Geoxor, Cimok
    */
   async endBattle(){
+    if (this.ended) return;
+    this.ended = true;
+    this.collector!.stop();
     clearInterval(this.bossbar as NodeJS.Timeout);                                                            console.log('cleared bossbar timer');
-    this.thread!.setName(`${this.initialThreadName} (0hp) - Victory`);                                        console.log('set to victory');
+    await this.thread!.setName(`${this.threadName} victory`);                                          console.log('set to victory');
     await this.thread!.send(`Battle has ended - deleting thread in ${this.aftermathTime / 1000} seconds`);    console.log('notify deletion');
     setTimeout(() => {
       this.thread?.delete();                                                                                  console.log('deleted thread');
