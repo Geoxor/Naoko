@@ -1,8 +1,9 @@
 [{ "name": "Shimakaze", "image": "./assets/waifus/shimakaze.png", "hp": 1000, "rewards": { "currency": 1000, "xp": 100 } }
-  { "name": "Akeno Himsjima", "image": "./assets/waifus/Akeno.png", "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+  { "name": "Akeno Himisjima", "image": "./assets/waifus/Akeno.png", "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
   { "name": "Koneko", "image": "./assets/waifus/koneko(dxd).png", "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
   { "name": "Rias Gremory", "image": "./assets/waifus/rias gremory.png", "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
   { "name": "Xenovia", "image": "./assets/waifus/xenovia quarta.png", "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
   { "name": "Vladi", "image": "./assets/waifus/vladi(dxd).png", "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+  { "name": "Astolfo ", "image": "./assets/waifus/Astolfo.png", "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
   { "name": "Asia", "image": "./assets/waifus/asia(dxd).png", "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
 ]
