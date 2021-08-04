@@ -1,18 +1,128 @@
-[
-  { "name": "Shimakaze",           "image": "./assets/waifus/shimakaze.png",       "hp": 1000, "rewards": { "currency": 1000, "xp": 100 } },
-  { "name": "Asuka Langley Soryu", "image": "./assets/waifus/asuka_langley.png",   "hp": 1200, "rewards": { "currency": 1200, "xp": 120 } },
-  { "name": "Krul",                "image": "./assets/waifus/krul.jpg",            "hp": 1100, "rewards": { "currency": 1100, "xp": 110 } },
-  { "name": "Sayori",              "image": "./assets/waifus/sayori.png",          "hp": 1600, "rewards": { "currency": 1600, "xp": 160 } },
-  { "name": "Rem",                 "image": "./assets/waifus/rem.jpg",             "hp": 1500, "rewards": { "currency": 1500, "xp": 150 } },
-  { "name": "Sumi Sakurasawa",     "image": "./assets/waifus/sumi_sakurasawa.jpg", "hp": 1100, "rewards": { "currency": 1100, "xp": 110 } },
-  { "name": "Akeno Himisjima",     "image": "./assets/waifus/Akeno.png",           "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
-  { "name": "Koneko",              "image": "./assets/waifus/koneko(dxd).png",     "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
-  { "name": "Rias Gremory",        "image": "./assets/waifus/rias gremory.png",    "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
-  { "name": "Xenovia",             "image": "./assets/waifus/xenovia quarta.png",  "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
-  { "name": "Vladi",               "image": "./assets/waifus/vladi(dxd).png",      "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
-  { "name": "Astolfo ",            "image": "./assets/waifus/Astolfo.png",         "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
-  { "name": "Asia",                "image": "./assets/waifus/asia(dxd).png",       "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
-  { "name": "Meru The Succubus",   "image": "./assets/waifus/meru.png",            "hp": 1400, "rewards": { "currency": 1400, "xp": 140 } },
-  { "name": "Yuuno",               "image": "./assets/waifus/yuuno.png",           "hp": 1250, "rewards": { "currency": 1300, "xp": 130 } },
-  { "name": "Retsu Kaioh",         "image": "./assets/waifus/retsu.png",           "hp": 1600, "rewards": { "currency": 1600, "xp": 160 } }
-]
+
+{
+  "common": [
+    { "name": "Meru The Succubus",   "image": "./assets/waifus/meru.png",            "hp": 1400, "rewards": { "currency": 1400, "xp": 140 } },
+    { "name": "Yuuno",               "image": "./assets/waifus/yuuno.png",           "hp": 1250, "rewards": { "currency": 1300, "xp": 130 } },
+    { "name": "Retsu Kaioh",         "image": "./assets/waifus/retsu.png",           "hp": 1600, "rewards": { "currency": 1600, "xp": 160 } },
+    {
+      "name": "Shimakaze",
+      "image": "shimakaze.png",
+      "hp": 1000,
+      "rewards": {
+        "currency": 1000,
+        "xp": 100
+      }
+    },
+    {
+      "name": "Asuka Langley Soryu",
+      "image": "asuka_langley.png",
+      "hp": 1200,
+      "rewards": {
+        "currency": 1200,
+        "xp": 120
+      }
+    },
+    {
+      "name": "Krul",
+      "image": "krul.jpg",
+      "hp": 1100,
+      "rewards": {
+        "currency": 1100,
+        "xp": 110
+      }
+    },
+    {
+      "name": "Sumi Sakurasawa",
+      "image": "sumi_sakurasawa.jpg",
+      "hp": 1100,
+      "rewards": {
+        "currency": 1100,
+        "xp": 110
+      }
+    }
+  ],
+  "uncommon": [
+    {
+      "name": "Akeno Himisjima",
+      "image": "Akeno.png",
+      "hp": 1460,
+      "rewards": {
+        "currency": 1470,
+        "xp": 160
+      }
+    },
+    {
+      "name": "Sayori",
+      "image": "sayori.png",
+      "hp": 1600,
+      "rewards": {
+        "currency": 1600,
+        "xp": 170
+      }
+    },
+    {
+      "name": "Rem",
+      "image": "rem.jpg",
+      "hp": 1500,
+      "rewards": {
+        "currency": 1500,
+        "xp": 180
+      }
+    },
+    {
+      "name": "Koneko",
+      "image": "koneko(dxd).png",
+      "hp": 1460,
+      "rewards": {
+        "currency": 1470,
+        "xp": 160
+      }
+    },
+    {
+      "name": "Rias Gremory",
+      "image": "rias gremory.png",
+      "hp": 1460,
+      "rewards": {
+        "currency": 1470,
+        "xp": 160
+      }
+    },
+    {
+      "name": "Xenovia",
+      "image": "xenovia quarta.png",
+      "hp": 1460,
+      "rewards": {
+        "currency": 1470,
+        "xp": 160
+      }
+    }
+  ],
+  "rare": [
+    {
+      "name": "Vladi",
+      "image": "vladi(dxd).png",
+      "hp": 2840,
+      "rewards": {
+        "currency": 2010,
+        "xp": 220
+      }
+    },
+    {
+      "name": "Asia",
+      "image": "asia(dxd).png",
+      "hp": 2880,
+      "rewards": { "currency": 2410, "xp": 230 }
+    }
+  ],
+  "legendary": [
+    {
+      "name": "Astolfo",
+      "image": "Astolfo.png",
+      "hp": 3000,
+      "rewards": {
+        "currency": 2780,
+        "xp": 480
+      }
+    }
+  ]
+}

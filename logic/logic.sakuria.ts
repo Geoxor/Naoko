@@ -7,6 +7,14 @@ import { IAnilistAnime, IAnime, IMessage } from "../types";
 import Jimp from "jimp";
 
 /**
+ * Picks a random item from an array
+ * @author MaidMarija
+ */
+export function randomChoice<T>(l: Array<T>): T {
+  return l[Math.floor(Math.random() * l.length)];
+}
+
+/**
  * Encodes an alphanumerical string to Morse code
  * @param {string} string an alphanumerical string to encode
  * @author Geoxor
