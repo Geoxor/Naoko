@@ -95,6 +95,11 @@ export default class WaifuBattle {
     // Collect messages
     this.collector.on("collect", async (message) => {
       if (message.content === "!attack") {
+
+        // Add the user to the participants who participated 
+        // in the battle so we can reward them
+        !this.participants.includes(message.author) && this.participants.push(message.author)
+
         this.waifu.dealDamage(100);
         if (this.waifu.isDead) await this.endBattle();
       }
