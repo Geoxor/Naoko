@@ -113,7 +113,7 @@ export default class WaifuBattle {
   async updateBossbar(){
     const newBossbar = `${this.initialThreadName} (${this.waifu.hp}hp)`;
     if (this.thread!.name !== newBossbar) {                                                                   console.log('updating bossbar');
-      await this.thread!.setName(newBossbar);                                                                 console.log('updated bossbar');
+      this.thread!.setName(newBossbar);                                                                       console.log('updated bossbar');
     }
   }
 
@@ -123,7 +123,7 @@ export default class WaifuBattle {
    */
   async endBattle(){
     clearInterval(this.bossbar as NodeJS.Timeout);                                                            console.log('cleared bossbar timer');
-    await this.thread!.setName(`${this.initialThreadName} (0hp) - Victory`);                                  console.log('set to victory');
+    this.thread!.setName(`${this.initialThreadName} (0hp) - Victory`);                                        console.log('set to victory');
     await this.thread!.send(`Battle has ended - deleting thread in ${this.aftermathTime / 1000} seconds`);    console.log('notify deletion');
     setTimeout(() => {
       this.thread?.delete();                                                                                  console.log('deleted thread');
