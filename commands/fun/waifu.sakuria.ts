@@ -7,7 +7,7 @@ export default {
   description: "Waifu battle a random waifu with your friends for rewards!",
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<string | void> => {
-    if (!(message.channel instanceof Discord.TextChannel)) return "Can't start battles in here!"
+    if (!(message.channel instanceof Discord.TextChannel)) return "Can't start battles in here!";
     const battle = new WaifuBattle(message.author, message.channel);
     await battle.startBattle();
     return;

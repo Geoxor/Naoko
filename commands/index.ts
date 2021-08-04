@@ -27,22 +27,4 @@ import play from "./musicPlayer/play.sakuria";
 import skip from "./musicPlayer/skip.sakuria";
 import shuffle from "./musicPlayer/shuffle.sakuria";
 
-export const commands: ICommand[] = [
-  waifu, 
-  shuffle, 
-  skip, 
-  play, 
-  anime, 
-  invert, 
-  ask, 
-  clear, 
-  decode, 
-  dicksize, 
-  help, 
-  invite, 
-  mors, 
-  say, 
-  traceAnime, 
-  uwuify, 
-  kick
-];
+export const commands: ICommand[] = [waifu, shuffle, skip, play, anime, invert, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];

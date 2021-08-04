@@ -8,7 +8,7 @@ export default {
   execute: async (message: IMessage): Promise<string> => {
     return musicMiddleware(message, async (channel, player) => {
       player.skip();
-      return 'Skipped';
+      return "Skipped";
     });
   },
 };

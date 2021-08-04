@@ -21,7 +21,7 @@ class Sakuria {
     this.bot.on("ready", async () => {
       this.onReady;
       logger.sakuria.numServers(this.bot.guilds.cache.size);
-      this.bot.user?.setActivity(`for ${config.prefix}help`, { type: 'LISTENING' })
+      this.bot.user?.setActivity(`for ${config.prefix}help`, { type: "LISTENING" });
     });
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.bot.login(process.env.DISCORD_TOKEN!);
