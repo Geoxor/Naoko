@@ -12,7 +12,8 @@ import { IRewards, IWaifu } from "../types";
 export default class Waifu {
   public name: string;
   public attachment: Discord.MessageAttachment;
-  public hp: number;
+  public currentHp: number;
+  public maxHp: number;
   public rewards: IRewards;
   public isDead: boolean;
   public ui: Discord.MessageEmbed;
@@ -21,7 +22,8 @@ export default class Waifu {
   constructor(waifu: IWaifu) {
     this.name = waifu.name;
     this.attachment = new Discord.MessageAttachment(fs.createReadStream(waifu.image), `${this.name}.png`);
-    this.hp = waifu.hp;
+    this.currentHp = waifu.hp;
+    this.maxHp = waifu.hp;
     this.rewards = waifu.rewards;
     this.isDead = false;
     this.ui = this.prepareUi();
@@ -32,13 +34,13 @@ export default class Waifu {
     embed
       .setColor("#FF00B6")
       .setTitle(this.name)
-      .setDescription("" + this.hp)
+      .setDescription("" + this.maxHp)
       .setImage(`attachment://${this.name}.png`);
     return embed;
   }
 
   public dealDamage(damage: number) {
-    this.hp = this.hp - damage;
-    if (this.hp <= 0) this.isDead = true;
+    this.currentHp = this.currentHp - damage;
+    if (this.currentHp <= 0) this.isDead = true;
   }
 }
