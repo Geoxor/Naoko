@@ -1,7 +1,7 @@
 import config from "../sakuria/Config.sakuria";
 import Discord from "discord.js";
 import MessageParser from "../sakuria/MessageParser.sakuria";
-import { IMessage, CommandExecute } from "../types";
+import { IMessage } from "../types";
 
 /**
  * Returns the function if the message doesn't meet requirements
@@ -13,7 +13,6 @@ import { IMessage, CommandExecute } from "../types";
  */
 export default function (message: Discord.Message, next: (message: IMessage) => any): void {
   if (message.content.lastIndexOf(config.prefix) !== 0) return;
-  if ((message.channel.type as string) === "dm") return;
   if (message.author.bot) return;
   const { command, args } = new MessageParser(message.content);
   const updatedMessage = message as IMessage;

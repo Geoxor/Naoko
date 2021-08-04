@@ -2,6 +2,7 @@ import Waifu from "./Waifu.sakuria";
 import Discord from "discord.js";
 import waifus from "../assets/waifus.json";
 import { IWaifu } from "../types";
+import logger from "./Logger.sakuria";
 
 /**
  * This manages a waifu battle, randomly picking enemy waifus,
@@ -53,7 +54,7 @@ export default class WaifuBattle {
    * Starts the battle
    * @author Geoxor, Cimok
    */
-  async startBattle(){                                                                                        console.log("Started Battle");
+  async startBattle(){                                                                                        logger.sakuria.generic("[WaifuBattle] Started Battle");
 
     // Create thread
     await this.initThread()
@@ -64,7 +65,7 @@ export default class WaifuBattle {
 
     // End the battle if its been more than the battle duration
     setTimeout(async () => {
-      !this.ended && await this.endBattle();                                                                  console.log("forcefully ending battle");
+      !this.ended && await this.endBattle();                                                                  logger.sakuria.generic("[WaifuBattle] forcefully ending battle");
     }, this.battleDuration);
   };
 
@@ -76,11 +77,11 @@ export default class WaifuBattle {
     this.thread = await this.channel.threads.create({
       name: this.threadName,
       autoArchiveDuration: 60
-    });                                                                                                       console.log("Thread created");
+    });                                                                                                       logger.sakuria.generic("[WaifuBattle] Thread created");
 
-    await this.thread.join();                                                                                 console.log("Thread joined");
-    await this.thread.members.add(this.startUser);                                                            console.log("Thread added author");
-    await this.thread.send(this.getWaifu());                                                                  console.log("Thread sent waifu");
+    await this.thread.join();                                                                                 logger.sakuria.generic("[WaifuBattle] Thread joined");
+    await this.thread.members.add(this.startUser);                                                            logger.sakuria.generic("[WaifuBattle] Thread added author");
+    await this.thread.send(this.getWaifu());                                                                  logger.sakuria.generic("[WaifuBattle] Thread sent waifu");
 
     this.initCollector();
   }
@@ -92,12 +93,12 @@ export default class WaifuBattle {
   async initCollector(){
 
     // Create the collector on the thread
-    this.collector = new Discord.MessageCollector(this.thread!);                                              console.log("Collector started");
+    this.collector = new Discord.MessageCollector(this.thread!);                                              logger.sakuria.generic("[WaifuBattle] Collector started");
 
     // Collect messages
     this.collector.on('collect', async message => {
-      if (message.content === '!attack') {                                                                    console.log("!attack gotten");
-        this.waifu.dealDamage(100);                                                                           console.log(`damage reduced ${this.waifu.hp}`);
+      if (message.content === '!attack') {                                                                    
+        this.waifu.dealDamage(100);                                                                           logger.sakuria.generic(`damage reduced ${this.waifu.hp}`);
         if (this.waifu.isDead) await this.endBattle();
       }
     });
@@ -122,11 +123,11 @@ export default class WaifuBattle {
     if (this.ended) return;
     this.ended = true;
     this.collector!.stop();
-    clearInterval(this.bossbar as NodeJS.Timeout);                                                            console.log('cleared bossbar timer');
-    await this.thread!.setName(`${this.threadName} victory`);                                          console.log('set to victory');
-    await this.thread!.send(`Battle has ended - deleting thread in ${this.aftermathTime / 1000} seconds`);    console.log('notify deletion');
+    clearInterval(this.bossbar as NodeJS.Timeout);                                                            logger.sakuria.generic('cleared bossbar timer');
+    await this.thread!.setName(`${this.threadName} victory`);                                                 logger.sakuria.generic('set to victory');
+    await this.thread!.send(`Battle has ended - deleting thread in ${this.aftermathTime / 1000} seconds`);    logger.sakuria.generic('notify deletion');
     setTimeout(() => {
-      this.thread?.delete();                                                                                  console.log('deleted thread');
+      this.thread?.delete();                                                                                  logger.sakuria.generic('deleted thread');
     }, this.aftermathTime);
   }
 }
