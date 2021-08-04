@@ -51,16 +51,19 @@ export default class WaifuBattle {
    * Starts the battle
    * @author Geoxor, Cimok
    */
-  async startBattle(){
+  async startBattle(){                                                                                        console.log("Started Battle");
 
     // Create thread
     await this.initThread()
 
     // Update the bossbar every second if it changes
-    this.bossbar = setInterval(() => this.updateBossbar(), 1000);
+    this.bossbar = setInterval(() => this.updateBossbar(), 5000);
+    
 
     // End the battle if its been more than the battle duration
-    setTimeout(async () => this.ended && await this.endBattle(), this.battleDuration);
+    setTimeout(async () => {
+      !this.ended && await this.endBattle();                                                                  console.log("forcefully ending battle");
+    }, this.battleDuration);
   };
 
   /**
@@ -71,11 +74,11 @@ export default class WaifuBattle {
     this.thread = await this.channel.threads.create({
       name: `${this.initialThreadName} (${this.waifu.hp}hp)`,
       autoArchiveDuration: 60
-    });
+    });                                                                                                       console.log("Thread created");
 
-    await this.thread.join();
-    await this.thread.members.add(this.startUser);
-    await this.thread.send(this.getWaifu());
+    await this.thread.join();                                                                                 console.log("Thread joined");
+    await this.thread.members.add(this.startUser);                                                            console.log("Thread added author");
+    await this.thread.send(this.getWaifu());                                                                  console.log("Thread sent waifu");
 
     this.initCollector();
   }
@@ -87,18 +90,17 @@ export default class WaifuBattle {
   async initCollector(){
 
     // Create the collector on the thread
-    this.collector = new Discord.MessageCollector(this.thread!);
+    this.collector = new Discord.MessageCollector(this.thread!);                                              console.log("Collector started");
 
     // Collect messages
-    this.collector.on('collect', message => {
-      if (message.content === '!attack') {
-        this.waifu.dealDamage(100);
-
+    this.collector.on('collect', async message => {
+      if (message.content === '!attack') {                                                                    console.log("!attack gotten");
+        this.waifu.dealDamage(100);                                                                           console.log(`damage reduced ${this.waifu.hp}`);
         // When the waifu dies finish up
-        if (this.waifu.isDead) {
-          this.collector!.stop();
+        if (this.waifu.isDead) {                                                                              console.log('waifu died');
           this.ended = true;
-          this.endBattle();
+          await this.endBattle();
+          this.collector!.stop();
         }
       }
     });
@@ -110,7 +112,9 @@ export default class WaifuBattle {
    */
   async updateBossbar(){
     const newBossbar = `${this.initialThreadName} (${this.waifu.hp}hp)`;
-    if (this.thread!.name !== newBossbar) await this.thread!.setName(newBossbar); 
+    if (this.thread!.name !== newBossbar) {                                                                   console.log('updating bossbar');
+      await this.thread!.setName(newBossbar);                                                                 console.log('updated bossbar');
+    }
   }
 
   /**
@@ -118,8 +122,11 @@ export default class WaifuBattle {
    * @author Geoxor, Cimok
    */
   async endBattle(){
-    await this.thread?.send(`Battle has ended - deleting thread in ${this.aftermathTime / 1000} seconds`);
-    clearInterval(this.bossbar as NodeJS.Timeout);
-    setTimeout(() => this.thread?.delete(), this.aftermathTime);
+    clearInterval(this.bossbar as NodeJS.Timeout);                                                            console.log('cleared bossbar timer');
+    await this.thread!.setName(`${this.initialThreadName} (0hp) - Victory`);                                  console.log('set to victory');
+    await this.thread!.send(`Battle has ended - deleting thread in ${this.aftermathTime / 1000} seconds`);    console.log('notify deletion');
+    setTimeout(() => {
+      this.thread?.delete();                                                                                  console.log('deleted thread');
+    }, this.aftermathTime);
   }
 }
