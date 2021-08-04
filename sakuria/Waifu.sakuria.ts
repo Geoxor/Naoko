@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 import fs from "fs";
-import { IRewards, IWaifu } from "../types";
+import { IRewards, IJSONWaifu, IWaifuRarity, IWaifu } from "../types";
 
 /**
  * Per guild waifu fights that people initiate with a command
@@ -16,14 +16,16 @@ export default class Waifu {
   public maxHp: number;
   public rewards: IRewards;
   public isDead: boolean;
+  public rarity: IWaifuRarity;
   public ui: Discord.MessageEmbed;
   // public rarity: string; ?
 
   constructor(waifu: IWaifu) {
     this.name = waifu.name;
-    this.attachment = new Discord.MessageAttachment(fs.createReadStream(waifu.image), `${this.name}.png`);
+    this.attachment = new Discord.MessageAttachment(fs.createReadStream(`./assets/waifus/${waifu.image}`), `${this.name}.png`);
     this.currentHp = waifu.hp;
     this.maxHp = waifu.hp;
+    this.rarity = waifu.rarity;
     this.rewards = waifu.rewards;
     this.isDead = false;
     this.ui = this.prepareUi();
@@ -34,6 +36,7 @@ export default class Waifu {
     embed
       .setColor("#FF00B6")
       .setTitle(this.name)
+      .addField("Rarity", this.rarity.name, true)
       .setDescription("" + this.maxHp)
       .setImage(`attachment://${this.name}.png`);
     return embed;

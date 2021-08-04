@@ -50,10 +50,17 @@ export interface IRewards {
   currency: number;
   xp: number;
 }
-
-export interface IWaifu {
+export interface IJSONWaifu {
   name: string;
   image: string;
   hp: number;
   rewards: IRewards;
+}
+
+export interface IWaifu extends IJSONWaifu {
+  rarity: IWaifuRarity;
+}
+export interface IWaifuRarity {
+  relativeFrequency: number;
+  name: "common" | "uncommon" | "rare" | "legendary";
 }
