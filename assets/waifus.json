@@ -11,5 +11,8 @@
   { "name": "Xenovia",             "image": "./assets/waifus/xenovia quarta.png",  "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
   { "name": "Vladi",               "image": "./assets/waifus/vladi(dxd).png",      "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
   { "name": "Astolfo ",            "image": "./assets/waifus/Astolfo.png",         "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
-  { "name": "Asia",                "image": "./assets/waifus/asia(dxd).png",       "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } }
+  { "name": "Asia",                "image": "./assets/waifus/asia(dxd).png",       "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+  { "name": "Meru The Succubus",   "image": "./assets/waifus/meru.png",            "hp": 1400, "rewards": { "currency": 1400, "xp": 140 } },
+  { "name": "Yuuno",               "image": "./assets/waifus/yuuno.png",           "hp": 1250, "rewards": { "currency": 1300, "xp": 130 } },
+  { "name": "Retsu Kaioh",         "image": "./assets/waifus/retsu.png",           "hp": 1600, "rewards": { "currency": 1600, "xp": 160 } }
 ]
