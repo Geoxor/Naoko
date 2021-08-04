@@ -1,1 +1,3 @@
-[{ "name": "Shimakaze", "image": "./assets/waifus/shimakaze.png", "hp": 1000, "rewards": { "currency": 1000, "xp": 100 } }]
+[{ "name": "Shimakaze", "image": "./assets/waifus/shimakaze.png", "hp": 1000, "rewards": { "currency": 1000, "xp": 100 } }
+  { "name": "Akeno Himsjima", "image": "./assets/waifus/Akeno.png", "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+]
