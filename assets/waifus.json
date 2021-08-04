@@ -1,4 +1,5 @@
 [
   { "name": "Shimakaze", "image": "./assets/waifus/shimakaze.png", "hp": 1000, "rewards": { "currency": 1000, "xp": 100 } },
-  { "name": "Asuka Langley Soryu", "image": "./assets/waifus/asuka_langley.png", "hp": 1200, "rewards": { "currency": 1200, "xp": 120 } }
+  { "name": "Asuka Langley Soryu", "image": "./assets/waifus/asuka_langley.png", "hp": 1200, "rewards": { "currency": 1200, "xp": 120 } },
+  { "name": "Akeno", "image": "./assets/waifus/akeno.png", "hp": 1100, "rewards": { "currency": 1100, "xp": 110 } }
 ]
