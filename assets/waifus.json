@@ -1,5 +1,15 @@
 [
-  { "name": "Shimakaze", "image": "./assets/waifus/shimakaze.png", "hp": 1000, "rewards": { "currency": 1000, "xp": 100 } },
-  { "name": "Asuka Langley Soryu", "image": "./assets/waifus/asuka_langley.png", "hp": 1200, "rewards": { "currency": 1200, "xp": 120 } },
-  { "name": "Akeno", "image": "./assets/waifus/akeno.png", "hp": 1100, "rewards": { "currency": 1100, "xp": 110 } }
+  { "name": "Shimakaze",           "image": "./assets/waifus/shimakaze.png",       "hp": 1000, "rewards": { "currency": 1000, "xp": 100 } },
+  { "name": "Asuka Langley Soryu", "image": "./assets/waifus/asuka_langley.png",   "hp": 1200, "rewards": { "currency": 1200, "xp": 120 } },
+  { "name": "Krul",                "image": "./assets/waifus/krul.jpg",            "hp": 1100, "rewards": { "currency": 1100, "xp": 110 } },
+  { "name": "Sayori",              "image": "./assets/waifus/sayori.png",          "hp": 1600, "rewards": { "currency": 1600, "xp": 160 } },
+  { "name": "Rem",                 "image": "./assets/waifus/rem.jpg",             "hp": 1500, "rewards": { "currency": 1500, "xp": 150 } },
+  { "name": "Sumi Sakurasawa",     "image": "./assets/waifus/sumi_sakurasawa.jpg", "hp": 1100, "rewards": { "currency": 1100, "xp": 110 } },
+  { "name": "Akeno Himisjima",     "image": "./assets/waifus/Akeno.png",           "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+  { "name": "Koneko",              "image": "./assets/waifus/koneko(dxd).png",     "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+  { "name": "Rias Gremory",        "image": "./assets/waifus/rias gremory.png",    "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+  { "name": "Xenovia",             "image": "./assets/waifus/xenovia quarta.png",  "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+  { "name": "Vladi",               "image": "./assets/waifus/vladi(dxd).png",      "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+  { "name": "Astolfo ",            "image": "./assets/waifus/Astolfo.png",         "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } },
+  { "name": "Asia",                "image": "./assets/waifus/asia(dxd).png",       "hp": 1360, "rewards": { "currency": 1270, "xp": 120 } }
 ]
