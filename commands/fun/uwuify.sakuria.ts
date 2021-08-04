@@ -1,5 +1,5 @@
-import { uwufy } from "../logic/logic.sakuria";
-import { IMessage } from "../types";
+import { uwufy } from "../../logic/logic.sakuria";
+import { IMessage } from "../../types";
 
 export default {
   name: "uwufy",

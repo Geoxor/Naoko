@@ -1,5 +1,5 @@
-import { decodeMorse } from "../logic/logic.sakuria";
-import { IMessage } from "../types";
+import { decodeMorse } from "../../logic/logic.sakuria";
+import { IMessage } from "../../types";
 
 export default {
   name: "decode",

@@ -1,5 +1,5 @@
-import { musicMiddleware } from "../middleware/musicMiddleware.sakuria";
-import { IMessage } from "../types";
+import { musicMiddleware } from "../../middleware/musicMiddleware.sakuria";
+import { IMessage } from "../../types";
 
 export default {
   name: "play",

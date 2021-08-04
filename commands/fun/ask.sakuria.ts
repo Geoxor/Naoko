@@ -1,5 +1,5 @@
-import { IMessage } from "../types";
-import answers from "../assets/answers.json";
+import { IMessage } from "../../types";
+import answers from "../../assets/answers.json";
 
 export default {
   name: "ask",

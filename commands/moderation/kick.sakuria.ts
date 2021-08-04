@@ -1,5 +1,5 @@
-import { db } from "../sakuria/Database.sakuria";
-import { IMessage } from "../types";
+import { db } from "../../sakuria/Database.sakuria";
+import { IMessage } from "../../types";
 
 export default {
   name: "kick",

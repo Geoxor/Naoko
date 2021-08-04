@@ -1,5 +1,5 @@
 import { DiscordAPIError, TextChannel } from "discord.js";
-import { IMessage } from "../types";
+import { IMessage } from "../../types";
 
 export default {
   name: "clear",

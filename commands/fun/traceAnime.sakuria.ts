@@ -1,6 +1,6 @@
-import { IMessage } from "../types";
+import { IMessage } from "../../types";
 import Discord from "discord.js";
-import { anilistQuery, traceAnime } from "../logic/logic.sakuria";
+import { anilistQuery, traceAnime } from "../../logic/logic.sakuria";
 
 export default {
   name: "trace",

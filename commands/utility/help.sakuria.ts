@@ -1,4 +1,4 @@
-import sakuria from "../sakuria/Sakuria.sakuria";
+import sakuria from "../../sakuria/Sakuria.sakuria";
 export default {
   name: "help",
   description: "The command you just did",

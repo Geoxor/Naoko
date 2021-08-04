@@ -1,6 +1,6 @@
 import Discord from "discord.js";
-import WaifuBattle from "../sakuria/WaifuBattle.sakuria";
-import { IMessage } from "../types";
+import WaifuBattle from "../../sakuria/WaifuBattle.sakuria";
+import { IMessage } from "../../types";
 
 export default {
   name: "waifu",

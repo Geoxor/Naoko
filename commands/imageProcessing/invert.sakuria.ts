@@ -1,6 +1,6 @@
 import Discord, { MessageOptions } from "discord.js";
-import { getBufferFromUrl, getLastAttachmentInChannel, invertImage } from "../logic/logic.sakuria";
-import { IMessage } from "../types";
+import { getBufferFromUrl, getLastAttachmentInChannel, invertImage } from "../../logic/logic.sakuria";
+import { IMessage } from "../../types";
 
 export default {
   name: "invert",
