@@ -1,18 +1,8 @@
-
 {
   "common": [
-    { "name": "Meru The Succubus",   "image": "./assets/waifus/meru.png",            "hp": 1400, "rewards": { "currency": 1400, "xp": 140 } },
-    { "name": "Yuuno",               "image": "./assets/waifus/yuuno.png",           "hp": 1250, "rewards": { "currency": 1300, "xp": 130 } },
-    { "name": "Retsu Kaioh",         "image": "./assets/waifus/retsu.png",           "hp": 1600, "rewards": { "currency": 1600, "xp": 160 } },
-    {
-      "name": "Shimakaze",
-      "image": "shimakaze.png",
-      "hp": 1000,
-      "rewards": {
-        "currency": 1000,
-        "xp": 100
-      }
-    },
+    { "name": "Meru The Succubus", "image": "./assets/waifus/meru.png", "hp": 1400, "rewards": { "currency": 1400, "xp": 140 } },
+    { "name": "Yuuno", "image": "./assets/waifus/yuuno.png", "hp": 1250, "rewards": { "currency": 1300, "xp": 130 } },
+    { "name": "Retsu Kaioh", "image": "./assets/waifus/retsu.png", "hp": 1600, "rewards": { "currency": 1600, "xp": 160 } },
     {
       "name": "Asuka Langley Soryu",
       "image": "asuka_langley.png",
@@ -111,7 +101,19 @@
       "name": "Asia",
       "image": "asia(dxd).png",
       "hp": 2880,
-      "rewards": { "currency": 2410, "xp": 230 }
+      "rewards": {
+        "currency": 2410,
+        "xp": 230
+      }
+    },
+    {
+      "name": "Rurudo",
+      "image": "rurudo.png",
+      "hp": 2520,
+      "rewards": {
+        "currency": 2310,
+        "xp": 200
+      }
     }
   ],
   "legendary": [
@@ -122,6 +124,35 @@
       "rewards": {
         "currency": 2780,
         "xp": 480
+      }
+    },
+    {
+      "name": "Ram",
+      "image": "ram.png",
+      "hp": 3300,
+      "rewards": {
+        "currency": 2560,
+        "xp": 490
+      }
+    }
+  ],
+  "mythic": [
+    {
+      "name": "Shimakaze",
+      "image": "shimakaze.png",
+      "hp": 8000,
+      "rewards": {
+        "currency": 4890,
+        "xp": 1120
+      }
+    },
+    {
+      "name": "Neneko",
+      "image": "Neneko.png",
+      "hp": 10000,
+      "rewards": {
+        "currency": 6120,
+        "xp": 1750
       }
     }
   ]

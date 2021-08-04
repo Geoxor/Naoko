@@ -5,23 +5,38 @@ import { IJSONWaifu, IWaifu, IWaifuRarity } from "../types";
 import { randomChoice } from "../logic/logic.sakuria";
 
 const COMMON: IWaifuRarity = {
-  relativeFrequency: 10,
+  relativeFrequency: 14,
   name: "common",
+  color: "#8F93A2",
+  emoji: "👺",
 };
 
 const UNCOMMON: IWaifuRarity = {
-  relativeFrequency: 5,
+  relativeFrequency: 7,
   name: "uncommon",
+  color: "#BDDE86",
+  emoji: "🐉",
 };
 
 const RARE: IWaifuRarity = {
-  relativeFrequency: 3,
+  relativeFrequency: 5,
   name: "rare",
+  color: "#C792EA",
+  emoji: "🔮",
 };
 
 const LEGENDARY: IWaifuRarity = {
-  relativeFrequency: 2,
+  relativeFrequency: 3,
   name: "legendary",
+  color: "#FFCB6B",
+  emoji: "🌟",
+};
+
+const MYTHIC: IWaifuRarity = {
+  relativeFrequency: 1,
+  name: "mythic",
+  color: "#F07178",
+  emoji: "⚜️",
 };
 
 /**
@@ -48,7 +63,7 @@ export default class WaifuBattle {
   public battleEnd: number;
 
   constructor(startUser: Discord.User, channel: Discord.TextChannel) {
-    this.chosenWaifu = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY]);
+    this.chosenWaifu = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHIC]);
     this.waifu = new Waifu(this.chosenWaifu);
     this.participants = [];
     this.startUser = startUser;
@@ -73,9 +88,7 @@ export default class WaifuBattle {
   chooseWaifu(rarities: IWaifuRarity[]): IWaifu {
     // sum up all these relative frequencies to generate a maximum for our random number generation
     let maximum = 0;
-    rarities.forEach((w) => {
-      maximum += w.relativeFrequency;
-    });
+    rarities.forEach((w) => (maximum += w.relativeFrequency));
 
     let choiceValue = Math.random() * maximum;
 
@@ -219,7 +232,7 @@ export default class WaifuBattle {
    */
   createRewardEmbed() {
     return new Discord.MessageEmbed()
-      .setColor("#ff00b6")
+      .setColor("#2F3136")
       .setTitle(`${this.waifu.name} has been defeated!`)
       .addField("Rewards", this.getRewards(), false)
       .addField("Participants", this.getParticipants(), false)
