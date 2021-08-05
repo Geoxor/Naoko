@@ -38,23 +38,25 @@ export interface IAnilistAnime {
   externalLinks: ExternalLinks[];
   bannerImage?: string;
 }
-export interface IRewards {
-  currency: number;
-  xp: number;
-}
-export interface IJSONWaifu {
-  name: string;
-  image: string;
-  hp: number;
-  armor?: number;
-  rewards: IRewards;
-}
-export interface IWaifu extends IJSONWaifu {
-  rarity: IWaifuRarity;
-}
 export interface IWaifuRarity {
   relativeFrequency: number;
-  name: "common" | "uncommon" | "rare" | "legendary" | "mythic";
-  color: "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | "#F07178";
-  emoji: "👺" | "🐉" | "🔮" | "🌟" | "⚜️";
+  rewards: IRewards;
+  armor: number;
+  hp: number;
+  waifus: IWaifu[];
+  name: IWaifuRarityName;
+  color: IWaifuRarityColor;
+  emoji: IWaifuRarityEmoji;
 }
+export interface IRewards {
+  money: number;
+  xp: number;
+}
+export interface IWaifu {
+  name: string;
+  image: string;
+}
+
+export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
+export type IWaifuRarityColor = "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | "#F07178";
+export type IWaifuRarityEmoji = "👺" | "🐉" | "🔮" | "🌟" | "⚜️";

@@ -1,43 +1,8 @@
 import Waifu from "./Waifu.sakuria";
 import Discord from "discord.js";
-import waifus from "../assets/waifus.json";
-import { IJSONWaifu, IWaifu, IWaifuRarity } from "../types";
+import { IWaifu, IWaifuRarity } from "../types";
 import { randomChoice, calcDamage } from "../logic/logic.sakuria";
-
-const COMMON: IWaifuRarity = {
-  relativeFrequency: 14,
-  name: "common",
-  color: "#8F93A2",
-  emoji: "👺",
-};
-
-const UNCOMMON: IWaifuRarity = {
-  relativeFrequency: 7,
-  name: "uncommon",
-  color: "#BDDE86",
-  emoji: "🐉",
-};
-
-const RARE: IWaifuRarity = {
-  relativeFrequency: 5,
-  name: "rare",
-  color: "#C792EA",
-  emoji: "🔮",
-};
-
-const LEGENDARY: IWaifuRarity = {
-  relativeFrequency: 3,
-  name: "legendary",
-  color: "#FFCB6B",
-  emoji: "🌟",
-};
-
-const MYTHIC: IWaifuRarity = {
-  relativeFrequency: 1,
-  name: "mythic",
-  color: "#F07178",
-  emoji: "⚜️",
-};
+import { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON } from "./WaifuRarities.sakuria";
 
 /**
  * This manages a waifu battle, randomly picking enemy waifus,
@@ -47,7 +12,6 @@ const MYTHIC: IWaifuRarity = {
  */
 export default class WaifuBattle {
   private lastBossbarMessage: Discord.Message | null;
-  public chosenWaifu: IWaifu;
   public waifu: Waifu;
   public participants: Discord.User[];
   public startUser: Discord.User;
@@ -63,8 +27,8 @@ export default class WaifuBattle {
   public battleEnd: number;
 
   constructor(startUser: Discord.User, channel: Discord.TextChannel) {
-    this.chosenWaifu = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHIC]);
-    this.waifu = new Waifu(this.chosenWaifu);
+    const {chosenWaifu, chosenRarity } = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHICAL]);
+    this.waifu = new Waifu(chosenWaifu, chosenRarity);
     this.participants = [];
     this.startUser = startUser;
     this.channel = channel;
@@ -85,7 +49,7 @@ export default class WaifuBattle {
    * @returns {Waifu} the waifu JSON
    * @author MaidMarija
    */
-  chooseWaifu(rarities: IWaifuRarity[]): IWaifu {
+  chooseWaifu(rarities: IWaifuRarity[]): {chosenWaifu: IWaifu, chosenRarity: IWaifuRarity} {
     // sum up all these relative frequencies to generate a maximum for our random number generation
     let maximum = 0;
     rarities.forEach((w) => (maximum += w.relativeFrequency));
@@ -96,21 +60,16 @@ export default class WaifuBattle {
     // we use < instead of <= because Math.random() is in the range [0,1)
     for (let rarity of rarities) {
       if (choiceValue < rarity.relativeFrequency) {
-        // We make the IJSONWaifu into an IWaifu because we wanna add the rarity
-        // even tho the rarity isn't part of the waifu itself rather its the key
-        // for a group of waifus, someone make this a lot better kthx - geoxor
-        const waifu = randomChoice<IJSONWaifu>(waifus[rarity.name]) as IWaifu;
-        waifu.rarity = rarity;
-        return waifu;
+        // This is kinda dumb it returns the entire rarity which contains the entire array of waifus as well
+        // performance--;
+        return {chosenWaifu: randomChoice<IWaifu>(rarity.waifus), chosenRarity: rarity};
       } else {
         choiceValue -= rarity.relativeFrequency;
       }
     }
 
     // If for some reason we can't get a waifu just return a common one
-    const waifu = randomChoice(waifus["common"]) as IWaifu;
-    waifu.rarity = COMMON;
-    return waifu;
+    return {chosenWaifu: randomChoice<IWaifu>(rarities[0].waifus), chosenRarity: rarities[0]};
   }
 
   /**
@@ -221,7 +180,7 @@ export default class WaifuBattle {
    */
   getRewards() {
     return `
-      Prisms: ${this.waifu.rewards.currency}
+      Prisms: ${this.waifu.rewards.money}
       XP: ${this.waifu.rewards.xp}
     `;
   }

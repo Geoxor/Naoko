@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 import fs from "fs";
-import { IRewards, IJSONWaifu, IWaifuRarity, IWaifu } from "../types";
+import { IRewards, IWaifuRarity, IWaifu, IWaifuRarityName, IWaifuRarityEmoji } from "../types";
 import { calcDefense } from "../logic/logic.sakuria";
 
 /**
@@ -15,34 +15,38 @@ export default class Waifu {
   public attachment: Discord.MessageAttachment;
   public currentHp: number;
   public maxHp: number;
-  public armor?: number;
+  public armor: number;
   public rewards: IRewards;
   public isDead: boolean;
-  public rarity: IWaifuRarity;
+  public rarity: IWaifuRarityName;
+  public emoji: IWaifuRarityEmoji;
   public ui: Discord.MessageEmbed;
+  public color: Discord.HexColorString;
   private imageFile: string;
 
-  constructor(waifu: IWaifu) {
+  constructor(waifu: IWaifu, rarity: IWaifuRarity) {
     this.name = waifu.name;
     this.imageFile = waifu.image;
-    this.attachment = new Discord.MessageAttachment(fs.createReadStream(`./assets/waifus/${this.imageFile}`), this.imageFile);
-    this.currentHp = waifu.hp;
-    this.maxHp = waifu.hp;
-    this.armor = waifu.armor;
-    this.rarity = waifu.rarity;
-    this.rewards = waifu.rewards;
+    this.currentHp = rarity.hp;
+    this.maxHp = rarity.hp;
+    this.armor = rarity.armor || 0;
+    this.rarity = rarity.name;
+    this.emoji = rarity.emoji; 
+    this.color = rarity.color;
+    this.rewards = rarity.rewards;
     this.isDead = false;
+    this.attachment = new Discord.MessageAttachment(fs.createReadStream(`./assets/waifus/${this.rarity}/${this.imageFile}`), this.imageFile);
     this.ui = this.prepareUi();
   }
 
   private prepareUi() {
     const embed = new Discord.MessageEmbed();
     embed
-      .setColor(this.rarity.color)
+      .setColor(this.color)
       .setTitle(this.name)
-      .addField("Rarity", `${this.rarity.emoji} ${this.rarity.name}`, true)
+      .addField("Rarity", `${this.emoji} ${this.rarity}`, true)
       .setDescription(`${this.maxHp} HP ${this.armor} AP`)
-      .setImage(`attachment://${this.imageFile}.png`);
+      .setImage(`attachment://${this.imageFile}`);
     return embed;
   }
 

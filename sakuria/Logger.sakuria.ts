@@ -1,6 +1,5 @@
 import quotes from "../assets/quotes.json";
 import chalk from "chalk";
-import Discord, { Message } from "discord.js";
 
 /**
  * Main logging wrapper that creates beautiful colors and emojis
