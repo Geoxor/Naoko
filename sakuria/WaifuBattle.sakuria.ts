@@ -3,6 +3,8 @@ import Discord from "discord.js";
 import { IWaifu, IWaifuRarity } from "../types";
 import { randomChoice, calcDamage } from "../logic/logic.sakuria";
 import { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON } from "./WaifuRarities.sakuria";
+import InventoryManager from "./InventoryManager.sakuria";
+import { db } from "./Database.sakuria";
 
 /**
  * This manages a waifu battle, randomly picking enemy waifus,
@@ -13,7 +15,12 @@ import { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON } from "./WaifuRarities.sak
 export default class WaifuBattle {
   private lastBossbarMessage: Discord.Message | null;
   public waifu: Waifu;
-  public participants: Discord.User[];
+  public participants: {
+    [key: string]: {
+      totalAttacks: number;
+      totalDamageDealt: number;
+    }
+  };
   public startUser: Discord.User;
   public channel: Discord.TextChannel;
   public thread: Discord.ThreadChannel | null;
@@ -29,14 +36,14 @@ export default class WaifuBattle {
   constructor(startUser: Discord.User, channel: Discord.TextChannel) {
     const { chosenWaifu, chosenRarity } = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHICAL]);
     this.waifu = new Waifu(chosenWaifu, chosenRarity);
-    this.participants = [];
+    this.participants = {};
     this.startUser = startUser;
     this.channel = channel;
     this.bossbar = null;
     this.thread = null;
     this.collector = null;
     this.battleDuration = 60000;
-    this.aftermathTime = 20000;
+    this.aftermathTime = 15000;
     this.threadName = `waifu battle!`;
     this.ended = false;
     this.lastBossbarMessage = null;
@@ -128,11 +135,29 @@ export default class WaifuBattle {
         // Keep track of when the battle started
         if (this.battleStart == 0) this.battleStart = Date.now();
 
-        // Add the user to the participants who participated
-        // in the battle so we can reward them
-        !this.participants.includes(message.author) && this.participants.push(message.author);
+        // Calculate damage to deal
+        const damage = calcDamage();
 
-        this.waifu.dealDamage(calcDamage());
+        // Add the player if they aren't in already
+        if(!this.participants[message.author.id]) {
+          this.participants[message.author.id] = {
+            totalAttacks: 0,
+            totalDamageDealt: 0,
+          }
+        }
+
+        // Get the current player attacking
+        const player = this.participants[message.author.id];
+
+        // Append their statistics
+        player.totalAttacks++;
+        player.totalDamageDealt = player.totalDamageDealt + damage;
+
+        // Deal damage to the waifu
+        this.waifu.dealDamage(damage);
+        
+        // Rare and above waifu can dodge attacks
+        // if (Math.random() < 0.9 && relativeFrequency >= 5 ) this.waifu.dealDamage(damage);
         if (this.waifu.isDead) await this.endBattle();
       }
     });
@@ -170,18 +195,18 @@ export default class WaifuBattle {
    * Returning their tags and sorted by their DPS
    * @author N1kO23, Geoxor
    */
-  getParticipants() {
-    return this.participants.map((user) => `<@${user.id}>`).join("\n");
+  getParticipantsString() {
+    return Object.keys(this.participants).map((user) => `<@${user}> - DMG ${this.participants[user].totalDamageDealt} - Attacks ${this.participants[user].totalAttacks}`).join("\n");
   }
 
   /**
    * Returns the reward info string for the embed
    * @author N1kO23, Geoxor
    */
-  getRewards() {
+  getRewardString() {
     return `
-      Prisms: ${this.waifu.rewards.money}
-      XP: ${this.waifu.rewards.xp}
+      💎 Prisms: ${this.waifu.rewards.money}
+      ✨ XP: ${this.waifu.rewards.xp}
     `;
   }
 
@@ -193,9 +218,28 @@ export default class WaifuBattle {
     return new Discord.MessageEmbed()
       .setColor("#2F3136")
       .setTitle(`${this.waifu.name} has been defeated!`)
-      .addField("Rewards", this.getRewards(), false)
-      .addField("Participants", this.getParticipants(), false)
+      .addField("Rewards", this.getRewardString(), false)
+      .addField("Participants", this.getParticipantsString(), false)
       .setFooter(`${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`);
+  }
+
+  /**
+   * Rewards all the participating players
+   * @author Geoxor
+   */
+  async rewardPlayers(){
+    for (let [userId, stats] of Object.entries(this.participants)) {
+      // Create the new user if they don't exist so we can 
+      // reward them later
+      await db.newUser(userId);
+      await db.addBattleRewardsToUser(userId, {
+        totalAttacks: stats.totalAttacks,
+        totalDamageDealt: stats.totalDamageDealt,
+        xp: this.waifu.rewards.xp,
+        money: this.waifu.rewards.money,
+        rarity: this.waifu.rarity,
+      })
+    }
   }
 
   /**
@@ -213,6 +257,7 @@ export default class WaifuBattle {
       content: `Battle ended, here's your rewards - deleting thread in ${this.aftermathTime / 1000} seconds`,
       embeds: [this.createRewardEmbed()],
     });
+    await this.rewardPlayers()
     setTimeout(() => {
       try {
         this.thread?.delete();

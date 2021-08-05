@@ -64,6 +64,10 @@ describe("⚡ Waifu name parser (getWaifuNameFromFileName)", () => {
     const name = getWaifuNameFromFileName("kanColle shimakaze.png");
     chai.expect(name).to.contain("KanColle Shimakaze");
   });
+  it("can replace underscores with spaces", async () => {
+    const name = getWaifuNameFromFileName("kanColle_shimakaze.png");
+    chai.expect(name).to.contain("KanColle Shimakaze");
+  });
   it("can handle bullshit extensions", async () => {
     const name = getWaifuNameFromFileName("shimakaze.piouAW3HR9-83");
     chai.expect(name).to.contain("Shimakaze");

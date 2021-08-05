@@ -1,4 +1,5 @@
-import { Inventory, PrismaClient } from "@prisma/client";
+import { Inventory, PrismaClient, Statistics, User } from "@prisma/client";
+import { IBattle } from "../types"
 
 /**
  * Prisma wrapper for making shit simple
@@ -32,7 +33,7 @@ class DB {
         statistics: true,
       },
     });
-    console.log(`CREATE: User: ${id}`);
+    console.log(`UPSERT: User: ${id}`);
     return user;
   }
 
@@ -63,6 +64,49 @@ class DB {
 
     console.log(`GET Inventory: ${userId}`);
     return inventory!;
+  }
+
+  public async addBattleRewardsToUser(user: string, battle: IBattle): Promise<void> {
+    await this.prisma.statistics.update({
+      data: {
+        xp: {
+          increment: battle.xp
+        },
+        totalAttacks: {
+          increment: battle.totalAttacks
+        },
+        totalDamageDealt: {
+          increment: battle.totalDamageDealt
+        },
+        rareWaifusKilled: {
+          increment: battle.rarity === 'rare' ? 1 : 0
+        },
+        commonWaifusKilled: {
+          increment: battle.rarity === 'common' ? 1 : 0
+        },
+        mythicalWaifusKilled: {
+          increment: battle.rarity === 'mythical' ? 1 : 0
+        },
+        uncommonWaifusKilled: {
+          increment: battle.rarity === 'uncommon' ? 1 : 0
+        },
+        legendaryWaifusKilled: {
+          increment: battle.rarity === 'legendary' ? 1 : 0
+        },
+      },
+      where: {userId: user}
+    })
+    console.log(`UPDATE: Statistics: ${user}`);
+    await this.prisma.inventory.update({
+      data: {
+        balance: {
+          increment: battle.money
+        },
+      },
+      where: {userId: user}
+    })
+    console.log(`UPDATE: Inventory: ${user}`);
+    return
   }
 }
 

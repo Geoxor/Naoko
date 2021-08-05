@@ -56,6 +56,11 @@ export interface IWaifu {
   name: string;
   image: string;
 }
+export interface IBattle extends IRewards {
+  rarity: IWaifuRarityName;
+  totalAttacks: number;
+  totalDamageDealt: number;
+}
 
 export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
 export type IWaifuRarityColor = "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | "#F07178";

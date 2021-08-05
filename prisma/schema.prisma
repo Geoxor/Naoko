@@ -70,6 +70,7 @@ model Statistics {
   totalPrismaSpent                Int         @default(0)
   totalPrismaCollected            Int         @default(0)
   totalAttacks                    Int         @default(0)
+  totalDamageDealt                Float       @default(0)
   topDPS                          Float       @default(0)
   commonWaifusKilled              Int         @default(0)
   uncommonWaifusKilled            Int         @default(0)
@@ -78,6 +79,7 @@ model Statistics {
   mythicalWaifusKilled            Int         @default(0)
 
   // Player's Statistics
+  xp                              Int         @default(0)
   health                          Float       @default(1000)
   healthRegen                     Float       @default(20)
   magicalDamage                   Float       @default(100)
@@ -99,4 +101,5 @@ model Battle {
   duration                        Int            // The duration in milliseconds
   participants                    User[]
   statistics                      Statistics[]
+  guildId                         String
 }

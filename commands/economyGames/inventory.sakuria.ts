@@ -8,6 +8,6 @@ export default {
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<Discord.MessageOptions | string> => {
     const embed = await InventoryManager.getInventory(message.author);
-    return {embeds: [embed]};
+    return { embeds: [embed] };
   },
 };
