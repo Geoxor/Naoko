@@ -26,7 +26,6 @@ model User {
   // the inventory for the user for G A M E S 🕹️🕹️
   inventory                       Inventory?
   statistics                      Statistics?
-  battles                         Battle[]
   favoriteWaifu                   String?
 }
 
@@ -65,8 +64,6 @@ model Statistics {
   user                            User        @relation(fields: [userId], references: [id])
 
   // Personal records
-  fastestBattle                   Battle?     @relation(fields: [fastestBattleId], references: [id])
-  fastestBattleId                 Int?
   totalPrismsSpent                Int         @default(0)
   totalPrismsCollected            Int         @default(0)
   totalAttacks                    Int         @default(0)
@@ -90,16 +87,4 @@ model Statistics {
   rangedDamageMultiplier          Float       @default(1)
   meleeDamageMultiplier           Float       @default(1)
   summonDamageMultiplier          Float       @default(1)
-}
-
-model Battle {
-  // The id of the item
-  id                              Int         @id @default(autoincrement())
-
-  // Battle information
-  timestamp                       Int
-  duration                        Int            // The duration in milliseconds
-  participants                    User[]
-  statistics                      Statistics[]
-  guildId                         String
 }

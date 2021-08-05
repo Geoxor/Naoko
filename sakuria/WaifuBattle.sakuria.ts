@@ -217,7 +217,7 @@ export default class WaifuBattle {
    * Creates the defeat embed to display when the battle ends
    * @author Geoxor
    */
-  createDefeatEmbed(){
+  createDefeatEmbed() {
     return new Discord.MessageEmbed()
       .setColor("#FF3136")
       .setTitle(`${this.waifu.name} has escaped with ${~~this.waifu.currentHp} HP!`)
@@ -267,8 +267,8 @@ export default class WaifuBattle {
     this.battleEnd = Date.now();
     this.collector!.stop();
     clearInterval(this.bossbar as NodeJS.Timeout);
-    
-    if (this.waifu.isDead){
+
+    if (this.waifu.isDead) {
       await this.thread!.setName(`${this.threadName} victory`);
       await this.thread!.send({
         content: `Battle ended, here's your rewards - deleting thread in ${this.aftermathTime / 1000} seconds`,
@@ -285,7 +285,7 @@ export default class WaifuBattle {
 
     setTimeout(async () => {
       try {
-        this.channel.name === 'sakuria' ? await this.thread!.setArchived(true) : await this.thread?.delete();
+        this.channel.name === "sakuria" ? await this.thread!.setArchived(true) : await this.thread?.delete();
       } catch (error) {
         console.log(error);
       }
