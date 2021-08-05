@@ -7,7 +7,7 @@ export default {
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<string> => {
     const targetUser = message.mentions.members?.first();
-    if (!targetUser) return "please meantion the user you wanna kick";
+    if (!targetUser) return "please mention the user you wanna kick";
     if (!message.member?.permissions.has("KICK_MEMBERS")) return "you don't have perms cunt";
 
     // Kick him
