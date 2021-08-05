@@ -7,7 +7,7 @@ export default {
   requiresProcessing: true,
   execute: async (message: IMessage) => {
     return musicMiddleware(message, async (channel, player) => {
-      return await player.getNowPlaying();
+      return await player.createNowPlayingEmbed();
     });
   },
 };

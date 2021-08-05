@@ -145,13 +145,11 @@ export default class MusicPlayer {
     }
   }
 
-
-
   /**
    * Creates an embed to send for the currently playing tune
    * @author Geoxor
    */
-  public async getNowPlaying() {
+  public async createNowPlayingEmbed() {
     // Get the current file thats playing
     const nowPlayingFile = this.getNowPlayingFile();
 
@@ -170,7 +168,6 @@ export default class MusicPlayer {
 
     // Prepare an embed to send to the user
     const embed = new Discord.MessageEmbed()
-      .setTitle(`${artist} - ${title}`)
       .addFields(
         { inline: true, name: "Title", value: title || "Unknown" },
         { inline: true, name: "Album", value: album || "Unknown" },
@@ -181,6 +178,7 @@ export default class MusicPlayer {
       .setImage("attachment://cover.png");
 
     // Add these if they exist
+    artist && title ? embed.setTitle(`${artist} - ${title}`) : embed.setTitle(nowPlayingFile);
     bitsPerSample && embed.addField("Sample Bits", `${bitsPerSample}bits`, true);
     bitrate && embed.addField("Bitrate", `${~~(bitrate / 1000)}Kbps`, true);
 
@@ -196,7 +194,7 @@ export default class MusicPlayer {
     }
 
     // If there's no cover art just return the generic cover art
-    const genericCover = fs.createReadStream("../assets/images/defaultCover.png");
+    const genericCover = fs.createReadStream("./assets/images/defaultCover.png");
     const coverAttachment = new Discord.MessageAttachment(genericCover, "cover.png");
     embed.setColor("#cacaca");
     return { embeds: [embed], files: [coverAttachment] };
