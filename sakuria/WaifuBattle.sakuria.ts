@@ -27,7 +27,7 @@ export default class WaifuBattle {
   public battleEnd: number;
 
   constructor(startUser: Discord.User, channel: Discord.TextChannel) {
-    const {chosenWaifu, chosenRarity } = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHICAL]);
+    const { chosenWaifu, chosenRarity } = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHICAL]);
     this.waifu = new Waifu(chosenWaifu, chosenRarity);
     this.participants = [];
     this.startUser = startUser;
@@ -49,7 +49,7 @@ export default class WaifuBattle {
    * @returns {Waifu} the waifu JSON
    * @author MaidMarija
    */
-  chooseWaifu(rarities: IWaifuRarity[]): {chosenWaifu: IWaifu, chosenRarity: IWaifuRarity} {
+  chooseWaifu(rarities: IWaifuRarity[]): { chosenWaifu: IWaifu; chosenRarity: IWaifuRarity } {
     // sum up all these relative frequencies to generate a maximum for our random number generation
     let maximum = 0;
     rarities.forEach((w) => (maximum += w.relativeFrequency));
@@ -62,14 +62,15 @@ export default class WaifuBattle {
       if (choiceValue < rarity.relativeFrequency) {
         // This is kinda dumb it returns the entire rarity which contains the entire array of waifus as well
         // performance--;
-        return {chosenWaifu: randomChoice<IWaifu>(rarity.waifus), chosenRarity: rarity};
+        rarity.waifus = [];
+        return { chosenWaifu: randomChoice<IWaifu>(rarity.waifus), chosenRarity: rarity };
       } else {
         choiceValue -= rarity.relativeFrequency;
       }
     }
 
     // If for some reason we can't get a waifu just return a common one
-    return {chosenWaifu: randomChoice<IWaifu>(rarities[0].waifus), chosenRarity: rarities[0]};
+    return { chosenWaifu: randomChoice<IWaifu>(rarities[0].waifus), chosenRarity: rarities[0] };
   }
 
   /**

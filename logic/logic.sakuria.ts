@@ -166,11 +166,11 @@ export async function getLastAttachmentInChannel(message: IMessage) {
  */
 export function calcDamage(): number {
   let damage = 100;
-  let critChance = .5;
+  let critChance = 0.5;
   let critMulti = 2;
-  let rng = Math.random() //😎
+  let rng = Math.random(); //😎
 
-  if (rng > critChance) damage = damage*critMulti;
+  if (rng > critChance) damage = damage * critMulti;
 
   return damage;
 }
@@ -181,7 +181,7 @@ export function calcDamage(): number {
  * @author azur1s
  */
 export function calcDefense(defense: number): number {
-  defense = defense / ( defense + 100 )
+  defense = defense / (defense + 100);
 
   return defense;
 }

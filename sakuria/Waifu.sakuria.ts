@@ -31,7 +31,7 @@ export default class Waifu {
     this.maxHp = rarity.hp;
     this.armor = rarity.armor || 0;
     this.rarity = rarity.name;
-    this.emoji = rarity.emoji; 
+    this.emoji = rarity.emoji;
     this.color = rarity.color;
     this.rewards = rarity.rewards;
     this.isDead = false;
@@ -41,20 +41,15 @@ export default class Waifu {
 
   private prepareUi() {
     const embed = new Discord.MessageEmbed();
-    embed
-      .setColor(this.color)
-      .setTitle(this.name)
-      .addField("Rarity", `${this.emoji} ${this.rarity}`, true)
-      .setDescription(`${this.maxHp} HP ${this.armor} AP`)
-      .setImage(`attachment://${this.imageFile}`);
+    embed.setColor(this.color).setTitle(this.name).addField("Rarity", `${this.emoji} ${this.rarity}`, true).setDescription(`${this.maxHp} HP ${this.armor} AP`).setImage(`attachment://${this.imageFile}`);
     return embed;
   }
 
   public dealDamage(damage: number) {
-    if (this.armor) // Check if the armor is defined or not
+    if (this.armor)
+      // Check if the armor is defined or not
       this.currentHp = this.currentHp - damage * calcDefense(this.armor);
-    else
-      this.currentHp = this.currentHp - damage;
+    else this.currentHp = this.currentHp - damage;
     if (this.currentHp <= 0) this.isDead = true;
   }
 }

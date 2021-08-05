@@ -1,26 +1,27 @@
 import chalk from "chalk";
 import fs from "fs";
 import { IWaifu, IWaifuRarity, IWaifuRarityName } from "../types";
-import LoggerSakuria from "./Logger.sakuria";
+import logger from "./Logger.sakuria";
 
+// Unit test this function later
 function getWaifuNameFromFileName(waifuFileName: string) {
-  let parsedWaifuName = waifuFileName.toLowerCase()
-  parsedWaifuName = parsedWaifuName.replace(/\.[^.]*$/, "")
-  parsedWaifuName = parsedWaifuName.replace(/([^a-z])([a-z])(?=[a-z]{2})|^([a-z])/g, (_, g1, g2, g3) => (typeof g1 === 'undefined') ? g3.toUpperCase() : g1 + g2.toUpperCase());
+  let parsedWaifuName = waifuFileName.toLowerCase();
+  parsedWaifuName = parsedWaifuName.replace(/\.[^.]*$/, "");
+  parsedWaifuName = parsedWaifuName.replace(/([^a-z])([a-z])(?=[a-z]{2})|^([a-z])/g, (_, g1, g2, g3) => (typeof g1 === "undefined" ? g3.toUpperCase() : g1 + g2.toUpperCase()));
   return parsedWaifuName;
 }
 
-function loadWaifusFromRarity(rarity: IWaifuRarityName): IWaifu[]{
+function loadWaifusFromRarity(rarity: IWaifuRarityName): IWaifu[] {
   const IWaifus = [];
   const waifuImages = fs.readdirSync(`./assets/waifus/${rarity}`);
 
-  for (let waifu of waifuImages){
+  for (let waifu of waifuImages) {
     const name = getWaifuNameFromFileName(waifu);
     IWaifus.push({
       name,
-      image: waifu, 
-    } as IWaifu)
-    LoggerSakuria.sakuria.generic(`Parsed ${chalk.hex("#FFCB6B")(rarity.toUpperCase())} waifu ${chalk.green(name)}`);
+      image: waifu,
+    } as IWaifu);
+    logger.sakuria.generic(`Parsed ${chalk.hex("#FFCB6B")(rarity.toUpperCase())} waifu ${chalk.green(name)}`);
   }
   return IWaifus;
 }
@@ -33,7 +34,7 @@ export const COMMON: IWaifuRarity = {
   name: "common",
   color: "#8F93A2",
   emoji: "👺",
-  waifus: loadWaifusFromRarity('common'),
+  waifus: loadWaifusFromRarity("common"),
 };
 
 export const UNCOMMON: IWaifuRarity = {
@@ -44,7 +45,7 @@ export const UNCOMMON: IWaifuRarity = {
   name: "uncommon",
   color: "#BDDE86",
   emoji: "🐉",
-  waifus: loadWaifusFromRarity('uncommon'),
+  waifus: loadWaifusFromRarity("uncommon"),
 };
 
 export const RARE: IWaifuRarity = {
@@ -55,7 +56,7 @@ export const RARE: IWaifuRarity = {
   name: "rare",
   color: "#C792EA",
   emoji: "🔮",
-  waifus: loadWaifusFromRarity('rare'),
+  waifus: loadWaifusFromRarity("rare"),
 };
 
 export const LEGENDARY: IWaifuRarity = {
@@ -66,7 +67,7 @@ export const LEGENDARY: IWaifuRarity = {
   name: "legendary",
   color: "#FFCB6B",
   emoji: "🌟",
-  waifus: loadWaifusFromRarity('legendary'),
+  waifus: loadWaifusFromRarity("legendary"),
 };
 
 export const MYTHICAL: IWaifuRarity = {
@@ -77,5 +78,5 @@ export const MYTHICAL: IWaifuRarity = {
   name: "mythical",
   color: "#F07178",
   emoji: "⚜️",
-  waifus: loadWaifusFromRarity('mythical'),
+  waifus: loadWaifusFromRarity("mythical"),
 };

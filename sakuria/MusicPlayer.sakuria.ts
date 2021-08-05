@@ -52,15 +52,15 @@ export default class MusicPlayer {
   /**
    * Resizes a cover art to 512px for sending to Discord
    * @param cover the cover to resize
-   * @returns 
+   * @returns
    */
   private async resizeCover(cover: Buffer): Promise<Buffer> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       Jimp.read(cover, async (err, image) => {
-        image.resize(Jimp.AUTO, 512); 
-        resolve(await image.getBufferAsync('image/png'));
+        image.resize(Jimp.AUTO, 512);
+        resolve(await image.getBufferAsync("image/png"));
       });
-    })
+    });
   }
 
   /**

@@ -57,7 +57,7 @@ class SakuriaLogger extends Logger {
   public importedCommand = (command: string) => this.print(`┖ Imported command ${command}`);
   public created = () => this.print("Sakuria created");
   public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
-  public generic = (string: string) => console.log(chalk.hex("#32343F")(`  ${this.time()} 👥  ${string}`));
+  public generic = (string: string) => console.log(`  ${this.time()} 🗻  ${string}`);
 }
 class ConfigLogger extends Logger {
   constructor() {
