@@ -158,3 +158,30 @@ export async function getLastAttachmentInChannel(message: IMessage) {
     .first();
   return lastMessage?.attachments.first()?.attachment;
 }
+
+/**
+ * Calculate attack damage
+ * @returns damage
+ * @author azur1s
+ */
+export function calcDamage(): number {
+  let damage = 100;
+  let critChance = .5;
+  let critMulti = 2;
+  let rng = Math.random() //😎
+
+  if (rng > critChance) damage = damage*critMulti;
+
+  return damage;
+}
+
+/**
+ * Calculate defense from armor
+ * @returns armor
+ * @author azur1s
+ */
+export function calcDefense(defense: number): number {
+  defense = defense / ( defense + 100 )
+
+  return defense;
+}
