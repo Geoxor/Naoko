@@ -2,7 +2,7 @@ import { encodeMorse, decodeMorse } from "../../logic/logic.sakuria";
 import { IMessage } from "../../types";
 
 export default {
-  name: "mors",
+  name: "morse",
   description: "Encodes a string to morse code",
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<string> => {

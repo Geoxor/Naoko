@@ -56,7 +56,7 @@ class Sakuria {
 
       // If it doesn't exist we respond
       if (!command) {
-        message.reply(`that command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
+        message.reply(`That command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
         return;
       }
 

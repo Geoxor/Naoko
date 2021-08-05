@@ -6,6 +6,7 @@ import logger from "./Logger.sakuria";
 import getColors from "get-image-colors";
 import * as mm from "music-metadata";
 import fs from "fs";
+import Jimp from "jimp";
 
 /**
  * The MusicPlayer class responsible for handling connection and audio playback in a voice channel
@@ -46,6 +47,20 @@ export default class MusicPlayer {
       logger.sakuria.generic(`Playing ${audio}`);
       return createAudioResource(audio);
     }
+  }
+
+  /**
+   * Resizes a cover art to 512px for sending to Discord
+   * @param cover the cover to resize
+   * @returns 
+   */
+  private async resizeCover(cover: Buffer): Promise<Buffer> {
+    return new Promise(resolve => {
+      Jimp.read(cover, async (err, image) => {
+        image.resize(Jimp.AUTO, 512); 
+        resolve(await image.getBufferAsync('image/png'));
+      });
+    })
   }
 
   /**
@@ -130,6 +145,8 @@ export default class MusicPlayer {
     }
   }
 
+
+
   /**
    * Creates an embed to send for the currently playing tune
    * @author Geoxor
@@ -172,7 +189,8 @@ export default class MusicPlayer {
     const coverFormat = metadata.common.picture?.[0].format;
     if (coverBuffer && coverFormat) {
       const coverColor = (await getColors(coverBuffer, coverFormat))[0].hex();
-      const coverAttachment = new Discord.MessageAttachment(coverBuffer, "cover.png");
+      const resizedCoverBuffer = await this.resizeCover(coverBuffer);
+      const coverAttachment = new Discord.MessageAttachment(resizedCoverBuffer, "cover.png");
       embed.setColor(coverColor as Discord.HexColorString);
       return { embeds: [embed], files: [coverAttachment] };
     }
