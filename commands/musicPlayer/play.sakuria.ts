@@ -9,7 +9,7 @@ export default {
     return musicMiddleware(message, async (channel, player) => {
       await player.start(channel);
       await player.initQueue();
-      return "Started playing";
+      return await player.getNowPlaying();
     });
   },
 };

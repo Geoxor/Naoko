@@ -4,7 +4,7 @@ import { IMessage } from "../../types";
 
 export default {
   name: "invert",
-  description: "Invert's a url, an attachemnt or the last image in the channel",
+  description: "Inverts a url, an attachment or the last image in the channel",
   requiresProcessing: true,
   execute: async (message: IMessage): Promise<MessageOptions | string> => {
     const attachedImage = message.attachments.first()?.attachment;
