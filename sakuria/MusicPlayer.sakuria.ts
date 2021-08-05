@@ -1,8 +1,12 @@
 import { AudioPlayerStatus, AudioPlayerState, AudioPlayer, entersState, createAudioPlayer, joinVoiceChannel, VoiceConnectionStatus, NoSubscriberBehavior, createAudioResource, VoiceConnectionState } from "@discordjs/voice";
-import Discord from "discord.js";
+import Discord, { ColorResolvable } from "discord.js";
 import { walkDirectory } from "../logic/logic.sakuria";
 import config from "./Config.sakuria";
 import logger from "./Logger.sakuria";
+import getColors from "get-image-colors";
+import * as mm from "music-metadata";
+import fs from "fs";
+
 /**
  * The MusicPlayer class responsible for handling connection and audio playback in a voice channel
  * @author N1kO23
@@ -82,6 +86,7 @@ export default class MusicPlayer {
    */
   public async initQueue() {
     this.queue = await walkDirectory(config.musicDirectory);
+    this.shuffle();
     this.skip();
     try {
       // Add the event listener to make the playback continuous as long as queue is not empty
@@ -111,5 +116,72 @@ export default class MusicPlayer {
    */
   public getNowPlayingFile() {
     return this.nowPlaying;
+  }
+
+  /**
+   * Returns the metadata of a tune
+   * @author Geoxor
+   */
+  async getMetadata(file: string) {
+    try {
+      console.log(mm);
+      return await mm.parseFile(file);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
+   * Creates an embed to send for the currently playing tune
+   * @author Geoxor
+   */
+  async getNowPlaying() {
+    // Get the current file thats playing
+    const nowPlayingFile = this.getNowPlayingFile();
+
+    // If there is nothing playing return
+    if (!nowPlayingFile) return "nothing is playing currently";
+
+    // Get information about the song
+    const metadata = await this.getMetadata(nowPlayingFile);
+
+    // If we fail to get any metadata return
+    if (!metadata) return nowPlayingFile;
+
+    // Get the data we want from the metadata
+    const { codec, bitsPerSample, sampleRate, bitrate } = metadata.format;
+    const { artist, title, album, date } = metadata.common;
+
+    // Prepare an embed to send to the user
+    const embed = new Discord.MessageEmbed()
+      .setTitle(`${artist} - ${title}`)
+      .addFields(
+        { inline: true, name: "Title", value: title || "Unknown" },
+        { inline: true, name: "Album", value: album || "Unknown" },
+        { inline: true, name: "Date", value: date || "Unknown" },
+        { inline: true, name: "Codec", value: codec || "Unknown" },
+        { inline: true, name: "Samplerate", value: `${sampleRate}Hz` || "Unknown" }
+      )
+      .setImage("attachment://cover.png");
+
+    // Add these if they exist
+    bitsPerSample && embed.addField("Sample Bits", `${bitsPerSample}bits`, true);
+    bitrate && embed.addField("Bitrate", `${~~(bitrate / 1000)}Kbps`, true);
+
+    // Get the cover art
+    const coverBuffer = metadata.common.picture?.[0].data;
+    const coverFormat = metadata.common.picture?.[0].format;
+    if (coverBuffer && coverFormat) {
+      const coverColor = (await getColors(coverBuffer, coverFormat))[0].hex();
+      const coverAttachment = new Discord.MessageAttachment(coverBuffer, "cover.png");
+      embed.setColor(("#" + coverColor) as ColorResolvable);
+      return { embeds: [embed], files: [coverAttachment] };
+    }
+
+    // If there's no cover art just return the generic cover art
+    const genericCover = fs.createReadStream("../assets/images/defaultCoverArt.jpg");
+    const coverAttachment = new Discord.MessageAttachment(genericCover, "cover.png");
+    embed.setColor("#cacaca");
+    return { embeds: [embed], files: [coverAttachment] };
   }
 }

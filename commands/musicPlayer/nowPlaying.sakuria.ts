@@ -2,14 +2,12 @@ import { musicMiddleware } from "../../middleware/musicMiddleware.sakuria";
 import { IMessage } from "../../types";
 
 export default {
-  name: "play",
-  description: "Play a song",
-  requiresProcessing: false,
+  name: "np",
+  description: "Shows you the currently playing song",
+  requiresProcessing: true,
   execute: async (message: IMessage) => {
     return musicMiddleware(message, async (channel, player) => {
-      await player.start(channel);
-      await player.initQueue();
-      return "Started playing";
+      return await player.getNowPlaying();
     });
   },
 };

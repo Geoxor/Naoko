@@ -5,7 +5,7 @@ export default {
   name: "skip",
   description: "Skips to the next song in the queue",
   requiresProcessing: false,
-  execute: async (message: IMessage): Promise<string> => {
+  execute: async (message: IMessage) => {
     return musicMiddleware(message, async (channel, player) => {
       player.skip();
       return "Skipped";
