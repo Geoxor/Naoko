@@ -18,11 +18,12 @@ export default class Waifu {
   public isDead: boolean;
   public rarity: IWaifuRarity;
   public ui: Discord.MessageEmbed;
-  // public rarity: string; ?
+  private imageFile: string;
 
   constructor(waifu: IWaifu) {
     this.name = waifu.name;
-    this.attachment = new Discord.MessageAttachment(fs.createReadStream(`./assets/waifus/${waifu.image}`), `${this.name}.png`);
+    this.imageFile = waifu.image;
+    this.attachment = new Discord.MessageAttachment(fs.createReadStream(`./assets/waifus/${this.imageFile}`), this.imageFile);
     this.currentHp = waifu.hp;
     this.maxHp = waifu.hp;
     this.rarity = waifu.rarity;
@@ -34,11 +35,11 @@ export default class Waifu {
   private prepareUi() {
     const embed = new Discord.MessageEmbed();
     embed
-      .setColor("#FF00B6")
+      .setColor(this.rarity.color)
       .setTitle(this.name)
-      .addField("Rarity", this.rarity.name, true)
+      .addField("Rarity", `${this.rarity.emoji} ${this.rarity.name}`, true)
       .setDescription("" + this.maxHp)
-      .setImage(`attachment://${this.name}.png`);
+      .setImage(`attachment://${this.imageFile}.png`);
     return embed;
   }
 
