@@ -19,6 +19,7 @@ export default class WaifuBattle {
     [key: string]: {
       totalAttacks: number;
       totalDamageDealt: number;
+      userId: string;
     }
   };
   public startUser: Discord.User;
@@ -141,6 +142,7 @@ export default class WaifuBattle {
         // Add the player if they aren't in already
         if(!this.participants[message.author.id]) {
           this.participants[message.author.id] = {
+            userId: message.author.id,
             totalAttacks: 0,
             totalDamageDealt: 0,
           }
@@ -196,7 +198,8 @@ export default class WaifuBattle {
    * @author N1kO23, Geoxor
    */
   getParticipantsString() {
-    return Object.keys(this.participants).map((user) => `<@${user}> - DMG ${this.participants[user].totalDamageDealt} - Attacks ${this.participants[user].totalAttacks}`).join("\n");
+    const sortedArray = Object.values(this.participants).sort((a, b) => a.totalDamageDealt - b.totalDamageDealt)
+    return sortedArray.map((user) => `<@${user.userId}> - 🩸 DMG ${user.totalDamageDealt} - ⚔️ Attacks ${user.totalAttacks}`).join("\n");
   }
 
   /**

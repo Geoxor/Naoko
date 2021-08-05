@@ -9,7 +9,7 @@ export default class InventoryManager {
       .setColor("#BF360C") 
       .setTitle(`${user.username}'s Inventory`)
       .setThumbnail('https://cdn.discordapp.com/attachments/806300597338767450/872917164091396126/unknown.png')
-      .addField("Balance", inventory.balance.toString(), true)
+      .addField("prisms", inventory.prisms.toString(), true)
     return embed;
   }
 }

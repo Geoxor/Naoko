@@ -1,5 +1,6 @@
 import { Inventory, PrismaClient, Statistics, User } from "@prisma/client";
 import { IBattle } from "../types"
+import chalk from "chalk";
 
 /**
  * Prisma wrapper for making shit simple
@@ -67,42 +68,26 @@ class DB {
   }
 
   public async addBattleRewardsToUser(user: string, battle: IBattle): Promise<void> {
+    // Prepare the statistics to commit to the database
+    let statistics = {
+      xp: { increment: battle.xp },
+      totalAttacks: { increment: battle.totalAttacks },
+      totalDamageDealt: { increment: battle.totalDamageDealt },
+    } as { [key: string]: any }
+
+    // Increment the waifu rarity they killed
+    statistics[`${battle.rarity}WaifusKilled`] = { increment: 1 };
+
+    // Commit their statistics
     await this.prisma.statistics.update({
-      data: {
-        xp: {
-          increment: battle.xp
-        },
-        totalAttacks: {
-          increment: battle.totalAttacks
-        },
-        totalDamageDealt: {
-          increment: battle.totalDamageDealt
-        },
-        rareWaifusKilled: {
-          increment: battle.rarity === 'rare' ? 1 : 0
-        },
-        commonWaifusKilled: {
-          increment: battle.rarity === 'common' ? 1 : 0
-        },
-        mythicalWaifusKilled: {
-          increment: battle.rarity === 'mythical' ? 1 : 0
-        },
-        uncommonWaifusKilled: {
-          increment: battle.rarity === 'uncommon' ? 1 : 0
-        },
-        legendaryWaifusKilled: {
-          increment: battle.rarity === 'legendary' ? 1 : 0
-        },
-      },
+      data: statistics,
       where: {userId: user}
     })
     console.log(`UPDATE: Statistics: ${user}`);
+
+    // Commit their new prisms to their inventory
     await this.prisma.inventory.update({
-      data: {
-        balance: {
-          increment: battle.money
-        },
-      },
+      data: { prisms: { increment: battle.money }, },
       where: {userId: user}
     })
     console.log(`UPDATE: Inventory: ${user}`);

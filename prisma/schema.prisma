@@ -52,8 +52,8 @@ model Inventory {
   // The Discord ID of the user the inventory belongs to
   userId                          String      @unique
   user                            User        @relation(fields: [userId], references: [id])
-  // the balance of the user. Never use floats. Floats are evil.
-  balance                         Int         @default(0)
+  // the prisms of the user. Never use floats. Floats are evil.
+  prisms                          Int         @default(0)
 }
 
 model Statistics {
