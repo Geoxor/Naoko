@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import fs from "fs";
-import { getWaifuNameFromFileName } from "../logic/logic.sakuria";
+import { getWaifuNameFromFileName, calcSpread } from "../logic/logic.sakuria";
 import { IWaifu, IWaifuRarity, IWaifuRarityName } from "../types";
 import logger from "./Logger.sakuria";
 
@@ -20,9 +20,9 @@ function loadWaifusFromRarity(rarity: IWaifuRarityName): IWaifu[] {
 }
 
 export const COMMON: IWaifuRarity = {
-  hp: 1000,
+  hp: calcSpread(1000),
   armor: 0,
-  rewards: { xp: 100, money: 200 },
+  rewards: { xp: calcSpread(100), money: calcSpread(200) },
   relativeFrequency: 14,
   name: "common",
   color: "#8F93A2",
@@ -31,9 +31,9 @@ export const COMMON: IWaifuRarity = {
 };
 
 export const UNCOMMON: IWaifuRarity = {
-  hp: 2500,
-  armor: 100,
-  rewards: { xp: 250, money: 500 },
+  hp: calcSpread(2500),
+  armor: calcSpread(100),
+  rewards: { xp: calcSpread(250), money: calcSpread(500) },
   relativeFrequency: 7,
   name: "uncommon",
   color: "#BDDE86",
@@ -42,9 +42,9 @@ export const UNCOMMON: IWaifuRarity = {
 };
 
 export const RARE: IWaifuRarity = {
-  hp: 10000,
-  armor: 500,
-  rewards: { xp: 1000, money: 2000 },
+  hp: calcSpread(10000),
+  armor: calcSpread(500),
+  rewards: { xp: calcSpread(1000), money: calcSpread(2000) },
   relativeFrequency: 5,
   name: "rare",
   color: "#C792EA",
@@ -53,9 +53,9 @@ export const RARE: IWaifuRarity = {
 };
 
 export const LEGENDARY: IWaifuRarity = {
-  hp: 25000,
-  armor: 1500,
-  rewards: { xp: 2500, money: 5000 },
+  hp: calcSpread(25000),
+  armor: calcSpread(1500),
+  rewards: { xp: calcSpread(2500), money: calcSpread(5000) },
   relativeFrequency: 3,
   name: "legendary",
   color: "#FFCB6B",
@@ -64,9 +64,9 @@ export const LEGENDARY: IWaifuRarity = {
 };
 
 export const MYTHICAL: IWaifuRarity = {
-  hp: 50000,
-  armor: 2500,
-  rewards: { xp: 5000, money: 10000 },
+  hp: calcSpread(50000),
+  armor: calcSpread(2500),
+  rewards: { xp: calcSpread(5000), money: calcSpread(10000) },
   relativeFrequency: 1,
   name: "mythical",
   color: "#F07178",

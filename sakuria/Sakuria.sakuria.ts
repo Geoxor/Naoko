@@ -10,7 +10,7 @@ import config from "./Config.sakuria";
  * @author Geoxor, Cimok
  */
 class Sakuria {
-  private bot: Discord.Client;
+  public bot: Discord.Client;
   public commands: Discord.Collection<string, ICommand>;
 
   constructor() {

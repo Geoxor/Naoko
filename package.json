@@ -1,6 +1,6 @@
 {
   "name": "sakuria",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Sakuria general purpose discord bot",
   "main": "sakuria.ts",
   "scripts": {
@@ -8,7 +8,8 @@
     "dev": "npx prisma generate && nodemon sakuria.ts",
     "setup": "npm i && npm run prettify && ts-node setup.sakuria.ts && npx prisma generate",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\"",
-    "reset-db": "npx prisma migrate reset -f"
+    "reset-db": "npx prisma migrate reset -f",
+    "init-db": "npx prisma migrate dev --name init"
   },
   "repository": {
     "type": "git",

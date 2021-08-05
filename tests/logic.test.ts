@@ -1,7 +1,7 @@
 require("ts-mocha");
 import chai from "chai";
 import { it } from "mocha";
-import { encodeMorse, decodeMorse, uwufy, getWaifuNameFromFileName } from "../logic/logic.sakuria";
+import { encodeMorse, decodeMorse, uwufy, getWaifuNameFromFileName, calcSpread } from "../logic/logic.sakuria";
 
 describe("⚡ Morse Encoder (encodeMorse)", () => {
   it("can encode a normal string", async () => {
@@ -75,5 +75,15 @@ describe("⚡ Waifu name parser (getWaifuNameFromFileName)", () => {
   it("can persist numbers", async () => {
     const name = getWaifuNameFromFileName("02");
     chai.expect(name).to.contain("02");
+  });
+});
+
+describe("⚡ RNG Number Spread (calcSpread)", () => {
+  it("can get a random number between a bipolar limit (x1000)", async () => {
+    for (let i = 0; i < 1000; i++) {
+      const rngNumber = calcSpread(1000);
+      chai.expect(rngNumber).to.be.below(1100);
+      chai.expect(rngNumber).to.be.above(899);
+    }
   });
 });

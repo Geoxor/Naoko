@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -12,39 +12,91 @@ generator client {
 
 model Guild {
   // The Discord ID of the guild
-  id          String      @id @unique
+  id                              String      @id @unique
 }
 
 model User {
   // The Discord ID of the user
-  id         String       @id @unique
+  id                              String      @id @unique
+
   // the list of past kicks
-  kicks      Kick[]       @relation("kicks")
+  kicks                           Kick[]      @relation("kicks")
   // the kicks they've done to other people
-  auditKicks Kick[]       @relation("auditKicks")
+  auditKicks                      Kick[]      @relation("auditKicks")
   // the inventory for the user for G A M E S 🕹️🕹️
-  inventory  Inventory?
+  inventory                       Inventory?
+  statistics                      Statistics?
+  battles                         Battle[]
+  favoriteWaifu                   String?
 }
 
 model Kick {
   // the ID of the Kick
-  id          Int         @id @default(autoincrement())
+  id                              Int         @unique @id @default(autoincrement())
+
   // the Discord ID of the user that got kicked
-  userId      String
-  user        User        @relation("kicks", fields: [userId], references: [id])
+  userId                          String      @unique
+  user                            User        @relation("kicks", fields: [userId], references: [id])
+
   // the Discord ID of the user who did the kick
-  byUserId    String
-  byUser      User        @relation("auditKicks", fields: [byUserId], references: [id])
+  byUserId                        String      @unique
+  byUser                          User        @relation("auditKicks", fields: [byUserId], references: [id])
   // When the kick happened
-  timestamp   Int
+  timestamp                       Int     
 }
 
 model Inventory {
-  // The id of the inventory
-  id          Int         @id @default(autoincrement())
+  // The id of the item
+  id                              Int         @unique @id @default(autoincrement())
+
   // The Discord ID of the user the inventory belongs to
-  userId      String
-  user        User        @relation(fields: [userId], references: [id])
+  userId                          String      @unique
+  user                            User        @relation(fields: [userId], references: [id])
   // the balance of the user. Never use floats. Floats are evil.
-  balance     Int
+  balance                         Int         @default(0)
+}
+
+model Statistics {
+  // The id of the item
+  id                              Int         @unique @id @default(autoincrement())
+
+  // The Discord ID of the user the statistics belong to
+  userId                          String      @unique 
+  user                            User        @relation(fields: [userId], references: [id])
+
+  // Personal records
+  fastestBattle                   Battle?     @relation(fields: [fastestBattleId], references: [id])
+  fastestBattleId                 Int?
+  totalPrismaSpent                Int         @default(0)
+  totalPrismaCollected            Int         @default(0)
+  totalAttacks                    Int         @default(0)
+  topDPS                          Float       @default(0)
+  commonWaifusKilled              Int         @default(0)
+  uncommonWaifusKilled            Int         @default(0)
+  rareWaifusKilled                Int         @default(0)
+  legendaryWaifusKilled           Int         @default(0)
+  mythicalWaifusKilled            Int         @default(0)
+
+  // Player's Statistics
+  health                          Float       @default(1000)
+  healthRegen                     Float       @default(20)
+  magicalDamage                   Float       @default(100)
+  physicalDamage                  Float       @default(100)
+  physicalArmor                   Float       @default(100)
+  magicArmor                      Float       @default(100)
+  critChance                      Float       @default(0.1)
+  rangedDamageMultiplier          Float       @default(1)
+  meleeDamageMultiplier           Float       @default(1)
+  summonDamageMultiplier          Float       @default(1)
+}
+
+model Battle {
+  // The id of the item
+  id                              Int         @id @default(autoincrement())
+
+  // Battle information
+  timestamp                       Int
+  duration                        Int            // The duration in milliseconds
+  participants                    User[]
+  statistics                      Statistics[]
 }

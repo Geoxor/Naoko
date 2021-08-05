@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Inventory, PrismaClient } from "@prisma/client";
 
 /**
  * Prisma wrapper for making shit simple
@@ -15,11 +15,25 @@ class DB {
    * @author Bluskript, Geoxor
    */
   public async newUser(id: string) {
-    return await this.prisma.user.upsert({
+    const user = await this.prisma.user.upsert({
       where: { id },
       update: {},
-      create: { id },
+      create: { 
+        id,
+        inventory: {
+          create: { }
+        },
+        statistics: {
+          create: { }
+        }
+      },
+      include: {
+        inventory: true,
+        statistics: true,
+      },
     });
+    console.log(`CREATE: User: ${id}`);
+    return user;
   }
 
   /**
@@ -33,6 +47,22 @@ class DB {
     const { id: byUserId } = await this.newUser(kicker);
     const { id: userId } = await this.newUser(kickee);
     await this.prisma.kick.create({ data: { byUserId, userId, timestamp } });
+    return console.log(`CREATE: Kick: kicker: ${kicker} - kickee: ${kickee}`);
+  }
+
+  /**
+   * Get's a user's inventory from the database
+   * If the user doesn't exist in the database it will create it
+   * @param {string} userId the user to get
+   * @author Geoxor
+   */
+  public async getInventory(userId: string): Promise<Inventory> {
+    const inventory = await this.prisma.inventory.findFirst({
+      where: { userId }
+    });
+
+    console.log(`GET Inventory: ${userId}`);
+    return inventory!;
   }
 }
 

@@ -62,7 +62,6 @@ export default class WaifuBattle {
       if (choiceValue < rarity.relativeFrequency) {
         // This is kinda dumb it returns the entire rarity which contains the entire array of waifus as well
         // performance--;
-        rarity.waifus = [];
         return { chosenWaifu: randomChoice<IWaifu>(rarity.waifus), chosenRarity: rarity };
       } else {
         choiceValue -= rarity.relativeFrequency;
@@ -144,7 +143,7 @@ export default class WaifuBattle {
    * @author Geoxor, Cimok
    */
   async updateBossbar() {
-    const newBossbar = `${this.waifu.name} still has *${this.waifu.currentHp}* HP!`;
+    const newBossbar = `${this.waifu.name} still has *${~~this.waifu.currentHp}* HP!`;
     if (!this.ended && this.lastBossbarMessage?.content !== newBossbar) {
       this.lastBossbarMessage = await this.thread!.send(newBossbar);
     }

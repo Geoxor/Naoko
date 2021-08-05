@@ -35,13 +35,13 @@ export default class Waifu {
     this.color = rarity.color;
     this.rewards = rarity.rewards;
     this.isDead = false;
-    this.attachment = new Discord.MessageAttachment(fs.createReadStream(`./assets/waifus/${this.rarity}/${this.imageFile}`), this.imageFile);
+    this.attachment = new Discord.MessageAttachment(fs.createReadStream(`./assets/waifus/${this.rarity}/${this.imageFile}`), "waifu.png");
     this.ui = this.prepareUi();
   }
 
   private prepareUi() {
     const embed = new Discord.MessageEmbed();
-    embed.setColor(this.color).setTitle(this.name).addField("Rarity", `${this.emoji} ${this.rarity}`, true).setDescription(`${this.maxHp} HP ${this.armor} AP`).setImage(`attachment://${this.imageFile}`);
+    embed.setColor(this.color).setTitle(this.name).addField("Rarity", `${this.emoji} ${this.rarity}`, true).setDescription(`${this.maxHp} HP ${this.armor} AP`).setImage(`attachment://waifu.png`);
     return embed;
   }
 

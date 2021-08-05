@@ -201,6 +201,22 @@ export function calcDamage(): number {
  */
 export function calcDefense(defense: number): number {
   defense = defense / (defense + 100);
-
   return defense;
+}
+
+/**
+ * Calculates an RNG number -+10% of a given number
+ * If value is 1000 then 900 is minimum and 1100 is maximum
+ * We get it from adding/subtracting 10% of the value (1000) given
+ * Please, if you have a better formula, you can fix it.
+ * @params value 
+ * @returns rng spread
+ * @author azur1s, Geoxor, N1kO23, MaidMarija
+ */
+export function calcSpread(value: number): number {
+  let rng = Math.random();
+  let min = value - ( value * 0.1 );
+  let max = value + ( value * 0.1 );
+  let spread = ~~((max - min) * rng + min);
+  return spread;
 }
