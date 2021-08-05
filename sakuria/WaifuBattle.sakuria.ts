@@ -214,6 +214,18 @@ export default class WaifuBattle {
   }
 
   /**
+   * Creates the defeat embed to display when the battle ends
+   * @author Geoxor
+   */
+  createDefeatEmbed(){
+    return new Discord.MessageEmbed()
+      .setColor("#FF3136")
+      .setTitle(`${this.waifu.name} has escaped!`)
+      .addField("Participants", this.getParticipantsString(), false)
+      .setFooter(`${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`);
+  }
+
+  /**
    * Creates the reward embed to display when the battle ends
    * @author N1kO23, Geoxor
    */
@@ -255,12 +267,22 @@ export default class WaifuBattle {
     this.battleEnd = Date.now();
     this.collector!.stop();
     clearInterval(this.bossbar as NodeJS.Timeout);
-    await this.thread!.setName(`${this.threadName} victory`);
-    await this.thread!.send({
-      content: `Battle ended, here's your rewards - deleting thread in ${this.aftermathTime / 1000} seconds`,
-      embeds: [this.createRewardEmbed()],
-    });
-    await this.rewardPlayers();
+    
+    if (this.waifu.isDead){
+      await this.thread!.setName(`${this.threadName} victory`);
+      await this.thread!.send({
+        content: `Battle ended, here's your rewards - deleting thread in ${this.aftermathTime / 1000} seconds`,
+        embeds: [this.createRewardEmbed()],
+      });
+      await this.rewardPlayers();
+    } else {
+      await this.thread!.setName(`${this.threadName} defeat`);
+      await this.thread!.send({
+        content: `Battle ended, no one killed the waifu - deleting thread in ${this.aftermathTime / 1000} seconds`,
+        embeds: [this.createDefeatEmbed()],
+      });
+    }
+
     setTimeout(() => {
       try {
         this.thread?.delete();

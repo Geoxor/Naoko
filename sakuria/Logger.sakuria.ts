@@ -86,6 +86,7 @@ class PrismaLogger extends Logger {
     this.color = "#31D2F7";
   }
   public loaded = () => this.print(`Prisma loaded`);
+  public generic = (string: string) => this.print(string);
 }
 
 export default {

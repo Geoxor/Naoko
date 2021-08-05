@@ -1,6 +1,6 @@
 import { Inventory, PrismaClient, Statistics, User } from "@prisma/client";
 import { IBattle } from "../types";
-import chalk from "chalk";
+import logger from "./Logger.sakuria";
 
 /**
  * Prisma wrapper for making shit simple
@@ -34,7 +34,7 @@ class DB {
         statistics: true,
       },
     });
-    console.log(`UPSERT: User: ${id}`);
+    logger.prisma.generic(`UPSERT: User: ${id}`);
     return user;
   }
 
@@ -49,7 +49,7 @@ class DB {
     const { id: byUserId } = await this.newUser(kicker);
     const { id: userId } = await this.newUser(kickee);
     await this.prisma.kick.create({ data: { byUserId, userId, timestamp } });
-    return console.log(`CREATE: Kick: kicker: ${kicker} - kickee: ${kickee}`);
+    return logger.prisma.generic(`CREATE: Kick: kicker: ${kicker} - kickee: ${kickee}`);
   }
 
   /**
@@ -63,7 +63,7 @@ class DB {
       where: { userId },
     });
 
-    console.log(`GET Inventory: ${userId}`);
+    logger.prisma.generic(`GET Inventory: ${userId}`);
     return inventory!;
   }
 
@@ -84,14 +84,14 @@ class DB {
       data: statistics,
       where: { userId: user },
     });
-    console.log(`UPDATE: Statistics: ${user}`);
+    logger.prisma.generic(`UPDATE: Statistics: ${user}`);
 
     // Commit their new prisms to their inventory
     await this.prisma.inventory.update({
       data: { prisms: { increment: battle.money } },
       where: { userId: user },
     });
-    console.log(`UPDATE: Inventory: ${user}`);
+    logger.prisma.generic(`UPDATE: Inventory: ${user}`);
     return;
   }
 }
