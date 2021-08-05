@@ -1,5 +1,5 @@
 import { AudioPlayerStatus, AudioPlayerState, AudioPlayer, entersState, createAudioPlayer, joinVoiceChannel, VoiceConnectionStatus, NoSubscriberBehavior, createAudioResource, VoiceConnectionState } from "@discordjs/voice";
-import Discord, { ColorResolvable } from "discord.js";
+import Discord from "discord.js";
 import { walkDirectory } from "../logic/logic.sakuria";
 import config from "./Config.sakuria";
 import logger from "./Logger.sakuria";
@@ -124,7 +124,6 @@ export default class MusicPlayer {
    */
   async getMetadata(file: string) {
     try {
-      console.log(mm);
       return await mm.parseFile(file);
     } catch (error) {
       console.error(error);
@@ -174,12 +173,12 @@ export default class MusicPlayer {
     if (coverBuffer && coverFormat) {
       const coverColor = (await getColors(coverBuffer, coverFormat))[0].hex();
       const coverAttachment = new Discord.MessageAttachment(coverBuffer, "cover.png");
-      embed.setColor(("#" + coverColor) as ColorResolvable);
+      embed.setColor(coverColor as Discord.HexColorString);
       return { embeds: [embed], files: [coverAttachment] };
     }
 
     // If there's no cover art just return the generic cover art
-    const genericCover = fs.createReadStream("../assets/images/defaultCoverArt.jpg");
+    const genericCover = fs.createReadStream("../assets/images/defaultCover.png");
     const coverAttachment = new Discord.MessageAttachment(genericCover, "cover.png");
     embed.setColor("#cacaca");
     return { embeds: [embed], files: [coverAttachment] };
