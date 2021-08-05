@@ -1,15 +1,8 @@
 import chalk from "chalk";
 import fs from "fs";
+import { getWaifuNameFromFileName } from "../logic/logic.sakuria";
 import { IWaifu, IWaifuRarity, IWaifuRarityName } from "../types";
 import logger from "./Logger.sakuria";
-
-// Unit test this function later
-function getWaifuNameFromFileName(waifuFileName: string) {
-  let parsedWaifuName = waifuFileName.toLowerCase();
-  parsedWaifuName = parsedWaifuName.replace(/\.[^.]*$/, "");
-  parsedWaifuName = parsedWaifuName.replace(/([^a-z])([a-z])(?=[a-z]{2})|^([a-z])/g, (_, g1, g2, g3) => (typeof g1 === "undefined" ? g3.toUpperCase() : g1 + g2.toUpperCase()));
-  return parsedWaifuName;
-}
 
 function loadWaifusFromRarity(rarity: IWaifuRarityName): IWaifu[] {
   const IWaifus = [];

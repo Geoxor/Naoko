@@ -39,6 +39,25 @@ export function decodeMorse(string: string): string {
 }
 
 /**
+ * Capitalizes the first character of a string
+ * @param string the string to capitalize
+ * @author Bluskript
+ */
+export function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+/**
+ * Parses a filename e.g rem.png to Rem
+ * @param fileName the file to parse
+ * @author Geoxor
+ */
+export function getWaifuNameFromFileName(filename: string) {
+  let parsedWaifuName = filename.replace(/\.[^.]*$/, "");
+  return parsedWaifuName.split(" ").map(word => capitalizeFirstLetter(word)).join(" ");
+}
+
+/**
  * Gets a random number between 1 and 1.000.000 with an exponential factor
  * @author MaidMarija
  */

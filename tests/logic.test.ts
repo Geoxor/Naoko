@@ -1,7 +1,7 @@
 require("ts-mocha");
 import chai from "chai";
 import { it } from "mocha";
-import { encodeMorse, decodeMorse, uwufy } from "../logic/logic.sakuria";
+import { encodeMorse, decodeMorse, uwufy, getWaifuNameFromFileName } from "../logic/logic.sakuria";
 
 describe("⚡ Morse Encoder (encodeMorse)", () => {
   it("can encode a normal string", async () => {
@@ -48,5 +48,32 @@ describe("⚡ UwU-ifier (uwufy)", () => {
   it("can preserve numbers", async () => {
     const uwu = uwufy("hewwo 125812985 owo");
     chai.expect(uwu).to.contain("125812985");
+  });
+});
+
+describe("⚡ Waifu name parser (getWaifuNameFromFileName)", () => {
+  it("can get a single name", async () => {
+    const name = getWaifuNameFromFileName("rem.png");
+    chai.expect(name).to.contain("Rem");
+  });
+  it("can get a single name with multiple words", async () => {
+    const name = getWaifuNameFromFileName("Kan shimakaze.png");
+    chai.expect(name).to.contain("Kan Shimakaze");
+  });
+  it("can persist secondary capitalizations", async () => {
+    const name = getWaifuNameFromFileName("kanColle shimakaze.png");
+    chai.expect(name).to.contain("KanColle Shimakaze");
+  });
+  it("can handle bullshit extensions", async () => {
+    const name = getWaifuNameFromFileName("shimakaze.piouAW3HR9-83");
+    chai.expect(name).to.contain("Shimakaze");
+  });
+  it("can handle no extensions", async () => {
+    const name = getWaifuNameFromFileName("shimakaze");
+    chai.expect(name).to.contain("Shimakaze");
+  });
+  it("can persist numbers", async () => {
+    const name = getWaifuNameFromFileName("02");
+    chai.expect(name).to.contain("02");
   });
 });
