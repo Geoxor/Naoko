@@ -1,8 +1,8 @@
 {
   "common": [
-    { "name": "Meru The Succubus", "image": "./assets/waifus/meru.png", "hp": 1400, "rewards": { "currency": 1400, "xp": 140 } },
-    { "name": "Yuuno", "image": "./assets/waifus/yuuno.png", "hp": 1250, "rewards": { "currency": 1300, "xp": 130 } },
-    { "name": "Retsu Kaioh", "image": "./assets/waifus/retsu.png", "hp": 1600, "rewards": { "currency": 1600, "xp": 160 } },
+    { "name": "Meru The Succubus", "image": "meru.png", "hp": 1400, "rewards": { "currency": 1400, "xp": 140 } },
+    { "name": "Yuuno", "image": "yuuno.png", "hp": 1250, "rewards": { "currency": 1300, "xp": 130 } },
+    { "name": "Retsu Kaioh", "image": "retsu.png", "hp": 1600, "rewards": { "currency": 1600, "xp": 160 } },
     {
       "name": "Asuka Langley Soryu",
       "image": "asuka_langley.png",
@@ -85,6 +85,42 @@
         "currency": 1470,
         "xp": 160
       }
+    },
+    {
+      "name": "Ajax",
+      "image": "azurlane/Ajax.png",
+      "hp": 1390,
+      "rewards": {
+        "currency": 1350,
+        "xp": 170
+      }
+    },
+    {
+      "name": "Kaga",
+      "image": "azurlane/Kaga.png",
+      "hp": 1500,
+      "rewards": {
+        "currency": 1410,
+        "xp": 190
+      }
+    },
+    {
+      "name": "Akagi",
+      "image": "azurlane/Akagi.png",
+      "hp": 1490,
+      "rewards": {
+        "currency": 1400,
+        "xp": 180
+      }
+    },
+    {
+      "name": "Ayanami",
+      "image": "azurlane/Ayanami.png",
+      "hp": 1270,
+      "rewards": {
+        "currency": 1350,
+        "xp": 190
+      }
     }
   ],
   "rare": [
@@ -114,6 +150,15 @@
         "currency": 2310,
         "xp": 200
       }
+    },
+    {
+      "name": "Atago",
+      "image": "azurlane/Atago.png",
+      "hp": 2790,
+      "rewards": {
+        "currency": 2400,
+        "xp": 250
+      }
     }
   ],
   "legendary": [
@@ -121,6 +166,7 @@
       "name": "Astolfo",
       "image": "Astolfo.png",
       "hp": 3000,
+      "armor": 100,
       "rewards": {
         "currency": 2780,
         "xp": 480
@@ -141,6 +187,7 @@
       "name": "Shimakaze",
       "image": "shimakaze.png",
       "hp": 8000,
+      "armor": 1000,
       "rewards": {
         "currency": 4890,
         "xp": 1120
@@ -150,6 +197,7 @@
       "name": "Neneko",
       "image": "Neneko.png",
       "hp": 10000,
+      "armor": 2500,
       "rewards": {
         "currency": 6120,
         "xp": 1750

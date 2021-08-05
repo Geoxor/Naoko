@@ -46,6 +46,7 @@ export interface IJSONWaifu {
   name: string;
   image: string;
   hp: number;
+  armor?: number;
   rewards: IRewards;
 }
 export interface IWaifu extends IJSONWaifu {

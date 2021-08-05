@@ -2,7 +2,7 @@ import Waifu from "./Waifu.sakuria";
 import Discord from "discord.js";
 import waifus from "../assets/waifus.json";
 import { IJSONWaifu, IWaifu, IWaifuRarity } from "../types";
-import { randomChoice } from "../logic/logic.sakuria";
+import { randomChoice, calcDamage } from "../logic/logic.sakuria";
 
 const COMMON: IWaifuRarity = {
   relativeFrequency: 14,
@@ -173,7 +173,7 @@ export default class WaifuBattle {
         // in the battle so we can reward them
         !this.participants.includes(message.author) && this.participants.push(message.author);
 
-        this.waifu.dealDamage(100);
+        this.waifu.dealDamage(calcDamage());
         if (this.waifu.isDead) await this.endBattle();
       }
     });
