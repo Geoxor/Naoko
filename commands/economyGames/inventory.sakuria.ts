@@ -7,7 +7,11 @@ export default {
   description: "Shows the inventory of the user",
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<Discord.MessageOptions | string> => {
-    const embed = await InventoryManager.getInventory(message.author);
-    return { embeds: [embed] };
+    try {
+      const embed = await InventoryManager.getInventory(message.author);
+      return { embeds: [embed] };
+    } catch (error) {
+      return "You don't have an inventory";
+    }
   },
 };

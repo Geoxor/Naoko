@@ -1,5 +1,5 @@
 import { Inventory, PrismaClient, Statistics, User } from "@prisma/client";
-import { IBattle } from "../types"
+import { IBattle } from "../types";
 import chalk from "chalk";
 
 /**
@@ -20,14 +20,14 @@ class DB {
     const user = await this.prisma.user.upsert({
       where: { id },
       update: {},
-      create: { 
+      create: {
         id,
         inventory: {
-          create: { }
+          create: {},
         },
         statistics: {
-          create: { }
-        }
+          create: {},
+        },
       },
       include: {
         inventory: true,
@@ -60,7 +60,7 @@ class DB {
    */
   public async getInventory(userId: string): Promise<Inventory> {
     const inventory = await this.prisma.inventory.findFirst({
-      where: { userId }
+      where: { userId },
     });
 
     console.log(`GET Inventory: ${userId}`);
@@ -73,7 +73,8 @@ class DB {
       xp: { increment: battle.xp },
       totalAttacks: { increment: battle.totalAttacks },
       totalDamageDealt: { increment: battle.totalDamageDealt },
-    } as { [key: string]: any }
+      totalPrismsCollected: { increment: battle.money },
+    } as { [key: string]: any };
 
     // Increment the waifu rarity they killed
     statistics[`${battle.rarity}WaifusKilled`] = { increment: 1 };
@@ -81,17 +82,17 @@ class DB {
     // Commit their statistics
     await this.prisma.statistics.update({
       data: statistics,
-      where: {userId: user}
-    })
+      where: { userId: user },
+    });
     console.log(`UPDATE: Statistics: ${user}`);
 
     // Commit their new prisms to their inventory
     await this.prisma.inventory.update({
-      data: { prisms: { increment: battle.money }, },
-      where: {userId: user}
-    })
+      data: { prisms: { increment: battle.money } },
+      where: { userId: user },
+    });
     console.log(`UPDATE: Inventory: ${user}`);
-    return
+    return;
   }
 }
 

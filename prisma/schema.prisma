@@ -67,8 +67,8 @@ model Statistics {
   // Personal records
   fastestBattle                   Battle?     @relation(fields: [fastestBattleId], references: [id])
   fastestBattleId                 Int?
-  totalPrismaSpent                Int         @default(0)
-  totalPrismaCollected            Int         @default(0)
+  totalPrismsSpent                Int         @default(0)
+  totalPrismsCollected            Int         @default(0)
   totalAttacks                    Int         @default(0)
   totalDamageDealt                Float       @default(0)
   topDPS                          Float       @default(0)
