@@ -67,8 +67,12 @@ class Sakuria {
       }
 
       // Get the result to send from the command
-      const result = await command.execute(message);
-      logger.command.executedCommand(command.name, message.author.username, message.guild?.name || "dm");
+      try {
+        var result = await command.execute(message);
+        logger.command.executedCommand(command.name, message.author.username, message.guild?.name || "dm");
+      } catch (error) {
+        return console.log(error);
+      }
 
       // Delete the processing message if it exists
       // @ts-ignore

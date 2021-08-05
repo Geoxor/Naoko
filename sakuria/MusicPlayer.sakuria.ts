@@ -122,7 +122,7 @@ export default class MusicPlayer {
    * Returns the metadata of a tune
    * @author Geoxor
    */
-  async getMetadata(file: string) {
+  public async getMetadata(file: string) {
     try {
       return await mm.parseFile(file);
     } catch (error) {
@@ -134,7 +134,7 @@ export default class MusicPlayer {
    * Creates an embed to send for the currently playing tune
    * @author Geoxor
    */
-  async getNowPlaying() {
+  public async getNowPlaying() {
     // Get the current file thats playing
     const nowPlayingFile = this.getNowPlayingFile();
 

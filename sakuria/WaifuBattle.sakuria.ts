@@ -255,7 +255,11 @@ export default class WaifuBattle {
       embeds: [this.createRewardEmbed()],
     });
     setTimeout(() => {
-      this.thread?.delete();
+      try {
+        this.thread?.delete();
+      } catch (error) {
+        console.log(error);
+      }
     }, this.aftermathTime);
   }
 }

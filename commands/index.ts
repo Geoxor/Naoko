@@ -9,7 +9,7 @@ import mors from "./fun/mors.sakuria";
 import say from "./fun/say.sakuria";
 import traceAnime from "./fun/traceAnime.sakuria";
 import uwuify from "./fun/uwuify.sakuria";
-import waifu from "./fun/waifu.sakuria";
+import waifu from "./fun/battle.sakuria";
 
 // moderation commands
 import clear from "./moderation/clear.sakuria";
