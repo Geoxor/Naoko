@@ -45,7 +45,7 @@ export default class WaifuBattle {
     this.collector = null;
     this.battleDuration = 60000;
     this.aftermathTime = 15000;
-    this.threadName = `waifu battle!`;
+    this.threadName = `${this.waifu.emoji} ${this.waifu.rarity} waifu battle!`;
     this.ended = false;
     this.lastBossbarMessage = null;
     this.battleStart = 0;
@@ -220,7 +220,7 @@ export default class WaifuBattle {
   createDefeatEmbed(){
     return new Discord.MessageEmbed()
       .setColor("#FF3136")
-      .setTitle(`${this.waifu.name} has escaped!`)
+      .setTitle(`${this.waifu.name} has escaped with ${~~this.waifu.currentHp} HP!`)
       .addField("Participants", this.getParticipantsString(), false)
       .setFooter(`${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`);
   }
@@ -283,9 +283,9 @@ export default class WaifuBattle {
       });
     }
 
-    setTimeout(() => {
+    setTimeout(async () => {
       try {
-        this.thread?.delete();
+        this.channel.name === 'sakuria' ? await this.thread!.setArchived(true) : await this.thread?.delete();
       } catch (error) {
         console.log(error);
       }

@@ -56,7 +56,7 @@ export const LEGENDARY: IWaifuRarity = {
   hp: calcSpread(25000),
   armor: calcSpread(1500),
   rewards: { xp: calcSpread(2500), money: calcSpread(5000) },
-  relativeFrequency: 3,
+  relativeFrequency: 2,
   name: "legendary",
   color: "#FFCB6B",
   emoji: "🌟",
