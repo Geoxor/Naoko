@@ -58,7 +58,7 @@ class DB {
    * @param {string} userId the user to get
    * @author Geoxor
    */
-  public async getInventory(userId: string): Promise<Inventory> {
+  public async getInventory(userId: string) {
     const inventory = await this.prisma.inventory.findFirst({
       where: { userId },
     });
@@ -67,7 +67,22 @@ class DB {
     return inventory!;
   }
 
-  public async addBattleRewardsToUser(user: string, battle: IBattle): Promise<void> {
+  /**
+   * Get's a user's statistics from the database
+   * If the user doesn't exist in the database it will create it
+   * @param {string} userId the user to get
+   * @author Geoxor
+   */
+   public async getStatistics(userId: string) {
+    const statistics = await this.prisma.statistics.findFirst({
+      where: { userId },
+    });
+
+    logger.prisma.generic(`GET Statistics: ${userId}`);
+    return statistics!;
+  }
+
+  public async addBattleRewardsToUser(user: string, battle: IBattle) {
     // Prepare the statistics to commit to the database
     let statistics = {
       xp: { increment: battle.xp },

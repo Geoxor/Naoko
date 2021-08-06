@@ -116,10 +116,10 @@ export default class MusicPlayer {
    * @author N1kO23
    */
   public shuffle() {
-    var currentIndex = this.queue.length,
+    let currentIndex = this.queue.length,
       randomIndex;
     while (0 !== currentIndex) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
+      randomIndex = ~~(Math.random() * currentIndex);
       currentIndex--;
       [this.queue[currentIndex], this.queue[randomIndex]] = [this.queue[randomIndex], this.queue[currentIndex]];
     }

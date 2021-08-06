@@ -3,6 +3,7 @@ import { ICommand } from "../types";
 // economy game commands
 import battle from "./economyGames/battle.sakuria";
 import inventory from "./economyGames/inventory.sakuria";
+import stats from "./economyGames/stats.sakuria";
 
 // fun commands
 import anime from "./fun/anime.sakuria";
@@ -32,4 +33,4 @@ import skip from "./musicPlayer/skip.sakuria";
 import shuffle from "./musicPlayer/shuffle.sakuria";
 import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
 
-export const commands: ICommand[] = [nowPlaying, ping, inventory, battle, shuffle, skip, play, anime, invert, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];
+export const commands: ICommand[] = [nowPlaying, stats, ping, inventory, battle, shuffle, skip, play, anime, invert, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];
