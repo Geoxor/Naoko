@@ -1,6 +1,6 @@
 {
   "name": "sakuria",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "Sakuria general purpose discord bot",
   "main": "sakuria.ts",
   "scripts": {
