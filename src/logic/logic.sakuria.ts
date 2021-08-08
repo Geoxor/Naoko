@@ -19,6 +19,7 @@ export function randomChoice<T>(l: Array<T>): T {
  * @param matcher first half of the shipname
  * @param matchee second half of the shiipname
  * @returns {string} the ship name
+ * @author Geoxor
  */
 export function getShipName(matcher: string, matchee: string) {
   return matcher.substring(0, matcher.length / 2) + matchee.substring(matchee.length / 2)
@@ -174,6 +175,20 @@ export async function invertImage(image: Buffer): Promise<Buffer | string> {
 export async function getBufferFromUrl(url: string) {
   const response = await axios({ method: "GET", url, responseType: "arraybuffer" });
   return Buffer.from(response.data);
+}
+
+/**
+ * Creates a trolley image with a given image buffer
+ * @param image the buffer to composite to the trolley
+ * @author Geoxor, Bluskript
+ */
+export async function createTrolley(image: Buffer): Promise<Buffer> {
+  // This could be optimized
+  const trolleyImage = await Jimp.read("./src/assets/images/trolleyTemplate.png")
+  const jimpImage = await Jimp.read(image);
+  const size = 48;
+  jimpImage.resize(size * 2, size);
+  return trolleyImage.composite(jimpImage, 4, 24).getBufferAsync('image/png');
 }
 
 /**
