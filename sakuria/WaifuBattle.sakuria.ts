@@ -3,7 +3,6 @@ import Discord from "discord.js";
 import { IWaifu, IWaifuRarity } from "../types";
 import { randomChoice, calcDamage } from "../logic/logic.sakuria";
 import { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON } from "./WaifuRarities.sakuria";
-import InventoryManager from "./InventoryManager.sakuria";
 import { db } from "./Database.sakuria";
 
 /**
@@ -160,7 +159,7 @@ export default class WaifuBattle {
 
         // Rare and above waifu can dodge attacks
         // if (Math.random() < 0.9 && relativeFrequency >= 5 ) this.waifu.dealDamage(damage);
-        if (this.waifu.isDead) await this.endBattle();
+        if (this.waifu.isDead) await this.endBattle().catch(error => console.log(error));
       }
     });
   }

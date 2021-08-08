@@ -14,6 +14,7 @@ import mors from "./fun/mors.sakuria";
 import say from "./fun/say.sakuria";
 import traceAnime from "./fun/traceAnime.sakuria";
 import uwuify from "./fun/uwuify.sakuria";
+import match from "./fun/match.sakuria";
 
 // moderation commands
 import clear from "./moderation/clear.sakuria";
@@ -33,4 +34,4 @@ import skip from "./musicPlayer/skip.sakuria";
 import shuffle from "./musicPlayer/shuffle.sakuria";
 import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
 
-export const commands: ICommand[] = [nowPlaying, stats, ping, inventory, battle, shuffle, skip, play, anime, invert, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];
+export const commands: ICommand[] = [nowPlaying, match, stats, ping, inventory, battle, shuffle, skip, play, anime, invert, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];

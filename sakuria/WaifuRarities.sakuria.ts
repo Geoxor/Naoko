@@ -23,7 +23,7 @@ export const COMMON: IWaifuRarity = {
   hp: calcSpread(1000),
   armor: 0,
   rewards: { xp: calcSpread(100), money: calcSpread(200) },
-  relativeFrequency: 14,
+  relativeFrequency: 10,
   name: "common",
   color: "#8F93A2",
   emoji: "👺",

@@ -15,6 +15,16 @@ export function randomChoice<T>(l: Array<T>): T {
 }
 
 /**
+ * Combines 2 user's names to create a ship name
+ * @param matcher discord user to match
+ * @param matchee discord user to match
+ * @returns {string} the ship name
+ */
+export function getShipName(matcher: string, matchee: string) {
+  return matcher.substring(0, matcher.length / 2) + matchee.substring(matchee.length / 2)
+}
+
+/**
  * Encodes an alphanumerical string to Morse code
  * @param {string} string an alphanumerical string to encode
  * @author Geoxor
