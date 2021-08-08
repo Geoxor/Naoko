@@ -6,22 +6,22 @@ import { encodeMorse, decodeMorse, uwufy, getWaifuNameFromFileName, calcSpread }
 describe("⚡ Morse Encoder (encodeMorse)", () => {
   it("can encode a normal string", async () => {
     const morseCode = encodeMorse("hello world");
-    chai.expect(morseCode).to.be.equal(".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
+    chai.expect(morseCode).to.equal(".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
   });
 
   it("can encode capital letters", async () => {
     const morseCode = encodeMorse("HeLLo WoRLd");
-    chai.expect(morseCode).to.be.equal(".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
+    chai.expect(morseCode).to.equal(".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
   });
 
   it("can handle random characters", async () => {
     const morseCode = encodeMorse("*@(h98(@nf928ndjkniu241i24");
-    chai.expect(morseCode).to.be.equal(".... ----. ---.. -. ..-. ----. ..--- ---.. -. -.. .--- -.- -. .. ..- ..--- ....- .---- .. ..--- ....-");
+    chai.expect(morseCode).to.equal(".... ----. ---.. -. ..-. ----. ..--- ---.. -. -.. .--- -.- -. .. ..- ..--- ....- .---- .. ..--- ....-");
   });
 
   it("can decode morse with text in between", async () => {
     const morseCode = decodeMorse(".... . .-.. .-.. --- world");
-    chai.expect(morseCode).to.be.equal("hello");
+    chai.expect(morseCode).to.equal("hello");
   });
 });
 
@@ -86,8 +86,8 @@ describe("⚡ RNG Number Spread (calcSpread)", () => {
   it("can get a random number between a bipolar limit (x1000)", async () => {
     for (let i = 0; i < 1000; i++) {
       const rngNumber = calcSpread(1000);
-      chai.expect(rngNumber).to.be.below(1100);
-      chai.expect(rngNumber).to.be.above(899);
+      chai.expect(rngNumber).to.below(1100);
+      chai.expect(rngNumber).to.above(899);
     }
   });
 });
