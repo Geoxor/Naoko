@@ -16,8 +16,8 @@ export function randomChoice<T>(l: Array<T>): T {
 
 /**
  * Combines 2 user's names to create a ship name
- * @param matcher discord user to match
- * @param matchee discord user to match
+ * @param matcher first half of the shipname
+ * @param matchee second half of the shiipname
  * @returns {string} the ship name
  */
 export function getShipName(matcher: string, matchee: string) {

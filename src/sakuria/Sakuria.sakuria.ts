@@ -1,9 +1,11 @@
 import Discord, { Intents } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.sakuria";
 import { ICommand, IMessage } from "../types";
-import logger from "../sakuria/Logger.sakuria";
+import logger from "./Logger.sakuria";
 import { commands } from "../commands";
 import config from "./Config.sakuria";
+import {version} from "../../package.json";
+
 
 /**
  * Sakuria multi purpose Discord bot
@@ -21,7 +23,7 @@ class Sakuria {
     this.bot.on("ready", async () => {
       this.onReady;
       logger.sakuria.numServers(this.bot.guilds.cache.size);
-      this.bot.user?.setActivity(`${config.prefix}help v${require("../package.json").version}`, { type: "LISTENING" });
+      this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
     });
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.bot.login(process.env.DISCORD_TOKEN!);

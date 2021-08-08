@@ -6,7 +6,7 @@ import logger from "./Logger.sakuria";
 
 function loadWaifusFromRarity(rarity: IWaifuRarityName): IWaifu[] {
   const IWaifus = [];
-  const waifuImages = fs.readdirSync(`./assets/waifus/${rarity}`);
+  const waifuImages = fs.readdirSync(`./src/assets/waifus/${rarity}`);
 
   for (let waifu of waifuImages) {
     const name = getWaifuNameFromFileName(waifu);

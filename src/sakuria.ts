@@ -7,10 +7,10 @@ console.clear();
 
 // Cosmetic Imports
 import chalk from "chalk";
-import { version } from "./package.json";
+import { version } from "../package.json";
 import logger from "./sakuria/Logger.sakuria";
 
-// Print logo
+// Print log
 console.log(
   chalk.hex("#FF33A7")(`              
           -%#-          
