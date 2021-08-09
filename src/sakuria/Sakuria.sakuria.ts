@@ -5,7 +5,6 @@ import logger from "./Logger.sakuria";
 import { commands } from "../commands";
 import config from "./Config.sakuria";
 import { version } from "../../package.json";
-import { getCurrentMemoryHeap } from "../logic/logic.sakuria";
 
 /**
  * Sakuria multi purpose Discord bot
