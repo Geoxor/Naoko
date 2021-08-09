@@ -12,7 +12,7 @@ import decode from "./fun/decode.sakuria";
 import dicksize from "./fun/dicksize.sakuria";
 import mors from "./fun/mors.sakuria";
 import say from "./fun/say.sakuria";
-import traceAnime from "./fun/traceAnime.sakuria";
+import traceAnime from "./fun/trace.sakuria";
 import uwuify from "./fun/uwufy.sakuria";
 import match from "./fun/match.sakuria";
 import trolley from "./imageProcessing/trolley.sakuria";
