@@ -194,7 +194,7 @@ export default class MusicPlayer {
     }
 
     // If there's no cover art just return the generic cover art
-    const genericCover = fs.createReadStream("./assets/images/defaultCover.png");
+    const genericCover = fs.createReadStream("./src/assets/images/defaultCover.png");
     const coverAttachment = new Discord.MessageAttachment(genericCover, "cover.png");
     embed.setColor("#cacaca");
     return { embeds: [embed], files: [coverAttachment] };

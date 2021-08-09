@@ -13,9 +13,9 @@ import dicksize from "./fun/dicksize.sakuria";
 import mors from "./fun/mors.sakuria";
 import say from "./fun/say.sakuria";
 import traceAnime from "./fun/traceAnime.sakuria";
-import uwuify from "./fun/uwuify.sakuria";
+import uwuify from "./fun/uwufy.sakuria";
 import match from "./fun/match.sakuria";
-import trolley from "./fun/trolley.sakuria";
+import trolley from "./imageProcessing/trolley.sakuria";
 
 // moderation commands
 import clear from "./moderation/clear.sakuria";

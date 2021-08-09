@@ -35,7 +35,7 @@ export default class Waifu {
     this.color = rarity.color;
     this.rewards = rarity.rewards;
     this.isDead = false;
-    this.attachment = new Discord.MessageAttachment(fs.createReadStream(`./assets/waifus/${this.rarity}/${this.imageFile}`), "waifu.png");
+    this.attachment = new Discord.MessageAttachment(fs.createReadStream(`./src/assets/waifus/${this.rarity}/${this.imageFile}`), "waifu.png");
     this.ui = this.prepareUi();
   }
 
