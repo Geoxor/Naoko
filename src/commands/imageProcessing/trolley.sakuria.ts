@@ -4,7 +4,7 @@ import { createTrolley, getBufferFromUrl, getImageURLFromMessage } from "../../l
 
 export default {
   name: "trolley",
-  description: "Makes a trolley out of your avatar",
+  description: "Makes a trolley out of an attachment, url or avatar",
   requiresProcessing: true,
   execute: async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
     const imageURL = await getImageURLFromMessage(message);

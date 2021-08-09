@@ -1,5 +1,6 @@
 import quotes from "../assets/quotes.json";
 import chalk from "chalk";
+import { getCurrentMemoryHeap } from "../logic/logic.sakuria";
 
 /**
  * Main logging wrapper that creates beautiful colors and emojis
@@ -33,7 +34,7 @@ class Logger {
    * @author Geoxor
    */
   public print(log: string): void {
-    console.log(chalk.hex(this.color)(`  ${this.time()} ${this.emoji}  ${log}`));
+    console.log(chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.time()} ${this.emoji}  ${log}`));
   }
 
   /**
@@ -58,7 +59,7 @@ class SakuriaLogger extends Logger {
   public created = () => this.print("Sakuria created");
   public inspiration = () =>
     console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
-  public generic = (string: string) => console.log(`  ${this.time()} 🗻  ${string}`);
+  public generic = (string: string) => console.log(`  ${getCurrentMemoryHeap()}  ${this.time()} 🗻  ${string}`);
 }
 class ConfigLogger extends Logger {
   constructor() {
@@ -78,8 +79,8 @@ class CommandLogger extends Logger {
     this.emoji = "🔮";
     this.color = "#886CE4";
   }
-  public executedCommand = (command: string, username: string, guild: string) =>
-    this.print(`Executed command: ${command} - User: ${username} - Guild: ${guild}`);
+  public executedCommand = (time: number, command: string, username: string, guild: string) =>
+    this.print(`${time}ms - Executed command: ${command} - User: ${username} - Guild: ${guild}`);
 }
 class PrismaLogger extends Logger {
   constructor() {

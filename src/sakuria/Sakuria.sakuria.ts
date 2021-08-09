@@ -5,6 +5,7 @@ import logger from "./Logger.sakuria";
 import { commands } from "../commands";
 import config from "./Config.sakuria";
 import { version } from "../../package.json";
+import { getCurrentMemoryHeap } from "../logic/logic.sakuria";
 
 /**
  * Sakuria multi purpose Discord bot
@@ -77,8 +78,10 @@ class Sakuria {
 
       // Get the result to send from the command
       try {
+        let timeStart = Date.now();
         var result = await command.execute(message);
-        logger.command.executedCommand(command.name, message.author.username, message.guild?.name || "dm");
+        let timeEnd = Date.now();
+        logger.command.executedCommand(timeEnd - timeStart, command.name, message.author.username, message.guild?.name || "dm");
       } catch (error) {
         console.log(error);
         await message.reply("⚠️ An error occured");

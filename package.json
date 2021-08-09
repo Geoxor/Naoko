@@ -4,7 +4,7 @@
   "description": "Sakuria general purpose discord bot",
   "main": "./src/sakuria.ts",
   "scripts": {
-    "test": "npm i && ts-mocha -p ./tsconfig.json ./src/**/*.test.ts",
+    "test": "npm i && ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
     "dev": "npx prisma generate --schema ./src/prisma/schema.prisma && nodemon ./src/sakuria.ts",
     "setup": "npm i && npm run prettify && ts-node ./src/setup.sakuria.ts && npm run gen-db",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\"",

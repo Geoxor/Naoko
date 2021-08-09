@@ -6,8 +6,6 @@ import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime, IMessage } from "../types";
 import Jimp from "jimp";
 import Discord from "discord.js";
-import SakuriaSakuria from "../sakuria/Sakuria.sakuria";
-import commandMiddlewareSakuria from "../middleware/commandMiddleware.sakuria";
 
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
@@ -16,6 +14,18 @@ const defaultImageOptions: Discord.ImageURLOptions = {
 
 let trolleyImage: Jimp;
 Jimp.read("./src/assets/images/trolleyTemplate.png").then(async image => trolleyImage = image);
+
+/**
+ * Gets the used/total heap in ram used
+ * @author Geoxor
+ */
+export function getCurrentMemoryHeap(){
+  const mem = process.memoryUsage();
+  const used = (mem.heapUsed / 1000 / 1000).toFixed(2);
+  const total = (mem.heapTotal / 1000 / 1000).toFixed(2);
+  return `${used}/${total}MB`
+}
+
 
 /**
  * Validate if a string is a valid HTTP URL
@@ -62,15 +72,6 @@ export function getImageURLWithoutArgs(message: Discord.Message) {
     message.author.displayAvatarURL(defaultImageOptions) ||
     message.author.defaultAvatarURL
   );
-}
-
-/**
- * Gets a Discord User from a user ID
- * @param id a user id
- * @author Geoxor
- */
-export function resolveUserFromID(id: string) {
-  return SakuriaSakuria.bot.users.fetch(id);
 }
 
 /**
@@ -180,7 +181,7 @@ export function calcDefense(defense: number): number {
  * Please, if you have a better formula, you can fix it.
  * @params value
  * @returns rng spread
- * @author azur1s, Geoxor, N1kO23, MaidMarija
+ * @author azur1s & MaidMarija
  */
 export function calcSpread(value: number): number {
   let rng = Math.random();
@@ -231,7 +232,7 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
   if (isValidHttpUrl(arg)) {
     return arg;
   } else {
-    const user = await resolveUserFromID(arg);
+    const user = await message.client.users.fetch(arg);
     return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL;
   }
 }
