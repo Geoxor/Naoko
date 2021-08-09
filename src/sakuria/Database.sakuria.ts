@@ -73,7 +73,7 @@ class DB {
    * @param {string} userId the user to get
    * @author Geoxor
    */
-   public async getStatistics(userId: string) {
+  public async getStatistics(userId: string) {
     const statistics = await this.prisma.statistics.findFirst({
       where: { userId },
     });

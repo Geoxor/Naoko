@@ -159,7 +159,7 @@ export default class WaifuBattle {
 
         // Rare and above waifu can dodge attacks
         // if (Math.random() < 0.9 && relativeFrequency >= 5 ) this.waifu.dealDamage(damage);
-        if (this.waifu.isDead) await this.endBattle().catch(error => console.log(error));
+        if (this.waifu.isDead) await this.endBattle().catch((error) => console.log(error));
       }
     });
   }

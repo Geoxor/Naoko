@@ -19,7 +19,7 @@ export default class InventoryManager {
       .setAuthor(user.username, "https://cdn.discordapp.com/attachments/806300597338767450/872917164091396126/unknown.png")
       .setColor("#BF360C")
       .setTitle(`${user.username}'s Statistics`)
-      .setThumbnail(user.avatarURL() || user.defaultAvatarURL)
+      .setThumbnail(user.avatarURL() || user.defaultAvatarURL);
 
     let statKeys = `
       \`Experience\`
@@ -34,7 +34,7 @@ export default class InventoryManager {
       \`Rare Waifus Killed\`
       \`Legendary Waifus Killed\`
       \`Mythical Waifus Killed\`
-    `
+    `;
 
     let statValues = `
       \`${statistics.xp}\`
@@ -49,7 +49,7 @@ export default class InventoryManager {
       \`${statistics.rareWaifusKilled}\`
       \`${statistics.legendaryWaifusKilled}\`
       \`${statistics.mythicalWaifusKilled}\`
-    `
+    `;
 
     embed.addField("Stat", statKeys, true);
     embed.addField("Value", statValues, true);

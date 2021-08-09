@@ -1,7 +1,6 @@
 import { getShipName } from "../../logic/logic.sakuria";
 import { IMessage } from "../../types";
 
-
 export default {
   name: "match",
   description: "See how much you and another user match!",
@@ -15,7 +14,7 @@ export default {
     const matcherValue = parseInt(matcher.id);
     const matcheeValue = parseInt(matchee.id as string);
     const matchValue = (matcherValue + matcheeValue) % 22;
-    const matchCalculation = (22 - matchValue) / 22 * 100;
+    const matchCalculation = ((22 - matchValue) / 22) * 100;
 
     const shipName = getShipName(matcher.username, matchee.username);
 

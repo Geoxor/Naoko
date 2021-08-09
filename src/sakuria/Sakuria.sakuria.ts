@@ -4,8 +4,7 @@ import { ICommand, IMessage } from "../types";
 import logger from "./Logger.sakuria";
 import { commands } from "../commands";
 import config from "./Config.sakuria";
-import {version} from "../../package.json";
-
+import { version } from "../../package.json";
 
 /**
  * Sakuria multi purpose Discord bot
