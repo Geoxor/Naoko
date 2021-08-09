@@ -9,7 +9,8 @@ export default {
     // Reply if no args
     if (message.args.length === 0) return "Give me a string to encode!";
     let messageContent: string = message.args.join(" ");
-    if (messageContent.length / messageContent.replace(/[\-./\s]/g, "").length > 1.5) return decodeMorse(messageContent).substr(0, 2000);
+    if (messageContent.length / messageContent.replace(/[\-./\s]/g, "").length > 1.5)
+      return decodeMorse(messageContent).substr(0, 2000);
     else return encodeMorse(messageContent).substr(0, 2000);
   },
 };

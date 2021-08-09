@@ -197,8 +197,12 @@ export default class WaifuBattle {
    * @author N1kO23, Geoxor
    */
   getParticipantsString() {
-    const sortedArray = Object.values(this.participants).sort((a, b) => b.totalDamageDealt - a.totalDamageDealt);
-    return sortedArray.map((user) => `<@${user.userId}> - 🩸 DMG ${user.totalDamageDealt} - ⚔️ Attacks ${user.totalAttacks}`).join("\n");
+    const sortedArray = Object.values(this.participants).sort(
+      (a, b) => b.totalDamageDealt - a.totalDamageDealt
+    );
+    return sortedArray
+      .map((user) => `<@${user.userId}> - 🩸 DMG ${user.totalDamageDealt} - ⚔️ Attacks ${user.totalAttacks}`)
+      .join("\n");
   }
 
   /**
@@ -277,7 +281,9 @@ export default class WaifuBattle {
     } else {
       await this.thread!.setName(`${this.threadName} defeat`);
       await this.thread!.send({
-        content: `Battle ended, no one killed the waifu - deleting thread in ${this.aftermathTime / 1000} seconds`,
+        content: `Battle ended, no one killed the waifu - deleting thread in ${
+          this.aftermathTime / 1000
+        } seconds`,
         embeds: [this.createDefeatEmbed()],
       });
     }

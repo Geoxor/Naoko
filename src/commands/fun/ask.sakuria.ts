@@ -7,7 +7,8 @@ export default {
   requiresProcessing: false,
   execute: (message: IMessage): string => {
     // Reply if no args
-    if (message.args.length === 0) return "Yeah you gotta ask a question you know? you can't just fuckin tell me the command and ask nothing idiot";
+    if (message.args.length === 0)
+      return "Yeah you gotta ask a question you know? you can't just fuckin tell me the command and ask nothing idiot";
     return answers[~~(Math.random() * answers.length - 1)];
   },
 };

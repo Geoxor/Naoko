@@ -56,7 +56,8 @@ class SakuriaLogger extends Logger {
   public loadingCommands = () => this.print("Loading commands...");
   public importedCommand = (command: string) => this.print(`┖ Imported command ${command}`);
   public created = () => this.print("Sakuria created");
-  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
+  public inspiration = () =>
+    console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
   public generic = (string: string) => console.log(`  ${this.time()} 🗻  ${string}`);
 }
 class ConfigLogger extends Logger {
@@ -77,7 +78,8 @@ class CommandLogger extends Logger {
     this.emoji = "🔮";
     this.color = "#886CE4";
   }
-  public executedCommand = (command: string, username: string, guild: string) => this.print(`Executed command: ${command} - User: ${username} - Guild: ${guild}`);
+  public executedCommand = (command: string, username: string, guild: string) =>
+    this.print(`Executed command: ${command} - User: ${username} - Guild: ${guild}`);
 }
 class PrismaLogger extends Logger {
   constructor() {

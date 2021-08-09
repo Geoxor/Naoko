@@ -7,6 +7,10 @@ export default {
   requiresProcessing: false,
   execute: async (message: IMessage): Promise<void> => {
     const timestampMessage = await message.channel.send("🏓 Getting ping...");
-    timestampMessage.edit(`🏓 Pong! Latency is ${(timestampMessage.createdTimestamp - message.createdTimestamp) / 2}ms. API Latency is ${~~Sakuria.bot.ws.ping / 2}ms`);
+    timestampMessage.edit(
+      `🏓 Pong! Latency is ${
+        (timestampMessage.createdTimestamp - message.createdTimestamp) / 2
+      }ms. API Latency is ${~~Sakuria.bot.ws.ping / 2}ms`
+    );
   },
 };

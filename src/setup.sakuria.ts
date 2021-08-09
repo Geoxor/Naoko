@@ -46,7 +46,10 @@ vscodeSettings["material-icon-theme.files.associations"]["Sakuria.sakuria.ts"] =
 vscodeSettings["material-icon-theme.folders.associations"] = {};
 vscodeSettings["material-icon-theme.folders.associations"]["sakuria"] = "../../../../icons/sakuriaFolder";
 
-fs.writeFileSync(`C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`, JSON.stringify(vscodeSettings, null, 2));
+fs.writeFileSync(
+  `C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`,
+  JSON.stringify(vscodeSettings, null, 2)
+);
 console.log("Settings updated");
 
 // Inform them to reload their window

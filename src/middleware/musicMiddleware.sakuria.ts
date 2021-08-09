@@ -11,7 +11,10 @@ import { IMessage } from "../types";
  * @returns a promise of a string of the error or from the child callback
  * @author Geoxor
  */
-export async function musicMiddleware(message: IMessage, next: (channel: VoiceChannel | StageChannel, player: MusicPlayer) => Promise<MessageOptions | string>) {
+export async function musicMiddleware(
+  message: IMessage,
+  next: (channel: VoiceChannel | StageChannel, player: MusicPlayer) => Promise<MessageOptions | string>
+) {
   if (!message.guild) return "music doesn't work in DMs";
   if (!message.member) return "couldn't find you lol";
   if (!message.member.voice.channel) return "You're not in a voice chat!";

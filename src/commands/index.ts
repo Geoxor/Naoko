@@ -36,4 +36,29 @@ import skip from "./musicPlayer/skip.sakuria";
 import shuffle from "./musicPlayer/shuffle.sakuria";
 import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
 
-export const commands: ICommand[] = [nowPlaying, trolley, avatar, match, stats, ping, inventory, battle, shuffle, skip, play, anime, invert, ask, clear, decode, dicksize, help, invite, mors, say, traceAnime, uwuify, kick];
+export const commands: ICommand[] = [
+  nowPlaying,
+  trolley,
+  avatar,
+  match,
+  stats,
+  ping,
+  inventory,
+  battle,
+  shuffle,
+  skip,
+  play,
+  anime,
+  invert,
+  ask,
+  clear,
+  decode,
+  dicksize,
+  help,
+  invite,
+  mors,
+  say,
+  traceAnime,
+  uwuify,
+  kick,
+];

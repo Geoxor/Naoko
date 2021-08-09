@@ -12,40 +12,38 @@ import commandMiddlewareSakuria from "../middleware/commandMiddleware.sakuria";
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
   size: 32,
-}
+};
 
 /**
  * Validate if a string is a valid HTTP URL
  * @param string the string to validate
  * @author Bluskript
  */
-function isValidHttpUrl(string: string) {
+export function isValidHttpUrl(string: string) {
   let url;
-  
+
   try {
     url = new URL(string);
   } catch (_) {
-    return false;  
+    return false;
   }
 
   return url.protocol === "http:" || url.protocol === "https:";
 }
 
-
-
 /**
- * This uses RegEx to filter out the different parts of an emoji as a string. 
- * A standard emoji would look like: <:emojiname:emojiID> eg. <:BBwave:562730391362994178> 
+ * This uses RegEx to filter out the different parts of an emoji as a string.
+ * A standard emoji would look like: <:emojiname:emojiID> eg. <:BBwave:562730391362994178>
  * An animated emoji would look like: <a:emojiname:emojiID>
  * @param message message to parse
  * @author Geoxor
  */
 export function getFirstEmojiURL(message: string) {
-  const emoteRegex = /<:.+:(\d+)>/gm
-  const animatedEmoteRegex = /<a:.+:(\d+)>/gm
+  const emoteRegex = /<:.+:(\d+)>/gm;
+  const animatedEmoteRegex = /<a:.+:(\d+)>/gm;
   const firstEmoji = message.split(emoteRegex)[1] || message.split(animatedEmoteRegex)[1];
-  if (firstEmoji) return "https://cdn.discordapp.com/emojis/" + firstEmoji + ".png?v=1"
-  else return undefined
+  if (firstEmoji) return "https://cdn.discordapp.com/emojis/" + firstEmoji + ".png?v=1";
+  else return undefined;
 }
 
 /**
@@ -53,37 +51,14 @@ export function getFirstEmojiURL(message: string) {
  * @param message the discord message to fetch from
  * @author Bluskript
  */
-function getImageURLWithoutArgs(message: Discord.Message) {
-  return message.attachments.first()?.url ||
+export function getImageURLWithoutArgs(message: Discord.Message) {
+  return (
+    message.attachments.first()?.url ||
     getFirstEmojiURL(message.content) ||
     message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
     message.author.displayAvatarURL(defaultImageOptions) ||
     message.author.defaultAvatarURL
-}
-
-/**
- * Gets a URL from a message, it will try to get a message 
- * from replies, attachments, links, or user avatars
- * @author Geoxor & Bluskript
- */
-export async function getImageURLFromMessage(message: IMessage): Promise<string> {
-  const arg = message.args[0]
-  const userMention = message.mentions.users.first()
-
-  // If theres a reply
-  if (message.reference) {
-    const reference = await message.fetchReference()
-    return getImageURLWithoutArgs(reference)
-  }
-
-  if (!arg || userMention || message.content.includes("<:")) return getImageURLWithoutArgs(message); // this is a hack...
-  
-  if (isValidHttpUrl(arg)) {
-    return arg
-  } else {
-    const user = await resolveUserFromID(arg)
-    return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL
-  }
+  );
 }
 
 /**
@@ -92,7 +67,7 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
  * @author Geoxor
  */
 export function resolveUserFromID(id: string) {
-  return SakuriaSakuria.bot.users.fetch(id)
+  return SakuriaSakuria.bot.users.fetch(id);
 }
 
 /**
@@ -170,6 +145,95 @@ export function randomDickSize(): number {
 }
 
 /**
+ * Calculate attack damage
+ * @returns damage
+ * @author azur1s
+ */
+export function calcDamage(): number {
+  let damage = 100;
+  let critChance = 0.5;
+  let critMulti = 2;
+  let rng = Math.random(); //😎
+
+  if (rng > critChance) damage = damage * critMulti;
+
+  return damage;
+}
+
+/**
+ * Calculate defense from armor
+ * @returns armor
+ * @author azur1s
+ */
+export function calcDefense(defense: number): number {
+  defense = defense / (defense + 100);
+  return defense;
+}
+
+/**
+ * Calculates an RNG number -+10% of a given number
+ * If value is 1000 then 900 is minimum and 1100 is maximum
+ * We get it from adding/subtracting 10% of the value (1000) given
+ * Please, if you have a better formula, you can fix it.
+ * @params value
+ * @returns rng spread
+ * @author azur1s, Geoxor, N1kO23, MaidMarija
+ */
+export function calcSpread(value: number): number {
+  let rng = Math.random();
+  let min = value - value * 0.1;
+  let max = value + value * 0.1;
+  let spread = ~~((max - min) * rng + min);
+  return spread;
+}
+
+/**
+ * Uwu-ify sentences
+ * @param {string} sentence the sentence to uwu-ify
+ * @author azur1s
+ */
+export function uwufy(sentence: string): string {
+  const normal = sentence;
+  const uwuified = normal
+    .replace(/(?:r|l)/g, "w")
+    .replace(/(?:R|L)/g, "W")
+    .replace(/n([aeiou])/g, "ny$1")
+    .replace(/N([AEIOU])/g, "NY$1")
+    .replace(/ove/g, "uv")
+    .split(" ")
+    .map((val) => {
+      return Math.random() < 0.1 ? `${val.charAt(0)}-${val}` : `${val}`;
+    })
+    .join(" ");
+  return uwuified;
+}
+
+/**
+ * Gets a URL from a message, it will try to get a message
+ * from replies, attachments, links, or user avatars
+ * @author Geoxor & Bluskript
+ */
+export async function getImageURLFromMessage(message: IMessage): Promise<string> {
+  const arg = message.args[0];
+  const userMention = message.mentions.users.first();
+
+  // If theres a reply
+  if (message.reference) {
+    const reference = await message.fetchReference();
+    return getImageURLWithoutArgs(reference);
+  }
+
+  if (!arg || userMention || message.content.includes("<:")) return getImageURLWithoutArgs(message); // this is a hack...
+
+  if (isValidHttpUrl(arg)) {
+    return arg;
+  } else {
+    const user = await resolveUserFromID(arg);
+    return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL;
+  }
+}
+
+/**
  * Tries to find an anime that matches the given URL image
  * @param {string} url a link to a PNG, GIF, JPG or TIFF image
  * @author Geoxor
@@ -217,30 +281,10 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
   for (let file of files) {
     const isDirectory = (await fs.promises.stat(dir + "/" + file)).isDirectory();
     if (isDirectory) filelist = await walkDirectory(dir + "/" + file, filelist);
-    if (file.endsWith(".flac") || file.endsWith(".mp3") || file.endsWith(".ogg") || file.endsWith(".wav")) filelist.push(path.resolve(dir + "/" + file));
+    if (file.endsWith(".flac") || file.endsWith(".mp3") || file.endsWith(".ogg") || file.endsWith(".wav"))
+      filelist.push(path.resolve(dir + "/" + file));
   }
   return filelist;
-}
-
-/**
- * Uwu-ify sentences
- * @param {string} sentence the sentence to uwu-ify
- * @author azur1s
- */
-export function uwufy(sentence: string): string {
-  const normal = sentence;
-  const uwuified = normal
-    .replace(/(?:r|l)/g, "w")
-    .replace(/(?:R|L)/g, "W")
-    .replace(/n([aeiou])/g, "ny$1")
-    .replace(/N([AEIOU])/g, "NY$1")
-    .replace(/ove/g, "uv")
-    .split(" ")
-    .map((val) => {
-      return Math.random() < 0.1 ? `${val.charAt(0)}-${val}` : `${val}`;
-    })
-    .join(" ");
-  return uwuified;
 }
 
 /**
@@ -293,47 +337,4 @@ export async function getLastAttachmentInChannel(message: IMessage) {
     .filter((m) => m.attachments.size > 0)
     .first();
   return lastMessage?.attachments.first()?.attachment;
-}
-
-/**
- * Calculate attack damage
- * @returns damage
- * @author azur1s
- */
-export function calcDamage(): number {
-  let damage = 100;
-  let critChance = 0.5;
-  let critMulti = 2;
-  let rng = Math.random(); //😎
-
-  if (rng > critChance) damage = damage * critMulti;
-
-  return damage;
-}
-
-/**
- * Calculate defense from armor
- * @returns armor
- * @author azur1s
- */
-export function calcDefense(defense: number): number {
-  defense = defense / (defense + 100);
-  return defense;
-}
-
-/**
- * Calculates an RNG number -+10% of a given number
- * If value is 1000 then 900 is minimum and 1100 is maximum
- * We get it from adding/subtracting 10% of the value (1000) given
- * Please, if you have a better formula, you can fix it.
- * @params value
- * @returns rng spread
- * @author azur1s, Geoxor, N1kO23, MaidMarija
- */
-export function calcSpread(value: number): number {
-  let rng = Math.random();
-  let min = value - value * 0.1;
-  let max = value + value * 0.1;
-  let spread = ~~((max - min) * rng + min);
-  return spread;
 }

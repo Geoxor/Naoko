@@ -1,6 +1,6 @@
 {
   "tabWidth": 2,
   "useTabs": false,
-  "printWidth": 256,
+  "printWidth": 112,
   "endOfLine": "crlf"
 }

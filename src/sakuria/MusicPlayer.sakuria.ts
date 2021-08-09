@@ -1,4 +1,15 @@
-import { AudioPlayerStatus, AudioPlayerState, AudioPlayer, entersState, createAudioPlayer, joinVoiceChannel, VoiceConnectionStatus, NoSubscriberBehavior, createAudioResource, VoiceConnectionState } from "@discordjs/voice";
+import {
+  AudioPlayerStatus,
+  AudioPlayerState,
+  AudioPlayer,
+  entersState,
+  createAudioPlayer,
+  joinVoiceChannel,
+  VoiceConnectionStatus,
+  NoSubscriberBehavior,
+  createAudioResource,
+  VoiceConnectionState,
+} from "@discordjs/voice";
 import Discord from "discord.js";
 import { walkDirectory } from "../logic/logic.sakuria";
 import config from "./Config.sakuria";
@@ -31,9 +42,11 @@ export default class MusicPlayer {
     // this.player.on("stateChange", this.onChange("Audio Player"));
   }
 
-  private onChange = (name: string) => (oldState: AudioPlayerState | VoiceConnectionState, newState: AudioPlayerState | VoiceConnectionState) => {
-    logger.sakuria.generic(`[${name}]` + ` Changed from ${oldState.status} to ${newState.status}`);
-  };
+  private onChange =
+    (name: string) =>
+    (oldState: AudioPlayerState | VoiceConnectionState, newState: AudioPlayerState | VoiceConnectionState) => {
+      logger.sakuria.generic(`[${name}]` + ` Changed from ${oldState.status} to ${newState.status}`);
+    };
 
   /**
    * Generates new audioResource from the array

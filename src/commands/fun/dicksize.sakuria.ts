@@ -23,7 +23,10 @@ export default {
           files: [
             {
               name: "battle.txt",
-              attachment: Readable.from(`${message.author.username}'s long dong:\n 8${"=".repeat(dicksize)}D\n` + `${message.mentions.users.first()?.username}'s long dong:\n 8${"=".repeat(enemyDicksize)}D\n`),
+              attachment: Readable.from(
+                `${message.author.username}'s long dong:\n 8${"=".repeat(dicksize)}D\n` +
+                  `${message.mentions.users.first()?.username}'s long dong:\n 8${"=".repeat(enemyDicksize)}D\n`
+              ),
             },
           ],
         };
@@ -38,7 +41,11 @@ export default {
       const dicksize = randomDickSize();
       let response = `8${"=".repeat(dicksize)}D ${dicksize}cm`;
 
-      if (response.length > 2000) return { content: "My goodness that's some schlong", files: [{ name: "magnum.txt", attachment: Readable.from(response) }] };
+      if (response.length > 2000)
+        return {
+          content: "My goodness that's some schlong",
+          files: [{ name: "magnum.txt", attachment: Readable.from(response) }],
+        };
       else return response;
     }
   },

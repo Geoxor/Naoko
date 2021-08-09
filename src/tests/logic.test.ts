@@ -16,7 +16,11 @@ describe("⚡ Morse Encoder (encodeMorse)", () => {
 
   it("can handle random characters", async () => {
     const morseCode = encodeMorse("*@(h98(@nf928ndjkniu241i24");
-    chai.expect(morseCode).to.equal(".... ----. ---.. -. ..-. ----. ..--- ---.. -. -.. .--- -.- -. .. ..- ..--- ....- .---- .. ..--- ....-");
+    chai
+      .expect(morseCode)
+      .to.equal(
+        ".... ----. ---.. -. ..-. ----. ..--- ---.. -. -.. .--- -.- -. .. ..- ..--- ....- .---- .. ..--- ....-"
+      );
   });
 
   it("can decode morse with text in between", async () => {

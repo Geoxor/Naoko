@@ -17,7 +17,15 @@ class Sakuria {
   constructor() {
     this.commands = new Discord.Collection();
     this.loadCommands();
-    this.bot = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
+    this.bot = new Discord.Client({
+      intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_PRESENCES,
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_VOICE_STATES,
+      ],
+    });
     logger.sakuria.instantiated();
     this.bot.on("ready", async () => {
       this.onReady;
