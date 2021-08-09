@@ -14,6 +14,9 @@ const defaultImageOptions: Discord.ImageURLOptions = {
   size: 32,
 };
 
+let trolleyImage: Jimp;
+Jimp.read("./src/assets/images/trolleyTemplate.png").then(async image => trolleyImage = image);
+
 /**
  * Validate if a string is a valid HTTP URL
  * @param string the string to validate
@@ -315,13 +318,14 @@ export async function getBufferFromUrl(url: string) {
  * @param image the buffer to composite to the trolley
  * @author Geoxor, Bluskript
  */
-export async function createTrolley(image: Buffer): Promise<Buffer> {
+export async function createTrolley(image: Buffer, stretchAmount: number = 2): Promise<Buffer> {
   // This could be optimized
-  const trolleyImage = await Jimp.read("./src/assets/images/trolleyTemplate.png");
+  const trolley = trolleyImage.clone();
   const jimpImage = await Jimp.read(image);
   const size = 48;
-  jimpImage.resize(size * 2, size);
-  return trolleyImage.composite(jimpImage, 4, 24).getBufferAsync("image/png");
+  jimpImage.resize(size * stretchAmount, size);
+  const composite = trolley.composite(jimpImage, 4, 24).getBufferAsync("image/png");
+  return composite;
 }
 
 /**
