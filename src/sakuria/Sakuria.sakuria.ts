@@ -72,7 +72,8 @@ class Sakuria {
         var result = await command.execute(message);
         logger.command.executedCommand(command.name, message.author.username, message.guild?.name || "dm");
       } catch (error) {
-        return console.log(error);
+        console.log(error);
+        await message.reply("⚠️ An error occured");
       }
 
       // Delete the processing message if it exists

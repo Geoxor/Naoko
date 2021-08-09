@@ -5,6 +5,95 @@ import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime, IMessage } from "../types";
 import Jimp from "jimp";
+import Discord from "discord.js";
+import SakuriaSakuria from "../sakuria/Sakuria.sakuria";
+import commandMiddlewareSakuria from "../middleware/commandMiddleware.sakuria";
+
+const defaultImageOptions: Discord.ImageURLOptions = {
+  format: "png",
+  size: 32,
+}
+
+/**
+ * Validate if a string is a valid HTTP URL
+ * @param string the string to validate
+ * @author Bluskript
+ */
+function isValidHttpUrl(string: string) {
+  let url;
+  
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;  
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+}
+
+
+
+/**
+ * This uses RegEx to filter out the different parts of an emoji as a string. 
+ * A standard emoji would look like: <:emojiname:emojiID> eg. <:BBwave:562730391362994178> 
+ * An animated emoji would look like: <a:emojiname:emojiID>
+ * @param message message to parse
+ * @author Geoxor
+ */
+export function getFirstEmojiURL(message: string) {
+  const emoteRegex = /<:.+:(\d+)>/gm
+  const animatedEmoteRegex = /<a:.+:(\d+)>/gm
+  const firstEmoji = message.split(emoteRegex)[1] || message.split(animatedEmoteRegex)[1];
+  if (firstEmoji) return "https://cdn.discordapp.com/emojis/" + firstEmoji + ".png?v=1"
+  else return undefined
+}
+
+/**
+ * Gets an image url from attachments > mentioned user avatar > author avatar > default avatar
+ * @param message the discord message to fetch from
+ * @author Bluskript
+ */
+function getImageURLWithoutArgs(message: Discord.Message) {
+  return message.attachments.first()?.url ||
+    getFirstEmojiURL(message.content) ||
+    message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
+    message.author.displayAvatarURL(defaultImageOptions) ||
+    message.author.defaultAvatarURL
+}
+
+/**
+ * Gets a URL from a message, it will try to get a message 
+ * from replies, attachments, links, or user avatars
+ * @author Geoxor & Bluskript
+ */
+export async function getImageURLFromMessage(message: IMessage): Promise<string> {
+  const arg = message.args[0]
+  const userMention = message.mentions.users.first()
+
+  // If theres a reply
+  if (message.reference) {
+    const reference = await message.fetchReference()
+    return getImageURLWithoutArgs(reference)
+  }
+
+  if (!arg || userMention || message.content.includes("<:")) return getImageURLWithoutArgs(message); // this is a hack...
+  
+  if (isValidHttpUrl(arg)) {
+    return arg
+  } else {
+    const user = await resolveUserFromID(arg)
+    return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL
+  }
+}
+
+/**
+ * Gets a Discord User from a user ID
+ * @param id a user id
+ * @author Geoxor
+ */
+export function resolveUserFromID(id: string) {
+  return SakuriaSakuria.bot.users.fetch(id)
+}
 
 /**
  * Picks a random item from an array
