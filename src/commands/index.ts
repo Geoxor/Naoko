@@ -15,7 +15,6 @@ import say from "./fun/say.sakuria";
 import traceAnime from "./fun/trace.sakuria";
 import uwuify from "./fun/uwufy.sakuria";
 import match from "./fun/match.sakuria";
-import trolley from "./imageProcessing/trolley.sakuria";
 
 // moderation commands
 import clear from "./moderation/clear.sakuria";
@@ -29,6 +28,8 @@ import avatar from "./utility/avatar.sakuria";
 
 // image processing commands
 import invert from "./imageProcessing/invert.sakuria";
+import trolley from "./imageProcessing/trolley.sakuria";
+import stretch from "./imageProcessing/stretch.sakuria";
 
 // music player commands
 import play from "./musicPlayer/play.sakuria";
@@ -47,6 +48,7 @@ export const commands: ICommand[] = [
   battle,
   shuffle,
   skip,
+  stretch,
   play,
   anime,
   invert,

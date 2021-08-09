@@ -26,7 +26,6 @@ export function getCurrentMemoryHeap(){
   return `${used}/${total}MB`
 }
 
-
 /**
  * Validate if a string is a valid HTTP URL
  * @param string the string to validate
@@ -320,13 +319,25 @@ export async function getBufferFromUrl(url: string) {
  * @author Geoxor, Bluskript
  */
 export async function createTrolley(image: Buffer, stretchAmount: number = 2): Promise<Buffer> {
-  // This could be optimized
   const trolley = trolleyImage.clone();
   const jimpImage = await Jimp.read(image);
   const size = 48;
   jimpImage.resize(size * stretchAmount, size);
   const composite = trolley.composite(jimpImage, 4, 24).getBufferAsync("image/png");
   return composite;
+}
+
+/**
+ * Stretches an image
+ * @param image the buffer to stretch
+ * @param amount the amount to stretch by horizontally
+ * @author Geoxor
+ */
+ export async function stretchImage(image: Buffer, stretchAmount: number = 3): Promise<Buffer> {
+  const jimpImage = await Jimp.read(image);
+  const {width, height} = jimpImage.bitmap;
+  jimpImage.resize(width * stretchAmount, height);
+  return await jimpImage.getBufferAsync('image/png');
 }
 
 /**
