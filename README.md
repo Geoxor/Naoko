@@ -15,8 +15,9 @@
 - [ ] Implement MP4 to GIF Conversion using [FFmpeg](https://ffmpeg.org/) and [node-gify](https://github.com/tj/node-gify)
 - [ ] Figure out how to keep the sakuria icons witout having to specify \*.sakuria on every file
 - [ ] Say prefix when tagged
-- [ ] Add currency
 - [ ] Add pay (so users can give their game currency to others)
+- [ ] Replace garbage SQL with mongo
+- [x] Add currency
 - [x] Add at least a single game
 - [X] Set sakuria status
 - [x] Logger Class
