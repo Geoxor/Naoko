@@ -296,8 +296,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
  * @returns a buffer of the inverted image
  * @author Geoxor
  */
-export async function invertImage(image: Buffer): Promise<Buffer | string> {
-  if (!image) throw "image can not be undefined";
+export async function invertImage(image: Buffer): Promise<Buffer> {
   const JimpImage = await Jimp.read(image);
   return JimpImage.invert().getBufferAsync("image/png");
 }
