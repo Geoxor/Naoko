@@ -16,16 +16,26 @@ export const imageProcessors: { [key: string]: (buffer: Buffer) => Promise<Buffe
 /**
  * Takes in a buffer and a pipeline string array and will applies
  * the processors sequantially
+ * 
+ * If a method takes longer than 1000ms it will terminate the pipeline
+ * at that point to prevent exponential n*n thread blocks
  * @param pipeline the order of functions to apply as strubgs
  * @param buffer the initial buffer to start with
  * @returns {Buffer} the modified buffer
+ * @author Geoxor
  */
 export async function transform(pipeline: string[], buffer: Buffer): Promise<Buffer> {
   let fuckedBuffer = buffer;
   for (let method of pipeline) {
     if (Object.keys(imageProcessors).includes(method)) {
+      let timeStart = Date.now();
       fuckedBuffer = await imageProcessors[method](fuckedBuffer);
-      logger.command.print(`Processed pipeline ${method} - Buffer: ${(fuckedBuffer.byteLength / 1000).toFixed(2)} KB`);
+      let timeEnd = Date.now();
+      const time = timeEnd - timeStart;
+      logger.command.print(`${time}ms - Processed pipeline ${method} - Buffer: ${(fuckedBuffer.byteLength / 1000).toFixed(2)} KB`);
+
+      // This is to avoid exp thread blocking
+      if (time > 1000) return fuckedBuffer;
     }
   }
   return fuckedBuffer;
@@ -88,7 +98,7 @@ export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promis
  * @param radius the radius to fisheye by
  * @author Geoxor
  */
- export async function fisheye(buffer: Buffer, radius: number = 1.5): Promise<Buffer> {
+ export async function fisheye(buffer: Buffer, radius: number = 2): Promise<Buffer> {
   const jimpImage = await Jimp.read(buffer);
   // The type declerations say this is supposed to be "fishEye" instead of "fisheye"
   // @ts-ignore 
