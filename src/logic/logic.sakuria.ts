@@ -55,21 +55,7 @@ export function getFirstEmojiURL(message: string) {
   else return undefined;
 }
 
-/**
- * Gets an image url from attachments > mentioned user avatar > author avatar > default avatar
- * @param message the discord message to fetch from
- * @author Bluskript
- */
-export function getImageURLWithoutArgs(message: Discord.Message) {
-  return (
-    message.attachments.first()?.url ||
-    message.stickers.first()?.url || 
-    getFirstEmojiURL(message.content) ||
-    message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
-    message.author.displayAvatarURL(defaultImageOptions) ||
-    message.author.defaultAvatarURL
-  );
-}
+
 
 /**
  * Picks a random item from an array
@@ -210,6 +196,22 @@ export function uwufy(sentence: string): string {
 }
 
 /**
+ * Gets an image url from attachments > stickers > first emoji > mentioned user avatar > author avatar > default avatar
+ * @param message the discord message to fetch from
+ * @author Bluskript
+ */
+ export function getMostRelevantImageURL(message: Discord.Message) {
+  return (
+    message.attachments.first()?.url ||
+    message.stickers.first()?.url ||
+    getFirstEmojiURL(message.content) ||
+    message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
+    message.author.displayAvatarURL(defaultImageOptions) ||
+    message.author.defaultAvatarURL
+  );
+}
+
+/**
  * Gets a URL from a message, it will try to get a message
  * from replies, attachments, links, or user avatars
  * @author Geoxor & Bluskript
@@ -221,10 +223,10 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
   // If theres a reply
   if (message.reference) {
     const reference = await message.fetchReference();
-    return getImageURLWithoutArgs(reference);
+    return getMostRelevantImageURL(reference);
   }
 
-  if (!/\d/g.test(arg) || userMention || message.content.includes("<:")) return getImageURLWithoutArgs(message); // this is a hack...
+  if (!/\d/g.test(arg) || userMention || message.content.includes("<:")) return getMostRelevantImageURL(message); // this is a hack...
 
   if (isValidHttpUrl(arg)) {
     return arg;
