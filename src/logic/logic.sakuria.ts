@@ -16,11 +16,11 @@ const defaultImageOptions: Discord.ImageURLOptions = {
  * Gets the used/total heap in ram used
  * @author Geoxor
  */
-export function getCurrentMemoryHeap(){
+export function getCurrentMemoryHeap() {
   const mem = process.memoryUsage();
   const used = (mem.heapUsed / 1000 / 1000).toFixed(2);
   const total = (mem.heapTotal / 1000 / 1000).toFixed(2);
-  return `${used}/${total}MB`
+  return `${used}/${total}MB`;
 }
 
 /**

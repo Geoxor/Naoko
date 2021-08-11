@@ -80,7 +80,12 @@ class Sakuria {
         let timeStart = Date.now();
         var result = await command.execute(message);
         let timeEnd = Date.now();
-        logger.command.executedCommand(timeEnd - timeStart, command.name, message.author.username, message.guild?.name || "dm");
+        logger.command.executedCommand(
+          timeEnd - timeStart,
+          command.name,
+          message.author.username,
+          message.guild?.name || "dm"
+        );
       } catch (error) {
         console.log(error);
         await message.reply("⚠️ An error occured");
