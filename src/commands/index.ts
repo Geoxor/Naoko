@@ -30,6 +30,8 @@ import avatar from "./utility/avatar.sakuria";
 import invert from "./imageProcessing/invert.sakuria";
 import trolley from "./imageProcessing/trolley.sakuria";
 import stretch from "./imageProcessing/stretch.sakuria";
+import fisheye from "./imageProcessing/fisheye.sakuria";
+import squish from "./imageProcessing/squish.sakuria";
 import transform from "./imageProcessing/transform.sakuria";
 
 // music player commands
@@ -44,6 +46,8 @@ export const commands: ICommand[] = [
   avatar,
   match,
   stats,
+  squish,
+  fisheye,
   transform,
   ping,
   inventory,

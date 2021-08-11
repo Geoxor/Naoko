@@ -1,6 +1,6 @@
 {
   "name": "sakuria",
-  "version": "1.0.28",
+  "version": "1.0.31",
   "description": "Sakuria general purpose discord bot",
   "main": "./src/sakuria.ts",
   "scripts": {
@@ -31,6 +31,7 @@
   "homepage": "https://github.com/Geoxor/sakuria#readme",
   "dependencies": {
     "@discordjs/voice": "^0.5.5",
+    "@jimp/plugin-fisheye": "^0.16.1",
     "axios": "^0.21.1",
     "chalk": "^4.1.1",
     "discord.js": "^13.0.1",
