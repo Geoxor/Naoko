@@ -11,6 +11,7 @@ export const imageProcessors: { [key: string]: (buffer: Buffer) => Promise<Buffe
   invert,
   fisheye,
   squish,
+  grayscale,
 };
 
 /**
@@ -49,9 +50,20 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
  * @returns a buffer of the inverted image
  * @author Geoxor
  */
-export async function invert(image: Buffer): Promise<Buffer> {
-  const JimpImage = await Jimp.read(image);
-  return JimpImage.invert().getBufferAsync("image/png");
+export async function invert(buffer: Buffer): Promise<Buffer> {
+  const image = await Jimp.read(buffer);
+  return image.invert().getBufferAsync("image/jpeg");
+}
+
+/**
+ * LRemoves color from an image buffer
+ * @param image the image buffer you wanna grayscale
+ * @returns a buffer of the grayscaled image
+ * @author Geoxor
+ */
+ export async function grayscale(buffer: Buffer): Promise<Buffer> {
+  const image = await Jimp.read(buffer);
+  return image.grayscale().getBufferAsync("image/png");
 }
 
 /**
@@ -61,10 +73,10 @@ export async function invert(image: Buffer): Promise<Buffer> {
  */
 export async function trolley(buffer: Buffer, stretchAmount: number = 2): Promise<Buffer> {
   const trolley = trolleyImage.clone();
-  const jimpImage = await Jimp.read(buffer);
+  const image = await Jimp.read(buffer);
   const size = 48;
-  jimpImage.resize(size * stretchAmount, size);
-  const composite = trolley.composite(jimpImage, 4, 24).getBufferAsync("image/png");
+  image.resize(size * stretchAmount, size);
+  const composite = trolley.composite(image, 4, 24).getBufferAsync("image/png");
   return composite;
 }
 
@@ -75,10 +87,10 @@ export async function trolley(buffer: Buffer, stretchAmount: number = 2): Promis
  * @author Geoxor
  */
 export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promise<Buffer> {
-  const jimpImage = await Jimp.read(buffer);
-  const { width, height } = jimpImage.bitmap;
-  jimpImage.resize(width, height * stretchAmount);
-  return await jimpImage.getBufferAsync("image/png");
+  const image = await Jimp.read(buffer);
+  const { width, height } = image.bitmap;
+  image.resize(width, height * stretchAmount);
+  return await image.getBufferAsync("image/png");
 }
 
 /**
@@ -88,10 +100,10 @@ export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promis
  * @author Geoxor
  */
 export async function squish(buffer: Buffer, squishAmount: number = 3): Promise<Buffer> {
-  const jimpImage = await Jimp.read(buffer);
-  const { width, height } = jimpImage.bitmap;
-  jimpImage.resize(width * squishAmount, height);
-  return await jimpImage.getBufferAsync("image/png");
+  const image = await Jimp.read(buffer);
+  const { width, height } = image.bitmap;
+  image.resize(width * squishAmount, height);
+  return await image.getBufferAsync("image/png");
 }
 
 /**
@@ -101,9 +113,9 @@ export async function squish(buffer: Buffer, squishAmount: number = 3): Promise<
  * @author Geoxor
  */
 export async function fisheye(buffer: Buffer, radius: number = 2): Promise<Buffer> {
-  const jimpImage = await Jimp.read(buffer);
+  const image = await Jimp.read(buffer);
   // The type declerations say this is supposed to be "fishEye" instead of "fisheye"
   // @ts-ignore
-  jimpImage.fisheye({ r: radius });
-  return await jimpImage.getBufferAsync("image/png");
+  image.fisheye({ r: radius });
+  return await image.getBufferAsync("image/png");
 }

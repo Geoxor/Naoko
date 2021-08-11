@@ -27,12 +27,13 @@ import ping from "./utility/ping.sakuria";
 import avatar from "./utility/avatar.sakuria";
 
 // image processing commands
+import transform from "./imageProcessing/transform.sakuria";
 import invert from "./imageProcessing/invert.sakuria";
 import trolley from "./imageProcessing/trolley.sakuria";
 import stretch from "./imageProcessing/stretch.sakuria";
 import fisheye from "./imageProcessing/fisheye.sakuria";
 import squish from "./imageProcessing/squish.sakuria";
-import transform from "./imageProcessing/transform.sakuria";
+import grayscale from "./imageProcessing/grayscale.sakuria";
 
 // music player commands
 import play from "./musicPlayer/play.sakuria";
@@ -44,6 +45,7 @@ export const commands: ICommand[] = [
   nowPlaying,
   trolley,
   avatar,
+  grayscale,
   match,
   stats,
   squish,
