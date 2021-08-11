@@ -16,7 +16,7 @@ export const imageProcessors: { [key: string]: (buffer: Buffer) => Promise<Buffe
 /**
  * Takes in a buffer and a pipeline string array and will applies
  * the processors sequantially
- * 
+ *
  * If a method takes longer than 1000ms it will terminate the pipeline
  * at that point to prevent exponential n*n thread blocks
  * @param pipeline the order of functions to apply as strubgs
@@ -32,7 +32,9 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
       fuckedBuffer = await imageProcessors[method](fuckedBuffer);
       let timeEnd = Date.now();
       const time = timeEnd - timeStart;
-      logger.command.print(`${time}ms - Processed pipeline ${method} - Buffer: ${(fuckedBuffer.byteLength / 1000).toFixed(2)} KB`);
+      logger.command.print(
+        `${time}ms - Processed pipeline ${method} - Buffer: ${(fuckedBuffer.byteLength / 1000).toFixed(2)} KB`
+      );
 
       // This is to avoid exp thread blocking
       if (time > 1000) return fuckedBuffer;
@@ -85,7 +87,7 @@ export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promis
  * @param amount the amount to stretch by vertically
  * @author Geoxor
  */
- export async function squish(buffer: Buffer, squishAmount: number = 3): Promise<Buffer> {
+export async function squish(buffer: Buffer, squishAmount: number = 3): Promise<Buffer> {
   const jimpImage = await Jimp.read(buffer);
   const { width, height } = jimpImage.bitmap;
   jimpImage.resize(width * squishAmount, height);
@@ -98,10 +100,10 @@ export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promis
  * @param radius the radius to fisheye by
  * @author Geoxor
  */
- export async function fisheye(buffer: Buffer, radius: number = 2): Promise<Buffer> {
+export async function fisheye(buffer: Buffer, radius: number = 2): Promise<Buffer> {
   const jimpImage = await Jimp.read(buffer);
   // The type declerations say this is supposed to be "fishEye" instead of "fisheye"
-  // @ts-ignore 
+  // @ts-ignore
   jimpImage.fisheye({ r: radius });
   return await jimpImage.getBufferAsync("image/png");
 }

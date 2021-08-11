@@ -63,6 +63,7 @@ export function getFirstEmojiURL(message: string) {
 export function getImageURLWithoutArgs(message: Discord.Message) {
   return (
     message.attachments.first()?.url ||
+    message.stickers.first()?.url || 
     getFirstEmojiURL(message.content) ||
     message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
     message.author.displayAvatarURL(defaultImageOptions) ||
