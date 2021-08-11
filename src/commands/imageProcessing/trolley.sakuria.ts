@@ -1,6 +1,7 @@
 import { IMessage } from "../../types";
 import Discord from "discord.js";
-import { createTrolley, getBufferFromUrl, getImageURLFromMessage } from "../../logic/logic.sakuria";
+import { getBufferFromUrl, getImageURLFromMessage } from "../../logic/logic.sakuria";
+import { trolley } from "../../logic/imageProcessors.sakuria";
 
 export default {
   name: "trolley",
@@ -9,6 +10,6 @@ export default {
   execute: async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
     const imageURL = await getImageURLFromMessage(message);
     const targetBuffer = await getBufferFromUrl(imageURL);
-    return { files: [await createTrolley(targetBuffer)] };
+    return { files: [await trolley(targetBuffer)] };
   },
 };

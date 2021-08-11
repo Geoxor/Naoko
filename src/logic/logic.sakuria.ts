@@ -9,11 +9,8 @@ import Discord from "discord.js";
 
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
-  size: 32,
+  size: 512,
 };
-
-let trolleyImage: Jimp;
-Jimp.read("./src/assets/images/trolleyTemplate.png").then(async image => trolleyImage = image);
 
 /**
  * Gets the used/total heap in ram used
@@ -226,7 +223,7 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
     return getImageURLWithoutArgs(reference);
   }
 
-  if (!arg || userMention || message.content.includes("<:")) return getImageURLWithoutArgs(message); // this is a hack...
+  if (!/\d/g.test(arg) || userMention || message.content.includes("<:")) return getImageURLWithoutArgs(message); // this is a hack...
 
   if (isValidHttpUrl(arg)) {
     return arg;
@@ -291,17 +288,6 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
 }
 
 /**
- * Inverts the colors of an image
- * @param image the image buffer you wanna invert
- * @returns a buffer of the inverted image
- * @author Geoxor
- */
-export async function invertImage(image: Buffer): Promise<Buffer> {
-  const JimpImage = await Jimp.read(image);
-  return JimpImage.invert().getBufferAsync("image/png");
-}
-
-/**
  * Gets a file from a url and creates a buffer out of it
  * @param url the url to a file to get a buffer from
  * @returns a fuffer of the file
@@ -310,33 +296,6 @@ export async function invertImage(image: Buffer): Promise<Buffer> {
 export async function getBufferFromUrl(url: string) {
   const response = await axios({ method: "GET", url, responseType: "arraybuffer" });
   return Buffer.from(response.data);
-}
-
-/**
- * Creates a trolley image with a given image buffer
- * @param image the buffer to composite to the trolley
- * @author Geoxor, Bluskript
- */
-export async function createTrolley(image: Buffer, stretchAmount: number = 2): Promise<Buffer> {
-  const trolley = trolleyImage.clone();
-  const jimpImage = await Jimp.read(image);
-  const size = 48;
-  jimpImage.resize(size * stretchAmount, size);
-  const composite = trolley.composite(jimpImage, 4, 24).getBufferAsync("image/png");
-  return composite;
-}
-
-/**
- * Stretches an image
- * @param image the buffer to stretch
- * @param amount the amount to stretch by horizontally
- * @author Geoxor
- */
- export async function stretchImage(image: Buffer, stretchAmount: number = 3): Promise<Buffer> {
-  const jimpImage = await Jimp.read(image);
-  const {width, height} = jimpImage.bitmap;
-  jimpImage.resize(width * stretchAmount, height);
-  return await jimpImage.getBufferAsync('image/png');
 }
 
 /**
