@@ -41,6 +41,9 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
       logger.command.print(
         `${time}ms - Processed pipeline ${method} - Buffer: ${(fuckedBuffer.byteLength / 1000).toFixed(2)} KB`
       );
+
+      // This is to avoid exp thread blocking
+      if (time > 1000) return fuckedBuffer;
     }
   }
   return fuckedBuffer;
@@ -116,7 +119,7 @@ export async function deepfry(buffer: Buffer): Promise<Buffer> {
 export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promise<Buffer> {
   const image = await Jimp.read(buffer);
   const { width, height } = image.bitmap;
-  image.resize(width / stretchAmount, height);
+  image.resize(width, height * stretchAmount);
   return await image.getBufferAsync("image/png");
 }
 
@@ -129,7 +132,7 @@ export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promis
 export async function squish(buffer: Buffer, squishAmount: number = 3): Promise<Buffer> {
   const image = await Jimp.read(buffer);
   const { width, height } = image.bitmap;
-  image.resize(width, height / squishAmount);
+  image.resize(width * squishAmount, height);
   return await image.getBufferAsync("image/png");
 }
 
