@@ -33,9 +33,13 @@ import skip from "./musicPlayer/skip.sakuria";
 import shuffle from "./musicPlayer/shuffle.sakuria";
 import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
 
+// image processing
+import transform from "./imageProcessors/transform.sakuria";
+
 export const commands: ICommand[] = [
   ...genCommands(Object.values(imageProcessors)),
   nowPlaying,
+  transform,
   avatar,
   match,
   stats,
