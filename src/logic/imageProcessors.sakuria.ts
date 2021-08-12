@@ -1,6 +1,8 @@
 import Jimp from "jimp";
 import logger from "../sakuria/Logger.sakuria";
-import { ImageProcessors } from "../types";
+import { ICommand, ImageProcessorFn, ImageProcessors, IMessage } from "../types";
+import { getBufferFromUrl, getImageURLFromMessage } from "./logic.sakuria";
+import Discord from "discord.js";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -18,6 +20,33 @@ export const imageProcessors: ImageProcessors = {
   wasted,
   deepfry
 };
+
+/**
+ * Returns an execute function to use in a image process command 
+ * @param fn the image processor function
+ * @author Bluskript
+ */
+export function imageProcess(fn: ImageProcessorFn) {
+  return async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
+    const imageURL = await getImageURLFromMessage(message);
+    const targetBuffer = await getBufferFromUrl(imageURL);
+    return { files: [await fn(targetBuffer)] };
+  }
+}
+
+/**
+ * Creates commands for the image processor functions
+ * @param fns all the image processor functions
+ * @author Bluskript
+ */
+  export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
+  return fns.map(fn => ({
+    name: fn.name,
+    description: `${fn.name} image processor`,
+    requiresProcessing: true,
+    execute: imageProcess(fn),
+  }))
+}
 
 /**
  * Takes in a buffer and a pipeline string array and will applies

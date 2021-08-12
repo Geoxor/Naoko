@@ -1,4 +1,5 @@
 import { ICommand } from "../types";
+import { genCommands, imageProcessors } from "../logic/imageProcessors.sakuria"
 
 // economy game commands
 import battle from "./economyGames/battle.sakuria";
@@ -26,17 +27,6 @@ import invite from "./utility/invite.sakuria";
 import ping from "./utility/ping.sakuria";
 import avatar from "./utility/avatar.sakuria";
 
-// image processing commands
-import transform from "./imageProcessing/transform.sakuria";
-import invert from "./imageProcessing/invert.sakuria";
-import trolley from "./imageProcessing/trolley.sakuria";
-import stretch from "./imageProcessing/stretch.sakuria";
-import fisheye from "./imageProcessing/fisheye.sakuria";
-import squish from "./imageProcessing/squish.sakuria";
-import grayscale from "./imageProcessing/grayscale.sakuria";
-import deepfry from "./imageProcessing/deepfry.sakuria";
-import wasted from "./imageProcessing/wasted.sakuria";
-
 // music player commands
 import play from "./musicPlayer/play.sakuria";
 import skip from "./musicPlayer/skip.sakuria";
@@ -44,26 +34,18 @@ import shuffle from "./musicPlayer/shuffle.sakuria";
 import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
 
 export const commands: ICommand[] = [
+  ...genCommands(Object.values(imageProcessors)),
   nowPlaying,
-  trolley,
   avatar,
-  grayscale,
   match,
   stats,
-  squish,
-  wasted,
-  deepfry,
-  fisheye,
-  transform,
   ping,
   inventory,
   battle,
   shuffle,
   skip,
-  stretch,
   play,
   anime,
-  invert,
   ask,
   clear,
   decode,
