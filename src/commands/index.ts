@@ -1,5 +1,5 @@
 import { ICommand } from "../types";
-import { genCommands, imageProcessors } from "../logic/imageProcessors.sakuria"
+import { genCommands, imageProcessors } from "../logic/imageProcessors.sakuria";
 
 // economy game commands
 import battle from "./economyGames/battle.sakuria";

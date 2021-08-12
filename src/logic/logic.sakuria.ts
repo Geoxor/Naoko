@@ -55,8 +55,6 @@ export function getFirstEmojiURL(message: string) {
   else return undefined;
 }
 
-
-
 /**
  * Picks a random item from an array
  * @author MaidMarija
@@ -200,7 +198,7 @@ export function uwufy(sentence: string): string {
  * @param message the discord message to fetch from
  * @author Bluskript
  */
- export function getMostRelevantImageURL(message: Discord.Message) {
+export function getMostRelevantImageURL(message: Discord.Message) {
   return (
     message.attachments.first()?.url ||
     message.stickers.first()?.url ||
@@ -226,7 +224,8 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
     return getMostRelevantImageURL(reference);
   }
 
-  if (!/\d/g.test(arg) || userMention || message.content.includes("<:")) return getMostRelevantImageURL(message); // this is a hack...
+  if (!/\d/g.test(arg) || userMention || message.content.includes("<:"))
+    return getMostRelevantImageURL(message); // this is a hack...
 
   if (isValidHttpUrl(arg)) {
     return arg;

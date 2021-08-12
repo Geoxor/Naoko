@@ -1,7 +1,9 @@
 import Discord from "discord.js";
 
-export type ImageProcessorFn = (buffer: Buffer) => Promise<Buffer>
-export interface ImageProcessors { [key: string]: ImageProcessorFn };
+export type ImageProcessorFn = (buffer: Buffer) => Promise<Buffer>;
+export interface ImageProcessors {
+  [key: string]: ImageProcessorFn;
+}
 export interface IMessage extends Discord.Message {
   command: string;
   args: string[];
