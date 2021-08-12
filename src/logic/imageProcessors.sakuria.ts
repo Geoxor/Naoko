@@ -1,17 +1,22 @@
 import Jimp from "jimp";
 import logger from "../sakuria/Logger.sakuria";
+import { ImageProcessors } from "../types";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
+let wastedImage: Jimp;
 Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
+Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
 
-export const imageProcessors: { [key: string]: (buffer: Buffer) => Promise<Buffer> } = {
+export const imageProcessors: ImageProcessors = {
   stretch,
   trolley,
   invert,
   fisheye,
   squish,
   grayscale,
+  wasted,
+  deepfry
 };
 
 /**
@@ -36,9 +41,6 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
       logger.command.print(
         `${time}ms - Processed pipeline ${method} - Buffer: ${(fuckedBuffer.byteLength / 1000).toFixed(2)} KB`
       );
-
-      // This is to avoid exp thread blocking
-      if (time > 1000) return fuckedBuffer;
     }
   }
   return fuckedBuffer;
@@ -81,6 +83,31 @@ export async function trolley(buffer: Buffer, stretchAmount: number = 2): Promis
 }
 
 /**
+ * Creates a wasted image with a given image buffer
+ * @param image the buffer to composite to the wasted
+ * @author Geoxor
+ */
+ export async function wasted(buffer: Buffer): Promise<Buffer> {
+  let wasted = wastedImage.clone();
+  let image = await Jimp.read(buffer);
+  // Stretch the wasted template to match the image
+  wasted = wasted.resize(Jimp.AUTO, image.bitmap.height);
+  // Composite the wasted in the center of the image
+  const composite = image.grayscale().composite(wasted, -(image.bitmap.width / 2.5), 0);
+  return composite.getBufferAsync("image/png");
+}
+
+/**
+ * Deepfry an image
+ * @param image the buffer to fry
+ * @author azur1s
+ */
+export async function deepfry(buffer: Buffer): Promise<Buffer> {
+  const image = await Jimp.read(buffer);
+  return image.contrast(1).quality(0).getBufferAsync('image/png');
+}
+
+/**
  * Stretches an image
  * @param image the buffer to stretch
  * @param amount the amount to stretch by vertically
@@ -89,7 +116,7 @@ export async function trolley(buffer: Buffer, stretchAmount: number = 2): Promis
 export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promise<Buffer> {
   const image = await Jimp.read(buffer);
   const { width, height } = image.bitmap;
-  image.resize(width, height * stretchAmount);
+  image.resize(width / stretchAmount, height);
   return await image.getBufferAsync("image/png");
 }
 
@@ -102,7 +129,7 @@ export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promis
 export async function squish(buffer: Buffer, squishAmount: number = 3): Promise<Buffer> {
   const image = await Jimp.read(buffer);
   const { width, height } = image.bitmap;
-  image.resize(width * squishAmount, height);
+  image.resize(width, height / squishAmount);
   return await image.getBufferAsync("image/png");
 }
 

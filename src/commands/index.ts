@@ -34,6 +34,8 @@ import stretch from "./imageProcessing/stretch.sakuria";
 import fisheye from "./imageProcessing/fisheye.sakuria";
 import squish from "./imageProcessing/squish.sakuria";
 import grayscale from "./imageProcessing/grayscale.sakuria";
+import deepfry from "./imageProcessing/deepfry.sakuria";
+import wasted from "./imageProcessing/wasted.sakuria";
 
 // music player commands
 import play from "./musicPlayer/play.sakuria";
@@ -49,6 +51,8 @@ export const commands: ICommand[] = [
   match,
   stats,
   squish,
+  wasted,
+  deepfry,
   fisheye,
   transform,
   ping,
