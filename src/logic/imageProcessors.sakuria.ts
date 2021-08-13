@@ -6,7 +6,7 @@ import logger from "../sakuria/Logger.sakuria";
 
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { CubeScene, ObamaScene, WTFScene } from "./3DRenderer.sakuria";
+import { CubeScene, PrismScene, WTFScene } from "./3DRenderer.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -98,7 +98,7 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
  * @author Bluskript & Geoxor
  */
 export async function prism(buffer: Buffer) {
-  const scene = new ObamaScene();
+  const scene = new PrismScene();
   await scene.prepare(buffer);
   return scene.render();
 }

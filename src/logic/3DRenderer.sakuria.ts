@@ -144,7 +144,7 @@ export class WTFScene extends ProcessorScene {
   }
 }
 
-export class ObamaScene extends ProcessorScene {
+export class PrismScene extends ProcessorScene {
   public prism: THREE.Mesh | null;
 
   constructor() {
@@ -167,7 +167,7 @@ export class ObamaScene extends ProcessorScene {
     const height = 4.5;
     const faces = 4;
     const geometry = new THREE.ConeGeometry(radius, height, faces);
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide});
     this.prism = new THREE.Mesh(geometry, material);
     this.addGeometry(this.prism);
   }
