@@ -3,7 +3,7 @@ import Discord from "discord.js";
 import { getBufferFromUrl, getImageURLFromMessage } from "../../logic/logic.sakuria";
 import { transform } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
-import fileType from 'file-type';
+import fileType from "file-type";
 
 export default {
   name: "transform",
@@ -15,7 +15,7 @@ export default {
     const pipeline = message.args;
     const resultbuffer = await transform(pipeline, targetBuffer);
     const mimetype = await fileType(resultbuffer);
-    const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`)
+    const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
     return { files: [attachment] };
   },
 };

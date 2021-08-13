@@ -36,10 +36,10 @@ export class ProcessorScene {
   }
 
   /**
-   * Meant to be overridden by child classes
+   * Updates the scene to the new positions
    */
   public update() {
-    throw new Error("must be implemented");
+    throw new Error("update must be implemented");
   }
 
   /**
@@ -55,25 +55,25 @@ export class ProcessorScene {
    * @param buffer the buffer image to read
    */
   public async createTextureFromBuffer(buffer: Buffer): Promise<THREE.DataTexture> {
-    const texels = 4 /** Red Green Blue and Alpha */;
+    const texels = 4; /** Red Green Blue and Alpha */
     const image = await Jimp.read(buffer);
-    const data = new Uint8Array( texels * image.bitmap.width * image.bitmap.height );
-    
-    for(let y = 0; y < image.bitmap.height; y++){    
-      for(let x = 0; x < image.bitmap.width; x++){
+    const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
+
+    for (let y = 0; y < image.bitmap.height; y++) {
+      for (let x = 0; x < image.bitmap.width; x++) {
         let color = image.getPixelColor(x, y);
-        let r = (color >> 24) & 255; 
-        let g = (color >> 16) & 255; 
-        let b = (color >> 8) & 255; 
+        let r = (color >> 24) & 255;
+        let g = (color >> 16) & 255;
+        let b = (color >> 8) & 255;
         let a = (color >> 0) & 255;
         const stride = texels * (x + y * image.bitmap.width);
-        data[ stride ] = r;
-        data[ stride + 1 ] = g;
-        data[ stride + 2 ] = b;
-        data[ stride + 3 ] = a;
+        data[stride] = r;
+        data[stride + 1] = g;
+        data[stride + 2] = b;
+        data[stride + 3] = a;
       }
     }
-    return new THREE.DataTexture( data, image.bitmap.width, image.bitmap.height, THREE.RGBAFormat );
+    return new THREE.DataTexture(data, image.bitmap.width, image.bitmap.height, THREE.RGBAFormat);
   }
 
   /**
@@ -87,7 +87,7 @@ export class ProcessorScene {
     for (let i = 0; i < frameCount; i++) {
       this.update();
       this.renderer.render(this.scene, this.camera);
-      logger.command.print(`Rendering frame ${i+1}`)
+      logger.command.print(`Rendering frame ${i + 1}`);
       // @ts-ignore
       this.encoder.addFrame(this.canvas.__ctx__);
     }
@@ -130,7 +130,7 @@ export class ObamaScene extends ProcessorScene {
 
   public update() {
     if (!this.prism) return;
-    this.prism.rotation.x += 0.00;
+    this.prism.rotation.x += 0.0;
     this.prism.rotation.y += 0.05;
   }
 

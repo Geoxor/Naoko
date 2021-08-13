@@ -5,7 +5,7 @@ import Discord from "discord.js";
 import logger from "../sakuria/Logger.sakuria";
 
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
-import fileType from 'file-type';
+import fileType from "file-type";
 import { CubeScene, ObamaScene } from "./3DRenderer.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
@@ -24,7 +24,7 @@ export const imageProcessors: ImageProcessors = {
   wasted,
   deepfry,
   cube,
-  "obamaprism": obamaPrism,
+  obamaprism: obamaPrism,
 };
 
 /**
@@ -38,7 +38,7 @@ export function imageProcess(process: ImageProcessorFn) {
     const targetBuffer = await getBufferFromUrl(imageURL);
     const resultbuffer = await process(targetBuffer);
     const mimetype = await fileType(resultbuffer);
-    const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`)
+    const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
     return { files: [attachment] };
   };
 }
@@ -97,7 +97,7 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
  * @author Bluskript & Geoxor
  */
 export async function obamaPrism(buffer: Buffer) {
-  const scene = new ObamaScene;
+  const scene = new ObamaScene();
   await scene.prepare(buffer);
   return scene.render();
 }
@@ -108,7 +108,7 @@ export async function obamaPrism(buffer: Buffer) {
  * @author Bluskript & Geoxor
  */
 export async function cube(buffer: Buffer) {
-  const scene = new CubeScene;
+  const scene = new CubeScene();
   await scene.prepare(buffer);
   return scene.render();
 }
