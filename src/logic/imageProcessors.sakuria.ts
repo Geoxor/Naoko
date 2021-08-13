@@ -6,7 +6,7 @@ import logger from "../sakuria/Logger.sakuria";
 
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { CubeScene, ObamaScene } from "./3DRenderer.sakuria";
+import { CubeScene, ObamaScene, WTFScene } from "./3DRenderer.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -25,6 +25,7 @@ export const imageProcessors: ImageProcessors = {
   deepfry,
   cube,
   obamaprism: obamaPrism,
+  wtf
 };
 
 /**
@@ -98,6 +99,17 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
  */
 export async function obamaPrism(buffer: Buffer) {
   const scene = new ObamaScene();
+  await scene.prepare(buffer);
+  return scene.render();
+}
+
+/**
+ * Creates a torus knot out of a texture
+ * @param buffer the immage buffer to use as a texture
+ * @author Bluskript & Geoxor
+ */
+ export async function wtf(buffer: Buffer) {
+  const scene = new WTFScene;
   await scene.prepare(buffer);
   return scene.render();
 }

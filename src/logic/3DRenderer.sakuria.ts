@@ -120,6 +120,30 @@ export class CubeScene extends ProcessorScene {
   }
 }
 
+export class WTFScene extends ProcessorScene {
+  public wtf: THREE.Mesh | null;
+
+  constructor() {
+    super();
+    this.wtf = null;
+  }
+
+  public update() {
+    if (!this.wtf) return;
+    this.wtf.rotation.x += 0.05;
+    this.wtf.rotation.y += 0.03;
+  }
+
+  public async prepare(textureBuffer: Buffer) {
+    this.camera.position.z = 3;
+    const texture = await this.createTextureFromBuffer(textureBuffer);
+    const geometry = new THREE.TorusKnotGeometry(1);
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    this.wtf = new THREE.Mesh(geometry, material);
+    this.addGeometry(this.wtf);
+  }
+}
+
 export class ObamaScene extends ProcessorScene {
   public prism: THREE.Mesh | null;
 
