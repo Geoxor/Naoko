@@ -6,7 +6,7 @@ import logger from "../sakuria/Logger.sakuria";
 
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { CubeScene, ObamaScene, WTFScene } from "./3DRenderer.sakuria";
+import { CubeScene, ObamaScene, WTFScene, SphereScene, CylinderScene } from "./3DRenderer.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -25,7 +25,9 @@ export const imageProcessors: ImageProcessors = {
   deepfry,
   cube,
   obamaprism: obamaPrism,
-  wtf
+  wtf,
+  sphere,
+  cylinder,
 };
 
 /**
@@ -108,8 +110,8 @@ export async function obamaPrism(buffer: Buffer) {
  * @param buffer the immage buffer to use as a texture
  * @author Bluskript & Geoxor
  */
- export async function wtf(buffer: Buffer) {
-  const scene = new WTFScene;
+export async function wtf(buffer: Buffer) {
+  const scene = new WTFScene();
   await scene.prepare(buffer);
   return scene.render();
 }
@@ -121,6 +123,28 @@ export async function obamaPrism(buffer: Buffer) {
  */
 export async function cube(buffer: Buffer) {
   const scene = new CubeScene();
+  await scene.prepare(buffer);
+  return scene.render();
+}
+
+/**
+ * Creates a spinning sphere out of a texture
+ * @param buffer the immage buffer to use as a texture
+ * @author azur1s
+ */
+ export async function sphere(buffer: Buffer) {
+  const scene = new SphereScene();
+  await scene.prepare(buffer);
+  return scene.render();
+}
+
+/**
+ * Creates a spinning cylinder out of a texture
+ * @param buffer the immage buffer to use as a texture
+ * @author azur1s
+ */
+ export async function cylinder(buffer: Buffer) {
+  const scene = new CylinderScene();
   await scene.prepare(buffer);
   return scene.render();
 }
