@@ -6,7 +6,7 @@ import logger from "../sakuria/Logger.sakuria";
 
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { CubeScene, ObamaScene, WTFScene, SphereScene, CylinderScene } from "./3DRenderer.sakuria";
+import { CubeScene, PrismScene, WTFScene, SphereScene, CylinderScene } from "./3DRenderer.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -24,7 +24,7 @@ export const imageProcessors: ImageProcessors = {
   wasted,
   deepfry,
   cube,
-  obamaprism: obamaPrism,
+  prism,
   wtf,
   sphere,
   cylinder,

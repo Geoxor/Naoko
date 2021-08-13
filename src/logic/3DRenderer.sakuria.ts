@@ -104,7 +104,7 @@ export class CubeScene extends ProcessorScene {
     super();
     this.cube = null;
   }
-
+ 
   public update() {
     if (!this.cube) return;
     this.cube.rotation.x += 0.05;
@@ -190,7 +190,7 @@ export class SphereScene extends ProcessorScene {
   public async prepare(textureBuffer: Buffer) {
     const texture = await this.createTextureFromBuffer(textureBuffer);
     const geometry = new THREE.SphereGeometry( .75 , 32 ,16 );
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
     this.sphere = new THREE.Mesh(geometry, material);
     this.addGeometry(this.sphere);
   }
@@ -213,7 +213,7 @@ export class CylinderScene extends ProcessorScene {
   public async prepare(textureBuffer: Buffer) {
     const texture = await this.createTextureFromBuffer(textureBuffer);
     const geometry = new THREE.CylinderGeometry( .5, .5, .75, 32 );
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
     this.cylinder = new THREE.Mesh(geometry, material);
     this.addGeometry(this.cylinder);
   }
