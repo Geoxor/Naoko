@@ -138,7 +138,7 @@ export class WTFScene extends ProcessorScene {
     this.camera.position.z = 3;
     const texture = await this.createTextureFromBuffer(textureBuffer);
     const geometry = new THREE.TorusKnotGeometry(1);
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide});
     this.wtf = new THREE.Mesh(geometry, material);
     this.addGeometry(this.wtf);
   }
