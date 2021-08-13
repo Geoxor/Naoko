@@ -25,7 +25,7 @@ export const imageProcessors: ImageProcessors = {
   grayscale,
   wasted,
   deepfry,
-  obamaPrism,
+  "obamaprism": obamaPrism,
 };
 
 /**
@@ -86,7 +86,7 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
       );
 
       // This is to avoid exp thread blocking
-      if (time > 1000) return fuckedBuffer;
+      if (time > 60000) return fuckedBuffer;
     }
   }
   return fuckedBuffer;
@@ -102,7 +102,7 @@ class ProcessorScene {
   public encoder: GIFEncoder;
   public canvas: HTMLCanvasElement;
 
-  constructor(width: number = 1280, height: number = 720, fps: number = 10) {
+  constructor(width: number = 512, height: number = 512, fps: number = 10) {
     this.width = width;
     this.height = height;
     this.fps = fps;
@@ -113,11 +113,12 @@ class ProcessorScene {
     this.encoder.setRepeat(0);
     this.encoder.setDelay(~~(1000 / fps));
     this.encoder.setQuality(10);
+    this.encoder.setTransparent(0x00000000);
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, 16 / 9, 0.1, 1000);
-    this.camera.position.z = 5;
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
+    this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
+    this.camera.position.z = 1.5;
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
     this.renderer.setSize(this.width, this.height);
   }
 
@@ -151,24 +152,50 @@ class ProcessorScene {
 }
 
 class ObamaScene extends ProcessorScene {
-  public cube: THREE.Mesh;
+  public cube: THREE.Mesh | null;
 
   constructor() {
-    super();
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    this.cube = new THREE.Mesh(geometry, material);
-    this.addGeometry(this.cube);
+    super(256, 256, 30);
+    this.cube = null;
   }
 
   public update() {
-    this.cube.rotation.x += 0.01;
+    if (!this.cube) return;
+    this.cube.rotation.x += 0.05;
     this.cube.rotation.y += 0.01;
+  }
+
+  public async prepare(textureBuffer: Buffer) {
+    const texels = 4;
+    const image = await Jimp.read(textureBuffer);
+    const data = new Uint8Array( texels * image.bitmap.width * image.bitmap.height );
+    
+    for(let y = 0; y < image.bitmap.height; y++){    
+      for(let x = 0; x < image.bitmap.width; x++){
+        let color = image.getPixelColor(x, y);
+        let r = (color >> 24) & 255; 
+        let g = (color >> 16) & 255; 
+        let b = (color >> 8) & 255; 
+        let a = (color >> 0) & 255;
+        const stride = texels * (x + y * image.bitmap.width);
+        data[ stride ] = r;
+        data[ stride + 1 ] = g;
+        data[ stride + 2 ] = b;
+        data[ stride + 3 ] = a;
+      }
+    }
+
+    const texture = new THREE.DataTexture( data, image.bitmap.width, image.bitmap.height, THREE.RGBAFormat );
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    this.cube = new THREE.Mesh(geometry, material);
+    this.addGeometry(this.cube);
   }
 }
 
 export async function obamaPrism(buffer: Buffer) {
   const scene = new ObamaScene();
+  await scene.prepare(buffer);
   return scene.render();
 }
 
