@@ -172,3 +172,49 @@ export class PrismScene extends ProcessorScene {
     this.addGeometry(this.prism);
   }
 }
+
+export class SphereScene extends ProcessorScene {
+  public sphere: THREE.Mesh | null;
+
+  constructor() {
+    super();
+    this.sphere = null;
+  }
+
+  public update() {
+    if (!this.sphere) return;
+    this.sphere.rotation.x = 135;
+    this.sphere.rotation.y += 0.05;
+  }
+
+  public async prepare(textureBuffer: Buffer) {
+    const texture = await this.createTextureFromBuffer(textureBuffer);
+    const geometry = new THREE.SphereGeometry( .75 , 32 ,16 );
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    this.sphere = new THREE.Mesh(geometry, material);
+    this.addGeometry(this.sphere);
+  }
+}
+
+export class CylinderScene extends ProcessorScene {
+  public cylinder: THREE.Mesh | null;
+
+  constructor() {
+    super();
+    this.cylinder = null;
+  }
+
+  public update() {
+    if (!this.cylinder) return;
+    this.cylinder.rotation.x = 135;
+    this.cylinder.rotation.y += 0.05;
+  }
+
+  public async prepare(textureBuffer: Buffer) {
+    const texture = await this.createTextureFromBuffer(textureBuffer);
+    const geometry = new THREE.CylinderGeometry( .5, .5, .75, 32 );
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    this.cylinder = new THREE.Mesh(geometry, material);
+    this.addGeometry(this.cylinder);
+  }
+}
