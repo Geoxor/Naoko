@@ -15,7 +15,7 @@ export class ProcessorScene {
   public encoder: GIFEncoder;
   public canvas: HTMLCanvasElement;
 
-  constructor(width: number = 256, height: number = 256, fps: number = 24) {
+  constructor(width: number = 256, height: number = 256, fps: number = 25) {
     this.width = width;
     this.height = height;
     this.fps = fps;
@@ -122,15 +122,17 @@ export class CubeScene extends ProcessorScene {
 
 export class WTFScene extends ProcessorScene {
   public wtf: THREE.Mesh | null;
+  private rotationSpeed: number;
 
   constructor() {
     super();
+    this.rotationSpeed = Math.random() / 3;
     this.wtf = null;
   }
 
   public update() {
     if (!this.wtf) return;
-    this.wtf.rotation.x += 0.05;
+    this.wtf.rotation.x += this.rotationSpeed;
     this.wtf.rotation.y += 0.03;
   }
 
@@ -141,6 +143,31 @@ export class WTFScene extends ProcessorScene {
     const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
     this.wtf = new THREE.Mesh(geometry, material);
     this.addGeometry(this.wtf);
+  }
+}
+
+
+export class DonutScene extends ProcessorScene {
+  public donut: THREE.Mesh | null;
+
+  constructor() {
+    super();
+    this.donut = null;
+  }
+
+  public update() {
+    if (!this.donut) return;
+    this.donut.rotation.x += 0.05;
+    this.donut.rotation.y += 0.05;
+  }
+
+  public async prepare(textureBuffer: Buffer) {
+    this.camera.position.z = 3;
+    const texture = await this.createTextureFromBuffer(textureBuffer);
+    const geometry = new THREE.TorusGeometry( 1, 0.5, 16, 100 );
+    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
+    this.donut = new THREE.Mesh(geometry, material);
+    this.addGeometry(this.donut);
   }
 }
 
@@ -206,15 +233,17 @@ export class CylinderScene extends ProcessorScene {
 
   public update() {
     if (!this.cylinder) return;
-    this.cylinder.rotation.x = 135;
-    this.cylinder.rotation.y += 0.05;
+    this.cylinder.rotation.x -= 0.01;
+    this.cylinder.rotation.y += 0.07;
   }
 
   public async prepare(textureBuffer: Buffer) {
     const texture = await this.createTextureFromBuffer(textureBuffer);
-    const geometry = new THREE.CylinderGeometry( .5, .5, .75, 32 );
+    const geometry = new THREE.CylinderGeometry( 1, 1, 1, 32 );
     const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
     this.cylinder = new THREE.Mesh(geometry, material);
+    this.cylinder.rotation.x = 45;
+    this.camera.position.z = 2;
     this.addGeometry(this.cylinder);
   }
 }

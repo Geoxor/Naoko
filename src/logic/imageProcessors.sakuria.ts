@@ -6,7 +6,7 @@ import logger from "../sakuria/Logger.sakuria";
 
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { CubeScene, PrismScene, WTFScene, SphereScene, CylinderScene } from "./3DRenderer.sakuria";
+import { CubeScene, PrismScene, WTFScene, SphereScene, CylinderScene, DonutScene } from "./3DRenderer.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -28,6 +28,7 @@ export const imageProcessors: ImageProcessors = {
   wtf,
   sphere,
   cylinder,
+  donut,
 };
 
 /**
@@ -123,6 +124,17 @@ export async function wtf(buffer: Buffer) {
  */
 export async function cube(buffer: Buffer) {
   const scene = new CubeScene();
+  await scene.prepare(buffer);
+  return scene.render();
+}
+
+/**
+ * Creates a spinning donut out of a texture
+ * @param buffer the immage buffer to use as a texture
+ * @author Bluskript & Geoxor
+ */
+ export async function donut(buffer: Buffer) {
+  const scene = new DonutScene();
   await scene.prepare(buffer);
   return scene.render();
 }
