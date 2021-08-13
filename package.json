@@ -9,9 +9,9 @@
     "setup": "npm i && npm run prettify && ts-node ./src/setup.sakuria.ts && npm run gen-db ",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\"",
     "gen-db": "npx prisma generate --schema ./src/prisma/schema.prisma",
-    "reset-db": "npx prisma migrate reset -f",
-    "migrate-db": "npx prisma migrate dev",
-    "init-db": "npx prisma migrate dev --name init"
+    "reset-db": "npx prisma migrate reset -f --schema ./src/prisma/schema.prisma",
+    "migrate-db": "npx prisma migrate dev --schema ./src/prisma/schema.prisma ",
+    "init-db": "npx prisma migrate dev --name init --schema ./src/prisma/schema.prisma "
   },
   "repository": {
     "type": "git",
