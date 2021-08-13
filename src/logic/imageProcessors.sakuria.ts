@@ -3,12 +3,10 @@ import { ICommand, ImageProcessorFn, ImageProcessors, IMessage } from "../types"
 import { getBufferFromUrl, getImageURLFromMessage } from "./logic.sakuria";
 import Discord from "discord.js";
 import logger from "../sakuria/Logger.sakuria";
-import * as THREE from "three";
-import GIFEncoder from "gifencoder";
-// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
-import { createCanvas } from "node-canvas-webgl";
+
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from 'file-type';
+import { CubeScene, ObamaScene } from "./3DRenderer.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -25,6 +23,7 @@ export const imageProcessors: ImageProcessors = {
   grayscale,
   wasted,
   deepfry,
+  cube,
   "obamaprism": obamaPrism,
 };
 
@@ -92,109 +91,24 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
   return fuckedBuffer;
 }
 
-class ProcessorScene {
-  public width: number;
-  public height: number;
-  public fps: number;
-  public camera: THREE.Camera;
-  public scene: THREE.Scene;
-  public renderer: THREE.WebGLRenderer;
-  public encoder: GIFEncoder;
-  public canvas: HTMLCanvasElement;
-
-  constructor(width: number = 512, height: number = 512, fps: number = 10) {
-    this.width = width;
-    this.height = height;
-    this.fps = fps;
-    this.canvas = createCanvas(this.width, this.height);
-
-    this.encoder = new GIFEncoder(width, height);
-    this.encoder.start();
-    this.encoder.setRepeat(0);
-    this.encoder.setDelay(~~(1000 / fps));
-    this.encoder.setQuality(10);
-    this.encoder.setTransparent(0x00000000);
-
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
-    this.camera.position.z = 1.5;
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
-    this.renderer.setSize(this.width, this.height);
-  }
-
-  public update() {
-    throw new Error("must be implemented");
-  }
-
-  public addGeometry(mesh: THREE.Mesh) {
-    this.scene.add(mesh);
-  }
-
-  /**
-   * Renders a webgl scene
-   * @author Geoxor
-   */
-  public render() {
-    const frameCount = 5 * this.fps;
-    // @ts-ignore
-
-    for (let i = 0; i < frameCount; i++) {
-      this.update();
-      this.renderer.render(this.scene, this.camera);
-      console.log(`Rendering frame ${i}`);
-      // @ts-ignore
-      this.encoder.addFrame(this.canvas.__ctx__);
-    }
-    this.encoder.finish();
-    const result = this.encoder.out.getData();
-    return result;
-  }
-}
-
-class ObamaScene extends ProcessorScene {
-  public cube: THREE.Mesh | null;
-
-  constructor() {
-    super(256, 256, 30);
-    this.cube = null;
-  }
-
-  public update() {
-    if (!this.cube) return;
-    this.cube.rotation.x += 0.05;
-    this.cube.rotation.y += 0.01;
-  }
-
-  public async prepare(textureBuffer: Buffer) {
-    const texels = 4;
-    const image = await Jimp.read(textureBuffer);
-    const data = new Uint8Array( texels * image.bitmap.width * image.bitmap.height );
-    
-    for(let y = 0; y < image.bitmap.height; y++){    
-      for(let x = 0; x < image.bitmap.width; x++){
-        let color = image.getPixelColor(x, y);
-        let r = (color >> 24) & 255; 
-        let g = (color >> 16) & 255; 
-        let b = (color >> 8) & 255; 
-        let a = (color >> 0) & 255;
-        const stride = texels * (x + y * image.bitmap.width);
-        data[ stride ] = r;
-        data[ stride + 1 ] = g;
-        data[ stride + 2 ] = b;
-        data[ stride + 3 ] = a;
-      }
-    }
-
-    const texture = new THREE.DataTexture( data, image.bitmap.width, image.bitmap.height, THREE.RGBAFormat );
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ map: texture });
-    this.cube = new THREE.Mesh(geometry, material);
-    this.addGeometry(this.cube);
-  }
-}
-
+/**
+ * Creates a spinning obamaprism out of a texture
+ * @param buffer the immage buffer to use as a texture
+ * @author Bluskript & Geoxor
+ */
 export async function obamaPrism(buffer: Buffer) {
-  const scene = new ObamaScene();
+  const scene = new ObamaScene;
+  await scene.prepare(buffer);
+  return scene.render();
+}
+
+/**
+ * Creates a spinning cube out of a texture
+ * @param buffer the immage buffer to use as a texture
+ * @author Bluskript & Geoxor
+ */
+export async function cube(buffer: Buffer) {
+  const scene = new CubeScene;
   await scene.prepare(buffer);
   return scene.render();
 }
