@@ -25,7 +25,7 @@ export const imageProcessors: ImageProcessors = {
   deepfry,
   cube,
   prism: prism,
-  wtf
+  wtf,
 };
 
 /**
@@ -108,8 +108,8 @@ export async function prism(buffer: Buffer) {
  * @param buffer the immage buffer to use as a texture
  * @author Bluskript & Geoxor
  */
- export async function wtf(buffer: Buffer) {
-  const scene = new WTFScene;
+export async function wtf(buffer: Buffer) {
+  const scene = new WTFScene();
   await scene.prepare(buffer);
   return scene.render();
 }

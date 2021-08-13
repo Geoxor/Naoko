@@ -114,7 +114,7 @@ export class CubeScene extends ProcessorScene {
   public async prepare(textureBuffer: Buffer) {
     const texture = await this.createTextureFromBuffer(textureBuffer);
     const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide});
+    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
     this.cube = new THREE.Mesh(geometry, material);
     this.addGeometry(this.cube);
   }
@@ -138,7 +138,7 @@ export class WTFScene extends ProcessorScene {
     this.camera.position.z = 3;
     const texture = await this.createTextureFromBuffer(textureBuffer);
     const geometry = new THREE.TorusKnotGeometry(1);
-    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide});
+    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
     this.wtf = new THREE.Mesh(geometry, material);
     this.addGeometry(this.wtf);
   }
@@ -167,7 +167,7 @@ export class PrismScene extends ProcessorScene {
     const height = 4.5;
     const faces = 4;
     const geometry = new THREE.ConeGeometry(radius, height, faces);
-    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide});
+    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
     this.prism = new THREE.Mesh(geometry, material);
     this.addGeometry(this.prism);
   }

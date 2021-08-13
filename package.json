@@ -6,9 +6,9 @@
   "scripts": {
     "test": "npm i && ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
     "dev": "npx prisma generate --schema ./src/prisma/schema.prisma && nodemon ./src/sakuria.ts",
-    "setup": "npm i && npm run prettify && ts-node ./src/setup.sakuria.ts && npm run gen-db",
+    "setup": "npm i && npm run prettify && ts-node ./src/setup.sakuria.ts && npm run gen-db ",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\"",
-    "gen-db": "npx prisma generate",
+    "gen-db": "npx prisma generate --schema ./src/prisma/schema.prisma",
     "reset-db": "npx prisma migrate reset -f",
     "migrate-db": "npx prisma migrate dev",
     "init-db": "npx prisma migrate dev --name init"
