@@ -24,7 +24,7 @@ export const imageProcessors: ImageProcessors = {
   wasted,
   deepfry,
   cube,
-  obamaprism: obamaPrism,
+  prism: prism,
   wtf
 };
 
@@ -93,11 +93,11 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
 }
 
 /**
- * Creates a spinning obamaprism out of a texture
+ * Creates a spinning prism out of a texture
  * @param buffer the immage buffer to use as a texture
  * @author Bluskript & Geoxor
  */
-export async function obamaPrism(buffer: Buffer) {
+export async function prism(buffer: Buffer) {
   const scene = new ObamaScene();
   await scene.prepare(buffer);
   return scene.render();

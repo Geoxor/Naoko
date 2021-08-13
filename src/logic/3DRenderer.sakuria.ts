@@ -15,7 +15,7 @@ export class ProcessorScene {
   public encoder: GIFEncoder;
   public canvas: HTMLCanvasElement;
 
-  constructor(width: number = 256, height: number = 256, fps: number = 30) {
+  constructor(width: number = 256, height: number = 256, fps: number = 24) {
     this.width = width;
     this.height = height;
     this.fps = fps;
@@ -114,7 +114,7 @@ export class CubeScene extends ProcessorScene {
   public async prepare(textureBuffer: Buffer) {
     const texture = await this.createTextureFromBuffer(textureBuffer);
     const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide});
     this.cube = new THREE.Mesh(geometry, material);
     this.addGeometry(this.cube);
   }

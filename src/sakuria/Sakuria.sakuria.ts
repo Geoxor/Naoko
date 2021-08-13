@@ -110,7 +110,7 @@ class Sakuria {
           await message.channel.send(result);
         } catch (error) {
           console.log(error);
-          await message.channel.send("⚠️ An error occured");
+          await message.reply("⚠️ An error occured");
         }
       }
     });
