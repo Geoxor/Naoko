@@ -4,8 +4,15 @@ on: [push, pull_request]
 
 jobs:
   test-sakuria:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies & test
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - name: Install Linux dependencies
+        run: sudo apt install libxi-dev
+      - name: Install dependencies
+        run: CXX=g++-10 npm ci
+      - name: Test
         run: npm run test
