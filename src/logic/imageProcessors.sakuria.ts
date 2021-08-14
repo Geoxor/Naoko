@@ -6,7 +6,8 @@ import logger from "../sakuria/Logger.sakuria";
 
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { CubeScene, PrismScene, WTFScene, SphereScene, CylinderScene, DonutScene } from "./3DRenderer.sakuria";
+import { GeometryScene } from "./3DRenderer.sakuria";
+import * as THREE from "three";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -101,8 +102,11 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
  * @author Bluskript & Geoxor
  */
 export async function prism(buffer: Buffer) {
-  const scene = new PrismScene();
-  await scene.prepare(buffer);
+  const geometry = new THREE.ConeGeometry(4, 4.5, 4);
+  const cameraPosition = { y:-1, z:7 };
+  const geometryRotation = { x:0 }
+  const scene = new GeometryScene(geometry, geometryRotation);
+  await scene.prepare(buffer, cameraPosition);
   return scene.render();
 }
 
@@ -112,8 +116,11 @@ export async function prism(buffer: Buffer) {
  * @author Bluskript & Geoxor
  */
 export async function wtf(buffer: Buffer) {
-  const scene = new WTFScene();
-  await scene.prepare(buffer);
+  const geometry = new THREE.TorusKnotGeometry(1);
+  const cameraPosition = { z:3 };
+  const geometryRotation = { x:Math.random() / 3 }
+  const scene = new GeometryScene(geometry, geometryRotation);
+  await scene.prepare(buffer, cameraPosition);
   return scene.render();
 }
 
@@ -123,7 +130,9 @@ export async function wtf(buffer: Buffer) {
  * @author Bluskript & Geoxor
  */
 export async function cube(buffer: Buffer) {
-  const scene = new CubeScene();
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  const geometryRotation = { x:0.05, y:0.0125 }
+  const scene = new GeometryScene(geometry, geometryRotation);
   await scene.prepare(buffer);
   return scene.render();
 }
@@ -134,30 +143,38 @@ export async function cube(buffer: Buffer) {
  * @author Bluskript & Geoxor
  */
  export async function donut(buffer: Buffer) {
-  const scene = new DonutScene();
-  await scene.prepare(buffer);
+  const geometry = new THREE.TorusGeometry( 1, 0.5, 16, 100 );
+  const scene = new GeometryScene(geometry, {});
+  const cameraPosition = { z:3 };
+  await scene.prepare(buffer, cameraPosition);
   return scene.render();
 }
 
 /**
  * Creates a spinning sphere out of a texture
  * @param buffer the immage buffer to use as a texture
- * @author azur1s
+ * @author azur1s, Geoxor
  */
  export async function sphere(buffer: Buffer) {
-  const scene = new SphereScene();
-  await scene.prepare(buffer);
+  const geometry = new THREE.SphereGeometry( .75 , 32 , 16 );
+  const geometryRotation = { x:0 }
+  const cameraPosition = { z:1.25 };
+  const scene = new GeometryScene(geometry, geometryRotation);
+  await scene.prepare(buffer, cameraPosition);
   return scene.render();
 }
 
 /**
  * Creates a spinning cylinder out of a texture
  * @param buffer the immage buffer to use as a texture
- * @author azur1s
+ * @author azur1s, Geoxor
  */
  export async function cylinder(buffer: Buffer) {
-  const scene = new CylinderScene();
-  await scene.prepare(buffer);
+  const geometry = new THREE.CylinderGeometry( 1, 1, 1, 32 );
+  const cameraPosition = { z:2 };
+  const geometryRotation = { x:0.01, y:0.07 }
+  const scene = new GeometryScene(geometry, geometryRotation);
+  await scene.prepare(buffer, cameraPosition);
   return scene.render();
 }
 

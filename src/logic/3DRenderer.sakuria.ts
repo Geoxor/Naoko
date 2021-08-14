@@ -5,7 +5,13 @@ import { createCanvas } from "node-canvas-webgl";
 import Jimp from "jimp";
 import logger from "../sakuria/Logger.sakuria";
 
-export class ProcessorScene {
+type Coords = {
+  x?: number;
+  y?: number;
+  z?: number;
+}
+
+export class SceneProcessor {
   public width: number;
   public height: number;
   public fps: number;
@@ -21,7 +27,7 @@ export class ProcessorScene {
     this.fps = fps;
     this.canvas = createCanvas(this.width, this.height);
 
-    this.encoder = new GIFEncoder(width, height);
+    this.encoder = new GIFEncoder(this.width, this.height);
     this.encoder.start();
     this.encoder.setRepeat(0);
     this.encoder.setDelay(~~(1000 / fps));
@@ -30,7 +36,6 @@ export class ProcessorScene {
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
-    this.camera.position.z = 1.5;
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
     this.renderer.setSize(this.width, this.height);
   }
@@ -89,10 +94,18 @@ export class ProcessorScene {
 
     for (let i = 0; i < frameCount; i++) {
       this.update();
+      let renderTimeStart = Date.now();
       this.renderer.render(this.scene, this.camera);
-      logger.command.print(`Rendering frame ${i + 1}`);
+      let renderTimeEnd = Date.now();
+      const renderTime = renderTimeEnd - renderTimeStart;
+
+      let encoderTimeStart = Date.now();
       // @ts-ignore
       this.encoder.addFrame(this.canvas.__ctx__);
+      let encoderTimeEnd = Date.now();
+      const encoderTime = encoderTimeEnd - encoderTimeStart;
+
+      logger.command.print(`Rendered frame ${i + 1} - Render: ${renderTime}ms - Encoder: ${encoderTime}ms`);
     }
     this.encoder.finish();
     const result = this.encoder.out.getData();
@@ -100,153 +113,34 @@ export class ProcessorScene {
   }
 }
 
-export class CubeScene extends ProcessorScene {
-  public cube: THREE.Mesh | null;
+export class GeometryScene extends SceneProcessor {
+  public sceneObject: THREE.Mesh | null;
+  public rotation: Coords;
+  public geometry: THREE.BufferGeometry;
 
-  constructor() {
+  constructor(geometry: THREE.BufferGeometry, rotation: Coords) {
     super();
-    this.cube = null;
-  }
- 
-  public update() {
-    if (!this.cube) return;
-    this.cube.rotation.x += 0.05;
-    this.cube.rotation.y += 0.0125;
-  }
-
-  public async prepare(textureBuffer: Buffer) {
-    const texture = await this.createTextureFromBuffer(textureBuffer);
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
-    this.cube = new THREE.Mesh(geometry, material);
-    this.addGeometry(this.cube);
-  }
-}
-
-export class WTFScene extends ProcessorScene {
-  public wtf: THREE.Mesh | null;
-  private rotationSpeed: number;
-
-  constructor() {
-    super();
-    this.rotationSpeed = Math.random() / 3;
-    this.wtf = null;
-  }
+    this.sceneObject = null;
+    this.geometry = geometry;
+    this.rotation = rotation;
+  };
 
   public update() {
-    if (!this.wtf) return;
-    this.wtf.rotation.x += this.rotationSpeed;
-    this.wtf.rotation.y += 0.05;
+    if (!this.sceneObject) return;
+    // This is some stupid shit because apparently 0 || 0.05 = 0.05
+    this.sceneObject.rotation.x += this.rotation.x !== undefined ? this.rotation.x : 0.05;
+    this.sceneObject.rotation.y += this.rotation.y !== undefined ? this.rotation.y : 0.05;
+    this.sceneObject.rotation.z += this.rotation.z !== undefined ? this.rotation.z : 0.00;
   }
 
-  public async prepare(textureBuffer: Buffer) {
-    this.camera.position.z = 3;
-    const texture = await this.createTextureFromBuffer(textureBuffer);
-    const geometry = new THREE.TorusKnotGeometry(1);
-    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
-    this.wtf = new THREE.Mesh(geometry, material);
-    this.addGeometry(this.wtf);
-  }
-}
-
-export class DonutScene extends ProcessorScene {
-  public donut: THREE.Mesh | null;
-
-  constructor() {
-    super();
-    this.donut = null;
-  }
-
-  public update() {
-    if (!this.donut) return;
-    this.donut.rotation.x += 0.05;
-    this.donut.rotation.y += 0.05;
-  }
-
-  public async prepare(textureBuffer: Buffer) {
-    this.camera.position.z = 3;
-    const texture = await this.createTextureFromBuffer(textureBuffer);
-    const geometry = new THREE.TorusGeometry( 1, 0.5, 16, 100 );
-    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
-    this.donut = new THREE.Mesh(geometry, material);
-    this.addGeometry(this.donut);
-  }
-}
-
-export class PrismScene extends ProcessorScene {
-  public prism: THREE.Mesh | null;
-
-  constructor() {
-    super();
-    this.prism = null;
-  }
-
-  public update() {
-    if (!this.prism) return;
-    this.prism.rotation.y += 0.05;
-  }
-
-  public async prepare(textureBuffer: Buffer) {
-    this.camera.position.z = 7;
-    this.camera.position.y = -1;
+  public async prepare(textureBuffer: Buffer, cameraPosition?: Coords) {
     const texture = await this.createTextureFromBuffer(textureBuffer);
     texture.flipY = true;
-    const radius = 4;
-    const height = 4.5;
-    const faces = 4;
-    const geometry = new THREE.ConeGeometry(radius, height, faces);
     const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
-    this.prism = new THREE.Mesh(geometry, material);
-    this.prism.rotation.x = 0;
-    this.addGeometry(this.prism);
-  }
-}
-
-export class SphereScene extends ProcessorScene {
-  public sphere: THREE.Mesh | null;
-
-  constructor() {
-    super();
-    this.sphere = null;
-  }
-
-  public update() {
-    if (!this.sphere) return;
-    this.sphere.rotation.y += 0.05;
-  }
-
-  public async prepare(textureBuffer: Buffer) {
-    const texture = await this.createTextureFromBuffer(textureBuffer);
-    const geometry = new THREE.SphereGeometry( .75 , 32 ,16 );
-    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
-    this.camera.position.z = 1.25;
-    this.sphere = new THREE.Mesh(geometry, material);
-    this.sphere.rotation.x = 135;
-    this.addGeometry(this.sphere);
-  }
-}
-
-export class CylinderScene extends ProcessorScene {
-  public cylinder: THREE.Mesh | null;
-
-  constructor() {
-    super();
-    this.cylinder = null;
-  }
-
-  public update() {
-    if (!this.cylinder) return;
-    this.cylinder.rotation.x -= 0.01;
-    this.cylinder.rotation.y += 0.07;
-  }
-
-  public async prepare(textureBuffer: Buffer) {
-    const texture = await this.createTextureFromBuffer(textureBuffer);
-    const geometry = new THREE.CylinderGeometry( 1, 1, 1, 32 );
-    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
-    this.cylinder = new THREE.Mesh(geometry, material);
-    this.cylinder.rotation.x = 45;
-    this.camera.position.z = 2;
-    this.addGeometry(this.cylinder);
+    this.camera.position.x = cameraPosition?.x || 0;
+    this.camera.position.y = cameraPosition?.y || 0;
+    this.camera.position.z = cameraPosition?.z || 1.5;
+    this.sceneObject = new THREE.Mesh(this.geometry, material);
+    this.addGeometry(this.sceneObject);
   }
 }
