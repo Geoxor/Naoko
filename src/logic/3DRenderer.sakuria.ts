@@ -9,7 +9,7 @@ type Coords = {
   x?: number;
   y?: number;
   z?: number;
-}
+};
 
 export class SceneProcessor {
   public width: number;
@@ -123,14 +123,14 @@ export class GeometryScene extends SceneProcessor {
     this.sceneObject = null;
     this.geometry = geometry;
     this.rotation = rotation;
-  };
+  }
 
   public update() {
     if (!this.sceneObject) return;
     // This is some stupid shit because apparently 0 || 0.05 = 0.05
     this.sceneObject.rotation.x += this.rotation.x !== undefined ? this.rotation.x : 0.05;
     this.sceneObject.rotation.y += this.rotation.y !== undefined ? this.rotation.y : 0.05;
-    this.sceneObject.rotation.z += this.rotation.z !== undefined ? this.rotation.z : 0.00;
+    this.sceneObject.rotation.z += this.rotation.z !== undefined ? this.rotation.z : 0.0;
   }
 
   public async prepare(textureBuffer: Buffer, cameraPosition?: Coords) {
