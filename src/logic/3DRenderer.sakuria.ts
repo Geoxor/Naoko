@@ -132,6 +132,11 @@ export class MediaMaterial {
     return GifUtil.shareAsJimp(Jimp, frame).getBufferAsync('image/png');
   }
 
+  /**
+   * Basically it's an async constructor to create a material and shit
+   * @param textureBuffer the buffer image to use as a texture
+   * @author Bluskript, Geoxor, N1kO23
+   */
   public async prepare(textureBuffer: Buffer) {
     const type = await fileType(textureBuffer);
     this.animated = type.mime === 'image/gif';
@@ -144,6 +149,10 @@ export class MediaMaterial {
     this.next()
   }
 
+  /**
+   * Used to render the next frame for animated textures
+   * @author Bluskript, Geoxor, N1kO23
+   */
   public async next() {
     if (!this.material || !this.animated) return;
     this.texture = await this.createTextureFromBuffer(await this.getBufferFromGifFrame(this.frames[this.idx % this.frames.length]))
@@ -174,6 +183,10 @@ export class GeometryScene extends SceneProcessor {
     await this.media?.next();
   }
 
+  /**
+   * Prepares the scene asyncronously
+   * @author Geoxor, Bluskript
+   */
   public async prepare(textureBuffer: Buffer, cameraPosition?: Coords) {
     this.media = new MediaMaterial();
     await this.media.prepare(textureBuffer);
