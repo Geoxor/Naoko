@@ -37,6 +37,7 @@ export class ProcessorScene {
 
   /**
    * Updates the scene to the new positions
+   * @author Geoxor, Bluskript
    */
   public update() {
     throw new Error("update must be implemented");
@@ -45,6 +46,7 @@ export class ProcessorScene {
   /**
    * Adds geometry to a scene
    * @param mesh the geometry to add to the scene
+   * @author Geoxor, Bluskript
    */
   public addGeometry(mesh: THREE.Mesh) {
     this.scene.add(mesh);
@@ -53,6 +55,7 @@ export class ProcessorScene {
   /**
    * Creates a RGBA texture from an image buffer
    * @param buffer the buffer image to read
+   * @author Geoxor, Bluskript
    */
   public async createTextureFromBuffer(buffer: Buffer): Promise<THREE.DataTexture> {
     const texels = 4; /** Red Green Blue and Alpha */
@@ -108,7 +111,7 @@ export class CubeScene extends ProcessorScene {
   public update() {
     if (!this.cube) return;
     this.cube.rotation.x += 0.05;
-    this.cube.rotation.y += 0.01;
+    this.cube.rotation.y += 0.0125;
   }
 
   public async prepare(textureBuffer: Buffer) {
@@ -133,7 +136,7 @@ export class WTFScene extends ProcessorScene {
   public update() {
     if (!this.wtf) return;
     this.wtf.rotation.x += this.rotationSpeed;
-    this.wtf.rotation.y += 0.03;
+    this.wtf.rotation.y += 0.05;
   }
 
   public async prepare(textureBuffer: Buffer) {
@@ -145,7 +148,6 @@ export class WTFScene extends ProcessorScene {
     this.addGeometry(this.wtf);
   }
 }
-
 
 export class DonutScene extends ProcessorScene {
   public donut: THREE.Mesh | null;
@@ -181,7 +183,6 @@ export class PrismScene extends ProcessorScene {
 
   public update() {
     if (!this.prism) return;
-    this.prism.rotation.x += 0.0;
     this.prism.rotation.y += 0.05;
   }
 
@@ -196,6 +197,7 @@ export class PrismScene extends ProcessorScene {
     const geometry = new THREE.ConeGeometry(radius, height, faces);
     const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
     this.prism = new THREE.Mesh(geometry, material);
+    this.prism.rotation.x = 0;
     this.addGeometry(this.prism);
   }
 }
@@ -210,7 +212,6 @@ export class SphereScene extends ProcessorScene {
 
   public update() {
     if (!this.sphere) return;
-    this.sphere.rotation.x = 135;
     this.sphere.rotation.y += 0.05;
   }
 
@@ -218,7 +219,9 @@ export class SphereScene extends ProcessorScene {
     const texture = await this.createTextureFromBuffer(textureBuffer);
     const geometry = new THREE.SphereGeometry( .75 , 32 ,16 );
     const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
+    this.camera.position.z = 1.25;
     this.sphere = new THREE.Mesh(geometry, material);
+    this.sphere.rotation.x = 135;
     this.addGeometry(this.sphere);
   }
 }
