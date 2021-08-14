@@ -4,6 +4,7 @@
   "description": "Sakuria general purpose discord bot",
   "main": "./src/sakuria.ts",
   "scripts": {
+    "install": "CXX=g++-10 npm install",
     "test": "npm i && ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
     "dev": "npx prisma generate --schema ./src/prisma/schema.prisma && nodemon ./src/sakuria.ts",
     "setup": "npm i && npm run prettify && ts-node ./src/setup.sakuria.ts && npm run gen-db ",
@@ -40,6 +41,7 @@
     "file-type": "^9.0.0",
     "get-image-colors": "^4.0.0",
     "gifencoder": "^2.0.1",
+    "gifwrap": "^0.9.2",
     "jimp": "^0.16.1",
     "music-metadata": "^7.11.3",
     "node": "16.6.1",

@@ -1,3 +1,4 @@
 {
-  "ignore": ["sakuria.json"]
+  "ignore": ["sakuria.json"],
+  "exec": "ts-node -T ./src/sakuria.ts"
 }

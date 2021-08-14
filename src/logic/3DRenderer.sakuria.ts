@@ -4,6 +4,9 @@ import GIFEncoder from "gifencoder";
 import { createCanvas } from "node-canvas-webgl";
 import Jimp from "jimp";
 import logger from "../sakuria/Logger.sakuria";
+import { GifUtil, GifFrame } from 'gifwrap';
+// @ts-ignore this has broken types :whyyyyyyyyyyy:
+import fileType from 'file-type';
 
 type Coords = {
   x?: number;
@@ -44,7 +47,7 @@ export class SceneProcessor {
    * Updates the scene to the new positions
    * @author Geoxor, Bluskript
    */
-  public update() {
+  public async update() {
     throw new Error("update must be implemented");
   }
 
@@ -58,42 +61,15 @@ export class SceneProcessor {
   }
 
   /**
-   * Creates a RGBA texture from an image buffer
-   * @param buffer the buffer image to read
-   * @author Geoxor, Bluskript
-   */
-  public async createTextureFromBuffer(buffer: Buffer): Promise<THREE.DataTexture> {
-    const texels = 4; /** Red Green Blue and Alpha */
-    const image = await Jimp.read(buffer);
-    const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
-
-    for (let y = 0; y < image.bitmap.height; y++) {
-      for (let x = 0; x < image.bitmap.width; x++) {
-        let color = image.getPixelColor(x, y);
-        let r = (color >> 24) & 255;
-        let g = (color >> 16) & 255;
-        let b = (color >> 8) & 255;
-        let a = (color >> 0) & 255;
-        const stride = texels * (x + y * image.bitmap.width);
-        data[stride] = r;
-        data[stride + 1] = g;
-        data[stride + 2] = b;
-        data[stride + 3] = a;
-      }
-    }
-    return new THREE.DataTexture(data, image.bitmap.width, image.bitmap.height, THREE.RGBAFormat);
-  }
-
-  /**
    * Renders a webgl scene
    * @author Geoxor
    */
-  public render() {
+  public async render() {
     const frameCount = 5 * this.fps;
     // @ts-ignore
 
     for (let i = 0; i < frameCount; i++) {
-      this.update();
+      await this.update();
       let renderTimeStart = Date.now();
       this.renderer.render(this.scene, this.camera);
       let renderTimeEnd = Date.now();
@@ -113,34 +89,98 @@ export class SceneProcessor {
   }
 }
 
+export class MediaMaterial {
+  public texture: THREE.Texture | undefined;
+  public material: THREE.MeshBasicMaterial | undefined;
+  public idx: number = 0;
+  public animated: boolean = false;
+  public frames: GifFrame[] = []
+
+  /**
+ * Creates a RGBA texture from an image buffer
+ * @param buffer the buffer image to read
+ * @author Geoxor, Bluskript
+ */
+  public async createTextureFromBuffer(buffer: Buffer): Promise<THREE.DataTexture> {
+    const texels = 4; /** Red Green Blue and Alpha */
+    const image = await Jimp.read(buffer);
+    const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
+
+    for (let y = 0; y < image.bitmap.height; y++) {
+      for (let x = 0; x < image.bitmap.width; x++) {
+        let color = image.getPixelColor(x, y);
+        let r = (color >> 24) & 255;
+        let g = (color >> 16) & 255;
+        let b = (color >> 8) & 255;
+        let a = (color >> 0) & 255;
+        const stride = texels * (x + y * image.bitmap.width);
+        data[stride] = r;
+        data[stride + 1] = g;
+        data[stride + 2] = b;
+        data[stride + 3] = a;
+      }
+    }
+
+    const texture = new THREE.DataTexture(data, image.bitmap.width, image.bitmap.height, THREE.RGBAFormat);
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.flipY = true;
+    return texture;
+  }
+
+  public getBufferFromGifFrame(frame: GifFrame) {
+    return GifUtil.shareAsJimp(Jimp, frame).getBufferAsync('image/png');
+  }
+
+  public async prepare(textureBuffer: Buffer) {
+    const type = await fileType(textureBuffer);
+    this.animated = type.mime === 'image/gif';
+    if (this.animated) {
+      this.frames = (await GifUtil.read(textureBuffer)).frames;
+      this.material = new THREE.MeshBasicMaterial({ transparent: true, side: THREE.DoubleSide });
+      this.material.needsUpdate = true;
+    };
+    this.material = new THREE.MeshBasicMaterial({ transparent: true, map: await this.createTextureFromBuffer(textureBuffer), side: THREE.DoubleSide });
+    this.next()
+  }
+
+  public async next() {
+    if (!this.material || !this.animated) return console.log('returning');
+    this.texture = await this.createTextureFromBuffer(await this.getBufferFromGifFrame(this.frames[this.idx % this.frames.length]))
+    this.material.map = this.texture;
+    this.material.needsUpdate = true;
+    this.idx++;
+  }
+}
+
 export class GeometryScene extends SceneProcessor {
-  public sceneObject: THREE.Mesh | null;
+  public sceneObject: THREE.Mesh | undefined;
   public rotation: Coords;
   public geometry: THREE.BufferGeometry;
+  public media: MediaMaterial | undefined;
 
   constructor(geometry: THREE.BufferGeometry, rotation: Coords) {
     super();
-    this.sceneObject = null;
     this.geometry = geometry;
     this.rotation = rotation;
   }
 
-  public update() {
+  public async update() {
     if (!this.sceneObject) return;
     // This is some stupid shit because apparently 0 || 0.05 = 0.05
     this.sceneObject.rotation.x += this.rotation.x !== undefined ? this.rotation.x : 0.05;
     this.sceneObject.rotation.y += this.rotation.y !== undefined ? this.rotation.y : 0.05;
     this.sceneObject.rotation.z += this.rotation.z !== undefined ? this.rotation.z : 0.0;
+    await this.media?.next();
   }
 
   public async prepare(textureBuffer: Buffer, cameraPosition?: Coords) {
-    const texture = await this.createTextureFromBuffer(textureBuffer);
-    texture.flipY = true;
-    const material = new THREE.MeshBasicMaterial({ transparent: true, map: texture, side: THREE.DoubleSide });
+    this.media = new MediaMaterial();
+    await this.media.prepare(textureBuffer);
     this.camera.position.x = cameraPosition?.x || 0;
     this.camera.position.y = cameraPosition?.y || 0;
     this.camera.position.z = cameraPosition?.z || 1.5;
-    this.sceneObject = new THREE.Mesh(this.geometry, material);
+    this.sceneObject = new THREE.Mesh(this.geometry, this.media.material);
     this.addGeometry(this.sceneObject);
   }
 }
