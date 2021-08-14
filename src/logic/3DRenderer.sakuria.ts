@@ -145,7 +145,7 @@ export class MediaMaterial {
   }
 
   public async next() {
-    if (!this.material || !this.animated) return console.log('returning');
+    if (!this.material || !this.animated) return;
     this.texture = await this.createTextureFromBuffer(await this.getBufferFromGifFrame(this.frames[this.idx % this.frames.length]))
     this.material.map = this.texture;
     this.material.needsUpdate = true;
