@@ -1,12 +1,12 @@
 import { uwufy } from "../../logic/logic.sakuria";
-import { IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
-export default {
+export default defineCommand({
   name: "uwufy",
   description: "Transforms your sentence to uwu",
   requiresProcessing: false,
-  execute: async (message: IMessage): Promise<string> => {
+  execute: async (message) => {
     if (message.args.length === 0) return "b-baka!! you need to give me s-something! uwu";
     return uwufy(message.args.join(" "));
   },
-};
+});

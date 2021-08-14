@@ -1,13 +1,13 @@
 import { musicMiddleware } from "../../middleware/musicMiddleware.sakuria";
-import { IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
-export default {
+export default defineCommand({
   name: "np",
   description: "Shows you the currently playing song",
   requiresProcessing: true,
-  execute: async (message: IMessage) => {
+  execute: async (message) => {
     return musicMiddleware(message, async (channel, player) => {
       return await player.createNowPlayingEmbed();
     });
   },
-};
+});

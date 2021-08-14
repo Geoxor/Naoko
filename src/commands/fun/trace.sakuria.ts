@@ -1,12 +1,12 @@
-import { IMessage } from "../../types";
+import { defineCommand, IMessage } from "../../types";
 import Discord from "discord.js";
 import { anilistQuery, traceAnime } from "../../logic/logic.sakuria";
 
-export default {
+export default defineCommand({
   name: "trace",
   description: "Attempts to find what anime a screenshot or GIF is from",
   requiresProcessing: true,
-  execute: async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
+  execute: async (message) => {
     // Check if they sent shit
     const url = message.args[0] || message.attachments.first()?.url;
 
@@ -35,4 +35,4 @@ export default {
       return error.response?.data?.error || error.response?.statusText || "Couldn't find anime..";
     }
   },
-};
+});

@@ -1,11 +1,11 @@
 import Sakuria from "../../sakuria/Sakuria.sakuria";
-import { IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
-export default {
+export default defineCommand({
   name: "ping",
   description: "Get api latency.",
   requiresProcessing: false,
-  execute: async (message: IMessage): Promise<void> => {
+  execute: async (message) => {
     const timestampMessage = await message.channel.send("🏓 Getting ping...");
     timestampMessage.edit(
       `🏓 Pong! Latency is ${
@@ -13,4 +13,4 @@ export default {
       }ms. API Latency is ${~~Sakuria.bot.ws.ping / 2}ms`
     );
   },
-};
+});

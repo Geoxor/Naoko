@@ -1,12 +1,12 @@
-import { IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
-export default {
+export default defineCommand({
   name: "say",
   description: "Says what you tell it",
   requiresProcessing: false,
-  execute: (message: IMessage): string => {
+  execute: (message) => {
     if (message.mentions.everyone) return "you can't make me tag everyone idiot";
     message.delete();
     return message.args.join(" ");
   },
-};
+});

@@ -1,14 +1,14 @@
 import { musicMiddleware } from "../../middleware/musicMiddleware.sakuria";
-import { IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
-export default {
+export default defineCommand({
   name: "shuffle",
   description: "Shuffles the queue",
   requiresProcessing: false,
-  execute: async (message: IMessage) => {
+  execute: async (message) => {
     return musicMiddleware(message, async (channel, player) => {
       player.shuffle();
       return "playlist shuffled";
     });
   },
-};
+});
