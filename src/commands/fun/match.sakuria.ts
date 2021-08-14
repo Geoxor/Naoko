@@ -1,11 +1,11 @@
 import { getShipName } from "../../logic/logic.sakuria";
-import { IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
-export default {
+export default defineCommand({
   name: "match",
   description: "See how much you and another user match!",
   requiresProcessing: false,
-  execute: (message: IMessage): string => {
+  execute: (message) => {
     const matcher = message.author;
     const matchee = message.mentions.users.first();
 
@@ -22,4 +22,4 @@ export default {
     const matchString = `You match ${~~matchCalculation}% ${shipName}`;
     return matchCalculation == 100 ? perfectMatchString : matchString;
   },
-};
+});

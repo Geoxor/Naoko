@@ -1,11 +1,11 @@
 import { encodeMorse, decodeMorse } from "../../logic/logic.sakuria";
-import { IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
-export default {
+export default defineCommand({
   name: "morse",
   description: "Encodes a string to morse code",
   requiresProcessing: false,
-  execute: async (message: IMessage): Promise<string> => {
+  execute: async (message) => {
     // Reply if no args
     if (message.args.length === 0) return "Give me a string to encode!";
     let messageContent: string = message.args.join(" ");
@@ -13,4 +13,4 @@ export default {
       return decodeMorse(messageContent).substr(0, 2000);
     else return encodeMorse(messageContent).substr(0, 2000);
   },
-};
+});

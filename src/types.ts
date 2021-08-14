@@ -8,15 +8,20 @@ export interface IMessage extends Discord.Message {
   command: string;
   args: string[];
 }
+
 export type CommandExecute = (
   message: IMessage
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
+
 export interface ICommand {
   execute: CommandExecute;
   name: string;
   description: string;
   requiresProcessing?: boolean;
 }
+
+export const defineCommand = (cmd: ICommand): ICommand => cmd;
+
 export interface IAnime {
   anilist: number;
   filename: string;

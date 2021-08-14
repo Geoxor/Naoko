@@ -1,11 +1,11 @@
 import { DiscordAPIError, TextChannel } from "discord.js";
-import { IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
-export default {
+export default defineCommand({
   name: "clear",
   description: "Bulk delete messages up to 100",
   requiresProcessing: false,
-  execute: async (message: IMessage): Promise<string> => {
+  execute: async (message) => {
     if (!message.member?.permissions.has("MANAGE_MESSAGES")) return "you don't have perms cunt";
     let count = parseInt(message.args[0]) + 1;
     count = count > 100 ? 100 : count;
@@ -20,4 +20,4 @@ export default {
       return err.message;
     }
   },
-};
+});

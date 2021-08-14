@@ -1,13 +1,13 @@
 import { MessageOptions } from "discord.js";
 import { randomDickSize } from "../../logic/logic.sakuria";
-import { IMessage } from "../../types";
+import { defineCommand, IMessage } from "../../types";
 import { Readable } from "stream";
 
-export default {
+export default defineCommand({
   name: "dicksize",
   description: "Tell's you your dicksize or battle against someone else's dicksize!",
   requiresProcessing: false,
-  execute: async (message: IMessage): Promise<string | MessageOptions> => {
+  execute: async (message) => {
     if (message.mentions.members && message.mentions.members.size !== 0) {
       const dicksize = randomDickSize();
       const enemyDicksize = randomDickSize();
@@ -49,4 +49,4 @@ export default {
       else return response;
     }
   },
-};
+});

@@ -1,11 +1,11 @@
 import { db } from "../../sakuria/Database.sakuria";
-import { IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
-export default {
+export default defineCommand({
   name: "kick",
   description: "Kicks a user",
   requiresProcessing: false,
-  execute: async (message: IMessage): Promise<string> => {
+  execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "please mention the user you wanna kick";
     if (!message.member?.permissions.has("KICK_MEMBERS")) return "you don't have perms cunt";
@@ -19,4 +19,4 @@ export default {
     // Get fucked
     return `Kicked user <@${targetUser.id}>`;
   },
-};
+});

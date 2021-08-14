@@ -1,12 +1,12 @@
-import { IMessage } from "../../types";
+import { defineCommand, IMessage } from "../../types";
 import Discord from "discord.js";
 import { anilistSearch } from "../../logic/logic.sakuria";
 
-export default {
+export default defineCommand({
   name: "anime",
   description: "Looks up an anime on Anilist",
   requiresProcessing: true,
-  execute: async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
+  execute: async (message) => {
     // Get the anime
     try {
       const animeMeta = await anilistSearch(message.args.join(" "));
@@ -26,4 +26,4 @@ export default {
       return error.response?.data?.error || error.response?.statusText || "Couldn't find anime..";
     }
   },
-};
+});
