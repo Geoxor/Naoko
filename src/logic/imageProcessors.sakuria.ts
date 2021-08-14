@@ -89,7 +89,7 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
       );
 
       // This is to avoid exp thread blocking
-      if (time > 60000) return fuckedBuffer;
+      if (time > 10000) return fuckedBuffer;
     }
   }
   return fuckedBuffer;

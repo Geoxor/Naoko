@@ -2,9 +2,9 @@ import { ICommand } from "../types";
 import { genCommands, imageProcessors } from "../logic/imageProcessors.sakuria";
 
 // economy game commands
-import battle from "./economyGames/battle.sakuria";
-import inventory from "./economyGames/inventory.sakuria";
-import stats from "./economyGames/stats.sakuria";
+// import battle from "./economyGames/battle.sakuria";
+// import inventory from "./economyGames/inventory.sakuria";
+// import stats from "./economyGames/stats.sakuria";
 
 // fun commands
 import anime from "./fun/anime.sakuria";
@@ -42,10 +42,10 @@ export const commands: ICommand[] = [
   transform,
   avatar,
   match,
-  stats,
   ping,
-  inventory,
-  battle,
+  // stats,
+  // inventory,
+  // battle,
   shuffle,
   skip,
   play,
