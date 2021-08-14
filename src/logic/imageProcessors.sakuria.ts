@@ -131,8 +131,9 @@ export async function wtf(buffer: Buffer) {
 export async function cube(buffer: Buffer) {
   const geometry = new THREE.BoxGeometry(1, 1, 1);
   const geometryRotation = { x: 0.05, y: 0.0125 };
+  const cameraPosition = { z: 1.30 };
   const scene = new GeometryScene(geometry, geometryRotation);
-  await scene.prepare(buffer);
+  await scene.prepare(buffer, cameraPosition);
   return scene.render();
 }
 

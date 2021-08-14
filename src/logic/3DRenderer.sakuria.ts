@@ -4,9 +4,9 @@ import GIFEncoder from "gifencoder";
 import { createCanvas } from "node-canvas-webgl";
 import Jimp from "jimp";
 import logger from "../sakuria/Logger.sakuria";
-import { GifUtil, GifFrame } from 'gifwrap';
+import { GifUtil, GifFrame } from "gifwrap";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
-import fileType from 'file-type';
+import fileType from "file-type";
 
 type Coords = {
   x?: number;
@@ -23,6 +23,8 @@ export class SceneProcessor {
   public renderer: THREE.WebGLRenderer;
   public encoder: GIFEncoder;
   public canvas: HTMLCanvasElement;
+  public light: THREE.AmbientLight;
+  public sun: THREE.DirectionalLight;
 
   constructor(width: number = 256, height: number = 256, fps: number = 25) {
     this.width = width;
@@ -38,6 +40,9 @@ export class SceneProcessor {
     this.encoder.setTransparent(0x00000000);
 
     this.scene = new THREE.Scene();
+    this.light = new THREE.AmbientLight(0xaaaaaa);
+    this.sun = new THREE.DirectionalLight(0xffffff);
+    this.scene.add(this.light, this.sun);
     this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
     this.renderer.setSize(this.width, this.height);
@@ -49,15 +54,6 @@ export class SceneProcessor {
    */
   public async update() {
     throw new Error("update must be implemented");
-  }
-
-  /**
-   * Adds geometry to a scene
-   * @param mesh the geometry to add to the scene
-   * @author Geoxor, Bluskript
-   */
-  public addGeometry(mesh: THREE.Mesh) {
-    this.scene.add(mesh);
   }
 
   /**
@@ -91,16 +87,16 @@ export class SceneProcessor {
 
 export class MediaMaterial {
   public texture: THREE.Texture | undefined;
-  public material: THREE.MeshBasicMaterial | undefined;
+  public material: THREE.MeshStandardMaterial | undefined;
   public idx: number = 0;
   public animated: boolean = false;
-  public frames: GifFrame[] = []
+  public frames: GifFrame[] = [];
 
   /**
- * Creates a RGBA texture from an image buffer
- * @param buffer the buffer image to read
- * @author Geoxor, Bluskript
- */
+   * Creates a RGBA texture from an image buffer
+   * @param buffer the buffer image to read
+   * @author Geoxor, Bluskript
+   */
   public async createTextureFromBuffer(buffer: Buffer): Promise<THREE.DataTexture> {
     const texels = 4; /** Red Green Blue and Alpha */
     const image = await Jimp.read(buffer);
@@ -129,7 +125,7 @@ export class MediaMaterial {
   }
 
   public getBufferFromGifFrame(frame: GifFrame) {
-    return GifUtil.shareAsJimp(Jimp, frame).getBufferAsync('image/png');
+    return GifUtil.shareAsJimp(Jimp, frame).getBufferAsync("image/png");
   }
 
   /**
@@ -138,15 +134,23 @@ export class MediaMaterial {
    * @author Bluskript, Geoxor, N1kO23
    */
   public async prepare(textureBuffer: Buffer) {
+    this.material = new THREE.MeshStandardMaterial({
+      roughness: 0,
+      transparent: true,
+      side: THREE.DoubleSide,
+      map: await this.createTextureFromBuffer(textureBuffer)
+    });
+
     const type = await fileType(textureBuffer);
-    this.animated = type.mime === 'image/gif';
+    this.animated = type.mime === "image/gif";
+
     if (this.animated) {
       this.frames = (await GifUtil.read(textureBuffer)).frames;
-      this.material = new THREE.MeshBasicMaterial({ transparent: true, side: THREE.DoubleSide });
-      this.material.needsUpdate = true;
-    };
-    this.material = new THREE.MeshBasicMaterial({ transparent: true, map: await this.createTextureFromBuffer(textureBuffer), side: THREE.DoubleSide });
-    this.next()
+      return this.next();
+    }
+
+    this.material.needsUpdate = true;
+    return this.next();
   }
 
   /**
@@ -155,7 +159,9 @@ export class MediaMaterial {
    */
   public async next() {
     if (!this.material || !this.animated) return;
-    this.texture = await this.createTextureFromBuffer(await this.getBufferFromGifFrame(this.frames[this.idx % this.frames.length]))
+    this.texture = await this.createTextureFromBuffer(
+      await this.getBufferFromGifFrame(this.frames[this.idx % this.frames.length])
+    );
     this.material.map = this.texture;
     this.material.needsUpdate = true;
     this.idx++;
@@ -194,6 +200,6 @@ export class GeometryScene extends SceneProcessor {
     this.camera.position.y = cameraPosition?.y || 0;
     this.camera.position.z = cameraPosition?.z || 1.5;
     this.sceneObject = new THREE.Mesh(this.geometry, this.media.material);
-    this.addGeometry(this.sceneObject);
+    this.scene.add(this.sceneObject);
   }
 }
