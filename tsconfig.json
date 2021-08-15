@@ -10,7 +10,7 @@
     "declaration": true,
     "module": "commonjs",
     "rootDirs": [
-      "./src",
+      "./src"
     ],
     "baseUrl": "./",
     "paths": {
@@ -18,10 +18,10 @@
         "src/*"
       ]
     },
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "./src",
-    "./src/assets/*",
+    "./src/assets/*"
   ]
 }
