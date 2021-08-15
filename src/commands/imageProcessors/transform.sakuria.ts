@@ -13,6 +13,7 @@ export default defineCommand({
     const imageURL = await getImageURLFromMessage(message);
     const targetBuffer = await getBufferFromUrl(imageURL);
     const pipeline = message.args;
+    if (pipeline.length > 10) return "pipeline can't be longer than 10 iterators";
     const resultbuffer = await transform(pipeline, targetBuffer);
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);

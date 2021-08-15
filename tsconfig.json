@@ -4,6 +4,24 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "target": "ES2017",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "declaration": true,
+    "module": "commonjs",
+    "rootDirs": [
+      "./src",
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "src/*": [
+        "src/*"
+      ]
+    },
+    "forceConsistentCasingInFileNames": true,
+  },
+  "include": [
+    "./src",
+    "./src/assets/*",
+  ]
 }

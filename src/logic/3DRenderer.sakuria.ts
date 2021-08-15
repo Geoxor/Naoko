@@ -62,7 +62,6 @@ export class SceneProcessor {
    */
   public async render() {
     const frameCount = 5 * this.fps;
-    // @ts-ignore
 
     for (let i = 0; i < frameCount; i++) {
       await this.update();
