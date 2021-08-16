@@ -182,6 +182,8 @@ export function uwufy(sentence: string): string {
   const uwuified = normal
     .replace(/(?:r|l)/g, "w")
     .replace(/(?:R|L)/g, "W")
+    .replace(/u/g, "oo")
+    .replace(/U/g, "OO")
     .replace(/n([aeiou])/g, "ny$1")
     .replace(/N([AEIOU])/g, "NY$1")
     .replace(/ove/g, "uv")
