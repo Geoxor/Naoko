@@ -24,6 +24,7 @@ Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage =
 const trolleyCart = fs.readFileSync("./src/assets/models/trolley.obj");
 const carObject = fs.readFileSync("./src/assets/models/car.obj");
 const amogusObject = fs.readFileSync("./src/assets/models/amogus.obj");
+const mikuObject = fs.readFileSync("./src/assets/models/miku.obj");
 
 export const imageProcessors: ImageProcessors = {
   stretch,
@@ -44,6 +45,7 @@ export const imageProcessors: ImageProcessors = {
   cart,
   car,
   amogus,
+  miku,
 };
 
 /**
@@ -256,6 +258,24 @@ export async function car(buffer: Buffer) {
     width: 368,
     height: 168,
     geometry: loader.parse(carObject.toString()),
+    buffer,
+  });
+  return scene.render();
+}
+
+/**
+ * Creates spinning miku out of a texture
+ * @param buffer the immage buffer to use as a texture
+ * @author N1kO23 & Geoxor
+ */
+export async function miku(buffer: Buffer) {
+  const loader: _types.OBJLoader = new OBJLoader();
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.0, y: 0.05 },
+    camera: { y: 10, z: 16 },
+    width: 256,
+    height: 256,
+    geometry: loader.parse(mikuObject.toString()),
     buffer,
   });
   return scene.render();

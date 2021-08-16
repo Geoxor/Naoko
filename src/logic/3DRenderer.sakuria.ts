@@ -8,6 +8,7 @@ import { GifUtil, GifFrame } from "gifwrap";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
 import { GeometrySceneOptions } from "src/types";
+import chalk from "chalk";
 
 type Coords = {
   x?: number;
@@ -69,18 +70,22 @@ export class SceneProcessor {
 
     for (let i = 0; i < frameCount; i++) {
       await this.update();
-      let renderTimeStart = Date.now();
+      let renderTimeStart = process.hrtime()[1];
       this.renderer.render(this.scene, this.camera);
-      let renderTimeEnd = Date.now();
-      const renderTime = renderTimeEnd - renderTimeStart;
+      let renderTimeEnd = process.hrtime()[1];
+      const renderTime = (renderTimeEnd - renderTimeStart) / 1000000;
 
-      let encoderTimeStart = Date.now();
+      let encoderTimeStart = process.hrtime()[1];
       // @ts-ignore
       this.encoder.addFrame(this.canvas.__ctx__);
-      let encoderTimeEnd = Date.now();
-      const encoderTime = encoderTimeEnd - encoderTimeStart;
+      let encoderTimeEnd = process.hrtime()[1];
+      const encoderTime = (encoderTimeEnd - encoderTimeStart) / 1000000;
 
-      logger.command.print(`Rendered frame ${i + 1} - Render: ${renderTime}ms - Encoder: ${encoderTime}ms`);
+      logger.command.print(
+        `Rendered frame ${i + 1} - Render: ${chalk.blue(renderTime)}ms ${chalk.green(
+          (1000 / renderTime).toFixed(2)
+        )}FPS - Encoder: ${chalk.blue(encoderTime)}ms ${chalk.green((1000 / encoderTime).toFixed(2))}FPS`
+      );
     }
     this.encoder.finish();
     const result = this.encoder.out.getData();
