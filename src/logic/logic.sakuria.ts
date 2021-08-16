@@ -228,10 +228,10 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
   if (isValidHttpUrl(arg)) {
     return arg;
   }
-  
+
   if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:"))
     return getMostRelevantImageURL(message); // this is a hack...
-  
+
   const user = await message.client.users.fetch(arg);
   return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL;
 }

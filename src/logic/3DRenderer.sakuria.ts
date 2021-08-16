@@ -84,6 +84,10 @@ export class SceneProcessor {
   }
 }
 
+/**
+ * Creates a texture that can also be animated
+ * @author Bluskript & Geoxor
+ */
 export class MediaMaterial {
   public texture: THREE.Texture | undefined;
   public material: THREE.MeshStandardMaterial | undefined;
@@ -168,23 +172,30 @@ export class MediaMaterial {
 }
 
 export class GeometryScene extends SceneProcessor {
-  public sceneObject: THREE.Mesh | undefined;
+  public sceneObject: THREE.Mesh | THREE.Object3D | undefined;
   public rotation: Coords;
-  public geometry: THREE.BufferGeometry;
+  public geometry: THREE.BufferGeometry | THREE.Group;
   public media: MediaMaterial | undefined;
 
-  constructor(geometry: THREE.BufferGeometry, rotation: Coords, width?: number, height?: number, fps?: number) {
+  constructor(
+    geometry: THREE.BufferGeometry | THREE.Group,
+    rotation: Coords,
+    width?: number,
+    height?: number,
+    fps?: number
+  ) {
     super(width, height, fps);
     this.geometry = geometry;
     this.rotation = rotation;
   }
 
   public async update() {
-    if (!this.sceneObject) return;
+    if (!this.sceneObject) return console.log("returning");
     // This is some stupid shit because apparently 0 || 0.05 = 0.05
     this.sceneObject.rotation.x += this.rotation.x !== undefined ? this.rotation.x : 0.05;
     this.sceneObject.rotation.y += this.rotation.y !== undefined ? this.rotation.y : 0.05;
     this.sceneObject.rotation.z += this.rotation.z !== undefined ? this.rotation.z : 0.0;
+
     await this.media?.next();
   }
 
@@ -193,12 +204,29 @@ export class GeometryScene extends SceneProcessor {
    * @author Geoxor, Bluskript
    */
   public async prepare(textureBuffer: Buffer, cameraPosition?: Coords) {
+    // Create texture
     this.media = new MediaMaterial();
     await this.media.prepare(textureBuffer);
+
+    // Set camera positions
     this.camera.position.x = cameraPosition?.x || 0;
     this.camera.position.y = cameraPosition?.y || 0;
     this.camera.position.z = cameraPosition?.z || 1.5;
-    this.sceneObject = new THREE.Mesh(this.geometry, this.media.material);
-    this.scene.add(this.sceneObject);
+
+    // Generate the sceneObject
+    if (this.geometry instanceof THREE.BufferGeometry) {
+      this.sceneObject = new THREE.Mesh(this.geometry, this.media.material);
+      this.scene.add(this.sceneObject);
+    }
+    // If the sceneObject is a 3D object with children
+    else {
+      this.sceneObject = this.geometry;
+
+      // Apply the texture to each child
+      this.sceneObject.children.map((child) => ((child as THREE.Mesh).material = this.media?.material!));
+
+      // Add the entire group as the sceneObject
+      this.scene.add(this.sceneObject);
+    }
   }
 }

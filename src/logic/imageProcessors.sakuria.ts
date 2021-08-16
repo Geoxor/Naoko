@@ -1,4 +1,5 @@
 import Jimp from "jimp";
+import fs from "fs";
 import { ICommand, ImageProcessorFn, ImageProcessors, IMessage } from "../types";
 import { getBufferFromUrl, getImageURLFromMessage } from "./logic.sakuria";
 import Discord from "discord.js";
@@ -9,11 +10,18 @@ import { GeometryScene } from "./3DRenderer.sakuria";
 import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json";
 
+// @ts-ignore gotta use this garbage npm package cus built
+// in three shit doesn't work good job cunts
+// and import the actual shit for types cus FUCK YOU THREE.JS
+import { OBJLoader } from "three-obj-mtl-loader";
+import _types from "three/examples/jsm/loaders/OBJLoader";
+
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
 let wastedImage: Jimp;
 Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
 Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
+const trolleyCart = fs.readFileSync("./src/assets/models/trolley.obj");
 
 export const imageProcessors: ImageProcessors = {
   stretch,
@@ -31,6 +39,7 @@ export const imageProcessors: ImageProcessors = {
   cylinder,
   donut,
   text,
+  cart,
 };
 
 /**
@@ -302,5 +311,21 @@ export async function text(buffer: Buffer, text?: string) {
   const cameraPosition = { z: 16 + (text?.length || 0) * Math.PI };
   const scene = new GeometryScene(geometry, geometryRotation);
   await scene.prepare(buffer, cameraPosition);
-  return await scene.render();
+  return scene.render();
+}
+
+/**
+ * Creates spinning trolley out of a texture and a sentence
+ * @param buffer the immage buffer to use as a texture
+ * @param text the text to render on the scene
+ * @author N1kO23 & Geoxor
+ */
+export async function cart(buffer: Buffer) {
+  const loader: _types.OBJLoader = new OBJLoader();
+  const objectGroup = loader.parse(trolleyCart.toString());
+  const geometryRotation = { x: 0.05, y: 0.05 };
+  const cameraPosition = { z: 10 };
+  const scene = new GeometryScene(objectGroup, geometryRotation);
+  await scene.prepare(buffer, cameraPosition);
+  return scene.render();
 }
