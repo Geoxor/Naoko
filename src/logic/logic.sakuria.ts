@@ -225,15 +225,15 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
     return getMostRelevantImageURL(reference);
   }
 
-  if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:"))
-    return getMostRelevantImageURL(message); // this is a hack...
-
   if (isValidHttpUrl(arg)) {
     return arg;
-  } else {
-    const user = await message.client.users.fetch(arg);
-    return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL;
   }
+  
+  if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:"))
+    return getMostRelevantImageURL(message); // this is a hack...
+  
+  const user = await message.client.users.fetch(arg);
+  return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL;
 }
 
 /**
