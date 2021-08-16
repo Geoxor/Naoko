@@ -10,8 +10,14 @@ import chalk from "chalk";
 // the files to their global .vscode folder and have it work there
 // you also get a nice bonus that the icons will work on other
 // repos besides this one lol
-const iconPath = os.platform() === "linux" ? `/home/${os.userInfo().username}/.vscode/extensions/icons/` : `C:/Users/${os.userInfo().username}/.vscode/extensions/icons/`;
-const settingsPath = os.platform() === "linux" ? `/home/${os.userInfo().username}/.config/Code/User/settings.json` : `C:/Users/${os.userInfo().username}/.config/Code/User/settings.json`;
+const iconPath =
+  os.platform() === "linux"
+    ? `/home/${os.userInfo().username}/.vscode/extensions/icons/`
+    : `C:/Users/${os.userInfo().username}/.vscode/extensions/icons/`;
+const settingsPath =
+  os.platform() === "linux"
+    ? `/home/${os.userInfo().username}/.config/Code/User/settings.json`
+    : `C:/Users/${os.userInfo().username}/.config/Code/User/settings.json`;
 
 // Create icons folder in .vscode/extensions
 if (!fs.existsSync(iconPath)) {
@@ -45,9 +51,7 @@ vscodeSettings["material-icon-theme.files.associations"]["Sakuria.sakuria.ts"] =
 vscodeSettings["material-icon-theme.folders.associations"] = {};
 vscodeSettings["material-icon-theme.folders.associations"]["sakuria"] = "../../../../icons/sakuria-folder";
 
-fs.writeFileSync(settingsPath,
-  JSON.stringify(vscodeSettings, null, 2)
-);
+fs.writeFileSync(settingsPath, JSON.stringify(vscodeSettings, null, 2));
 console.log("Settings updated");
 
 // Inform them to reload their window

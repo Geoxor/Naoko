@@ -7,6 +7,7 @@ import logger from "../sakuria/Logger.sakuria";
 import fileType from "file-type";
 import { GeometryScene } from "./3DRenderer.sakuria";
 import * as THREE from "three";
+import comicSans from "../assets/comic_sans_font.json";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -29,6 +30,7 @@ export const imageProcessors: ImageProcessors = {
   sphere,
   cylinder,
   donut,
+  text,
 };
 
 /**
@@ -40,7 +42,7 @@ export function imageProcess(process: ImageProcessorFn) {
   return async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
     const imageURL = await getImageURLFromMessage(message);
     const targetBuffer = await getBufferFromUrl(imageURL);
-    const resultbuffer = await process(targetBuffer);
+    const resultbuffer = await process(targetBuffer, message.args.join(" "));
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
     return { files: [attachment] };
@@ -205,11 +207,11 @@ export async function grayscale(buffer: Buffer): Promise<Buffer> {
  * @param image the buffer to composite to the trolley
  * @author Geoxor, Bluskript
  */
-export async function trolley(buffer: Buffer, stretchAmount: number = 2): Promise<Buffer> {
+export async function trolley(buffer: Buffer): Promise<Buffer> {
   const trolley = trolleyImage.clone();
   const image = await Jimp.read(buffer);
   const size = 48;
-  image.resize(size * stretchAmount, size);
+  image.resize(size * 2, size);
   const composite = trolley.composite(image, 4, 24).getBufferAsync("image/png");
   return composite;
 }
@@ -245,10 +247,10 @@ export async function deepfry(buffer: Buffer): Promise<Buffer> {
  * @param amount the amount to stretch by vertically
  * @author Geoxor
  */
-export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promise<Buffer> {
+export async function stretch(buffer: Buffer): Promise<Buffer> {
   const image = await Jimp.read(buffer);
   const { width, height } = image.bitmap;
-  image.resize(width, height * stretchAmount);
+  image.resize(width, height * 3);
   return await image.getBufferAsync("image/png");
 }
 
@@ -258,10 +260,10 @@ export async function stretch(buffer: Buffer, stretchAmount: number = 3): Promis
  * @param amount the amount to stretch by vertically
  * @author Geoxor
  */
-export async function squish(buffer: Buffer, squishAmount: number = 3): Promise<Buffer> {
+export async function squish(buffer: Buffer): Promise<Buffer> {
   const image = await Jimp.read(buffer);
   const { width, height } = image.bitmap;
-  image.resize(width * squishAmount, height);
+  image.resize(width * 3, height);
   return await image.getBufferAsync("image/png");
 }
 
@@ -271,10 +273,34 @@ export async function squish(buffer: Buffer, squishAmount: number = 3): Promise<
  * @param radius the radius to fisheye by
  * @author Geoxor
  */
-export async function fisheye(buffer: Buffer, radius: number = 2): Promise<Buffer> {
+export async function fisheye(buffer: Buffer): Promise<Buffer> {
   const image = await Jimp.read(buffer);
   // The type declerations say this is supposed to be "fishEye" instead of "fisheye"
   // @ts-ignore
-  image.fisheye({ r: radius });
+  image.fisheye({ r: 2 });
   return await image.getBufferAsync("image/png");
+}
+
+/**
+ * Creates spinning 3d text out of a texture and a sentence
+ * @param buffer the immage buffer to use as a texture
+ * @param text the text to render on the scene
+ * @author N1kO23 & Geoxor
+ */
+export async function text(buffer: Buffer, text?: string) {
+  const loader = new THREE.FontLoader();
+  const font = loader.parse(comicSans);
+  const geometry = new THREE.TextGeometry(text || "your mom", {
+    font: font,
+    size: 12,
+    height: 4,
+    curveSegments: 12,
+    bevelEnabled: false,
+  });
+  geometry.center();
+  const geometryRotation = { x: 0 };
+  const cameraPosition = { z: 16 + (text?.length || 0) * Math.PI };
+  const scene = new GeometryScene(geometry, geometryRotation);
+  await scene.prepare(buffer, cameraPosition);
+  return await scene.render();
 }

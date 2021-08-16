@@ -173,8 +173,8 @@ export class GeometryScene extends SceneProcessor {
   public geometry: THREE.BufferGeometry;
   public media: MediaMaterial | undefined;
 
-  constructor(geometry: THREE.BufferGeometry, rotation: Coords) {
-    super();
+  constructor(geometry: THREE.BufferGeometry, rotation: Coords, width?: number, height?: number, fps?: number) {
+    super(width, height, fps);
     this.geometry = geometry;
     this.rotation = rotation;
   }
