@@ -7,6 +7,7 @@ import logger from "../sakuria/Logger.sakuria";
 import { GifUtil, GifFrame } from "gifwrap";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
+import { GeometrySceneOptions } from "src/types";
 
 type Coords = {
   x?: number;
@@ -14,6 +15,9 @@ type Coords = {
   z?: number;
 };
 
+/**
+ *
+ */
 export class SceneProcessor {
   public width: number;
   public height: number;
@@ -26,7 +30,7 @@ export class SceneProcessor {
   public light: THREE.AmbientLight;
   public sun: THREE.DirectionalLight;
 
-  constructor(width: number = 256, height: number = 256, fps: number = 25) {
+  protected constructor(width: number = 256, height: number = 256, fps: number = 25) {
     this.width = width;
     this.height = height;
     this.fps = fps;
@@ -52,7 +56,7 @@ export class SceneProcessor {
    * Updates the scene to the new positions
    * @author Geoxor, Bluskript
    */
-  public async update() {
+  protected async update() {
     throw new Error("update must be implemented");
   }
 
@@ -133,22 +137,22 @@ export class MediaMaterial {
 
   /**
    * Basically it's an async constructor to create a material and shit
-   * @param textureBuffer the buffer image to use as a texture
+   * @param buffer the buffer image to use as a texture
    * @author Bluskript, Geoxor, N1kO23
    */
-  public async prepare(textureBuffer: Buffer) {
+  public async prepare(buffer: Buffer) {
     this.material = new THREE.MeshStandardMaterial({
       roughness: 0,
       transparent: true,
       side: THREE.DoubleSide,
-      map: await this.createTextureFromBuffer(textureBuffer),
+      map: await this.createTextureFromBuffer(buffer),
     });
 
-    const type = await fileType(textureBuffer);
+    const type = await fileType(buffer);
     this.animated = type.mime === "image/gif";
 
     if (this.animated) {
-      this.frames = (await GifUtil.read(textureBuffer)).frames;
+      this.frames = (await GifUtil.read(buffer)).frames;
       return this.next();
     }
 
@@ -177,7 +181,7 @@ export class GeometryScene extends SceneProcessor {
   public geometry: THREE.BufferGeometry | THREE.Group;
   public media: MediaMaterial | undefined;
 
-  constructor(
+  private constructor(
     geometry: THREE.BufferGeometry | THREE.Group,
     rotation: Coords,
     width?: number,
@@ -189,29 +193,42 @@ export class GeometryScene extends SceneProcessor {
     this.rotation = rotation;
   }
 
-  public async update() {
+  /**
+   * Updates the scene for the next tick
+   */
+  protected async update() {
     if (!this.sceneObject) return console.log("returning");
-    // This is some stupid shit because apparently 0 || 0.05 = 0.05
-    this.sceneObject.rotation.x += this.rotation.x !== undefined ? this.rotation.x : 0.05;
-    this.sceneObject.rotation.y += this.rotation.y !== undefined ? this.rotation.y : 0.05;
-    this.sceneObject.rotation.z += this.rotation.z !== undefined ? this.rotation.z : 0.0;
-
+    this.sceneObject.rotation.x += this.rotation.x ?? 0.05;
+    this.sceneObject.rotation.y += this.rotation.y ?? 0.05;
+    this.sceneObject.rotation.z += this.rotation.z ?? 0.0;
     await this.media?.next();
   }
 
   /**
+   * Assures that the class gets instantiated properly
+   */
+  public static async create(options: GeometrySceneOptions) {
+    const { geometry, rotation, width, height, fps, buffer, camera } = options;
+    let geometryScene = new GeometryScene(geometry, rotation, width, height, fps);
+    await geometryScene.prepare(buffer, camera);
+    return geometryScene;
+  }
+
+  /**
    * Prepares the scene asyncronously
+   * @param {Coords} [camera] The camera XYZ position
+   * @param {Buffer} buffer The texture buffer to use
    * @author Geoxor, Bluskript
    */
-  public async prepare(textureBuffer: Buffer, cameraPosition?: Coords) {
+  private async prepare(buffer: Buffer, camera?: Coords) {
     // Create texture
     this.media = new MediaMaterial();
-    await this.media.prepare(textureBuffer);
+    await this.media.prepare(buffer);
 
     // Set camera positions
-    this.camera.position.x = cameraPosition?.x || 0;
-    this.camera.position.y = cameraPosition?.y || 0;
-    this.camera.position.z = cameraPosition?.z || 1.5;
+    this.camera.position.x = camera?.x || 0;
+    this.camera.position.y = camera?.y || 0;
+    this.camera.position.z = camera?.z || 1.5;
 
     // Generate the sceneObject
     if (this.geometry instanceof THREE.BufferGeometry) {

@@ -22,6 +22,8 @@ let wastedImage: Jimp;
 Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
 Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
 const trolleyCart = fs.readFileSync("./src/assets/models/trolley.obj");
+const carObject = fs.readFileSync("./src/assets/models/car.obj");
+const amogusObject = fs.readFileSync("./src/assets/models/amogus.obj");
 
 export const imageProcessors: ImageProcessors = {
   stretch,
@@ -40,6 +42,8 @@ export const imageProcessors: ImageProcessors = {
   donut,
   text,
   cart,
+  car,
+  amogus,
 };
 
 /**
@@ -112,11 +116,12 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
  * @author Bluskript & Geoxor
  */
 export async function prism(buffer: Buffer) {
-  const geometry = new THREE.ConeGeometry(4, 4.5, 4);
-  const cameraPosition = { y: -1, z: 7 };
-  const geometryRotation = { x: 0 };
-  const scene = new GeometryScene(geometry, geometryRotation);
-  await scene.prepare(buffer, cameraPosition);
+  const scene = await GeometryScene.create({
+    rotation: { x: 0 },
+    camera: { y: -1, z: 7 },
+    geometry: new THREE.ConeGeometry(4, 4.5, 4),
+    buffer,
+  });
   return scene.render();
 }
 
@@ -126,11 +131,12 @@ export async function prism(buffer: Buffer) {
  * @author Bluskript & Geoxor
  */
 export async function wtf(buffer: Buffer) {
-  const geometry = new THREE.TorusKnotGeometry(1);
-  const cameraPosition = { z: 3 };
-  const geometryRotation = { x: Math.random() / 3 };
-  const scene = new GeometryScene(geometry, geometryRotation);
-  await scene.prepare(buffer, cameraPosition);
+  const scene = await GeometryScene.create({
+    rotation: { x: Math.random() / 3 },
+    camera: { z: 3 },
+    geometry: new THREE.TorusKnotGeometry(1),
+    buffer,
+  });
   return scene.render();
 }
 
@@ -140,11 +146,12 @@ export async function wtf(buffer: Buffer) {
  * @author Bluskript & Geoxor
  */
 export async function cube(buffer: Buffer) {
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const geometryRotation = { x: 0.05, y: 0.0125 };
-  const cameraPosition = { z: 1.3 };
-  const scene = new GeometryScene(geometry, geometryRotation);
-  await scene.prepare(buffer, cameraPosition);
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.05, y: 0.0125 },
+    camera: { z: 1.3 },
+    geometry: new THREE.BoxGeometry(1, 1, 1),
+    buffer,
+  });
   return scene.render();
 }
 
@@ -154,10 +161,12 @@ export async function cube(buffer: Buffer) {
  * @author Bluskript & Geoxor
  */
 export async function donut(buffer: Buffer) {
-  const geometry = new THREE.TorusGeometry(1, 0.5, 16, 100);
-  const scene = new GeometryScene(geometry, {});
-  const cameraPosition = { z: 2.5 };
-  await scene.prepare(buffer, cameraPosition);
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.05, y: 0.0125 },
+    camera: { z: 2.5 },
+    geometry: new THREE.TorusGeometry(1, 0.5, 16, 100),
+    buffer,
+  });
   return scene.render();
 }
 
@@ -167,11 +176,12 @@ export async function donut(buffer: Buffer) {
  * @author azur1s, Geoxor
  */
 export async function sphere(buffer: Buffer) {
-  const geometry = new THREE.SphereGeometry(0.75, 32, 16);
-  const geometryRotation = { x: 0 };
-  const cameraPosition = { z: 1.25 };
-  const scene = new GeometryScene(geometry, geometryRotation);
-  await scene.prepare(buffer, cameraPosition);
+  const scene = await GeometryScene.create({
+    rotation: { x: 0 },
+    camera: { z: 1.25 },
+    geometry: new THREE.SphereGeometry(0.75, 32, 16),
+    buffer,
+  });
   return scene.render();
 }
 
@@ -181,11 +191,89 @@ export async function sphere(buffer: Buffer) {
  * @author azur1s, Geoxor
  */
 export async function cylinder(buffer: Buffer) {
-  const geometry = new THREE.CylinderGeometry(1, 1, 1, 32);
-  const cameraPosition = { z: 2 };
-  const geometryRotation = { x: 0.01, y: 0.07 };
-  const scene = new GeometryScene(geometry, geometryRotation);
-  await scene.prepare(buffer, cameraPosition);
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.01, y: 0.07 },
+    camera: { z: 2 },
+    geometry: new THREE.CylinderGeometry(1, 1, 1, 32),
+    buffer,
+  });
+  return scene.render();
+}
+
+/**
+ * Creates spinning 3d text out of a texture and a sentence
+ * @param buffer the immage buffer to use as a texture
+ * @param text the text to render on the scene
+ * @author N1kO23 & Geoxor
+ */
+export async function text(buffer: Buffer, text?: string) {
+  const loader = new THREE.FontLoader();
+  const font = loader.parse(comicSans);
+  const geometry = new THREE.TextGeometry(text || "your mom", {
+    font: font,
+    size: 12,
+    height: 4,
+    curveSegments: 12,
+    bevelEnabled: false,
+  });
+  geometry.center();
+  const scene = await GeometryScene.create({
+    rotation: { x: 0 },
+    camera: { z: 16 + (text?.length || 0) * Math.PI },
+    geometry,
+    buffer,
+  });
+  return scene.render();
+}
+
+/**
+ * Creates spinning trolley out of a texture and a sentence
+ * @param buffer the immage buffer to use as a texture
+ * @param text the text to render on the scene
+ * @author N1kO23 & Geoxor
+ */
+export async function cart(buffer: Buffer) {
+  const loader: _types.OBJLoader = new OBJLoader();
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.05, y: 0.05 },
+    camera: { z: 10 },
+    geometry: loader.parse(trolleyCart.toString()),
+    buffer,
+  });
+  return scene.render();
+}
+
+/**
+ * Creates spinning car out of a texture
+ * @param buffer the immage buffer to use as a texture
+ * @author N1kO23 & Geoxor
+ */
+export async function car(buffer: Buffer) {
+  const loader: _types.OBJLoader = new OBJLoader();
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.0, y: 0.05 },
+    camera: { z: 6 },
+    width: 368,
+    height: 168,
+    geometry: loader.parse(carObject.toString()),
+    buffer,
+  });
+  return scene.render();
+}
+
+/**
+ * Creates spinning amogus out of a texture
+ * @param buffer the immage buffer to use as a texture
+ * @author N1kO23 & Geoxor
+ */
+export async function amogus(buffer: Buffer) {
+  const loader: _types.OBJLoader = new OBJLoader();
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.025, y: 0.05 },
+    camera: { z: 4 },
+    geometry: loader.parse(amogusObject.toString()),
+    buffer,
+  });
   return scene.render();
 }
 
@@ -288,44 +376,4 @@ export async function fisheye(buffer: Buffer): Promise<Buffer> {
   // @ts-ignore
   image.fisheye({ r: 2 });
   return await image.getBufferAsync("image/png");
-}
-
-/**
- * Creates spinning 3d text out of a texture and a sentence
- * @param buffer the immage buffer to use as a texture
- * @param text the text to render on the scene
- * @author N1kO23 & Geoxor
- */
-export async function text(buffer: Buffer, text?: string) {
-  const loader = new THREE.FontLoader();
-  const font = loader.parse(comicSans);
-  const geometry = new THREE.TextGeometry(text || "your mom", {
-    font: font,
-    size: 12,
-    height: 4,
-    curveSegments: 12,
-    bevelEnabled: false,
-  });
-  geometry.center();
-  const geometryRotation = { x: 0 };
-  const cameraPosition = { z: 16 + (text?.length || 0) * Math.PI };
-  const scene = new GeometryScene(geometry, geometryRotation);
-  await scene.prepare(buffer, cameraPosition);
-  return scene.render();
-}
-
-/**
- * Creates spinning trolley out of a texture and a sentence
- * @param buffer the immage buffer to use as a texture
- * @param text the text to render on the scene
- * @author N1kO23 & Geoxor
- */
-export async function cart(buffer: Buffer) {
-  const loader: _types.OBJLoader = new OBJLoader();
-  const objectGroup = loader.parse(trolleyCart.toString());
-  const geometryRotation = { x: 0.05, y: 0.05 };
-  const cameraPosition = { z: 10 };
-  const scene = new GeometryScene(objectGroup, geometryRotation);
-  await scene.prepare(buffer, cameraPosition);
-  return scene.render();
 }

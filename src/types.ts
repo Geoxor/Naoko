@@ -77,3 +77,13 @@ export interface IBattle extends IRewards {
 export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
 export type IWaifuRarityColor = "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | "#F07178";
 export type IWaifuRarityEmoji = "👺" | "🐉" | "🔮" | "🌟" | "⚜️";
+
+export interface GeometrySceneOptions {
+  buffer: Buffer;
+  geometry: THREE.BufferGeometry | THREE.Group;
+  rotation: Coords;
+  camera?: Coords;
+  width?: number;
+  height?: number;
+  fps?: number;
+}
