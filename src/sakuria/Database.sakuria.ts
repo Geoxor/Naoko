@@ -1,4 +1,4 @@
-import { Inventory, PrismaClient, Statistics, User } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { IBattle } from "../types";
 import logger from "./Logger.sakuria";
 

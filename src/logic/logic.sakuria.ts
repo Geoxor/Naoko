@@ -4,7 +4,6 @@ import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime, IMessage } from "../types";
-import Jimp from "jimp";
 import Discord from "discord.js";
 
 const defaultImageOptions: Discord.ImageURLOptions = {
