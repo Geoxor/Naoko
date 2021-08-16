@@ -12,7 +12,7 @@ import chalk from "chalk";
 // repos besides this one lol
 
 // TODO: update this to work for linux as well
-const iconPath = `C:/Users/${os.userInfo().username}/.vscode/extensions/icons/`;
+const iconPath = `/home/${os.userInfo().username}/.vscode/extensions/icons/`;
 
 // Create icons folder in .vscode/extensions
 if (!fs.existsSync(iconPath)) {
@@ -29,25 +29,25 @@ console.log("Icons installed");
 
 // Update the user's VS Code settings to use the new icons for the sakuria files
 try {
-  var vscodeSettings = require(`C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`);
+  var vscodeSettings = require(`/home/${os.userInfo().username}/.config/Code/User/settings.json`);
 } catch (error) {
   console.log("VS Code settings.json not found, creating a new one");
   // @ts-ignore
   var vscodeSettings = {};
 }
 vscodeSettings["material-icon-theme.files.associations"] = {};
-vscodeSettings["material-icon-theme.files.associations"]["sakuria.json"] = "../../icons/sakuriaJson";
+vscodeSettings["material-icon-theme.files.associations"]["sakuria.json"] = "../../icons/sakuria-json";
 vscodeSettings["material-icon-theme.files.associations"]["sakuria.ts"] = "../../icons/sakuria";
 vscodeSettings["material-icon-theme.files.associations"]["*.sakuria"] = "../../icons/sakuria";
 vscodeSettings["material-icon-theme.files.associations"]["*.sakuria.ts"] = "../../icons/sakuria";
-vscodeSettings["material-icon-theme.files.associations"]["Logger.sakuria.ts"] = "../../icons/sakuriaLogger";
-vscodeSettings["material-icon-theme.files.associations"]["Sakuria.sakuria.ts"] = "../../icons/sakuriaMain";
+vscodeSettings["material-icon-theme.files.associations"]["Logger.sakuria.ts"] = "../../icons/sakuria-logger";
+vscodeSettings["material-icon-theme.files.associations"]["Sakuria.sakuria.ts"] = "../../icons/sakuria-main";
 
 vscodeSettings["material-icon-theme.folders.associations"] = {};
-vscodeSettings["material-icon-theme.folders.associations"]["sakuria"] = "../../../../icons/sakuriaFolder";
+vscodeSettings["material-icon-theme.folders.associations"]["sakuria"] = "../../../../icons/sakuria-folder";
 
 fs.writeFileSync(
-  `C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`,
+  `/home/${os.userInfo().username}/.config/Code/User/settings.json`,
   JSON.stringify(vscodeSettings, null, 2)
 );
 console.log("Settings updated");

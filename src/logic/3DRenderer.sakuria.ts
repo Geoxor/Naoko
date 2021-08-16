@@ -137,7 +137,7 @@ export class MediaMaterial {
       roughness: 0,
       transparent: true,
       side: THREE.DoubleSide,
-      map: await this.createTextureFromBuffer(textureBuffer)
+      map: await this.createTextureFromBuffer(textureBuffer),
     });
 
     const type = await fileType(textureBuffer);

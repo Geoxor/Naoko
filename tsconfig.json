@@ -9,19 +9,12 @@
     "outDir": "dist",
     "declaration": true,
     "module": "commonjs",
-    "rootDirs": [
-      "./src"
-    ],
+    "rootDirs": ["./src"],
     "baseUrl": "./",
     "paths": {
-      "src/*": [
-        "src/*"
-      ]
+      "src/*": ["src/*"]
     },
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "./src",
-    "./src/assets/*"
-  ]
+  "include": ["./src", "./src/assets/*"]
 }
