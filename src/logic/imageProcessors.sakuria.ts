@@ -86,16 +86,12 @@ export async function getRGBAUintArray(image: Jimp) {
 export async function encodeFramesToGif(frames: ImageData[], delay: number) {
   const gif = GIFEncoder();
   const palette = quantize(frames[0].data, 256);
-
-  for (let frame of frames) {
-    const encoderTimeStart = process.hrtime()[1];
+  const bar = logger.sakuria.progress("Encoding", frames.length);
+  for (let i = 0; i < frames.length; i++) {
+    const frame = frames[i];
     const idx = applyPalette(frame.data, palette);
     gif.writeFrame(idx, frame.width, frame.height, { transparent: true, delay, palette });
-    const encoderTimeEnd = process.hrtime()[1];
-    const encoderTime = (encoderTimeEnd - encoderTimeStart) / 1000000;
-    logger.command.print(
-      `Encoder: ${chalk.blue(encoderTime.toFixed(2))}ms ${chalk.green((1000 / encoderTime).toFixed(2))}FPS`
-    );
+    logger.sakuria.setProgressValue(bar, i / frames.length);
   }
 
   gif.finish();
@@ -149,19 +145,16 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
  */
 export async function transform(pipeline: string[], buffer: Buffer) {
   let fuckedBuffer = buffer;
-  for (let method of pipeline) {
-    if (Object.keys(imageProcessors).includes(method)) {
-      let timeStart = Date.now();
-      fuckedBuffer = await imageProcessors[method](fuckedBuffer);
-      let timeEnd = Date.now();
-      const time = timeEnd - timeStart;
-      logger.command.print(
-        `${time}ms - Processed pipeline ${method} - Buffer: ${(fuckedBuffer.byteLength / 1000).toFixed(2)} KB`
-      );
+  const functions = pipeline.map((name) => imageProcessors[name]).filter((processor) => !!processor);
+  const bar = logger.sakuria.progress("Pipelines", functions.length);
+  const start = Date.now();
+  for (let i = 0; i < functions.length; i++) {
+    const method = functions[i];
+    fuckedBuffer = await method(fuckedBuffer);
+    logger.sakuria.setProgressValue(bar, i / (functions.length - 1));
 
-      // This is to avoid exp thread blocking
-      if (time > 10000) return fuckedBuffer;
-    }
+    // This is to avoid exp thread blocking
+    if (Date.now() - start > 10000) return fuckedBuffer;
   }
   return fuckedBuffer;
 }
