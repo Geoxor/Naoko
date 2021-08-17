@@ -10,8 +10,8 @@ import { GeometryScene } from "./3DRenderer.sakuria";
 import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json";
 
-// @ts-ignore gotta use this garbage npm package cus built
-// in three shit doesn't work good job cunts
+// @ts-ignore gotta use this garbage npm package cus built-in
+// three.js shit doesn't work (good job cunts)
 // and import the actual shit for types cus FUCK YOU THREE.JS
 import { OBJLoader } from "three-obj-mtl-loader";
 import _types from "three/examples/jsm/loaders/OBJLoader";
@@ -93,7 +93,7 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
  * @returns {Buffer} the modified buffer
  * @author Geoxor
  */
-export async function transform(pipeline: string[], buffer: Buffer): Promise<Buffer> {
+export async function transform(pipeline: string[], buffer: Buffer) {
   let fuckedBuffer = buffer;
   for (let method of pipeline) {
     if (Object.keys(imageProcessors).includes(method)) {
@@ -273,8 +273,6 @@ export async function miku(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.0, y: 0.05 },
     camera: { y: 10, z: 16 },
-    width: 256,
-    height: 256,
     geometry: loader.parse(mikuObject.toString()),
     texture,
   });
@@ -299,32 +297,30 @@ export async function amogus(texture: Buffer) {
 
 /**
  * Inverts the colors of an image
- * @param image the image buffer you wanna invert
- * @returns a buffer of the inverted image
+ * @param texture the texture to process
  * @author Geoxor
  */
-export async function invert(texture: Buffer): Promise<Buffer> {
+export async function invert(texture: Buffer) {
   const image = await Jimp.read(texture);
   return image.invert().getBufferAsync("image/jpeg");
 }
 
 /**
- * LRemoves color from an image buffer
- * @param image the image buffer you wanna grayscale
- * @returns a buffer of the grayscaled image
+ * Removes color from an image buffer
+ * @param texture the texture to process
  * @author Geoxor
  */
-export async function grayscale(texture: Buffer): Promise<Buffer> {
+export async function grayscale(texture: Buffer) {
   const image = await Jimp.read(texture);
   return image.grayscale().getBufferAsync("image/png");
 }
 
 /**
  * Creates a trolley image with a given image buffer
- * @param texture the texture to apply
+ * @param texture the texture to process
  * @author Geoxor, Bluskript
  */
-export async function trolley(texture: Buffer): Promise<Buffer> {
+export async function trolley(texture: Buffer) {
   const trolley = trolleyImage.clone();
   const image = await Jimp.read(texture);
   const size = 48;
@@ -335,10 +331,10 @@ export async function trolley(texture: Buffer): Promise<Buffer> {
 
 /**
  * Creates a wasted image with a given image buffer
- * @param texture the texture to apply
+ * @param texture the texture to process
  * @author Geoxor
  */
-export async function wasted(texture: Buffer): Promise<Buffer> {
+export async function wasted(texture: Buffer) {
   let wasted = wastedImage.clone();
   let image = await Jimp.read(texture);
   // Stretch the wasted template to match the image
@@ -350,20 +346,20 @@ export async function wasted(texture: Buffer): Promise<Buffer> {
 
 /**
  * Deepfry an image
- * @param texture the texture to apply
+ * @param texture the texture to process
  * @author azur1s
  */
-export async function deepfry(texture: Buffer): Promise<Buffer> {
+export async function deepfry(texture: Buffer) {
   const image = await Jimp.read(texture);
   return image.contrast(1).quality(0).getBufferAsync("image/png");
 }
 
 /**
  * Stretches an image
- * @param texture the texture to apply
+ * @param texture the texture to process
  * @author Geoxor
  */
-export async function stretch(texture: Buffer): Promise<Buffer> {
+export async function stretch(texture: Buffer) {
   const image = await Jimp.read(texture);
   const { width, height } = image.bitmap;
   image.resize(width, height * 3);
@@ -372,10 +368,10 @@ export async function stretch(texture: Buffer): Promise<Buffer> {
 
 /**
  * Squishes an image
- * @param texture the texture to apply
+ * @param texture the texture to process
  * @author Geoxor
  */
-export async function squish(texture: Buffer): Promise<Buffer> {
+export async function squish(texture: Buffer) {
   const image = await Jimp.read(texture);
   const { width, height } = image.bitmap;
   image.resize(width * 3, height);
@@ -384,10 +380,10 @@ export async function squish(texture: Buffer): Promise<Buffer> {
 
 /**
  * Fisheye an image
- * @param texture the texture to apply
+ * @param texture the texture to process
  * @author Geoxor
  */
-export async function fisheye(texture: Buffer): Promise<Buffer> {
+export async function fisheye(texture: Buffer) {
   const image = await Jimp.read(texture);
   // The type declerations say this is supposed to be "fishEye" instead of "fisheye"
   // @ts-ignore
