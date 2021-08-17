@@ -9,6 +9,9 @@ import fileType from "file-type";
 import { GeometryScene } from "./3DRenderer.sakuria";
 import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json";
+// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
+import { GIFEncoder, quantize, applyPalette } from "gifenc";
+import chalk from "chalk";
 
 // @ts-ignore gotta use this garbage npm package cus built-in
 // three.js shit doesn't work (good job cunts)
@@ -46,6 +49,55 @@ export const imageProcessors: ImageProcessors = {
   car,
   amogus,
   miku,
+};
+
+/**
+ * Gets the RGBA values of an image
+ * @param buffer the buffer to get the values from
+ * @author Geoxor & Bluskript
+ * @returns a tuple array containing RGBA pairs
+ */
+export async function getRGBAUintArray(image: Jimp){
+  const texels = 4; /** Red Green Blue and Alpha */
+  const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
+  for (let y = 0; y < image.bitmap.height; y++) {
+    for (let x = 0; x < image.bitmap.width; x++) {
+      let color = image.getPixelColor(x, y);
+      let r = (color >> 24) & 255;
+      let g = (color >> 16) & 255;
+      let b = (color >> 8) & 255;
+      let a = (color >> 0) & 255;
+      const stride = texels * (x + y * image.bitmap.width);
+      data[stride] = r;
+      data[stride + 1] = g;
+      data[stride + 2] = b;
+      data[stride + 3] = a;
+    }
+  }
+  return data;
+}
+
+/**
+ * Encodes a GIF out of an array of png buffers
+ * @param frames an array of buffers to make a gif from
+ * @author Geoxor & Bluskript
+ * @returns {Promise<Buffer>} the gif as a buffer
+ */
+ export async function encodeFramesToGif(frames: Buffer[], delay: number){
+  const gif = GIFEncoder();
+
+  for (let frame of frames) {
+    const image = await Jimp.read(frame);
+    const imageData = await getRGBAUintArray(image);
+    const palette = quantize(imageData, 256);
+    const index = applyPalette(imageData, palette);
+    gif.writeFrame(index, image.bitmap.width, image.bitmap.height, { transparent: true, delay, palette });
+  }
+
+  gif.finish();
+  const result = Buffer.from(gif.bytes());
+  console.log(result);
+  return result;
 };
 
 /**

@@ -1,8 +1,6 @@
 import * as THREE from "three";
-import GIFEncoder from "gifencoder";
-
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
-import { createCanvas } from "node-canvas-webgl";
+import { NodeCanvasElement, createCanvas } from "node-canvas-webgl";
 import Jimp from "jimp";
 import logger from "../sakuria/Logger.sakuria";
 import { GifUtil, GifFrame } from "gifwrap";
@@ -10,6 +8,7 @@ import { GifUtil, GifFrame } from "gifwrap";
 import fileType from "file-type";
 import { Coords, GeometrySceneOptions } from "src/types";
 import chalk from "chalk";
+import {getRGBAUintArray, encodeFramesToGif} from "./imageProcessors.sakuria";
 
 /**
  *
@@ -21,8 +20,7 @@ export class SceneProcessor {
   public camera: THREE.Camera;
   public scene: THREE.Scene;
   public renderer: THREE.WebGLRenderer;
-  public encoder: GIFEncoder;
-  public canvas: HTMLCanvasElement;
+  public canvas: NodeCanvasElement;
   public light: THREE.AmbientLight;
   public sun: THREE.DirectionalLight;
 
@@ -31,14 +29,6 @@ export class SceneProcessor {
     this.height = height;
     this.fps = fps;
     this.canvas = createCanvas(this.width, this.height);
-
-    this.encoder = new GIFEncoder(this.width, this.height);
-    this.encoder.start();
-    this.encoder.setRepeat(0);
-    this.encoder.setDelay(~~(1000 / fps));
-    this.encoder.setQuality(10);
-    this.encoder.setTransparent(0x00000000);
-
     this.scene = new THREE.Scene();
     this.light = new THREE.AmbientLight(0xaaaaaa);
     this.sun = new THREE.DirectionalLight(0xffffff);
@@ -62,31 +52,15 @@ export class SceneProcessor {
    */
   public async render() {
     const frameCount = 5 * this.fps;
+    const renderedFrames = [];
 
     for (let i = 0; i < frameCount; i++) {
       await this.update();
-      let renderTimeStart = process.hrtime()[1];
       this.renderer.render(this.scene, this.camera);
-      let renderTimeEnd = process.hrtime()[1];
-      const renderTime = (renderTimeEnd - renderTimeStart) / 1000000;
-
-      let encoderTimeStart = process.hrtime()[1];
-      // @ts-ignore
-      this.encoder.addFrame(this.canvas.__ctx__);
-      let encoderTimeEnd = process.hrtime()[1];
-      const encoderTime = (encoderTimeEnd - encoderTimeStart) / 1000000;
-
-      logger.command.print(
-        `Rendered frame ${i + 1} - Render: ${chalk.blue(renderTime.toFixed(2))}ms ${chalk.green(
-          (1000 / renderTime).toFixed(2)
-        )}FPS - Encoder: ${chalk.blue(encoderTime.toFixed(2))}ms ${chalk.green(
-          (1000 / encoderTime).toFixed(2)
-        )}FPS`
-      );
+      renderedFrames.push(this.canvas.toBuffer());
     }
-    this.encoder.finish();
-    const result = this.encoder.out.getData();
-    return result;
+
+    return await encodeFramesToGif(renderedFrames, ~~(1000 / this.fps));
   }
 }
 
@@ -107,26 +81,8 @@ export class MediaMaterial {
    * @author Geoxor, Bluskript
    */
   public async createTextureFromBuffer(texture: Buffer): Promise<THREE.DataTexture> {
-    const texels = 4; /** Red Green Blue and Alpha */
     const image = await Jimp.read(texture);
-    const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
-
-    for (let y = 0; y < image.bitmap.height; y++) {
-      for (let x = 0; x < image.bitmap.width; x++) {
-        let color = image.getPixelColor(x, y);
-        let r = (color >> 24) & 255;
-        let g = (color >> 16) & 255;
-        let b = (color >> 8) & 255;
-        let a = (color >> 0) & 255;
-        const stride = texels * (x + y * image.bitmap.width);
-        data[stride] = r;
-        data[stride + 1] = g;
-        data[stride + 2] = b;
-        data[stride + 3] = a;
-      }
-    }
-
-    const dataTexture = new THREE.DataTexture(data, image.bitmap.width, image.bitmap.height, THREE.RGBAFormat);
+    const dataTexture = new THREE.DataTexture(await getRGBAUintArray(image), image.bitmap.width, image.bitmap.height, THREE.RGBAFormat);
     dataTexture.wrapS = THREE.ClampToEdgeWrapping;
     dataTexture.wrapT = THREE.ClampToEdgeWrapping;
     dataTexture.flipY = true;
