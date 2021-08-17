@@ -86,13 +86,24 @@ export async function getRGBAUintArray(image: Jimp){
  export async function encodeFramesToGif(frames: Buffer[], delay: number){
   const gif = GIFEncoder();
 
+
+
   for (let frame of frames) {
+    const encoderTimeStart = process.hrtime()[1];
     const image = await Jimp.read(frame);
     const imageData = await getRGBAUintArray(image);
     const palette = quantize(imageData, 256);
     const index = applyPalette(imageData, palette);
     gif.writeFrame(index, image.bitmap.width, image.bitmap.height, { transparent: true, delay, palette });
+    const encoderTimeEnd = process.hrtime()[1];
+    const encoderTime = (encoderTimeEnd - encoderTimeStart) / 1000000;
+    logger.command.print(
+      `Encoder: ${chalk.blue(encoderTime.toFixed(2))}ms ${chalk.green((1000 / encoderTime).toFixed(2))}FPS`
+    );
+
   }
+
+
 
   gif.finish();
   const result = Buffer.from(gif.bytes());

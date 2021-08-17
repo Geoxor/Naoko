@@ -56,8 +56,19 @@ export class SceneProcessor {
 
     for (let i = 0; i < frameCount; i++) {
       await this.update();
+      let renderTimeStart = process.hrtime()[1];
       this.renderer.render(this.scene, this.camera);
+      let renderTimeEnd = process.hrtime()[1];
+      const renderTime = (renderTimeEnd - renderTimeStart) / 1000000;
+
+      let bufferTimeStart = process.hrtime()[1];
       renderedFrames.push(this.canvas.toBuffer());
+      let bufferTimeEnd = process.hrtime()[1];
+      const bufferTime = (bufferTimeEnd - bufferTimeStart) / 1000000;
+
+      logger.command.print(
+        `Rendered frame ${i + 1} - Render: ${chalk.blue(renderTime.toFixed(2))}ms ${chalk.green((1000 / renderTime).toFixed(2))}FPS - Buffer: ${chalk.blue(bufferTime.toFixed(2))}ms ${chalk.green((1000 / bufferTime).toFixed(2))}FPS`
+      );
     }
 
     return await encodeFramesToGif(renderedFrames, ~~(1000 / this.fps));
