@@ -23,6 +23,7 @@ export class SceneProcessor {
   public renderer: THREE.WebGLRenderer;
   public canvas: NodeCanvasElement;
   public light: THREE.AmbientLight;
+  public sun: THREE.DirectionalLight;
 
   protected constructor(width: number = 256, height: number = 256, fps: number = 25) {
     this.width = width;
@@ -30,8 +31,9 @@ export class SceneProcessor {
     this.fps = fps;
     this.canvas = createCanvas(this.width, this.height);
     this.scene = new THREE.Scene();
-    this.light = new THREE.AmbientLight(0xffffff);
-    this.scene.add(this.light);
+    this.light = new THREE.AmbientLight(0xaaaaaa);
+    this.sun = new THREE.DirectionalLight(0xffffff);
+    this.scene.add(this.light, this.sun);
     this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
     this.renderer.setSize(this.width, this.height);
