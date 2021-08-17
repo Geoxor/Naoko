@@ -52,7 +52,7 @@ export class SceneProcessor {
   public async render() {
     const frameCount = 5 * this.fps;
     const renderedFrames: ImageData[] = [];
-    const bar = logger.sakuria.progress("Rendering", frameCount);
+    const bar = logger.sakuria.progress("Rendering - ", frameCount);
 
     for (let i = 0; i < frameCount; i++) {
       await this.update();

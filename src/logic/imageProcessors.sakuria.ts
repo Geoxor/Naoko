@@ -86,7 +86,7 @@ export async function getRGBAUintArray(image: Jimp) {
 export async function encodeFramesToGif(frames: ImageData[], delay: number) {
   const gif = GIFEncoder();
   const palette = quantize(frames[0].data, 256);
-  const bar = logger.sakuria.progress("Encoding", frames.length);
+  const bar = logger.sakuria.progress("Encoding  - ", frames.length);
   for (let i = 0; i < frames.length; i++) {
     const frame = frames[i];
     const idx = applyPalette(frame.data, palette);
@@ -146,12 +146,12 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
 export async function transform(pipeline: string[], buffer: Buffer) {
   let fuckedBuffer = buffer;
   const functions = pipeline.map((name) => imageProcessors[name]).filter((processor) => !!processor);
-  const bar = logger.sakuria.progress("Pipelines", functions.length);
-  const start = Date.now();
+  const bar = logger.sakuria.progress("Pipelines - ", functions.length);
   for (let i = 0; i < functions.length; i++) {
+    const start = Date.now();
     const method = functions[i];
     fuckedBuffer = await method(fuckedBuffer);
-    logger.sakuria.setProgressValue(bar, i / (functions.length - 1));
+    logger.sakuria.setProgressValue(bar, i / (functions.length));
 
     // This is to avoid exp thread blocking
     if (Date.now() - start > 10000) return fuckedBuffer;

@@ -69,10 +69,10 @@ class SakuriaLogger extends Logger {
    * Sets a progress bar
    */
   public progress(name: string, tickCount: number) {
-    return this.multiProgress.newBar(`  ${chalk.green(name)} ${chalk.blue("[:bar]")} :percent `, {
+    return this.multiProgress.newBar(`  ${chalk.green(name)} ${chalk.blue("[:bar]")} :etas :percent `, {
       complete: "#",
       incomplete: "~",
-      width: 96,
+      width: 64,
       total: tickCount,
     });
   }
