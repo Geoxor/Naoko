@@ -114,101 +114,101 @@ export async function transform(pipeline: string[], buffer: Buffer): Promise<Buf
 
 /**
  * Creates a spinning prism out of a texture
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @author Bluskript & Geoxor
  */
-export async function prism(buffer: Buffer) {
+export async function prism(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0 },
     camera: { y: -1, z: 7 },
     geometry: new THREE.ConeGeometry(4, 4.5, 4),
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates a torus knot out of a texture
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @author Bluskript & Geoxor
  */
-export async function wtf(buffer: Buffer) {
+export async function wtf(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: Math.random() / 3 },
     camera: { z: 3 },
     geometry: new THREE.TorusKnotGeometry(1),
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates a spinning cube out of a texture
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @author Bluskript & Geoxor
  */
-export async function cube(buffer: Buffer) {
+export async function cube(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.0125 },
     camera: { z: 1.3 },
     geometry: new THREE.BoxGeometry(1, 1, 1),
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates a spinning donut out of a texture
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @author Bluskript & Geoxor
  */
-export async function donut(buffer: Buffer) {
+export async function donut(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.0125 },
     camera: { z: 2.5 },
     geometry: new THREE.TorusGeometry(1, 0.5, 16, 100),
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates a spinning sphere out of a texture
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @author azur1s, Geoxor
  */
-export async function sphere(buffer: Buffer) {
+export async function sphere(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0 },
     camera: { z: 1.25 },
     geometry: new THREE.SphereGeometry(0.75, 32, 16),
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates a spinning cylinder out of a texture
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @author azur1s, Geoxor
  */
-export async function cylinder(buffer: Buffer) {
+export async function cylinder(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.01, y: 0.07 },
     camera: { z: 2 },
     geometry: new THREE.CylinderGeometry(1, 1, 1, 32),
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates spinning 3d text out of a texture and a sentence
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @param text the text to render on the scene
  * @author N1kO23 & Geoxor
  */
-export async function text(buffer: Buffer, text?: string) {
+export async function text(texture: Buffer, text?: string) {
   const loader = new THREE.FontLoader();
   const font = loader.parse(comicSans);
   const geometry = new THREE.TextGeometry(text || "your mom", {
@@ -223,34 +223,34 @@ export async function text(buffer: Buffer, text?: string) {
     rotation: { x: 0 },
     camera: { z: 16 + (text?.length || 0) * Math.PI },
     geometry,
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates spinning trolley out of a texture and a sentence
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @param text the text to render on the scene
  * @author N1kO23 & Geoxor
  */
-export async function cart(buffer: Buffer) {
+export async function cart(texture: Buffer) {
   const loader: _types.OBJLoader = new OBJLoader();
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.05 },
     camera: { z: 10 },
     geometry: loader.parse(trolleyCart.toString()),
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates spinning car out of a texture
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @author N1kO23 & Geoxor
  */
-export async function car(buffer: Buffer) {
+export async function car(texture: Buffer) {
   const loader: _types.OBJLoader = new OBJLoader();
   const scene = await GeometryScene.create({
     rotation: { x: 0.0, y: 0.05 },
@@ -258,17 +258,17 @@ export async function car(buffer: Buffer) {
     width: 368,
     height: 168,
     geometry: loader.parse(carObject.toString()),
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates spinning miku out of a texture
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @author N1kO23 & Geoxor
  */
-export async function miku(buffer: Buffer) {
+export async function miku(texture: Buffer) {
   const loader: _types.OBJLoader = new OBJLoader();
   const scene = await GeometryScene.create({
     rotation: { x: 0.0, y: 0.05 },
@@ -276,23 +276,23 @@ export async function miku(buffer: Buffer) {
     width: 256,
     height: 256,
     geometry: loader.parse(mikuObject.toString()),
-    buffer,
+    texture,
   });
   return scene.render();
 }
 
 /**
  * Creates spinning amogus out of a texture
- * @param buffer the immage buffer to use as a texture
+ * @param texture the image buffer to use as a texture
  * @author N1kO23 & Geoxor
  */
-export async function amogus(buffer: Buffer) {
+export async function amogus(texture: Buffer) {
   const loader: _types.OBJLoader = new OBJLoader();
   const scene = await GeometryScene.create({
     rotation: { x: 0.025, y: 0.05 },
     camera: { z: 4 },
     geometry: loader.parse(amogusObject.toString()),
-    buffer,
+    texture,
   });
   return scene.render();
 }
@@ -303,8 +303,8 @@ export async function amogus(buffer: Buffer) {
  * @returns a buffer of the inverted image
  * @author Geoxor
  */
-export async function invert(buffer: Buffer): Promise<Buffer> {
-  const image = await Jimp.read(buffer);
+export async function invert(texture: Buffer): Promise<Buffer> {
+  const image = await Jimp.read(texture);
   return image.invert().getBufferAsync("image/jpeg");
 }
 
@@ -314,19 +314,19 @@ export async function invert(buffer: Buffer): Promise<Buffer> {
  * @returns a buffer of the grayscaled image
  * @author Geoxor
  */
-export async function grayscale(buffer: Buffer): Promise<Buffer> {
-  const image = await Jimp.read(buffer);
+export async function grayscale(texture: Buffer): Promise<Buffer> {
+  const image = await Jimp.read(texture);
   return image.grayscale().getBufferAsync("image/png");
 }
 
 /**
  * Creates a trolley image with a given image buffer
- * @param image the buffer to composite to the trolley
+ * @param texture the texture to apply
  * @author Geoxor, Bluskript
  */
-export async function trolley(buffer: Buffer): Promise<Buffer> {
+export async function trolley(texture: Buffer): Promise<Buffer> {
   const trolley = trolleyImage.clone();
-  const image = await Jimp.read(buffer);
+  const image = await Jimp.read(texture);
   const size = 48;
   image.resize(size * 2, size);
   const composite = trolley.composite(image, 4, 24).getBufferAsync("image/png");
@@ -335,12 +335,12 @@ export async function trolley(buffer: Buffer): Promise<Buffer> {
 
 /**
  * Creates a wasted image with a given image buffer
- * @param image the buffer to composite to the wasted
+ * @param texture the texture to apply
  * @author Geoxor
  */
-export async function wasted(buffer: Buffer): Promise<Buffer> {
+export async function wasted(texture: Buffer): Promise<Buffer> {
   let wasted = wastedImage.clone();
-  let image = await Jimp.read(buffer);
+  let image = await Jimp.read(texture);
   // Stretch the wasted template to match the image
   wasted = wasted.resize(Jimp.AUTO, image.bitmap.height);
   // Composite the wasted in the center of the image
@@ -350,22 +350,21 @@ export async function wasted(buffer: Buffer): Promise<Buffer> {
 
 /**
  * Deepfry an image
- * @param image the buffer to fry
+ * @param texture the texture to apply
  * @author azur1s
  */
-export async function deepfry(buffer: Buffer): Promise<Buffer> {
-  const image = await Jimp.read(buffer);
+export async function deepfry(texture: Buffer): Promise<Buffer> {
+  const image = await Jimp.read(texture);
   return image.contrast(1).quality(0).getBufferAsync("image/png");
 }
 
 /**
  * Stretches an image
- * @param image the buffer to stretch
- * @param amount the amount to stretch by vertically
+ * @param texture the texture to apply
  * @author Geoxor
  */
-export async function stretch(buffer: Buffer): Promise<Buffer> {
-  const image = await Jimp.read(buffer);
+export async function stretch(texture: Buffer): Promise<Buffer> {
+  const image = await Jimp.read(texture);
   const { width, height } = image.bitmap;
   image.resize(width, height * 3);
   return await image.getBufferAsync("image/png");
@@ -373,12 +372,11 @@ export async function stretch(buffer: Buffer): Promise<Buffer> {
 
 /**
  * Squishes an image
- * @param image the buffer to stretch
- * @param amount the amount to stretch by vertically
+ * @param texture the texture to apply
  * @author Geoxor
  */
-export async function squish(buffer: Buffer): Promise<Buffer> {
-  const image = await Jimp.read(buffer);
+export async function squish(texture: Buffer): Promise<Buffer> {
+  const image = await Jimp.read(texture);
   const { width, height } = image.bitmap;
   image.resize(width * 3, height);
   return await image.getBufferAsync("image/png");
@@ -386,12 +384,11 @@ export async function squish(buffer: Buffer): Promise<Buffer> {
 
 /**
  * Fisheye an image
- * @param image the buffer to stretch
- * @param radius the radius to fisheye by
+ * @param texture the texture to apply
  * @author Geoxor
  */
-export async function fisheye(buffer: Buffer): Promise<Buffer> {
-  const image = await Jimp.read(buffer);
+export async function fisheye(texture: Buffer): Promise<Buffer> {
+  const image = await Jimp.read(texture);
   // The type declerations say this is supposed to be "fishEye" instead of "fisheye"
   // @ts-ignore
   image.fisheye({ r: 2 });

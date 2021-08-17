@@ -1,5 +1,9 @@
 import Discord from "discord.js";
-
+export type Coords = {
+  x?: number;
+  y?: number;
+  z?: number;
+};
 export type ImageProcessorFn = (buffer: Buffer, text?: string) => Promise<Buffer>;
 export interface ImageProcessors {
   [key: string]: ImageProcessorFn;
@@ -79,7 +83,7 @@ export type IWaifuRarityColor = "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | 
 export type IWaifuRarityEmoji = "👺" | "🐉" | "🔮" | "🌟" | "⚜️";
 
 export interface GeometrySceneOptions {
-  buffer: Buffer;
+  texture: Buffer;
   geometry: THREE.BufferGeometry | THREE.Group;
   rotation: Coords;
   camera?: Coords;

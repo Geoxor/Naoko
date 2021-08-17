@@ -8,14 +8,8 @@ import logger from "../sakuria/Logger.sakuria";
 import { GifUtil, GifFrame } from "gifwrap";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { GeometrySceneOptions } from "src/types";
+import { Coords, GeometrySceneOptions } from "src/types";
 import chalk from "chalk";
-
-type Coords = {
-  x?: number;
-  y?: number;
-  z?: number;
-};
 
 /**
  *
@@ -109,12 +103,12 @@ export class MediaMaterial {
 
   /**
    * Creates a RGBA texture from an image buffer
-   * @param buffer the buffer image to read
+   * @param texture the buffer image to read
    * @author Geoxor, Bluskript
    */
-  public async createTextureFromBuffer(buffer: Buffer): Promise<THREE.DataTexture> {
+  public async createTextureFromBuffer(texture: Buffer): Promise<THREE.DataTexture> {
     const texels = 4; /** Red Green Blue and Alpha */
-    const image = await Jimp.read(buffer);
+    const image = await Jimp.read(texture);
     const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
 
     for (let y = 0; y < image.bitmap.height; y++) {
@@ -132,11 +126,11 @@ export class MediaMaterial {
       }
     }
 
-    const texture = new THREE.DataTexture(data, image.bitmap.width, image.bitmap.height, THREE.RGBAFormat);
-    texture.wrapS = THREE.ClampToEdgeWrapping;
-    texture.wrapT = THREE.ClampToEdgeWrapping;
-    texture.flipY = true;
-    return texture;
+    const dataTexture = new THREE.DataTexture(data, image.bitmap.width, image.bitmap.height, THREE.RGBAFormat);
+    dataTexture.wrapS = THREE.ClampToEdgeWrapping;
+    dataTexture.wrapT = THREE.ClampToEdgeWrapping;
+    dataTexture.flipY = true;
+    return dataTexture;
   }
 
   public getBufferFromGifFrame(frame: GifFrame) {
@@ -145,22 +139,22 @@ export class MediaMaterial {
 
   /**
    * Basically it's an async constructor to create a material and shit
-   * @param buffer the buffer image to use as a texture
+   * @param texture the buffer image to use as a texture
    * @author Bluskript, Geoxor, N1kO23
    */
-  public async prepare(buffer: Buffer) {
+  public async prepare(texture: Buffer) {
     this.material = new THREE.MeshStandardMaterial({
       roughness: 0,
       transparent: true,
       side: THREE.DoubleSide,
-      map: await this.createTextureFromBuffer(buffer),
+      map: await this.createTextureFromBuffer(texture),
     });
 
-    const type = await fileType(buffer);
+    const type = await fileType(texture);
     this.animated = type.mime === "image/gif";
 
     if (this.animated) {
-      this.frames = (await GifUtil.read(buffer)).frames;
+      this.frames = (await GifUtil.read(texture)).frames;
       return this.next();
     }
 
@@ -216,22 +210,22 @@ export class GeometryScene extends SceneProcessor {
    * Assures that the class gets instantiated properly
    */
   public static async create(options: GeometrySceneOptions) {
-    const { geometry, rotation, width, height, fps, buffer, camera } = options;
+    const { geometry, rotation, width, height, fps, texture, camera } = options;
     let geometryScene = new GeometryScene(geometry, rotation, width, height, fps);
-    await geometryScene.prepare(buffer, camera);
+    await geometryScene.prepare(texture, camera);
     return geometryScene;
   }
 
   /**
    * Prepares the scene asyncronously
    * @param {Coords} [camera] The camera XYZ position
-   * @param {Buffer} buffer The texture buffer to use
+   * @param {Buffer} texture The texture buffer to use
    * @author Geoxor, Bluskript
    */
-  private async prepare(buffer: Buffer, camera?: Coords) {
+  private async prepare(texture: Buffer, camera?: Coords) {
     // Create texture
     this.media = new MediaMaterial();
-    await this.media.prepare(buffer);
+    await this.media.prepare(texture);
 
     // Set camera positions
     this.camera.position.x = camera?.x || 0;
