@@ -88,7 +88,7 @@ class Sakuria {
         );
       } catch (error) {
         console.log(error);
-        await message.reply("⚠️ An error occured");
+        await message.reply("⚠️ when the software");
       }
 
       // Delete the processing message if it exists
@@ -110,7 +110,7 @@ class Sakuria {
           await message.channel.send(result);
         } catch (error) {
           console.log(error);
-          await message.reply("⚠️ An error occured");
+          await message.reply("⚠️ when the software");
         }
       }
     });
