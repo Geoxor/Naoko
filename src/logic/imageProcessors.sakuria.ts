@@ -99,9 +99,7 @@ export async function encodeFramesToGif(frames: ImageData[], delay: number) {
   }
 
   gif.finish();
-  const result = Buffer.from(gif.bytes());
-  console.log(result);
-  return result;
+  return Buffer.from(gif.bytes());
 }
 
 /**
