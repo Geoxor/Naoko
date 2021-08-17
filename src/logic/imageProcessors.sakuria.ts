@@ -57,7 +57,7 @@ export const imageProcessors: ImageProcessors = {
  * @author Geoxor & Bluskript
  * @returns a tuple array containing RGBA pairs
  */
-export async function getRGBAUintArray(image: Jimp){
+export async function getRGBAUintArray(image: Jimp) {
   const texels = 4; /** Red Green Blue and Alpha */
   const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
   for (let y = 0; y < image.bitmap.height; y++) {
@@ -83,33 +83,26 @@ export async function getRGBAUintArray(image: Jimp){
  * @author Geoxor & Bluskript
  * @returns {Promise<Buffer>} the gif as a buffer
  */
- export async function encodeFramesToGif(frames: Buffer[], delay: number){
+export async function encodeFramesToGif(frames: ImageData[], delay: number) {
   const gif = GIFEncoder();
-
-
 
   for (let frame of frames) {
     const encoderTimeStart = process.hrtime()[1];
-    const image = await Jimp.read(frame);
-    const imageData = await getRGBAUintArray(image);
-    const palette = quantize(imageData, 256);
-    const index = applyPalette(imageData, palette);
-    gif.writeFrame(index, image.bitmap.width, image.bitmap.height, { transparent: true, delay, palette });
+    const palette = quantize(frame.data, 256);
+    const idx = applyPalette(frame.data, palette);
+    gif.writeFrame(idx, frame.width, frame.height, { transparent: true, delay, palette });
     const encoderTimeEnd = process.hrtime()[1];
     const encoderTime = (encoderTimeEnd - encoderTimeStart) / 1000000;
     logger.command.print(
       `Encoder: ${chalk.blue(encoderTime.toFixed(2))}ms ${chalk.green((1000 / encoderTime).toFixed(2))}FPS`
     );
-
   }
-
-
 
   gif.finish();
   const result = Buffer.from(gif.bytes());
   console.log(result);
   return result;
-};
+}
 
 /**
  * Returns an execute function to use in a image process command
