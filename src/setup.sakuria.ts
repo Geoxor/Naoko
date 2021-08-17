@@ -17,8 +17,7 @@ const iconPath =
 const settingsPath =
   os.platform() === "linux"
     ? `/home/${os.userInfo().username}/.config/Code/User/settings.json`
-    : `C:/Users/${os.userInfo().username}/.config/Code/User/settings.json`;
-
+    : `C:/Users/${os.userInfo().username}/AppData/Roaming/Code/User/settings.json`;
 // Create icons folder in .vscode/extensions
 if (!fs.existsSync(iconPath)) {
   console.log("Creating icon folder");
@@ -36,6 +35,7 @@ console.log("Icons installed");
 try {
   var vscodeSettings = require(settingsPath);
 } catch (error) {
+  console.log(error);
   console.log("VS Code settings.json not found, creating a new one");
   // @ts-ignore
   var vscodeSettings = {};

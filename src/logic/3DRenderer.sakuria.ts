@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import GIFEncoder from "gifencoder";
+
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { createCanvas } from "node-canvas-webgl";
 import Jimp from "jimp";
@@ -82,9 +83,11 @@ export class SceneProcessor {
       const encoderTime = (encoderTimeEnd - encoderTimeStart) / 1000000;
 
       logger.command.print(
-        `Rendered frame ${i + 1} - Render: ${chalk.blue(renderTime)}ms ${chalk.green(
+        `Rendered frame ${i + 1} - Render: ${chalk.blue(renderTime.toFixed(2))}ms ${chalk.green(
           (1000 / renderTime).toFixed(2)
-        )}FPS - Encoder: ${chalk.blue(encoderTime)}ms ${chalk.green((1000 / encoderTime).toFixed(2))}FPS`
+        )}FPS - Encoder: ${chalk.blue(encoderTime.toFixed(2))}ms ${chalk.green(
+          (1000 / encoderTime).toFixed(2)
+        )}FPS`
       );
     }
     this.encoder.finish();
