@@ -9,6 +9,9 @@ import fileType from "file-type";
 import { GeometryScene } from "./3DRenderer.sakuria";
 import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json";
+// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
+import { GIFEncoder, quantize, applyPalette } from "gifenc";
+import chalk from "chalk";
 
 // @ts-ignore gotta use this garbage npm package cus built-in
 // three.js shit doesn't work (good job cunts)
@@ -47,6 +50,57 @@ export const imageProcessors: ImageProcessors = {
   amogus,
   miku,
 };
+
+/**
+ * Gets the RGBA values of an image
+ * @param buffer the buffer to get the values from
+ * @author Geoxor & Bluskript
+ * @returns a tuple array containing RGBA pairs
+ */
+export async function getRGBAUintArray(image: Jimp) {
+  const texels = 4; /** Red Green Blue and Alpha */
+  const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
+  for (let y = 0; y < image.bitmap.height; y++) {
+    for (let x = 0; x < image.bitmap.width; x++) {
+      let color = image.getPixelColor(x, y);
+      let r = (color >> 24) & 255;
+      let g = (color >> 16) & 255;
+      let b = (color >> 8) & 255;
+      let a = (color >> 0) & 255;
+      const stride = texels * (x + y * image.bitmap.width);
+      data[stride] = r;
+      data[stride + 1] = g;
+      data[stride + 2] = b;
+      data[stride + 3] = a;
+    }
+  }
+  return data;
+}
+
+/**
+ * Encodes a GIF out of an array of png buffers
+ * @param frames an array of buffers to make a gif from
+ * @author Geoxor & Bluskript
+ * @returns {Promise<Buffer>} the gif as a buffer
+ */
+export async function encodeFramesToGif(frames: ImageData[], delay: number) {
+  const gif = GIFEncoder();
+  const palette = quantize(frames[0].data, 256);
+
+  for (let frame of frames) {
+    const encoderTimeStart = process.hrtime()[1];
+    const idx = applyPalette(frame.data, palette);
+    gif.writeFrame(idx, frame.width, frame.height, { transparent: true, delay, palette });
+    const encoderTimeEnd = process.hrtime()[1];
+    const encoderTime = (encoderTimeEnd - encoderTimeStart) / 1000000;
+    logger.command.print(
+      `Encoder: ${chalk.blue(encoderTime.toFixed(2))}ms ${chalk.green((1000 / encoderTime).toFixed(2))}FPS`
+    );
+  }
+
+  gif.finish();
+  return Buffer.from(gif.bytes());
+}
 
 /**
  * Returns an execute function to use in a image process command
