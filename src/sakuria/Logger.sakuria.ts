@@ -1,6 +1,7 @@
 import quotes from "../assets/quotes.json";
 import chalk from "chalk";
 import { getCurrentMemoryHeap } from "../logic/logic.sakuria";
+import MultiProgress from "multi-progress";
 
 /**
  * Main logging wrapper that creates beautiful colors and emojis
@@ -47,8 +48,11 @@ class Logger {
   }
 }
 class SakuriaLogger extends Logger {
+  public multiProgress: MultiProgress;
+
   constructor() {
     super();
+    this.multiProgress = new MultiProgress(process.stdout);
   }
   public numServers = (numGuilds: number) => this.print(`Currently in ${numGuilds} servers`);
   public login = () => this.print("Sakuria logging in...");
@@ -60,6 +64,23 @@ class SakuriaLogger extends Logger {
   public inspiration = () =>
     console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
   public generic = (string: string) => console.log(`  ${getCurrentMemoryHeap()}  ${this.time()} 🗻  ${string}`);
+
+  /**
+   * Sets a progress bar
+   */
+  public progress(name: string, tickCount: number) {
+    return this.multiProgress.newBar(`  ${chalk.green(name)} ${chalk.blue("[:bar]")} :percent `, {
+      complete: "#",
+      incomplete: "~",
+      width: 96,
+      total: tickCount,
+    });
+  }
+
+  public setProgressValue(bar: ProgressBar, value: number) {
+    bar.update(value);
+    bar.tick();
+  }
 }
 class ConfigLogger extends Logger {
   constructor() {

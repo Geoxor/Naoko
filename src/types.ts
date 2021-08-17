@@ -84,7 +84,7 @@ export type IWaifuRarityEmoji = "👺" | "🐉" | "🔮" | "🌟" | "⚜️";
 
 export interface GeometrySceneOptions {
   texture: Buffer;
-  geometry: THREE.BufferGeometry | THREE.Group;
+  geometry: THREE.BufferGeometry | THREE.Object3D;
   rotation: Coords;
   camera?: Coords;
   width?: number;

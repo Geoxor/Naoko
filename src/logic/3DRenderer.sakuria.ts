@@ -1,14 +1,12 @@
 import * as THREE from "three";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { NodeCanvasElement, createCanvas } from "node-canvas-webgl";
-import { Canvas } from "canvas";
 import Jimp from "jimp";
 import logger from "../sakuria/Logger.sakuria";
 import { GifUtil, GifFrame } from "gifwrap";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
 import { Coords, GeometrySceneOptions } from "src/types";
-import chalk from "chalk";
 import { getRGBAUintArray, encodeFramesToGif } from "./imageProcessors.sakuria";
 
 /**
@@ -54,28 +52,15 @@ export class SceneProcessor {
   public async render() {
     const frameCount = 5 * this.fps;
     const renderedFrames: ImageData[] = [];
+    const bar = logger.sakuria.progress("Rendering", frameCount);
 
     for (let i = 0; i < frameCount; i++) {
       await this.update();
-      let renderTimeStart = process.hrtime()[1];
       this.renderer.render(this.scene, this.camera);
-      let renderTimeEnd = process.hrtime()[1];
-      const renderTime = (renderTimeEnd - renderTimeStart) / 1000000;
-
-      let bufferTimeStart = process.hrtime()[1];
       renderedFrames.push(
         (this.canvas.__ctx__ as CanvasRenderingContext2D).getImageData(0, 0, this.width, this.height)
       );
-      let bufferTimeEnd = process.hrtime()[1];
-      const bufferTime = (bufferTimeEnd - bufferTimeStart) / 1000000;
-
-      logger.command.print(
-        `Rendered frame ${i + 1} - Render: ${chalk.blue(renderTime.toFixed(2))}ms ${chalk.green(
-          (1000 / renderTime).toFixed(2)
-        )}FPS - Buffer: ${chalk.blue(bufferTime.toFixed(2))}ms ${chalk.green(
-          (1000 / bufferTime).toFixed(2)
-        )}FPS`
-      );
+      logger.sakuria.setProgressValue(bar, i / frameCount);
     }
 
     return await encodeFramesToGif(renderedFrames, ~~(1000 / this.fps));
@@ -159,11 +144,11 @@ export class MediaMaterial {
 export class GeometryScene extends SceneProcessor {
   public sceneObject: THREE.Mesh | THREE.Object3D | undefined;
   public rotation: Coords;
-  public geometry: THREE.BufferGeometry | THREE.Group;
+  public geometry: THREE.BufferGeometry | THREE.Object3D;
   public media: MediaMaterial | undefined;
 
   private constructor(
-    geometry: THREE.BufferGeometry | THREE.Group,
+    geometry: THREE.BufferGeometry | THREE.Object3D,
     rotation: Coords,
     width?: number,
     height?: number,
