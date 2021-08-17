@@ -85,10 +85,10 @@ export async function getRGBAUintArray(image: Jimp) {
  */
 export async function encodeFramesToGif(frames: ImageData[], delay: number) {
   const gif = GIFEncoder();
+  const palette = quantize(frames[0].data, 256);
 
   for (let frame of frames) {
     const encoderTimeStart = process.hrtime()[1];
-    const palette = quantize(frame.data, 256);
     const idx = applyPalette(frame.data, palette);
     gif.writeFrame(idx, frame.width, frame.height, { transparent: true, delay, palette });
     const encoderTimeEnd = process.hrtime()[1];
