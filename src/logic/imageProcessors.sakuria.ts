@@ -28,6 +28,7 @@ const trolleyCart = fs.readFileSync("./src/assets/models/trolley.obj");
 const carObject = fs.readFileSync("./src/assets/models/car.obj");
 const amogusObject = fs.readFileSync("./src/assets/models/amogus.obj");
 const mikuObject = fs.readFileSync("./src/assets/models/miku.obj");
+const trackmaniaObject = fs.readFileSync("./src/assets/models/trackmania.obj");
 
 export const imageProcessors: ImageProcessors = {
   stretch,
@@ -49,6 +50,7 @@ export const imageProcessors: ImageProcessors = {
   car,
   amogus,
   miku,
+  trackmania,
 };
 
 /**
@@ -337,6 +339,22 @@ export async function amogus(texture: Buffer) {
     rotation: { x: 0.025, y: 0.05 },
     camera: { z: 4 },
     geometry: loader.parse(amogusObject.toString()),
+    texture,
+  });
+  return scene.render();
+}
+
+/**
+ * Creates spinning trackmania car out of a texture
+ * @param texture the image buffer to use as a texture
+ * @author N1kO23 & Geoxor
+ */
+ export async function trackmania(texture: Buffer) {
+  const loader: _types.OBJLoader = new OBJLoader();
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.05, y: 0.05 },
+    camera: { z: 4 },
+    geometry: loader.parse(trackmaniaObject.toString()),
     texture,
   });
   return scene.render();
