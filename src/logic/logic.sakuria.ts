@@ -17,9 +17,13 @@ const defaultImageOptions: Discord.ImageURLOptions = {
  */
 export function getCurrentMemoryHeap() {
   const mem = process.memoryUsage();
-  const used = (mem.heapUsed / 1000 / 1000).toFixed(2);
-  const total = (mem.heapTotal / 1000 / 1000).toFixed(2);
-  return `${used}/${total}MB`;
+  const used = (mem.heapUsed / 1000 / 1000);
+  const total = (mem.heapTotal / 1000 / 1000);
+
+  const usedPadded = used < 100 ? '0' + used.toFixed(2) : used.toFixed(2);
+  const totalPadded = total < 100 ? '0' + total.toFixed(2) : total.toFixed(2);
+
+  return `${usedPadded}/${totalPadded}MB`;
 }
 
 /**
