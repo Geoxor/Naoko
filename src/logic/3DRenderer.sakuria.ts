@@ -21,17 +21,20 @@ export class SceneProcessor {
   public renderer: THREE.WebGLRenderer;
   public canvas: NodeCanvasElement;
   public light: THREE.AmbientLight;
-  public sun: THREE.DirectionalLight;
+  public sun?: THREE.DirectionalLight;
 
-  protected constructor(width: number = 256, height: number = 256, fps: number = 25) {
+  protected constructor(width: number = 256, height: number = 256, fps: number = 25, shading: boolean = false) {
     this.width = width;
     this.height = height;
     this.fps = fps;
     this.canvas = createCanvas(this.width, this.height);
     this.scene = new THREE.Scene();
-    this.light = new THREE.AmbientLight(0xaaaaaa);
-    this.sun = new THREE.DirectionalLight(0xffffff);
-    this.scene.add(this.light, this.sun);
+    this.light = new THREE.AmbientLight(shading ? 0xaaaaaa : 0xffffff);
+    if (shading) {
+      this.sun = new THREE.DirectionalLight(0xffffff)
+      this.scene.add(this.light, this.sun);
+    };
+    this.scene.add(this.light);
     this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
     this.renderer.setSize(this.width, this.height);
@@ -152,9 +155,10 @@ export class GeometryScene extends SceneProcessor {
     rotation: Coords,
     width?: number,
     height?: number,
-    fps?: number
+    fps?: number,
+    shading: boolean = false,
   ) {
-    super(width, height, fps);
+    super(width, height, fps, shading);
     this.geometry = geometry;
     this.rotation = rotation;
   }
@@ -174,8 +178,8 @@ export class GeometryScene extends SceneProcessor {
    * Assures that the class gets instantiated properly
    */
   public static async create(options: GeometrySceneOptions) {
-    const { geometry, rotation, width, height, fps, texture, camera } = options;
-    let geometryScene = new GeometryScene(geometry, rotation, width, height, fps);
+    const { geometry, rotation, width, height, fps, texture, camera, shading} = options;
+    let geometryScene = new GeometryScene(geometry, rotation, width, height, fps, shading);
     await geometryScene.prepare(texture, camera);
     return geometryScene;
   }

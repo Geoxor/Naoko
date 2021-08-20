@@ -1,4 +1,5 @@
 import Jimp from "jimp";
+import fs from "fs";
 import { ICommand, ImageProcessorFn, ImageProcessors, IMessage } from "../types";
 import { getBufferFromUrl, getImageURLFromMessage } from "./logic.sakuria";
 import Discord from "discord.js";
@@ -11,6 +12,17 @@ import comicSans from "../assets/comic_sans_font.json";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
 import cache from "../sakuria/Cache.sakuria";
+// @ts-ignore gotta use this garbage npm package cus built-in
+// three.js shit doesn't work (good job cunts)
+// and import the actual shit for types cus FUCK YOU THREE.JS
+import { OBJLoader } from "three-obj-mtl-loader";
+import _types from "three/examples/jsm/loaders/OBJLoader";
+
+// This is so we cache the template files in RAM, performance++;
+let trolleyImage: Jimp;
+let wastedImage: Jimp;
+Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
+Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
 
 export const imageProcessors: ImageProcessors = {
   stretch,
@@ -167,6 +179,7 @@ export async function wtf(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: Math.random() / 3 },
     camera: { z: 3 },
+    shading: true,
     geometry: new THREE.TorusKnotGeometry(1),
     texture,
   });
@@ -196,6 +209,7 @@ export async function cube(texture: Buffer) {
 export async function donut(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.0125 },
+    shading: true,
     camera: { z: 2.5 },
     geometry: new THREE.TorusGeometry(1, 0.5, 16, 100),
     texture,
@@ -252,6 +266,7 @@ export async function text(texture: Buffer, text?: string) {
   geometry.center();
   const scene = await GeometryScene.create({
     rotation: { x: 0 },
+    shading: true,
     camera: { z: 16 + (text?.length || 0) * Math.PI },
     geometry,
     texture,
@@ -265,10 +280,11 @@ export async function text(texture: Buffer, text?: string) {
  * @param text the text to render on the scene
  * @author N1kO23 & Geoxor
  */
-export async function cart(texture: Buffer) {
+ export async function cart(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.05 },
     camera: { z: 10 },
+    shading: true,
     geometry: cache.objects.cart,
     texture,
   });
@@ -284,6 +300,7 @@ export async function car(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.0, y: 0.05 },
     camera: { z: 6 },
+    shading: true,
     width: 368,
     height: 168,
     geometry: cache.objects.car,
@@ -301,6 +318,7 @@ export async function miku(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.0, y: 0.05 },
     camera: { y: 10, z: 16 },
+    shading: true,
     geometry: cache.objects.miku,
     texture,
   });
@@ -316,6 +334,7 @@ export async function amogus(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.025, y: 0.05 },
     camera: { z: 4 },
+    shading: true,
     geometry: cache.objects.amogus,
     texture,
   });
@@ -331,12 +350,12 @@ export async function amogus(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.05 },
     camera: { z: 4 },
+    shading: true,
     geometry: cache.objects.trackmania,
     texture,
   });
   return scene.render();
 }
-
 /**
  * Inverts the colors of an image
  * @param texture the texture to process
@@ -363,7 +382,7 @@ export async function grayscale(texture: Buffer) {
  * @author Geoxor, Bluskript
  */
 export async function trolley(texture: Buffer) {
-  const trolley = cache.images.trolley!.clone();
+  const trolley = trolleyImage.clone();
   const image = await Jimp.read(texture);
   const size = 48;
   image.resize(size * 2, size);
@@ -377,7 +396,7 @@ export async function trolley(texture: Buffer) {
  * @author Geoxor
  */
 export async function wasted(texture: Buffer) {
-  let wasted = cache.images.wasted!.clone();
+  let wasted = wastedImage.clone();
   let image = await Jimp.read(texture);
   // Stretch the wasted template to match the image
   wasted = wasted.resize(Jimp.AUTO, image.bitmap.height);

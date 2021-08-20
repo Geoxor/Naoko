@@ -87,6 +87,7 @@ export interface GeometrySceneOptions {
   geometry: THREE.BufferGeometry | THREE.Object3D;
   rotation: Coords;
   camera?: Coords;
+  shading?: boolean;
   width?: number;
   height?: number;
   fps?: number;
