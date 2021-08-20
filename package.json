@@ -1,6 +1,6 @@
 {
   "name": "sakuria",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Sakuria general purpose discord bot",
   "main": "./src/sakuria.ts",
   "scripts": {
@@ -50,6 +50,7 @@
     "node": "16.6.1",
     "node-canvas-webgl": "^0.2.6",
     "prisma": "^2.28.0",
+    "progress": "^2.0.3",
     "three": "^0.131.3",
     "three-obj-mtl-loader": "^1.0.3",
     "ts-mocha": "^8.0.0",

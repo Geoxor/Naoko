@@ -1,5 +1,4 @@
 import Jimp from "jimp";
-import fs from "fs";
 import { ICommand, ImageProcessorFn, ImageProcessors, IMessage } from "../types";
 import { getBufferFromUrl, getImageURLFromMessage } from "./logic.sakuria";
 import Discord from "discord.js";
@@ -11,24 +10,7 @@ import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
-import chalk from "chalk";
-
-// @ts-ignore gotta use this garbage npm package cus built-in
-// three.js shit doesn't work (good job cunts)
-// and import the actual shit for types cus FUCK YOU THREE.JS
-import { OBJLoader } from "three-obj-mtl-loader";
-import _types from "three/examples/jsm/loaders/OBJLoader";
-
-// This is so we cache the template files in RAM, performance++;
-let trolleyImage: Jimp;
-let wastedImage: Jimp;
-Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
-Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
-const trolleyCart = fs.readFileSync("./src/assets/models/trolley.obj");
-const carObject = fs.readFileSync("./src/assets/models/car.obj");
-const amogusObject = fs.readFileSync("./src/assets/models/amogus.obj");
-const mikuObject = fs.readFileSync("./src/assets/models/miku.obj");
-const trackmaniaObject = fs.readFileSync("./src/assets/models/trackmania.obj");
+import cache from "../sakuria/Cache.sakuria";
 
 export const imageProcessors: ImageProcessors = {
   stretch,
@@ -278,17 +260,16 @@ export async function text(texture: Buffer, text?: string) {
 }
 
 /**
- * Creates spinning trolley out of a texture and a sentence
+ * Creates spinning cart out of a texture and a sentence
  * @param texture the image buffer to use as a texture
  * @param text the text to render on the scene
  * @author N1kO23 & Geoxor
  */
 export async function cart(texture: Buffer) {
-  const loader: _types.OBJLoader = new OBJLoader();
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.05 },
     camera: { z: 10 },
-    geometry: loader.parse(trolleyCart.toString()),
+    geometry: cache.objects.cart,
     texture,
   });
   return scene.render();
@@ -300,13 +281,12 @@ export async function cart(texture: Buffer) {
  * @author N1kO23 & Geoxor
  */
 export async function car(texture: Buffer) {
-  const loader: _types.OBJLoader = new OBJLoader();
   const scene = await GeometryScene.create({
     rotation: { x: 0.0, y: 0.05 },
     camera: { z: 6 },
     width: 368,
     height: 168,
-    geometry: loader.parse(carObject.toString()),
+    geometry: cache.objects.car,
     texture,
   });
   return scene.render();
@@ -318,11 +298,10 @@ export async function car(texture: Buffer) {
  * @author N1kO23 & Geoxor
  */
 export async function miku(texture: Buffer) {
-  const loader: _types.OBJLoader = new OBJLoader();
   const scene = await GeometryScene.create({
     rotation: { x: 0.0, y: 0.05 },
     camera: { y: 10, z: 16 },
-    geometry: loader.parse(mikuObject.toString()),
+    geometry: cache.objects.miku,
     texture,
   });
   return scene.render();
@@ -334,11 +313,10 @@ export async function miku(texture: Buffer) {
  * @author N1kO23 & Geoxor
  */
 export async function amogus(texture: Buffer) {
-  const loader: _types.OBJLoader = new OBJLoader();
   const scene = await GeometryScene.create({
     rotation: { x: 0.025, y: 0.05 },
     camera: { z: 4 },
-    geometry: loader.parse(amogusObject.toString()),
+    geometry: cache.objects.amogus,
     texture,
   });
   return scene.render();
@@ -350,11 +328,10 @@ export async function amogus(texture: Buffer) {
  * @author N1kO23 & Geoxor
  */
  export async function trackmania(texture: Buffer) {
-  const loader: _types.OBJLoader = new OBJLoader();
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.05 },
     camera: { z: 4 },
-    geometry: loader.parse(trackmaniaObject.toString()),
+    geometry: cache.objects.trackmania,
     texture,
   });
   return scene.render();
@@ -386,7 +363,7 @@ export async function grayscale(texture: Buffer) {
  * @author Geoxor, Bluskript
  */
 export async function trolley(texture: Buffer) {
-  const trolley = trolleyImage.clone();
+  const trolley = cache.images.trolley!.clone();
   const image = await Jimp.read(texture);
   const size = 48;
   image.resize(size * 2, size);
@@ -400,7 +377,7 @@ export async function trolley(texture: Buffer) {
  * @author Geoxor
  */
 export async function wasted(texture: Buffer) {
-  let wasted = wastedImage.clone();
+  let wasted = cache.images.wasted!.clone();
   let image = await Jimp.read(texture);
   // Stretch the wasted template to match the image
   wasted = wasted.resize(Jimp.AUTO, image.bitmap.height);
