@@ -95,7 +95,7 @@ export function encodeMorse(string: string): string {
  * @author Dave69
  */
 export function decodeMorse(string: string): string {
-  const strippedString = string.replace(/[a-z0-9]/g, "");
+  const strippedString = string.replace(/[a-zA-Z0-9]/g, "");
   const characterArray = strippedString.split(" ");
   const morseCharacters = characterArray.map((a: string) => (morseCodeTableReverse as any)[a]);
   return morseCharacters.join("");
