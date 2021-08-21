@@ -147,7 +147,7 @@ export async function transform(pipeline: string[], buffer: Buffer) {
     const start = Date.now();
     const method = functions[i];
     fuckedBuffer = await method(fuckedBuffer);
-    logger.sakuria.setProgressValue(bar, i / (functions.length));
+    logger.sakuria.setProgressValue(bar, i / functions.length);
 
     // This is to avoid exp thread blocking
     if (Date.now() - start > 10000) return fuckedBuffer;
@@ -280,7 +280,7 @@ export async function text(texture: Buffer, text?: string) {
  * @param text the text to render on the scene
  * @author N1kO23 & Geoxor
  */
- export async function cart(texture: Buffer) {
+export async function cart(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.05 },
     camera: { z: 10 },
@@ -346,7 +346,7 @@ export async function amogus(texture: Buffer) {
  * @param texture the image buffer to use as a texture
  * @author N1kO23 & Geoxor
  */
- export async function trackmania(texture: Buffer) {
+export async function trackmania(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.05, y: 0.05 },
     camera: { z: 4 },

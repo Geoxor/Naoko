@@ -1,7 +1,15 @@
 require("ts-mocha");
 import chai from "chai";
 import { it } from "mocha";
-import { encodeMorse, decodeMorse, uwufy, getWaifuNameFromFileName, calcSpread, isValidHttpUrl, capitalizeFirstLetter } from "../logic/logic.sakuria";
+import {
+  encodeMorse,
+  decodeMorse,
+  uwufy,
+  getWaifuNameFromFileName,
+  calcSpread,
+  isValidHttpUrl,
+  capitalizeFirstLetter,
+} from "../logic/logic.sakuria";
 
 describe("⚡ Morse Encoder (encodeMorse)", () => {
   it("can encode a normal string", async () => {
@@ -98,18 +106,18 @@ describe("⚡ RNG Number Spread (calcSpread)", () => {
 
 describe("⚡ URL Validator (isValidHttpUrl)", () => {
   it("passes for HTTP URLs", async () => {
-    chai.expect(isValidHttpUrl('http://google.com'));
+    chai.expect(isValidHttpUrl("http://google.com"));
   });
   it("passes for HTTPS URLs", async () => {
-    chai.expect(isValidHttpUrl('https://google.com'));
+    chai.expect(isValidHttpUrl("https://google.com"));
   });
   it("fails for random shit", async () => {
-    chai.expect(isValidHttpUrl('9283fn98235')).to.be.false;
+    chai.expect(isValidHttpUrl("9283fn98235")).to.be.false;
   });
 });
 
 describe("⚡ Capitalize first letter a string (capitalizeFirstLetter)", () => {
   it("can capitalize a string", async () => {
-    chai.expect(capitalizeFirstLetter('your fucking mom 23')).to.equal('Your fucking mom 23');
+    chai.expect(capitalizeFirstLetter("your fucking mom 23")).to.equal("Your fucking mom 23");
   });
 });

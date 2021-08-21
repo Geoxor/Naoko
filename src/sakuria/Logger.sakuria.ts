@@ -69,12 +69,17 @@ class SakuriaLogger extends Logger {
    * Sets a progress bar
    */
   public progress(name: string, tickCount: number) {
-    return this.multiProgress.newBar(`  ${getCurrentMemoryHeap()}  ${this.time()} 🧪 ${chalk.hex('#00B294')(name)}${chalk.hex('#00B294')("[:bar]")} :etas :percent `, {
-      complete: "#",
-      incomplete: "~",
-      width: 64,
-      total: tickCount,
-    });
+    return this.multiProgress.newBar(
+      `  ${getCurrentMemoryHeap()}  ${this.time()} 🧪 ${chalk.hex("#00B294")(name)}${chalk.hex("#00B294")(
+        "[:bar]"
+      )} :etas :percent `,
+      {
+        complete: "#",
+        incomplete: "~",
+        width: 64,
+        total: tickCount,
+      }
+    );
   }
 
   public setProgressValue(bar: ProgressBar, value: number) {
