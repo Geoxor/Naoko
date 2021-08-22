@@ -1,4 +1,3 @@
-import sakuria from "../../sakuria/Sakuria.sakuria";
 import { defineCommand } from "../../types";
 export default defineCommand({
   name: "avatar",

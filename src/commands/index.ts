@@ -26,6 +26,7 @@ import help from "./utility/help.sakuria";
 import invite from "./utility/invite.sakuria";
 import ping from "./utility/ping.sakuria";
 import avatar from "./utility/avatar.sakuria";
+import env from "./utility/env.sakuria";
 
 // music player commands
 import play from "./musicPlayer/play.sakuria";
@@ -46,6 +47,7 @@ export const commands: ICommand[] = [
   // stats,
   // inventory,
   // battle,
+  env,
   shuffle,
   skip,
   play,

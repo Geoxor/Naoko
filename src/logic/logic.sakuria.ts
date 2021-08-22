@@ -61,6 +61,22 @@ export function getFirstEmojiURL(message: string) {
 }
 
 /**
+ * Convert milliseconds to human readable
+ * @param ms miliseconds to convert
+ * @author Geoxor
+ */
+export function msToTime(ms: number) {
+  const seconds = (ms / 1000);
+  const minutes = (ms / (1000 * 60));
+  const hours = (ms / (1000 * 60 * 60));
+  const days = (ms / (1000 * 60 * 60 * 24));
+  if (seconds < 60) return seconds + " sec";
+  else if (minutes < 60) return minutes + " min";
+  else if (hours < 24) return hours + " hour";
+  else return days + " days"
+}
+
+/**
  * Picks a random item from an array
  * @author MaidMarija
  */

@@ -9,6 +9,7 @@ import {
   calcSpread,
   isValidHttpUrl,
   capitalizeFirstLetter,
+  msToTime,
 } from "../logic/logic.sakuria";
 
 describe("⚡ Morse Encoder (encodeMorse)", () => {
@@ -105,15 +106,9 @@ describe("⚡ RNG Number Spread (calcSpread)", () => {
 });
 
 describe("⚡ URL Validator (isValidHttpUrl)", () => {
-  it("passes for HTTP URLs", async () => {
-    chai.expect(isValidHttpUrl("http://google.com"));
-  });
-  it("passes for HTTPS URLs", async () => {
-    chai.expect(isValidHttpUrl("https://google.com"));
-  });
-  it("fails for random shit", async () => {
-    chai.expect(isValidHttpUrl("9283fn98235")).to.be.false;
-  });
+  it("passes for HTTP URLs", () => chai.expect(isValidHttpUrl("http://google.com")));
+  it("passes for HTTPS URLs", () => chai.expect(isValidHttpUrl("https://google.com")));
+  it("fails for random shit", () => chai.expect(isValidHttpUrl("9283fn98235")).to.be.false);
 });
 
 describe("⚡ Capitalize first letter a string (capitalizeFirstLetter)", () => {
@@ -121,3 +116,13 @@ describe("⚡ Capitalize first letter a string (capitalizeFirstLetter)", () => {
     chai.expect(capitalizeFirstLetter("your fucking mom 23")).to.equal("Your Fucking Mom 23");
   });
 });
+
+describe("⚡ Milliseconds to human readable (msToTime)", () => {
+  it("can convert 1000ms to 1 sec", () => chai.expect(msToTime(1000)).to.equals('1 sec'));
+  it("can convert 10000ms to 10 sec", () => chai.expect(msToTime(10000)).to.equals('10 sec'));
+  it("can convert 300000ms to 5 min", () => chai.expect(msToTime(300000)).to.equals('5 min'));
+  it("can convert 3600000ms to 1 hour", () => chai.expect(msToTime(3600000)).to.equals('1 hour'));
+  it("can convert 86400000ms to 1 days", () => chai.expect(msToTime(86400000)).to.equals('1 days'));
+});
+
+

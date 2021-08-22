@@ -5,6 +5,14 @@ import logger from "./Logger.sakuria";
 import { commands } from "../commands";
 import config from "./Config.sakuria";
 import { version } from "../../package.json";
+import si from 'systeminformation';
+
+export let systemInfo: si.Systeminformation.StaticData;
+logger.config.print("Fetching environment information...")
+si.getStaticData().then(info => {
+  logger.config.print("Environment info fetched")
+  systemInfo = info;
+});
 
 /**
  * Sakuria multi purpose Discord bot
