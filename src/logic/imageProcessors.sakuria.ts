@@ -1,5 +1,4 @@
 import Jimp from "jimp";
-import fs from "fs";
 import { ICommand, ImageProcessorFn, ImageProcessors, IMessage } from "../types";
 import { getBufferFromUrl, getImageURLFromMessage } from "./logic.sakuria";
 import Discord from "discord.js";
@@ -12,11 +11,6 @@ import comicSans from "../assets/comic_sans_font.json";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
 import cache from "../sakuria/Cache.sakuria";
-// @ts-ignore gotta use this garbage npm package cus built-in
-// three.js shit doesn't work (good job cunts)
-// and import the actual shit for types cus FUCK YOU THREE.JS
-import { OBJLoader } from "three-obj-mtl-loader";
-import _types from "three/examples/jsm/loaders/OBJLoader";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
