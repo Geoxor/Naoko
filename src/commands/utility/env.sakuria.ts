@@ -1,7 +1,10 @@
 import { defineCommand } from "../../types";
-import Discord, { Message } from "discord.js";
+import Discord from "discord.js";
 import { systemInfo } from "../../sakuria/Sakuria.sakuria";
 import { version } from "../../../package.json";
+import { msToTime } from "../../logic/logic.sakuria";
+
+const startTime = Date.now();
 
 const WINDOWS_LOGO = "https://cdn.discordapp.com/attachments/816028632269979668/878984332025397258/windows.png";
 const LINUX_LOGO =
@@ -44,7 +47,8 @@ export default defineCommand({
         { name: "CPU", value: `${CPU_EMOJI} x${cores} ${cpuManufacturer} ${brand}` },
         { name: "GPU", value: `${GPU_EMOJI} ${gpuModel} ${vram}MB` },
         { name: "RAM", value: `${~~(totalRam / 1024 / 1024 / 1024)}GB` },
-        { name: "Motherboard", value: `${moboManufacturer} ${model}` }
+        { name: "Motherboard", value: `${moboManufacturer} ${model}` },
+        { name: "Uptime", value: msToTime(Date.now() - startTime) }
       );
 
     return { embeds: [embed] };
