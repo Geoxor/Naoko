@@ -118,11 +118,9 @@ describe("⚡ Capitalize first letter a string (capitalizeFirstLetter)", () => {
 });
 
 describe("⚡ Milliseconds to human readable (msToTime)", () => {
-  it("can convert 1000ms to 1 sec", () => chai.expect(msToTime(1000)).to.equals('1 sec'));
-  it("can convert 10000ms to 10 sec", () => chai.expect(msToTime(10000)).to.equals('10 sec'));
-  it("can convert 300000ms to 5 min", () => chai.expect(msToTime(300000)).to.equals('5 min'));
-  it("can convert 3600000ms to 1 hour", () => chai.expect(msToTime(3600000)).to.equals('1 hour'));
-  it("can convert 86400000ms to 1 days", () => chai.expect(msToTime(86400000)).to.equals('1 days'));
+  it("can convert 1000ms to 1 sec", () => chai.expect(msToTime(1000)).to.equals("1 sec"));
+  it("can convert 10000ms to 10 sec", () => chai.expect(msToTime(10000)).to.equals("10 sec"));
+  it("can convert 300000ms to 5 min", () => chai.expect(msToTime(300000)).to.equals("5 min"));
+  it("can convert 3600000ms to 1 hour", () => chai.expect(msToTime(3600000)).to.equals("1 hour"));
+  it("can convert 86400000ms to 1 days", () => chai.expect(msToTime(86400000)).to.equals("1 days"));
 });
-
-

@@ -66,14 +66,14 @@ export function getFirstEmojiURL(message: string) {
  * @author Geoxor
  */
 export function msToTime(ms: number) {
-  const seconds = (ms / 1000);
-  const minutes = (ms / (1000 * 60));
-  const hours = (ms / (1000 * 60 * 60));
-  const days = (ms / (1000 * 60 * 60 * 24));
+  const seconds = ms / 1000;
+  const minutes = ms / (1000 * 60);
+  const hours = ms / (1000 * 60 * 60);
+  const days = ms / (1000 * 60 * 60 * 24);
   if (seconds < 60) return seconds + " sec";
   else if (minutes < 60) return minutes + " min";
   else if (hours < 24) return hours + " hour";
-  else return days + " days"
+  else return days + " days";
 }
 
 /**
@@ -129,9 +129,9 @@ export function capitalizeFirstLetter(string: string) {
   const words = string.split(" ");
   for (let i = 0; i < words.length; i++) {
     const word = words[i];
-    result.push(word.charAt(0).toUpperCase() + word.slice(1))
+    result.push(word.charAt(0).toUpperCase() + word.slice(1));
   }
-  return result.join(' ');
+  return result.join(" ");
 }
 
 /**
