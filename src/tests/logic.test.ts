@@ -118,6 +118,6 @@ describe("⚡ URL Validator (isValidHttpUrl)", () => {
 
 describe("⚡ Capitalize first letter a string (capitalizeFirstLetter)", () => {
   it("can capitalize a string", async () => {
-    chai.expect(capitalizeFirstLetter("your fucking mom 23")).to.equal("Your fucking mom 23");
+    chai.expect(capitalizeFirstLetter("your fucking mom 23")).to.equal("Your Fucking Mom 23");
   });
 });

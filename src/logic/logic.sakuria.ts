@@ -107,7 +107,13 @@ export function decodeMorse(string: string): string {
  * @author Bluskript
  */
 export function capitalizeFirstLetter(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  const result = [];
+  const words = string.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    result.push(word.charAt(0).toUpperCase() + word.slice(1))
+  }
+  return result.join(' ');
 }
 
 /**

@@ -18,7 +18,7 @@ class Cache {
     for (let i = 0; i < this.files.length; i++) {
       const { name, buffer } = this.loadFile(this.files[i]);
       this.objects[name] = (new OBJLoader() as _types.OBJLoader).parse(buffer.toString());
-      logger.sakuria.print(`Loaded ${name}.obj`)
+      logger.sakuria.print(`Loaded ${name}.obj`);
     }
   }
 
