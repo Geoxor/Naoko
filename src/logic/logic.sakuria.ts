@@ -53,8 +53,10 @@ export function isValidHttpUrl(string: string) {
 export function getFirstEmojiURL(message: string) {
   const emoteRegex = /<:.+:(\d+)>/gm;
   const animatedEmoteRegex = /<a:.+:(\d+)>/gm;
-  const firstEmoji = message.split(emoteRegex)[1] || message.split(animatedEmoteRegex)[1];
-  if (firstEmoji) return "https://cdn.discordapp.com/emojis/" + firstEmoji + ".png?v=1";
+  const staticEmoji = message.split(emoteRegex)[1];
+  const animatedEmoji = message.split(animatedEmoteRegex)[1];
+  if (staticEmoji) return "https://cdn.discordapp.com/emojis/" + staticEmoji + ".png?v=1";
+  if (animatedEmoji) return "https://cdn.discordapp.com/emojis/" + animatedEmoji + ".gif?v=1";
   else return undefined;
 }
 
