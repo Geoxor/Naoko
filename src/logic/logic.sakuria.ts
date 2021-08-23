@@ -92,7 +92,7 @@ export function randomChoice<T>(l: Array<T>): T {
  * @author Geoxor
  */
 export function getShipName(matcher: string, matchee: string) {
-  return matcher.substring(0, matcher.length / 2) + matchee.substring(matchee.length / 2);
+  return matcher.substring(0, matcher.length >> 1) + matchee.substring(matchee.length >> 1);
 }
 
 /**
@@ -253,9 +253,7 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
     return getMostRelevantImageURL(reference);
   }
 
-  if (isValidHttpUrl(arg)) {
-    return arg;
-  }
+  if (isValidHttpUrl(arg)) return arg;
 
   if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:"))
     return getMostRelevantImageURL(message); // this is a hack...
