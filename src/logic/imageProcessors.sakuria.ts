@@ -295,8 +295,6 @@ export async function car(texture: Buffer) {
     rotation: { x: 0.0, y: 0.05 },
     camera: { z: 6 },
     shading: true,
-    width: 368,
-    height: 168,
     geometry: cache.objects.car,
     texture,
   });
