@@ -15,6 +15,7 @@ import mors from "./fun/mors.sakuria";
 import say from "./fun/say.sakuria";
 import traceAnime from "./fun/trace.sakuria";
 import uwuify from "./fun/uwufy.sakuria";
+import britify from "./fun/britify.sakuria";
 import match from "./fun/match.sakuria";
 
 // moderation commands
@@ -50,6 +51,7 @@ export const commands: ICommand[] = [
   env,
   shuffle,
   skip,
+  britify,
   play,
   anime,
   ask,

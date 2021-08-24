@@ -205,8 +205,7 @@ export function calcSpread(value: number): number {
  * @author azur1s
  */
 export function uwufy(sentence: string): string {
-  const normal = sentence;
-  const uwuified = normal
+  return sentence
     .replace(/(?:r|l)/g, "w")
     .replace(/(?:R|L)/g, "W")
     .replace(/u/g, "oo")
@@ -219,8 +218,22 @@ export function uwufy(sentence: string): string {
       return Math.random() < 0.1 ? `${val.charAt(0)}-${val}` : `${val}`;
     })
     .join(" ");
-  return uwuified;
 }
+
+/**
+ * Britishize a sentence
+ * @param sentence the sentence to britishize 
+ * @author Geoxor
+ */
+export function britify(sentence:string): string {
+  return sentence
+    .replace(/fuck/g, "fock")
+    .replace(/ing/g, "in'")
+    .replace(/what/g, "wot")
+    .replace(/(man)|(bro)|(buddy)/g, "cunt")
+    .replace(/a/g, "o");
+}
+
 
 /**
  * Gets an image url from attachments > stickers > first emoji > mentioned user avatar > author avatar > default avatar

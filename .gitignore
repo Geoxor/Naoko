@@ -4,5 +4,6 @@ node_modules/
 .env
 music/*
 prisma/*
+cache/*
 !prisma/migrations
 !prisma/schema.prisma
