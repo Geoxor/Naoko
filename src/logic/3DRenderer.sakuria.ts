@@ -23,7 +23,7 @@ export class SceneProcessor {
   public light: THREE.AmbientLight;
   public sun?: THREE.DirectionalLight;
 
-  protected constructor(width: number = 1280, height: number = 720, fps: number = 25, shading: boolean = false) {
+  protected constructor(width: number = 256, height: number = 256, fps: number = 25, shading: boolean = false) {
     this.width = width;
     this.height = height;
     this.fps = fps;
