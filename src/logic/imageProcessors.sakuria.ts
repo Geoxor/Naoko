@@ -11,6 +11,9 @@ import comicSans from "../assets/comic_sans_font.json";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
 import cache from "../sakuria/Cache.sakuria";
+// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
+import petPetGif from 'pet-pet-gif';
+
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -28,6 +31,7 @@ export const imageProcessors: ImageProcessors = {
   wasted,
   deepfry,
   cube,
+  pat,
   prism,
   wtf,
   sphere,
@@ -348,6 +352,17 @@ export async function trackmania(texture: Buffer) {
   });
   return scene.render();
 }
+
+/**
+ * Create a pat gif from an image
+ * @param image the image buffer to pet
+ * @author Geoxor
+ */
+export async function pat(image: Buffer): Promise<Buffer> {
+  return await petPetGif(image);
+}
+
+
 /**
  * Inverts the colors of an image
  * @param texture the texture to process
