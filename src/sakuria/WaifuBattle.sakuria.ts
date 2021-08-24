@@ -12,7 +12,7 @@ import { db } from "./Database.sakuria";
  * @author Cimok, Geoxor, azur1s, N1kO23
  */
 export default class WaifuBattle {
-  private lastBossbarMessage: Discord.Message | null;
+  private lastBossbarMessage: Discord.Message | null = null;
   public waifu: Waifu;
   public participants: {
     [key: string]: {
@@ -20,35 +20,25 @@ export default class WaifuBattle {
       totalDamageDealt: number;
       userId: string;
     };
-  };
+  } = {};
   public startUser: Discord.User;
   public channel: Discord.TextChannel;
-  public thread: Discord.ThreadChannel | null;
-  public collector: Discord.MessageCollector | null;
-  public bossbar: NodeJS.Timer | null;
-  public battleDuration: number;
-  public aftermathTime: number;
+  public thread: Discord.ThreadChannel | null = null;
+  public collector: Discord.MessageCollector | null = null;
+  public bossbar: NodeJS.Timer | null = null;
+  public battleDuration: number = 60000;
+  public aftermathTime: number = 15000;
   public threadName: string;
-  public ended: boolean;
-  public battleStart: number;
-  public battleEnd: number;
+  public ended: boolean = false;
+  public battleStart: number = 0;
+  public battleEnd: number = 0;
 
   constructor(startUser: Discord.User, channel: Discord.TextChannel) {
     const { chosenWaifu, chosenRarity } = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHICAL]);
     this.waifu = new Waifu(chosenWaifu, chosenRarity);
-    this.participants = {};
     this.startUser = startUser;
     this.channel = channel;
-    this.bossbar = null;
-    this.thread = null;
-    this.collector = null;
-    this.battleDuration = 60000;
-    this.aftermathTime = 15000;
     this.threadName = `${this.waifu.emoji} ${this.waifu.rarity} waifu battle!`;
-    this.ended = false;
-    this.lastBossbarMessage = null;
-    this.battleStart = 0;
-    this.battleEnd = 0;
   }
 
   /**
