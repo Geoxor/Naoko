@@ -4,7 +4,7 @@ import { randomChoice } from "../../logic/logic.sakuria";
 import Discord from "discord.js";
 
 export default defineCommand({
-  name: "fact",
+  name: "funfact",
   description: "Random fun fact",
   requiresProcessing: false,
   execute: (message) => {

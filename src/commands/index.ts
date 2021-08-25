@@ -17,7 +17,7 @@ import traceAnime from "./fun/trace.sakuria";
 import uwuify from "./fun/uwufy.sakuria";
 import britify from "./fun/britify.sakuria";
 import match from "./fun/match.sakuria";
-import fact from "./fun/fact.sakuria";
+import fact from "./fun/funfact.sakuria";
 
 // moderation commands
 import clear from "./moderation/clear.sakuria";
