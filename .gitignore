@@ -4,6 +4,7 @@ node_modules/
 .env
 music/*
 prisma/*
+dist
 cache/*
 sakuria.json
 !prisma/migrations

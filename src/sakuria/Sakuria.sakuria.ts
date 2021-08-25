@@ -41,7 +41,7 @@ class Sakuria {
       this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
     });
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
-    this.bot.login(process.env.DISCORD_TOKEN!);
+    this.bot.login(config.token);
     logger.sakuria.login();
   }
 

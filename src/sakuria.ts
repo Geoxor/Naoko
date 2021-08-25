@@ -1,6 +1,5 @@
 // Documentation
 // https://deploy-preview-680--discordjs-guide.netlify.app/additional-info/changes-in-v13.html
-require("dotenv").config();
 
 // Clear the console
 console.clear();
