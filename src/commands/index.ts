@@ -1,3 +1,7 @@
+// This file exists because the commands import faster
+// when they are hardcoded like this than 
+// dynamically importing them with FS
+
 import { ICommand } from "../types";
 import { genCommands, imageProcessors } from "../logic/imageProcessors.sakuria";
 
