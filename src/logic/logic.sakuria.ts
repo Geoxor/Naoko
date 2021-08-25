@@ -5,6 +5,7 @@ import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime, IMessage } from "../types";
 import Discord from "discord.js";
+import { speak } from "windows-tts";
 
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
@@ -232,10 +233,6 @@ export function britify(sentence: string): string {
 
   // and make some suitable other word replacements
   sentence = sentence.replace(/what/g, "wot");
-  // sentence = sentence.replace(/fuck/g, "fock");
-
-  // where the fuck did you get this from
-  // sentence = sentence.replace(/a/g, "o");
 
   // personally "what the fuck mate" sounds better than "what the fuck cunt"
   sentence = sentence.replace(/man|bud(dy)?|bro/g, "mate");
@@ -260,6 +257,15 @@ export function getMostRelevantImageURL(message: Discord.Message) {
     message.author.displayAvatarURL(defaultImageOptions) ||
     message.author.defaultAvatarURL
   );
+}
+
+/**
+ * Generates text to speech wav buffer from a string
+ * @param string the string to text to speech
+ * @author Geoxor
+ */
+export async function tts(string: string): Promise<Buffer> {
+  return speak(string);
 }
 
 /**

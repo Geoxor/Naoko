@@ -15,6 +15,7 @@ import anime from "./fun/anime.sakuria";
 import ask from "./fun/ask.sakuria";
 import decode from "./fun/decode.sakuria";
 import dicksize from "./fun/dicksize.sakuria";
+import tts from "./fun/tts.sakuria";
 import mors from "./fun/mors.sakuria";
 import say from "./fun/say.sakuria";
 import traceAnime from "./fun/trace.sakuria";
@@ -48,6 +49,7 @@ export const commands: ICommand[] = [
   nowPlaying,
   transform,
   avatar,
+  tts,
   match,
   ping,
   fact,
