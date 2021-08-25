@@ -223,15 +223,27 @@ export function uwufy(sentence: string): string {
 /**
  * Britishize a sentence
  * @param sentence the sentence to britishize
- * @author Geoxor
+ * @author Geoxor & MaidMarija
  */
 export function britify(sentence: string): string {
-  return sentence
-    .replace(/fuck/g, "fock")
-    .replace(/ing/g, "in'")
-    .replace(/what/g, "wot")
-    .replace(/(man)|(bro)|(buddy)/g, "cunt")
-    .replace(/a/g, "o");
+
+  // first delete any disgusting american dialect (IMPORTANT, NEEDS IMPROVEMENT)
+  sentence = sentence.replace(/mom/g, "mum");
+
+  // and make some suitable other word replacements
+  sentence = sentence.replace(/what/g, "wot");
+  // sentence = sentence.replace(/fuck/g, "fock");
+
+  // where the fuck did you get this from
+  // sentence = sentence.replace(/a/g, "o");
+
+  // personally "what the fuck mate" sounds better than "what the fuck cunt"
+  sentence = sentence.replace(/man|bud(dy)?|bro/g, "mate");
+
+  // we don't use t (sometimes) nor the -ing suffix
+  sentence = sentence.replace(/(?<!\s|k|x|')t+(?!(\w*')|h|ch|ion)|(?<=\win)g/g, "'");
+
+  return sentence;
 }
 
 /**
