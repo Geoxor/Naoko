@@ -5,7 +5,8 @@ export default defineCommand({
   requiresProcessing: false,
   execute: (message) => {
     const otherUser = message.mentions.users.first();
-    const link = (otherUser ? otherUser.avatarURL() : message.author.avatarURL()) || message.author.defaultAvatarURL;
-    return link + '?size=2048'
+    const link =
+      (otherUser ? otherUser.avatarURL() : message.author.avatarURL()) || message.author.defaultAvatarURL;
+    return link + "?size=2048";
   },
 });

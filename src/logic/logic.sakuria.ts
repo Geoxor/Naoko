@@ -222,10 +222,10 @@ export function uwufy(sentence: string): string {
 
 /**
  * Britishize a sentence
- * @param sentence the sentence to britishize 
+ * @param sentence the sentence to britishize
  * @author Geoxor
  */
-export function britify(sentence:string): string {
+export function britify(sentence: string): string {
   return sentence
     .replace(/fuck/g, "fock")
     .replace(/ing/g, "in'")
@@ -233,7 +233,6 @@ export function britify(sentence:string): string {
     .replace(/(man)|(bro)|(buddy)/g, "cunt")
     .replace(/a/g, "o");
 }
-
 
 /**
  * Gets an image url from attachments > stickers > first emoji > mentioned user avatar > author avatar > default avatar
