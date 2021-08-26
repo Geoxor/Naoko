@@ -72,15 +72,42 @@ export async function encodeFramesToGif(
 }
 
 /**
+ * Preprocesses an image so it eliminates huge images from developing
+ * @returns a 256x256 png buffer
+ * @author Geoxor
+ */
+export async function preProcessBuffer(buffer: Buffer) {
+  const image = await Jimp.read(buffer);
+  if (image.bitmap.width > 512) {
+    image.resize(512, Jimp.AUTO);
+    return image.getBufferAsync('image/png')
+  }
+  return buffer;
+}
+
+/**
+ * Fetches and rescales an image from a discord message for
+ * it to be deformed by an image processor
+ * @param message discord message to get buffer from
+ * @returns {Promise<buffer>}
+ * @author Geoxor
+ */
+export async function parseBufferFromMessage(message: IMessage): Promise<Buffer> {
+  const imageURL = await getImageURLFromMessage(message);
+  const targetBuffer = await getBufferFromUrl(imageURL);
+  const preProccessed = await preProcessBuffer(targetBuffer);
+  return preProccessed;
+}
+
+/**
  * Returns an execute function to use in a image process command
  * @param process the image processor function
  * @author Bluskript
  */
 export function imageProcess(process: ImageProcessorFn) {
   return async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
-    const imageURL = await getImageURLFromMessage(message);
-    const targetBuffer = await getBufferFromUrl(imageURL);
-    const resultbuffer = await process(targetBuffer, message.args.join(" "));
+    const buffer = await parseBufferFromMessage(message);
+    const resultbuffer = await process(buffer, message.args.join(" "));
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
     return { files: [attachment] };

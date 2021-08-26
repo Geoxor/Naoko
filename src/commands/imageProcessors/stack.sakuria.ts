@@ -1,6 +1,6 @@
-import { defineCommand, IMessage } from "../../types";
+import { defineCommand } from "../../types";
 import Discord from "discord.js";
-import { getBufferFromUrl, getImageURLFromMessage } from "../../logic/logic.sakuria";
+import { parseBufferFromMessage, preProcessBuffer } from "../../logic/logic.sakuria";
 import { stack } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
@@ -12,9 +12,9 @@ export default defineCommand({
   execute: async (message) => {
     const processorFunctionName = message.args[0];
     if (!processorFunctionName) return "please enter a name of an image processor function";
-    const imageURL = await getImageURLFromMessage(message);
-    const targetBuffer = await getBufferFromUrl(imageURL);
-    const resultbuffer = await stack(processorFunctionName, targetBuffer);
+    const buffer = await parseBufferFromMessage(message);
+    const preProccessed = await preProcessBuffer(buffer);
+    const resultbuffer = await stack(processorFunctionName, preProccessed);
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
     return { files: [attachment] };
