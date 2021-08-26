@@ -9,8 +9,8 @@ export default defineCommand({
     const timestampMessage = await message.channel.send("🏓 Getting ping...");
     timestampMessage.edit(
       `🏓 Pong! Latency is ${
-        (timestampMessage.createdTimestamp - message.createdTimestamp) >> 1
-      }ms. API Latency is ${~~Sakuria.bot.ws.ping >> 1}ms`
+        (timestampMessage.createdTimestamp - message.createdTimestamp)
+      }ms. API Latency is ${~~Sakuria.bot.ws.ping}ms`
     );
   },
 });

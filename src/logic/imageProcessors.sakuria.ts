@@ -87,6 +87,8 @@ export async function transform(pipeline: string[], buffer: Buffer) {
   const bufferFrames: Buffer[] = [buffer];
   const renderedFrames: Uint8Array[] = [firstFrame];
 
+  const bar = logger.sakuria.progress("Stacks - ", 6);
+
   for (let i = 0; i < 6; i++) {
     // Iterate through the frames one frame behind, if it's the starting frame then 
     // pick the first frame
@@ -95,6 +97,8 @@ export async function transform(pipeline: string[], buffer: Buffer) {
     // Get the clamp RGBA array of the current frame and add it 1 frame ahead
     // of the first starting frame
     renderedFrames[i + 1] = await getRGBAUintArray(await Jimp.read(bufferFrames[i]));
+    
+    logger.sakuria.setProgressValue(bar, i / 6);
   }
 
   return await encodeFramesToGif(renderedFrames, width, height, 10);
