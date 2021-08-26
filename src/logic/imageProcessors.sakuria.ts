@@ -40,7 +40,7 @@ export const imageProcessors: ImageProcessors = {
   cart,
   car,
   amogus,
-  recursiveFisheye,
+  gFish,
   miku,
   trackmania,
 };
@@ -72,8 +72,8 @@ export async function getRGBAUintArray(image: Jimp) {
 }
 
 /**
- * Encodes a GIF out of an array of an RGBA bitmap
- * @param frames an array of buffers to make a gif from
+ * Encodes a GIF out of an array of an RGBA texel array
+ * @param frames an RGBA texel array of frames
  * @param delay the delay between each frame in ms
  * @author Geoxor & Bluskript
  * @returns {Promise<Buffer>} the gif as a buffer
@@ -91,24 +91,6 @@ export async function encodeFramesToGif(frames: Uint8ClampedArray[] | Uint8Array
 
   gif.finish();
   return Buffer.from(gif.bytes());
-}
-
-
-export async function recursiveFisheye(texture: Buffer): Promise<Buffer> {
-  const firstFrame = await Jimp.read(texture);
-  const frames = [texture];
-
-  for (let i = 0; i < 25; i++) {
-    frames[i] = await fisheye(frames[i - 1]  || frames[0]);
-  }
-
-  let renderedFrames = [];
-
-  for (let i = 0; i < frames.length; i++) {
-    renderedFrames[i] = await getRGBAUintArray(await Jimp.read(frames[i]));
-  }
-
-  return await encodeFramesToGif(renderedFrames, firstFrame.bitmap.width, firstFrame.bitmap.height, 10);
 }
 
 /**
@@ -475,4 +457,24 @@ export async function fisheye(texture: Buffer) {
   // @ts-ignore
   image.fisheye({ r: 2 });
   return await image.getBufferAsync("image/png");
+}
+
+/**
+ * Stacks fisheyes
+ * @param texture the texture to process
+ * @author Geoxor 
+ */
+ export async function gFish(texture: Buffer): Promise<Buffer> {
+  const firstFrameBuffer = await Jimp.read(texture);
+  const firstFrame =  await getRGBAUintArray(firstFrameBuffer);
+  const {width, height} = firstFrameBuffer.bitmap;
+  const bufferFrames: Buffer[] = [texture];
+  const renderedFrames: Uint8Array[] = [firstFrame];
+
+  for (let i = 0; i < 6; i++) {
+    bufferFrames[i] = await fisheye(bufferFrames[i - 1] || bufferFrames[0]);
+    renderedFrames[i + 1] = await getRGBAUintArray(await Jimp.read(bufferFrames[i]));
+  }
+
+  return await encodeFramesToGif(renderedFrames, width, height, 10);
 }

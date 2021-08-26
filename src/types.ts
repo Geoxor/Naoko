@@ -4,7 +4,7 @@ export type Coords = {
   y?: number;
   z?: number;
 };
-export type ImageProcessorFn = (buffer: Buffer, text?: string) => Promise<Buffer>;
+export type ImageProcessorFn = (buffer: Buffer, ...args: any) => Promise<Buffer>;
 export interface ImageProcessors {
   [key: string]: ImageProcessorFn;
 }
