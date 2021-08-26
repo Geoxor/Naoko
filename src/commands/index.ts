@@ -1,5 +1,5 @@
 // This file exists because the commands import faster
-// when they are hardcoded like this than 
+// when they are hardcoded like this than
 // dynamically importing them with FS
 
 import { ICommand } from "../types";
@@ -38,7 +38,9 @@ import env from "./utility/env.sakuria";
 // music player commands
 import play from "./musicPlayer/play.sakuria";
 import skip from "./musicPlayer/skip.sakuria";
+import volume from "./musicPlayer/volume.sakuria";
 import shuffle from "./musicPlayer/shuffle.sakuria";
+import queue from "./musicPlayer/queue.sakuria";
 import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
 
 // image processing
@@ -52,11 +54,10 @@ export const commands: ICommand[] = [
   tts,
   match,
   ping,
+  volume,
   fact,
-  // stats,
-  // inventory,
-  // battle,
   env,
+  queue,
   shuffle,
   skip,
   britify,
@@ -73,4 +74,7 @@ export const commands: ICommand[] = [
   traceAnime,
   uwuify,
   kick,
+  // stats,
+  // inventory,
+  // battle,
 ];

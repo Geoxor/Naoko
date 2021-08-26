@@ -8,6 +8,7 @@ import {
   VoiceConnectionStatus,
   NoSubscriberBehavior,
   createAudioResource,
+  AudioResource,
   VoiceConnectionState,
 } from "@discordjs/voice";
 import Discord from "discord.js";
@@ -26,7 +27,8 @@ import Jimp from "jimp";
 export default class MusicPlayer {
   private player: AudioPlayer;
   public queue: string[];
-  public nowPlaying: string | null;
+  public nowPlayingFile: string | null;
+  public nowPlayingStream: AudioResource | null = null;
 
   constructor() {
     this.player = createAudioPlayer({
@@ -38,7 +40,7 @@ export default class MusicPlayer {
       console.error(error);
     });
     this.queue = [];
-    this.nowPlaying = null;
+    this.nowPlayingFile = null;
     // this.player.on("stateChange", this.onChange("Audio Player"));
   }
 
@@ -54,11 +56,11 @@ export default class MusicPlayer {
    */
   private playNextSong(audioArray: string[]) {
     let audio = audioArray[0];
-    this.nowPlaying = audio;
+    this.nowPlayingFile = audio;
     if (this.queue.length !== 0) {
       this.queue.shift();
       logger.sakuria.generic(`Playing ${audio}`);
-      return createAudioResource(audio);
+      return createAudioResource(audio, { inlineVolume: true });
     }
   }
 
@@ -104,8 +106,21 @@ export default class MusicPlayer {
    * @author N1kO23
    */
   public skip() {
-    const newQueue = this.playNextSong(this.queue);
-    if (newQueue) this.player.play(newQueue);
+    const newStream = this.playNextSong(this.queue);
+    if (newStream) {
+      this.nowPlayingStream = newStream;
+      this.player.play(this.nowPlayingStream);
+    }
+  }
+
+  /**
+   * Changes the volume of a player
+   * @param volume the volume to set it to
+   * @author Geoxor
+   */
+  public changeVolume(volume: number = 1) {
+    if (!this.nowPlayingStream) return "there's nothing playing currently";
+    this.nowPlayingStream.volume?.setVolume(volume);
   }
 
   /**
@@ -139,14 +154,6 @@ export default class MusicPlayer {
   }
 
   /**
-   * Returns the current playing song's file path
-   * @author N1kO23
-   */
-  public getNowPlayingFile() {
-    return this.nowPlaying;
-  }
-
-  /**
    * Returns the metadata of a tune
    * @author Geoxor
    */
@@ -163,17 +170,14 @@ export default class MusicPlayer {
    * @author Geoxor
    */
   public async createNowPlayingEmbed() {
-    // Get the current file thats playing
-    const nowPlayingFile = this.getNowPlayingFile();
-
     // If there is nothing playing return
-    if (!nowPlayingFile) return "nothing is playing currently";
+    if (!this.nowPlayingFile) return "nothing is playing currently";
 
     // Get information about the song
-    const metadata = await this.getMetadata(nowPlayingFile);
+    const metadata = await this.getMetadata(this.nowPlayingFile);
 
     // If we fail to get any metadata return
-    if (!metadata) return nowPlayingFile;
+    if (!metadata) return this.nowPlayingFile;
 
     // Get the data we want from the metadata
     const { codec, bitsPerSample, sampleRate, bitrate } = metadata.format;
@@ -191,7 +195,7 @@ export default class MusicPlayer {
       .setImage("attachment://cover.png");
 
     // Add these if they exist
-    artist && title ? embed.setTitle(`${artist} - ${title}`) : embed.setTitle(nowPlayingFile);
+    artist && title ? embed.setTitle(`${artist} - ${title}`) : embed.setTitle(this.nowPlayingFile);
     bitsPerSample && embed.addField("Sample Bits", `${bitsPerSample}bits`, true);
     bitrate && embed.addField("Bitrate", `${~~(bitrate / 1000)}Kbps`, true);
 

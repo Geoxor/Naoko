@@ -7,7 +7,10 @@ export default defineCommand({
   description: "Turn a string into text to speech",
   requiresProcessing: false,
   execute: async (message) => {
-    const attachment = new Discord.MessageAttachment(await tts(message.args.join(" ")), 'tts.wav');
-    return {files: [attachment]};
+    const attachment = new Discord.MessageAttachment(
+      await tts(message.args.join(" ")),
+      `${message.args.slice(0, 6).join(" ")}.wav`
+    );
+    return { files: [attachment] };
   },
 });

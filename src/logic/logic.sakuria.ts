@@ -227,7 +227,6 @@ export function uwufy(sentence: string): string {
  * @author Geoxor & MaidMarija
  */
 export function britify(sentence: string): string {
-
   // first delete any disgusting american dialect (IMPORTANT, NEEDS IMPROVEMENT)
   sentence = sentence.replace(/mom/g, "mum");
 
