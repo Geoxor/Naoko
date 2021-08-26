@@ -37,6 +37,8 @@ export const imageProcessors: ImageProcessors = {
   amogus,
   miku,
   trackmania,
+  troll,
+  trollcart,
 };
 
 /**
@@ -252,6 +254,38 @@ export async function car(texture: Buffer) {
     camera: { z: 6 },
     shading: true,
     geometry: cache.objects.car,
+    texture,
+  });
+  return scene.render();
+}
+
+/**
+ * Creates spinning trollface out of a texture
+ * @param texture the image buffer to use as a texture
+ * @author N1kO23 & Geoxor
+ */
+ export async function troll(texture: Buffer) {
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.0, y: 0.05 },
+    camera: { z: 3, y: 1 },
+    shading: true,
+    geometry: cache.objects.troll,
+    texture,
+  });
+  return scene.render();
+}
+
+/**
+ * Creates spinning trolley out of a texture
+ * @param texture the image buffer to use as a texture
+ * @author N1kO23 & Geoxor
+ */
+ export async function trollcart(texture: Buffer) {
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.0, y: 0.05 },
+    camera: { z: 6 },
+    shading: true,
+    geometry: cache.objects.trolley,
     texture,
   });
   return scene.render();

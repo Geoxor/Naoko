@@ -16,10 +16,10 @@ export default defineCommand({
         return {
           content:
             `This battle of the dongs is too much to just say as is, so here's the brief:\n` +
-            `<@${message.author}>: ${dicksize}cm\n` +
-            `<@${message.mentions.members.first()}>: ${enemyDicksize}cm` +
+            `${message.author}: ${dicksize}cm\n` +
+            `${message.mentions.members.first()}: ${enemyDicksize}cm` +
             `diff: ${Math.abs(dicksize - enemyDicksize)}cm` +
-            `winner: <@${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}>`,
+            `winner: ${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}`,
           files: [
             {
               name: "battle.txt",
@@ -32,10 +32,10 @@ export default defineCommand({
         };
       } else
         return `
-        8${"=".repeat(dicksize)}D ${dicksize}cm <@${message.author}>
-        8${"=".repeat(enemyDicksize)}D ${enemyDicksize}cm <@${message.mentions.members.first()}>
+        8${"=".repeat(dicksize)}D ${dicksize}cm ${message.author}
+        8${"=".repeat(enemyDicksize)}D ${enemyDicksize}cm ${message.mentions.members.first()}
         diff: ${Math.abs(dicksize - enemyDicksize)}cm
-        winner: <@${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}>
+        winner: ${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}
       `;
     } else {
       const dicksize = randomDickSize();
