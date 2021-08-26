@@ -7,7 +7,7 @@ import { GifUtil, GifFrame } from "gifwrap";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
 import { Coords, GeometrySceneOptions } from "src/types";
-import { getRGBAUintArray, encodeFramesToGif } from "./imageProcessors.sakuria";
+import { getRGBAUintArray, encodeFramesToGif } from "./logic.sakuria";
 
 /**
  *

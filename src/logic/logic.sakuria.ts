@@ -3,14 +3,102 @@ import path from "path";
 import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
-import { IAnilistAnime, IAnime, IMessage } from "../types";
+import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
 import Discord from "discord.js";
 import { speak } from "windows-tts";
+import logger from "../sakuria/Logger.sakuria";
+// @ts-ignore this has broken types :whyyyyyyyyyyy:
+import fileType from "file-type";
+// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
+import { GIFEncoder, quantize, applyPalette } from "gifenc";
+import Jimp from "jimp";
 
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
   size: 512,
 };
+
+/**
+ * Gets the RGBA values of an image
+ * @param buffer the buffer to get the values from
+ * @author Geoxor & Bluskript
+ * @returns a tuple array containing RGBA pairs
+ */
+ export async function getRGBAUintArray(image: Jimp) {
+  const texels = 4; /** Red Green Blue and Alpha */
+  const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
+  for (let y = 0; y < image.bitmap.height; y++) {
+    for (let x = 0; x < image.bitmap.width; x++) {
+      let color = image.getPixelColor(x, y);
+      let r = (color >> 24) & 255;
+      let g = (color >> 16) & 255;
+      let b = (color >> 8) & 255;
+      let a = (color >> 0) & 255;
+      const stride = texels * (x + y * image.bitmap.width);
+      data[stride] = r;
+      data[stride + 1] = g;
+      data[stride + 2] = b;
+      data[stride + 3] = a;
+    }
+  }
+  return data;
+}
+
+/**
+ * Encodes a GIF out of an array of an RGBA texel array
+ * @param frames an RGBA texel array of frames
+ * @param delay the delay between each frame in ms
+ * @author Geoxor & Bluskript
+ * @returns {Promise<Buffer>} the gif as a buffer
+ */
+export async function encodeFramesToGif(frames: Uint8ClampedArray[] | Uint8Array[], width: number, height: number, delay: number) {
+  const gif = GIFEncoder();
+  const palette = quantize(frames[0], 256);
+  const bar = logger.sakuria.progress("Encoding  - ", frames.length);
+  for (let i = 0; i < frames.length; i++) {
+    const frame = frames[i];
+    const idx = applyPalette(frame, palette);
+    gif.writeFrame(idx, width, height, { transparent: true, delay, palette });
+    logger.sakuria.setProgressValue(bar, i / frames.length);
+  }
+
+  gif.finish();
+  return Buffer.from(gif.bytes());
+}
+
+/**
+ * Returns an execute function to use in a image process command
+ * @param process the image processor function
+ * @author Bluskript
+ */
+export function imageProcess(process: ImageProcessorFn) {
+  return async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
+    const imageURL = await getImageURLFromMessage(message);
+    const targetBuffer = await getBufferFromUrl(imageURL);
+    const resultbuffer = await process(targetBuffer, message.args.join(" "));
+    const mimetype = await fileType(resultbuffer);
+    const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
+    return { files: [attachment] };
+  };
+}
+
+/**
+ * Creates commands for the image processor functions
+ * @param fns all the image processor functions
+ * @author Bluskript
+ */
+export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
+  return fns.map((fn) => {
+    const cmdName = fn.name.toLowerCase();
+    logger.command.print(`Generated command ${cmdName}`);
+    return {
+      name: cmdName,
+      description: `${cmdName} image processor`,
+      requiresProcessing: true,
+      execute: imageProcess(fn),
+    };
+  });
+}
 
 /**
  * Gets the used/total heap in ram used
