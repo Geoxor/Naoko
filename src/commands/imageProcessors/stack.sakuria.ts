@@ -10,10 +10,10 @@ export default defineCommand({
   description: "Stack an image processor and make a gif out of it",
   requiresProcessing: true,
   execute: async (message) => {
-    const imageURL = await getImageURLFromMessage(message);
-    const targetBuffer = await getBufferFromUrl(imageURL);
     const processorFunctionName = message.args[0];
     if (!processorFunctionName) return "please enter a name of an image processor function";
+    const imageURL = await getImageURLFromMessage(message);
+    const targetBuffer = await getBufferFromUrl(imageURL);
     const resultbuffer = await stack(processorFunctionName, targetBuffer);
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
