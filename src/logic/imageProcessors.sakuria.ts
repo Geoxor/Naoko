@@ -51,7 +51,7 @@ export const imageProcessors: ImageProcessors = {
  * @returns {Buffer} the modified buffer
  * @author Geoxor
  */
- export async function transform(pipeline: string[], buffer: Buffer) {
+export async function transform(pipeline: string[], buffer: Buffer) {
   let fuckedBuffer = buffer;
   const functions = pipeline.map((name) => imageProcessors[name]).filter((processor) => !!processor);
   const bar = logger.sakuria.progress("Pipelines - ", functions.length);
@@ -375,12 +375,12 @@ export async function fisheye(texture: Buffer) {
 /**
  * Stacks fisheyes
  * @param texture the texture to process
- * @author Geoxor 
+ * @author Geoxor
  */
- export async function gFish(texture: Buffer): Promise<Buffer> {
+export async function gFish(texture: Buffer): Promise<Buffer> {
   const firstFrameBuffer = await Jimp.read(texture);
-  const firstFrame =  await getRGBAUintArray(firstFrameBuffer);
-  const {width, height} = firstFrameBuffer.bitmap;
+  const firstFrame = await getRGBAUintArray(firstFrameBuffer);
+  const { width, height } = firstFrameBuffer.bitmap;
   const bufferFrames: Buffer[] = [texture];
   const renderedFrames: Uint8Array[] = [firstFrame];
 

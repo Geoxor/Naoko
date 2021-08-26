@@ -24,7 +24,7 @@ const defaultImageOptions: Discord.ImageURLOptions = {
  * @author Geoxor & Bluskript
  * @returns a tuple array containing RGBA pairs
  */
- export async function getRGBAUintArray(image: Jimp) {
+export async function getRGBAUintArray(image: Jimp) {
   const texels = 4; /** Red Green Blue and Alpha */
   const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
   for (let y = 0; y < image.bitmap.height; y++) {
@@ -51,7 +51,12 @@ const defaultImageOptions: Discord.ImageURLOptions = {
  * @author Geoxor & Bluskript
  * @returns {Promise<Buffer>} the gif as a buffer
  */
-export async function encodeFramesToGif(frames: Uint8ClampedArray[] | Uint8Array[], width: number, height: number, delay: number) {
+export async function encodeFramesToGif(
+  frames: Uint8ClampedArray[] | Uint8Array[],
+  width: number,
+  height: number,
+  delay: number
+) {
   const gif = GIFEncoder();
   const palette = quantize(frames[0], 256);
   const bar = logger.sakuria.progress("Encoding  - ", frames.length);

@@ -66,7 +66,12 @@ export class SceneProcessor {
       logger.sakuria.setProgressValue(bar, i / frameCount);
     }
 
-    return await encodeFramesToGif(renderedFrames.map(frame => frame.data), renderedFrames[0].width, renderedFrames[0].height, ~~(1000 / this.fps));
+    return await encodeFramesToGif(
+      renderedFrames.map((frame) => frame.data),
+      renderedFrames[0].width,
+      renderedFrames[0].height,
+      ~~(1000 / this.fps)
+    );
   }
 }
 
