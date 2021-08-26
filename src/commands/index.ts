@@ -46,11 +46,13 @@ import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
 
 // image processing
 import transform from "./imageProcessors/transform.sakuria";
+import stack from "./imageProcessors/stack.sakuria";
 
 export const commands: ICommand[] = [
   ...genCommands(Object.values(imageProcessors)),
   nowPlaying,
   transform,
+  stack,
   avatar,
   tts,
   match,

@@ -1,5 +1,5 @@
 import Jimp from "jimp";
-import { ImageProcessors } from "../types";
+import { ImageProcessorFn, ImageProcessors } from "../types";
 import { GeometryScene } from "./3DRenderer.sakuria";
 import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json";
@@ -35,7 +35,6 @@ export const imageProcessors: ImageProcessors = {
   cart,
   car,
   amogus,
-  gFish,
   miku,
   trackmania,
 };
@@ -46,7 +45,7 @@ export const imageProcessors: ImageProcessors = {
  *
  * If a method takes longer than 1000ms it will terminate the pipeline
  * at that point to prevent exponential n*n thread blocks
- * @param pipeline the order of functions to apply as strubgs
+ * @param pipeline the order of functions to apply
  * @param buffer the initial buffer to start with
  * @returns {Buffer} the modified buffer
  * @author Geoxor
@@ -66,6 +65,41 @@ export async function transform(pipeline: string[], buffer: Buffer) {
   }
   return fuckedBuffer;
 }
+
+/**
+ * Stacks image processors and creates a gif out of them
+ * @param name the name of the image processor function to apply
+ * @param buffer the initial buffer to start with
+ * @returns {Buffer} the modified buffer
+ * @author Geoxor
+ */
+ export async function stack(name: string, buffer: Buffer): Promise<Buffer> {
+
+  // Get the processor function
+  const processorFunction = imageProcessors[name];
+
+  // if theres no image processor function found return the buffer
+  if (!processorFunction) return buffer;
+
+  const firstFrameBuffer = await Jimp.read(buffer);
+  const firstFrame = await getRGBAUintArray(firstFrameBuffer);
+  const { width, height } = firstFrameBuffer.bitmap;
+  const bufferFrames: Buffer[] = [buffer];
+  const renderedFrames: Uint8Array[] = [firstFrame];
+
+  for (let i = 0; i < 6; i++) {
+    // Iterate through the frames one frame behind, if it's the starting frame then 
+    // pick the first frame
+    bufferFrames[i] = await processorFunction(bufferFrames[i - 1] || bufferFrames[0]);
+
+    // Get the clamp RGBA array of the current frame and add it 1 frame ahead
+    // of the first starting frame
+    renderedFrames[i + 1] = await getRGBAUintArray(await Jimp.read(bufferFrames[i]));
+  }
+
+  return await encodeFramesToGif(renderedFrames, width, height, 10);
+}
+
 
 /**
  * Creates a spinning prism out of a texture
@@ -370,24 +404,4 @@ export async function fisheye(texture: Buffer) {
   // @ts-ignore
   image.fisheye({ r: 2 });
   return await image.getBufferAsync("image/png");
-}
-
-/**
- * Stacks fisheyes
- * @param texture the texture to process
- * @author Geoxor
- */
-export async function gFish(texture: Buffer): Promise<Buffer> {
-  const firstFrameBuffer = await Jimp.read(texture);
-  const firstFrame = await getRGBAUintArray(firstFrameBuffer);
-  const { width, height } = firstFrameBuffer.bitmap;
-  const bufferFrames: Buffer[] = [texture];
-  const renderedFrames: Uint8Array[] = [firstFrame];
-
-  for (let i = 0; i < 6; i++) {
-    bufferFrames[i] = await fisheye(bufferFrames[i - 1] || bufferFrames[0]);
-    renderedFrames[i + 1] = await getRGBAUintArray(await Jimp.read(bufferFrames[i]));
-  }
-
-  return await encodeFramesToGif(renderedFrames, width, height, 10);
 }
