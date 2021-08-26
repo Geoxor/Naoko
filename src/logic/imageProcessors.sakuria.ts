@@ -40,6 +40,7 @@ export const imageProcessors: ImageProcessors = {
   cart,
   car,
   amogus,
+  recursiveFisheye,
   miku,
   trackmania,
 };
@@ -71,24 +72,43 @@ export async function getRGBAUintArray(image: Jimp) {
 }
 
 /**
- * Encodes a GIF out of an array of png buffers
+ * Encodes a GIF out of an array of an RGBA bitmap
  * @param frames an array of buffers to make a gif from
+ * @param delay the delay between each frame in ms
  * @author Geoxor & Bluskript
  * @returns {Promise<Buffer>} the gif as a buffer
  */
-export async function encodeFramesToGif(frames: ImageData[], delay: number) {
+export async function encodeFramesToGif(frames: Uint8ClampedArray[] | Uint8Array[], width: number, height: number, delay: number) {
   const gif = GIFEncoder();
-  const palette = quantize(frames[0].data, 256);
+  const palette = quantize(frames[0], 256);
   const bar = logger.sakuria.progress("Encoding  - ", frames.length);
   for (let i = 0; i < frames.length; i++) {
     const frame = frames[i];
-    const idx = applyPalette(frame.data, palette);
-    gif.writeFrame(idx, frame.width, frame.height, { transparent: true, delay, palette });
+    const idx = applyPalette(frame, palette);
+    gif.writeFrame(idx, width, height, { transparent: true, delay, palette });
     logger.sakuria.setProgressValue(bar, i / frames.length);
   }
 
   gif.finish();
   return Buffer.from(gif.bytes());
+}
+
+
+export async function recursiveFisheye(texture: Buffer): Promise<Buffer> {
+  const firstFrame = await Jimp.read(texture);
+  const frames = [texture];
+
+  for (let i = 0; i < 25; i++) {
+    frames[i] = await fisheye(frames[i - 1]  || frames[0]);
+  }
+
+  let renderedFrames = [];
+
+  for (let i = 0; i < frames.length; i++) {
+    renderedFrames[i] = await getRGBAUintArray(await Jimp.read(frames[i]));
+  }
+
+  return await encodeFramesToGif(renderedFrames, firstFrame.bitmap.width, firstFrame.bitmap.height, 10);
 }
 
 /**
