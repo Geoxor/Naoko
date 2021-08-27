@@ -1,12 +1,12 @@
 import Jimp from "jimp";
-import { ImageProcessorFn, ImageProcessors } from "../types";
+import { ImageProcessors } from "../types";
 import { GeometryScene } from "./3DRenderer.sakuria";
 import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json";
 import cache from "../sakuria/Cache.sakuria";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import petPetGif from "pet-pet-gif";
-import { getRGBAUintArray, encodeFramesToGif } from "./logic.sakuria";
+import { getRGBAUintArray, encodeFramesToGif, bipolarRandom } from "./logic.sakuria";
 import logger from "../sakuria/Logger.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
@@ -37,8 +37,6 @@ export const imageProcessors: ImageProcessors = {
   amogus,
   miku,
   trackmania,
-  troll,
-  trollcart,
 };
 
 /**
@@ -75,7 +73,7 @@ export async function transform(pipeline: string[], buffer: Buffer) {
  * @returns {Buffer} the modified buffer
  * @author Geoxor
  */
- export async function stack(name: string, buffer: Buffer): Promise<Buffer> {
+ export async function stack(name: string, buffer: Buffer, iterations: number = 6): Promise<Buffer> {
 
   // Get the processor function
   const processorFunction = imageProcessors[name];
@@ -89,18 +87,20 @@ export async function transform(pipeline: string[], buffer: Buffer) {
   const bufferFrames: Buffer[] = [buffer];
   const renderedFrames: Uint8Array[] = [firstFrame];
 
-  const bar = logger.sakuria.progress("Stacks - ", 6);
+  const bar = logger.sakuria.progress("Stacks - ", iterations);
 
-  for (let i = 0; i < 6; i++) {
-    // Iterate through the frames one frame behind, if it's the starting frame then 
+  for (let i = 0; i < iterations; i++) {
+    // Iterate through the frames one frame behind 
+    // if it's the starting frame then 
     // pick the first frame
     bufferFrames[i] = await processorFunction(bufferFrames[i - 1] || bufferFrames[0]);
 
-    // Get the clamp RGBA array of the current frame and add it 1 frame ahead
+    // Get the clamp RGBA array of the current 
+    // frame and add it 1 frame ahead
     // of the first starting frame
     renderedFrames[i + 1] = await getRGBAUintArray(await Jimp.read(bufferFrames[i]));
     
-    logger.sakuria.setProgressValue(bar, i / 6);
+    logger.sakuria.setProgressValue(bar, i / iterations);
   }
 
   return await encodeFramesToGif(renderedFrames, width, height, 10);
@@ -260,38 +260,6 @@ export async function car(texture: Buffer) {
 }
 
 /**
- * Creates spinning trollface out of a texture
- * @param texture the image buffer to use as a texture
- * @author N1kO23 & Geoxor
- */
- export async function troll(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.0, y: 0.05 },
-    camera: { z: 3, y: 1 },
-    shading: true,
-    geometry: cache.objects.troll,
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates spinning trolley out of a texture
- * @param texture the image buffer to use as a texture
- * @author N1kO23 & Geoxor
- */
- export async function trollcart(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.0, y: 0.05 },
-    camera: { z: 6 },
-    shading: true,
-    geometry: cache.objects.trolley,
-    texture,
-  });
-  return scene.render();
-}
-
-/**
  * Creates spinning miku out of a texture
  * @param texture the image buffer to use as a texture
  * @author N1kO23 & Geoxor
@@ -393,7 +361,16 @@ export async function wasted(texture: Buffer) {
   // Stretch the wasted template to match the image
   wasted = wasted.resize(Jimp.AUTO, image.bitmap.height);
   // Composite the wasted in the center of the image
-  const composite = image.grayscale().composite(wasted, -(image.bitmap.width / 2.5), 0);
+
+
+  const centerX = image.bitmap.width / 2 - wasted.bitmap.width / 2;
+  const centerY = image.bitmap.height / 2;
+
+  const offsetX = centerX * bipolarRandom();
+
+  const randomPositionX = centerX - offsetX;
+  const randomPositionY = bipolarRandom() * centerY;
+  const composite = image.grayscale().composite(wasted, randomPositionX, randomPositionY);
   return composite.getBufferAsync("image/png");
 }
 

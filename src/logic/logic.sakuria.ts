@@ -86,6 +86,13 @@ export async function preProcessBuffer(buffer: Buffer) {
 }
 
 /**
+ * Returns a random number between -1 and +1;
+ * @author Bluskript & Geoxor
+ */
+export const bipolarRandom = () => Math.random() * 2 - 1;
+
+
+/**
  * Fetches and rescales an image from a discord message for
  * it to be deformed by an image processor
  * @param message discord message to get buffer from
