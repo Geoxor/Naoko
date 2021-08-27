@@ -394,13 +394,20 @@ export async function tts(string: string): Promise<Buffer> {
   return speak(string);
 }
 
+export function findIndexOfURL(array: string[]) {
+  for (let i = 0; i < array.length; i++) {
+    if (isValidHttpUrl(array[i])) return i;
+  }
+  return -1;
+}
+
 /**
  * Gets a URL from a message, it will try to get a message
  * from replies, attachments, links, or user avatars
  * @author Geoxor & Bluskript
  */
 export async function getImageURLFromMessage(message: IMessage): Promise<string> {
-  const arg = message.args[0];
+  const arg = message.args[findIndexOfURL(message.args)];
   const userMention = message.mentions.users.first();
 
   // If theres a reply
@@ -409,7 +416,12 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
     return getMostRelevantImageURL(reference);
   }
 
-  if (isValidHttpUrl(arg)) return arg;
+  if (isValidHttpUrl(arg)) {
+    if (arg.startsWith("https://tenor") && !arg.endsWith(".gif")) {
+      return arg + '.gif';
+    }
+    return arg;
+  };
 
   if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:"))
     return getMostRelevantImageURL(message); // this is a hack...
