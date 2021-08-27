@@ -22,6 +22,8 @@ export const imageProcessors: ImageProcessors = {
   fisheye,
   squish,
   grayscale,
+  trollcart,
+  troll,
   wasted,
   deepfry,
   cube,
@@ -308,6 +310,38 @@ export async function trackmania(texture: Buffer) {
 }
 
 /**
+ * Creates spinning trollface out of a texture
+ * @param texture the image buffer to use as a texture
+ * @author N1kO23 & Geoxor
+ */
+ export async function troll(texture: Buffer) {
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.0, y: 0.05 },
+    camera: { z: 3, y: 1 },
+    shading: true,
+    geometry: cache.objects.troll,
+    texture,
+  });
+  return scene.render();
+}
+
+/**
+ * Creates spinning trolley out of a texture
+ * @param texture the image buffer to use as a texture
+ * @author N1kO23 & Geoxor
+ */
+ export async function trollcart(texture: Buffer) {
+  const scene = await GeometryScene.create({
+    rotation: { x: 0.0, y: 0.05 },
+    camera: { z: 6 },
+    shading: true,
+    geometry: cache.objects.trolley,
+    texture,
+  });
+  return scene.render();
+}
+
+/**
  * Create a pat gif from an image
  * @param image the image buffer to pet
  * @author Geoxor
@@ -361,7 +395,6 @@ export async function wasted(texture: Buffer) {
   // Stretch the wasted template to match the image
   wasted = wasted.resize(Jimp.AUTO, image.bitmap.height);
   // Composite the wasted in the center of the image
-
 
   const centerX = image.bitmap.width / 2 - wasted.bitmap.width / 2;
   const centerY = image.bitmap.height / 2;
