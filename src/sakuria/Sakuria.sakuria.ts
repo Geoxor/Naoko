@@ -96,7 +96,7 @@ class Sakuria {
         );
       } catch (error) {
         console.log(error);
-        await message.reply("⚠️ when the software");
+        await message.reply(`\`\`\`${error}\`\`\``);
       }
 
       // Delete the processing message if it exists
@@ -119,7 +119,7 @@ class Sakuria {
         } catch (error) {
           console.log(error);
           if (error.code === 500) await message.reply("⚠️ when the upload speed");
-          else await message.reply("⚠️ when the software");
+          else await message.reply(`\`\`\`${error}\`\`\``);
         }
       }
     });
