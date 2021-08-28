@@ -14,11 +14,9 @@ import { imageProcessors } from "../logic/imageProcessors.sakuria";
 // fun commands
 import anime from "./fun/anime.sakuria";
 import ask from "./fun/ask.sakuria";
-import decode from "./fun/decode.sakuria";
 import dicksize from "./fun/dicksize.sakuria";
 import tts from "./fun/tts.sakuria";
-import mors from "./fun/mors.sakuria";
-import say from "./fun/say.sakuria";
+import morse from "./fun/morse.sakuria";
 import traceAnime from "./fun/trace.sakuria";
 import uwuify from "./fun/uwufy.sakuria";
 import britify from "./fun/britify.sakuria";
@@ -30,7 +28,6 @@ import clear from "./moderation/clear.sakuria";
 import kick from "./moderation/kick.sakuria";
 
 // utility commands
-import help from "./utility/help.sakuria";
 import invite from "./utility/invite.sakuria";
 import ping from "./utility/ping.sakuria";
 import avatar from "./utility/avatar.sakuria";
@@ -68,12 +65,9 @@ export const commands: ICommand[] = [
   anime,
   ask,
   clear,
-  decode,
   dicksize,
-  help,
   invite,
-  mors,
-  say,
+  morse,
   traceAnime,
   uwuify,
   kick,

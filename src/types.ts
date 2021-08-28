@@ -1,4 +1,6 @@
-import Discord from "discord.js";
+import Discord, { CommandInteraction, Interaction } from "discord.js";
+import { SlashCommandBuilder } from '@discordjs/builders';
+
 export type Coords = {
   x?: number;
   y?: number;
@@ -14,14 +16,13 @@ export interface IMessage extends Discord.Message {
 }
 
 export type CommandExecute = (
-  message: IMessage
+  interaction: CommandInteraction
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
 export interface ICommand {
   execute: CommandExecute;
-  name: string;
-  description: string;
   requiresProcessing?: boolean;
+  data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
 }
 
 export const defineCommand = (cmd: ICommand): ICommand => cmd;

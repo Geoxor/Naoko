@@ -1,6 +1,5 @@
-import { MessageOptions } from "discord.js";
 import { randomDickSize } from "../../logic/logic.sakuria";
-import { defineCommand, IMessage } from "../../types";
+import { defineCommand } from "../../types";
 import { Readable } from "stream";
 
 export default defineCommand({

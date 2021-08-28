@@ -1,17 +1,20 @@
 import { defineCommand, IMessage } from "../../types";
 import Discord from "discord.js";
 import { anilistQuery, traceAnime } from "../../logic/logic.sakuria";
+import { SlashCommandBuilder } from '@discordjs/builders';
 
 export default defineCommand({
-  name: "trace",
-  description: "Attempts to find what anime a screenshot or GIF is from",
+  data: new SlashCommandBuilder()
+  .setName("trace")
+  .setDescription("Attempts to find what anime a screenshot or GIF is from")
+  .addStringOption(option => option
+    .setName('url')
+    .setDescription("The image URL to trace")
+    .setRequired(true)),
   requiresProcessing: true,
-  execute: async (message) => {
+  execute: async (interaction) => {
     // Check if they sent shit
-    const url = message.args[0] || message.attachments.first()?.url;
-
-    // Reply if not
-    if (!url) return "Please attach an image or a url in your command";
+    const url = interaction.options.getString("url", true);
 
     // Get the anime
     try {

@@ -1,19 +1,23 @@
-import { DiscordAPIError, TextChannel } from "discord.js";
+import { DiscordAPIError, GuildMember, TextChannel } from "discord.js";
 import { defineCommand } from "../../types";
+import { SlashCommandBuilder } from '@discordjs/builders';
 
 export default defineCommand({
-  name: "clear",
-  description: "Bulk delete messages up to 100",
-  requiresProcessing: false,
-  execute: async (message) => {
-    if (!message.member?.permissions.has("MANAGE_MESSAGES")) return "you don't have perms cunt";
-    let count = parseInt(message.args[0]) + 1;
+  data: new SlashCommandBuilder()
+  .setName("clear")
+  .setDescription("Bulk delete messages up to 100")
+  .addIntegerOption(option => option
+    .setName('amount')
+    .setDescription("the amount of messages to delete")
+    .setRequired(true)),
+  execute: async (interaction) => {
+    if (!(interaction.member as GuildMember)?.permissions.has("MANAGE_MESSAGES")) return "you don't have perms cunt";
+    let count = interaction.options.getInteger("amount", true) + 1;
     count = count > 100 ? 100 : count;
     // Will return if count is not a string.
-    if (isNaN(count)) return `⚠️ when not number`;
 
     try {
-      await (message.channel as TextChannel).bulkDelete(count);
+      await (interaction.channel as TextChannel).bulkDelete(count);
       return `Cleared ${count} messages!`;
     } catch (error) {
       const err = error as DiscordAPIError;

@@ -1,25 +1,20 @@
-import { getShipName } from "../../logic/logic.sakuria";
+import { match } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
+import { SlashCommandBuilder } from '@discordjs/builders';
 
 export default defineCommand({
-  name: "match",
-  description: "See how much you and another user match!",
-  requiresProcessing: false,
-  execute: (message) => {
-    const matcher = message.author;
-    const matchee = message.mentions.users.first();
-
-    if (!matchee) return "Tag the person you wanna match with!";
-
-    const matcherValue = parseInt(matcher.id);
-    const matcheeValue = parseInt(matchee.id as string);
-    const matchValue = (matcherValue + matcheeValue) % 22;
-    const matchCalculation = ((22 - matchValue) / 22) * 100;
-
-    const shipName = getShipName(matcher.username, matchee.username);
-
-    const perfectMatchString = `You perfectly match ${~~matchCalculation}% ${shipName}`;
-    const matchString = `You match ${~~matchCalculation}% ${shipName}`;
-    return matchCalculation == 100 ? perfectMatchString : matchString;
+  data: new SlashCommandBuilder()
+    .setName("match")
+    .setDescription("See how much you and another user match")
+    .addUserOption(option => option
+      .setName('user')
+      .setDescription("the user to match with")
+      .setRequired(true)),
+  execute: (interaction) => {
+      const matcher = interaction.user;
+      const matchee = interaction.options.getUser("user", true);
+      return match(matcher, matchee);
+    ;
   },
 });
+

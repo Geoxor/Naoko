@@ -4,7 +4,7 @@ import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
-import Discord from "discord.js";
+import Discord, { CommandInteraction } from "discord.js";
 import { speak } from "windows-tts";
 import logger from "../sakuria/Logger.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
@@ -91,6 +91,31 @@ export async function preProcessBuffer(buffer: Buffer) {
  */
 export const bipolarRandom = () => Math.random() * 2 - 1;
 
+/**
+ * Searches for an anime on the internet
+ * @param query the anime to search for
+ * @returns {Discord.MessageEmbed | string} a Discord message of the resulting anime
+ * @author Geoxor
+ */
+export async function animeQuery(query: string) {
+  try {
+    const animeMeta = await anilistSearch(query);
+    // prepare an embed to send to the user
+    const embed = new Discord.MessageEmbed()
+      .setColor("#FF90E0")
+      .setThumbnail(animeMeta.coverImage.large)
+      .setDescription(animeMeta.description.replace(/<br>/g, ""));
+    if (animeMeta.bannerImage) embed.setImage(animeMeta.bannerImage);
+    if (animeMeta.externalLinks[0]?.url)
+      embed.setTitle(
+        `${animeMeta.title.romaji}\n${animeMeta.title.native}\n${animeMeta.externalLinks[0]?.url}`
+      );
+    else embed.setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}`);
+    return { embeds: [embed] };
+  } catch (error) {
+    return error.response?.data?.error || error.response?.statusText || "Couldn't find anime..";
+  }
+}
 
 /**
  * Fetches and rescales an image from a discord message for
@@ -202,6 +227,26 @@ export function msToTime(ms: number) {
   else if (minutes < 60) return minutes + " min";
   else if (hours < 24) return hours + " hour";
   else return days + " days";
+}
+
+/**
+ * Creates a match string to send to Discord
+ * @param matcher the user to match with
+ * @param matchee the user to match with
+ * @returns {String}
+ * @author Geoxor
+ */
+export function match(matcher: Discord.User, matchee: Discord.User) {
+  const matcherValue = parseInt(matcher.id);
+  const matcheeValue = parseInt(matchee.id as string);
+  const matchValue = (matcherValue + matcheeValue) % 22;
+  const matchCalculation = ((22 - matchValue) / 22) * 100;
+
+  const shipName = getShipName(matcher.username, matchee.username);
+
+  const perfectMatchString = `You perfectly match ${~~matchCalculation}% ${shipName}`;
+  const matchString = `You match ${~~matchCalculation}% ${shipName}`;
+  return matchCalculation == 100 ? perfectMatchString : matchString;
 }
 
 /**

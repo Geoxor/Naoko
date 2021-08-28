@@ -16,7 +16,7 @@ const stacks: {
 
 export default defineCommand({
   name: "stack",
-  description: "Stack an image processor and make a gif out of it",
+  description: "Stack an image processor and make a 60fps gif out of it (this might cause seizures)",
   requiresProcessing: true,
   execute: async (message) => {
     const processorFunctionName = message.args[0];

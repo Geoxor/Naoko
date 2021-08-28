@@ -1,6 +1,6 @@
 {
   "name": "sakuria",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Sakuria general purpose discord bot",
   "main": "./src/sakuria.ts",
   "scripts": {
@@ -32,12 +32,14 @@
   "homepage": "https://github.com/Geoxor/sakuria#readme",
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
+    "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.5.5",
     "@hbis/three-obj-mtl-loader": "^1.1.0",
     "@jimp/plugin-fisheye": "^0.16.1",
     "axios": "^0.21.1",
     "canvas": "^2.8.0",
     "chalk": "^4.1.1",
+    "discord-api-types": "^0.22.0",
     "discord.js": "^13.0.1",
     "file-type": "^9.0.0",
     "get-image-colors": "^4.0.0",
