@@ -105,7 +105,7 @@ export async function transform(pipeline: string[], buffer: Buffer) {
     logger.sakuria.setProgressValue(bar, i / iterations);
   }
 
-  return await encodeFramesToGif(renderedFrames, width, height, 10);
+  return await encodeFramesToGif(renderedFrames, width, height, ~~(1000 / 60));
 }
 
 

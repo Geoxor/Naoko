@@ -11,7 +11,7 @@ import fileType from "file-type";
 const stacks: {
   [key: string]: number;
 } = {
-  'wasted': 25,
+  'wasted': 90,
 }
 
 export default defineCommand({
