@@ -118,7 +118,8 @@ class Sakuria {
           await message.channel.send(result);
         } catch (error) {
           console.log(error);
-          await message.reply("⚠️ when the software");
+          if (error.code === 500) await message.reply("⚠️ when the upload speed");
+          else await message.reply("⚠️ when the software");
         }
       }
     });
