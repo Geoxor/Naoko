@@ -22,7 +22,7 @@ export default defineCommand({
     .setName("stack")
     .setDescription("Stack an image processor and make a GIF out of it (this might cause seizures)")
     .addStringOption((option) =>
-      option.setName("source").setDescription("A URL to fetch the image from").setRequired(true)
+      option.setName("url").setDescription("A URL to fetch the image from").setRequired(true)
     )
     .addStringOption((option) =>
       option
@@ -36,10 +36,10 @@ export default defineCommand({
     ),
   requiresProcessing: true,
   execute: async (interaction) => {
-    const source = interaction.options.getString("source", true);
+    const url = interaction.options.getString("url", true);
     const processor = interaction.options.getString("processor", true);
     const fps = interaction.options.getInteger("fps");
-    const buffer = await getBufferFromUrl(source);
+    const buffer = await getBufferFromUrl(url);
     const preProccessed = await preProcessBuffer(buffer);
     const resultbuffer = await stack(processor, preProccessed, stacks[processor], fps || undefined);
     const mimetype = await fileType(resultbuffer);

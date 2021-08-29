@@ -11,7 +11,7 @@ export default defineCommand({
     .setName("transform")
     .setDescription("Transform an image with a pipeline")
     .addStringOption((option) =>
-      option.setName("source").setDescription("A URL to fetch the image from").setRequired(true)
+      option.setName("url").setDescription("A URL to fetch the image from").setRequired(true)
     )
     .addStringOption((option) =>
       option
@@ -24,9 +24,9 @@ export default defineCommand({
   requiresProcessing: true,
   execute: async (interaction) => {
     const pipeline = interaction.options.getString("pipeline", true).split(" ");
-    const source = interaction.options.getString("source", true);
+    const url = interaction.options.getString("url", true);
     if (pipeline.length > 10) return "pipeline can't be longer than 10 iterators";
-    const buffer = await getBufferFromUrl(source);
+    const buffer = await getBufferFromUrl(url);
     const resultbuffer = await transform(pipeline, buffer);
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);

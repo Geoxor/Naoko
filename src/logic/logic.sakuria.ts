@@ -139,7 +139,7 @@ export async function parseBufferFromMessage(message: IMessage): Promise<Buffer>
  */
 export function imageProcess(process: ImageProcessorFn) {
   return async (interaction: CommandInteraction): Promise<string | Discord.ReplyMessageOptions> => {
-    const buffer = await getBufferFromUrl(interaction.options.getString("source", true));
+    const buffer = await getBufferFromUrl(interaction.options.getString("url", true));
     const resultbuffer = await process(buffer);
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
@@ -161,7 +161,7 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
         .setName(cmdName)
         .setDescription(`${cmdName} image processor`)
         .addStringOption((option) =>
-          option.setName("source").setDescription("the URL of the image to process").setRequired(true)
+          option.setName("url").setDescription("the URL of the image to process").setRequired(true)
         ),
       requiresProcessing: true,
       execute: imageProcess(fn),
