@@ -23,4 +23,3 @@ export async function musicMiddleware(
   const player = MusicPlayerHandler.getMusicPlayer(interaction.guild);
   return next(member.voice.channel, player);
 }
-

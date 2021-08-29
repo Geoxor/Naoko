@@ -4,20 +4,23 @@ import { getBufferFromUrl, parseBufferFromMessage } from "../../logic/logic.saku
 import { transform } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
   data: new SlashCommandBuilder()
     .setName("transform")
     .setDescription("Transform an image with a pipeline")
-    .addStringOption(option => option
-      .setName('source')
-      .setDescription("A URL to fetch the image from")
-      .setRequired(true))
-    .addStringOption(option => option
-      .setName('pipeline')
-      .setDescription("The order of subprocess image processors to chain e.g 'trolley cart wtf miku invert cart'")
-      .setRequired(true)),
+    .addStringOption((option) =>
+      option.setName("source").setDescription("A URL to fetch the image from").setRequired(true)
+    )
+    .addStringOption((option) =>
+      option
+        .setName("pipeline")
+        .setDescription(
+          "The order of subprocess image processors to chain e.g 'trolley cart wtf miku invert cart'"
+        )
+        .setRequired(true)
+    ),
   requiresProcessing: true,
   execute: async (interaction) => {
     const pipeline = interaction.options.getString("pipeline", true).split(" ");

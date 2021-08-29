@@ -12,7 +12,7 @@ import fileType from "file-type";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
 import Jimp from "jimp";
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder } from "@discordjs/builders";
 
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
@@ -81,7 +81,7 @@ export async function preProcessBuffer(buffer: Buffer) {
   const image = await Jimp.read(buffer);
   if (image.bitmap.width > 512) {
     image.resize(512, Jimp.AUTO);
-    return image.getBufferAsync('image/png')
+    return image.getBufferAsync("image/png");
   }
   return buffer;
 }
@@ -160,10 +160,9 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
       data: new SlashCommandBuilder()
         .setName(cmdName)
         .setDescription(`${cmdName} image processor`)
-        .addStringOption(option => option
-          .setName('source')
-          .setDescription("the URL of the image to process")
-          .setRequired(true)),
+        .addStringOption((option) =>
+          option.setName("source").setDescription("the URL of the image to process").setRequired(true)
+        ),
       requiresProcessing: true,
       execute: imageProcess(fn),
     };
@@ -469,10 +468,10 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
 
   if (isValidHttpUrl(arg)) {
     if (arg.startsWith("https://tenor") && !arg.endsWith(".gif")) {
-      return arg + '.gif';
+      return arg + ".gif";
     }
     return arg;
-  };
+  }
 
   if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:"))
     return getMostRelevantImageURL(message); // this is a hack...

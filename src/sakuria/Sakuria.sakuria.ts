@@ -5,9 +5,9 @@ import { commands } from "../commands";
 import config from "./Config.sakuria";
 import { version } from "../../package.json";
 import si from "systeminformation";
-import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v9';
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { REST } from "@discordjs/rest";
+import { Routes } from "discord-api-types/v9";
+import { SlashCommandBuilder } from "@discordjs/builders";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");
@@ -30,13 +30,13 @@ class Sakuria {
 
   constructor() {
     logger.sakuria.instantiated();
-    this.rest = new REST({ version: '9' }).setToken(config.token);
-    
+    this.rest = new REST({ version: "9" }).setToken(config.token);
+
     this.commands = new Discord.Collection();
     this.loadCommands();
 
     // Get the slash command data from the command object
-    this.slashCommands = this.commands.map(command => command.data);
+    this.slashCommands = this.commands.map((command) => command.data);
     this.registerSlashCommands();
 
     this.bot = new Discord.Client({
@@ -56,8 +56,8 @@ class Sakuria {
       this.bot.user?.setActivity(`/help v${version}`, { type: "LISTENING" });
     });
     // this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
-    this.bot.on('interactionCreate', async interaction => {
-      this.onInteractionCreate(interaction)
+    this.bot.on("interactionCreate", async (interaction) => {
+      this.onInteractionCreate(interaction);
     });
   }
 
@@ -75,21 +75,27 @@ class Sakuria {
     }
   }
 
-  private async registerSlashCommands(){
-    const commandsJSON = this.slashCommands.map(command => command.toJSON());
+  private async registerSlashCommands() {
+    const commandsJSON = this.slashCommands.map((command) => command.toJSON());
 
     try {
-      logger.command.print('Started refreshing global application (/) commands.');
+      logger.command.print("Started refreshing global application (/) commands.");
       await this.rest.put(Routes.applicationCommands(this.CLIENT_ID), { body: commandsJSON });
-      logger.command.print(`Successfully reloaded ${this.slashCommands.length} global application (/) commands.`);
+      logger.command.print(
+        `Successfully reloaded ${this.slashCommands.length} global application (/) commands.`
+      );
     } catch (error) {
       console.log(error);
     }
 
     try {
-      logger.command.print('Started refreshing dev server application (/) commands.');
-      await this.rest.put(Routes.applicationGuildCommands(this.CLIENT_ID, this.DEV_SERVER_ID), { body: commandsJSON });
-      logger.command.print(`Successfully reloaded ${this.slashCommands.length} dev server application (/) commands.`);
+      logger.command.print("Started refreshing dev server application (/) commands.");
+      await this.rest.put(Routes.applicationGuildCommands(this.CLIENT_ID, this.DEV_SERVER_ID), {
+        body: commandsJSON,
+      });
+      logger.command.print(
+        `Successfully reloaded ${this.slashCommands.length} dev server application (/) commands.`
+      );
     } catch (error) {
       console.log(error);
     }
@@ -102,10 +108,10 @@ class Sakuria {
 
   private async onInteractionCreate(interaction: Discord.Interaction) {
     if (!interaction.isCommand()) return;
-    
+
     const { commandName } = interaction;
     const command = this.commands.get(commandName);
-    
+
     if (!command) return;
 
     if (command.requiresProcessing) {
@@ -130,10 +136,10 @@ class Sakuria {
     if (!result) return;
 
     if (command.requiresProcessing) {
-      return await interaction.editReply(result).catch(err => console.log(err));
+      return await interaction.editReply(result).catch((err) => console.log(err));
     }
 
-    return await interaction.reply(result).catch(err => console.log(err));
+    return await interaction.reply(result).catch((err) => console.log(err));
   }
 }
 

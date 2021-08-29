@@ -75,8 +75,12 @@ export async function transform(pipeline: string[], buffer: Buffer) {
  * @returns {Buffer} the modified buffer
  * @author Geoxor
  */
- export async function stack(name: string, buffer: Buffer, iterations: number = 6, fps: number = 60): Promise<Buffer> {
-
+export async function stack(
+  name: string,
+  buffer: Buffer,
+  iterations: number = 6,
+  fps: number = 60
+): Promise<Buffer> {
   // Get the processor function
   const processorFunction = imageProcessors[name];
 
@@ -92,22 +96,21 @@ export async function transform(pipeline: string[], buffer: Buffer) {
   const bar = logger.sakuria.progress("Stacks - ", iterations);
 
   for (let i = 0; i < iterations; i++) {
-    // Iterate through the frames one frame behind 
-    // if it's the starting frame then 
+    // Iterate through the frames one frame behind
+    // if it's the starting frame then
     // pick the first frame
     bufferFrames[i] = await processorFunction(bufferFrames[i - 1] || bufferFrames[0]);
 
-    // Get the clamp RGBA array of the current 
+    // Get the clamp RGBA array of the current
     // frame and add it 1 frame ahead
     // of the first starting frame
     renderedFrames[i + 1] = await getRGBAUintArray(await Jimp.read(bufferFrames[i]));
-    
+
     logger.sakuria.setProgressValue(bar, i / iterations);
   }
 
   return await encodeFramesToGif(renderedFrames, width, height, ~~(1000 / fps));
 }
-
 
 /**
  * Creates a spinning prism out of a texture
@@ -314,7 +317,7 @@ export async function trackmania(texture: Buffer) {
  * @param texture the image buffer to use as a texture
  * @author N1kO23 & Geoxor
  */
- export async function troll(texture: Buffer) {
+export async function troll(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.0, y: 0.05 },
     camera: { z: 3, y: 1 },
@@ -330,7 +333,7 @@ export async function trackmania(texture: Buffer) {
  * @param texture the image buffer to use as a texture
  * @author N1kO23 & Geoxor
  */
- export async function trollcart(texture: Buffer) {
+export async function trollcart(texture: Buffer) {
   const scene = await GeometryScene.create({
     rotation: { x: 0.0, y: 0.05 },
     camera: { z: 6 },

@@ -1,5 +1,5 @@
 import Discord, { CommandInteraction, Interaction } from "discord.js";
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder } from "@discordjs/builders";
 
 export type Coords = {
   x?: number;
