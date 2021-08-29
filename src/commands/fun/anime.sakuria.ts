@@ -9,5 +9,6 @@ export default defineCommand({
     .addStringOption((option) =>
       option.setName("query").setDescription("the anime to search for").setRequired(true)
     ),
+  requiresProcessing: true,
   execute: async (interaction) => animeQuery(interaction.options.getString("query", true)),
 });

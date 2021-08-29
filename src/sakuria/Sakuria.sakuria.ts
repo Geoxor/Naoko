@@ -56,9 +56,7 @@ class Sakuria {
       this.bot.user?.setActivity(`/help v${version}`, { type: "LISTENING" });
     });
     // this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
-    this.bot.on("interactionCreate", async (interaction) => {
-      this.onInteractionCreate(interaction);
-    });
+    this.bot.on("interactionCreate", async (interaction) => this.onInteractionCreate(interaction));
   }
 
   /**
@@ -136,10 +134,12 @@ class Sakuria {
     if (!result) return;
 
     if (command.requiresProcessing) {
-      return await interaction.editReply(result).catch((err) => console.log(err));
+      await interaction.editReply(result).catch((err) => console.log(err));
+      return
     }
 
-    return await interaction.reply(result).catch((err) => console.log(err));
+    await interaction.reply(result).catch((err) => console.log(err));
+    return 
   }
 }
 
