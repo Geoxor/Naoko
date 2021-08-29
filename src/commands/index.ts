@@ -32,6 +32,7 @@ import invite from "./utility/invite.sakuria";
 import ping from "./utility/ping.sakuria";
 import avatar from "./utility/avatar.sakuria";
 import env from "./utility/env.sakuria";
+import help from "./utility/help.sakuria";
 
 // music player commands
 import play from "./musicPlayer/play.sakuria";
@@ -51,6 +52,7 @@ export const commands: ICommand[] = [
   transform,
   stack,
   avatar,
+  help,
   tts,
   match,
   ping,

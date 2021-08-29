@@ -12,6 +12,7 @@ import fileType from "file-type";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
 import Jimp from "jimp";
+import { SlashCommandBuilder } from '@discordjs/builders';
 
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
@@ -137,9 +138,9 @@ export async function parseBufferFromMessage(message: IMessage): Promise<Buffer>
  * @author Bluskript
  */
 export function imageProcess(process: ImageProcessorFn) {
-  return async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
-    const buffer = await parseBufferFromMessage(message);
-    const resultbuffer = await process(buffer, message.args.join(" "));
+  return async (interaction: CommandInteraction): Promise<string | Discord.ReplyMessageOptions> => {
+    const buffer = await getBufferFromUrl(interaction.options.getString("source", true));
+    const resultbuffer = await process(buffer);
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
     return { files: [attachment] };
@@ -156,8 +157,13 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
     const cmdName = fn.name.toLowerCase();
     logger.command.print(`Generated command ${cmdName}`);
     return {
-      name: cmdName,
-      description: `${cmdName} image processor`,
+      data: new SlashCommandBuilder()
+        .setName(cmdName)
+        .setDescription(`${cmdName} image processor`)
+        .addStringOption(option => option
+          .setName('source')
+          .setDescription("the URL of the image to process")
+          .setRequired(true)),
       requiresProcessing: true,
       execute: imageProcess(fn),
     };

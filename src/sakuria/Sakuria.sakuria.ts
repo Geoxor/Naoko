@@ -53,7 +53,7 @@ class Sakuria {
     this.bot.on("ready", async () => {
       this.onReady;
       logger.sakuria.numServers(this.bot.guilds.cache.size);
-      this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
+      this.bot.user?.setActivity(`/help v${version}`, { type: "LISTENING" });
     });
     // this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.bot.on('interactionCreate', async interaction => this.onInteractionCreate(interaction));
@@ -107,6 +107,11 @@ class Sakuria {
     
     if (!command) return;
 
+    if (command.requiresProcessing) {
+      console.log("defer");
+      await interaction.deferReply();
+    }
+
     try {
       let timeStart = Date.now();
       var result = await command.execute(interaction);
@@ -124,12 +129,10 @@ class Sakuria {
     if (!result) return;
 
     if (command.requiresProcessing) {
-      await interaction.deferReply();
-      await interaction.editReply(result).catch(err => console.log(err));
-      return;
+      return await interaction.editReply(result).catch(err => console.log(err));
     }
 
-    await interaction.reply(result).catch(err => console.log(err));
+    return await interaction.reply(result).catch(err => console.log(err));
   }
 
   // // onMessageCreate handler

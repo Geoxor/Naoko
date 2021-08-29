@@ -1,18 +1,29 @@
 import { defineCommand } from "../../types";
 import Discord from "discord.js";
-import { parseBufferFromMessage } from "../../logic/logic.sakuria";
+import { getBufferFromUrl, parseBufferFromMessage } from "../../logic/logic.sakuria";
 import { transform } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
+import { SlashCommandBuilder } from '@discordjs/builders';
 
 export default defineCommand({
-  name: "transform",
-  description: "Transform an image with a pipeline",
+  data: new SlashCommandBuilder()
+    .setName("transform")
+    .setDescription("Transform an image with a pipeline")
+    .addStringOption(option => option
+      .setName('source')
+      .setDescription("A URL to fetch the image from")
+      .setRequired(true))
+    .addStringOption(option => option
+      .setName('pipeline')
+      .setDescription("The order of subprocess image processors to chain e.g 'trolley cart wtf miku invert cart'")
+      .setRequired(true)),
   requiresProcessing: true,
-  execute: async (message) => {
-    const pipeline = message.args;
+  execute: async (interaction) => {
+    const pipeline = interaction.options.getString("pipeline", true).split(" ");
+    const source = interaction.options.getString("source", true);
     if (pipeline.length > 10) return "pipeline can't be longer than 10 iterators";
-    const buffer = await parseBufferFromMessage(message);
+    const buffer = await getBufferFromUrl(source);
     const resultbuffer = await transform(pipeline, buffer);
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);

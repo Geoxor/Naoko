@@ -75,7 +75,7 @@ export async function transform(pipeline: string[], buffer: Buffer) {
  * @returns {Buffer} the modified buffer
  * @author Geoxor
  */
- export async function stack(name: string, buffer: Buffer, iterations: number = 6): Promise<Buffer> {
+ export async function stack(name: string, buffer: Buffer, iterations: number = 6, fps: number = 60): Promise<Buffer> {
 
   // Get the processor function
   const processorFunction = imageProcessors[name];
@@ -105,7 +105,7 @@ export async function transform(pipeline: string[], buffer: Buffer) {
     logger.sakuria.setProgressValue(bar, i / iterations);
   }
 
-  return await encodeFramesToGif(renderedFrames, width, height, ~~(1000 / 60));
+  return await encodeFramesToGif(renderedFrames, width, height, ~~(1000 / fps));
 }
 
 
