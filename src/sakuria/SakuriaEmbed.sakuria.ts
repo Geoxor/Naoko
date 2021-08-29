@@ -1,4 +1,4 @@
-import { ColorResolvable, EmbedFieldData, MessageEmbed } from "discord.js"
+import {ColorResolvable, EmbedFieldData, MessageEmbed} from "discord.js";
 
 export default class SakuriaEmbed extends MessageEmbed {
   public constructor(
@@ -33,19 +33,50 @@ export default class SakuriaEmbed extends MessageEmbed {
     url && super.setURL(url);
     timestamp && super.setTimestamp(timestamp);
     color && super.setColor(color);
-    typeof footer === "object" ? super.setFooter(footer.text, footer.iconURL) : super.setFooter(footer);
+    footer && (typeof footer === "object"
+      ? super.setFooter(footer.text, footer.iconURL)
+      : super.setFooter(footer as string));
     image && super.setImage(image);
     thumbnail && super.setThumbnail(thumbnail);
     author && super.setAuthor(author.name, author.iconURL, author.url);
     fields && super.setFields(fields);
   }
+}
 
-  public static ZERO_WIDTH_SPACE = "\u200E";
-  public static createBlankField(inline: boolean): EmbedFieldData {
-    return {
-      name: this.ZERO_WIDTH_SPACE,
-      value: this.ZERO_WIDTH_SPACE,
-      inline
-    }
+export const ZERO_WIDTH_SPACE = "\u200E";
+
+export function createErrorEmbed(description: string, extraTitle?: string): SakuriaEmbed {
+  return new SakuriaEmbed({
+    title: `❌ ${extraTitle}`,
+    description,
+    color: "RED"
+  })
+}
+
+export function createNotInlineBlankField(amount = 1): EmbedFieldData[] {
+  const arr: EmbedFieldData[] = [];
+
+  for (let i = 0; i < amount; i++) {
+    arr.push(createBlankField(false))
   }
+
+  return arr;
+}
+
+export function createInlineBlankField(amount = 1): EmbedFieldData[] {
+  const arr: EmbedFieldData[] = [];
+
+  for (let i = 0; i < amount; i++) {
+    arr.push(createBlankField(true));
+  }
+
+  return arr;
+}
+
+export function createBlankField(inline: boolean): EmbedFieldData {
+  return {
+    value: ZERO_WIDTH_SPACE,
+    name: ZERO_WIDTH_SPACE,
+    inline
+  };
 }
