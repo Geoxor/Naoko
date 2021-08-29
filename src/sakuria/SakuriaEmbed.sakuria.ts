@@ -1,4 +1,4 @@
-import {ColorResolvable, EmbedFieldData, MessageEmbed} from "discord.js";
+import { ColorResolvable, EmbedFieldData, MessageEmbed } from "discord.js";
 
 export default class SakuriaEmbed extends MessageEmbed {
   public constructor(
