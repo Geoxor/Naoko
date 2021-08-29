@@ -50,7 +50,7 @@ class Sakuria {
     });
     logger.sakuria.login();
     this.bot.login(config.token);
-    this.bot.on("ready", async () => {
+    this.bot.once("ready", async () => {
       this.onReady();
       logger.sakuria.numServers(this.bot.guilds.cache.size);
       this.bot.user?.setActivity(`/help v${version}`, { type: "LISTENING" });
@@ -134,11 +134,11 @@ class Sakuria {
 
     if (command.requiresProcessing) {
       await interaction.editReply(result).catch((err) => console.log(err));
-      return
+      return;
     }
 
     await interaction.reply(result).catch((err) => console.log(err));
-    return 
+    return;
   }
 }
 

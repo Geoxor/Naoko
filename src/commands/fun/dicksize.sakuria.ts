@@ -7,10 +7,8 @@ export default defineCommand({
   data: new SlashCommandBuilder()
     .setName("dicksize")
     .setDescription("Tell's you your dicksize or battle against someone else's dicksize")
-    .addUserOption((option) => option
-      .setName("user")
-      .setDescription("the user to battle against")
-      .setRequired(false)
+    .addUserOption((option) =>
+      option.setName("user").setDescription("the user to battle against").setRequired(false)
     ),
   requiresProcessing: false,
   execute: async (interaction) => {
