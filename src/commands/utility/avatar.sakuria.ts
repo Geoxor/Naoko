@@ -12,6 +12,6 @@ export default defineCommand({
     const otherUser = interaction.options.getUser("user");
     const link =
       (otherUser ? otherUser.avatarURL() : interaction.user.avatarURL()) || interaction.user.defaultAvatarURL;
-    return link + "?size=2048";
+    return link.replace("webp", "png") + "?size=2048";
   },
 });

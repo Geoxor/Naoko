@@ -38,10 +38,10 @@ export default defineCommand({
   execute: async (interaction) => {
     const source = interaction.options.getString("source", true);
     const processor = interaction.options.getString("processor", true);
-    const fps = interaction.options.getInteger("fps", true);
+    const fps = interaction.options.getInteger("fps");
     const buffer = await getBufferFromUrl(source);
     const preProccessed = await preProcessBuffer(buffer);
-    const resultbuffer = await stack(processor, preProccessed, stacks[processor], fps);
+    const resultbuffer = await stack(processor, preProccessed, stacks[processor], fps || undefined);
     const mimetype = await fileType(resultbuffer);
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
     return { files: [attachment] };
