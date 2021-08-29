@@ -1,13 +1,21 @@
 import { randomDickSize } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
 import { Readable } from "stream";
+import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
-  name: "dicksize",
-  description: "Tell's you your dicksize or battle against someone else's dicksize!",
+  data: new SlashCommandBuilder()
+    .setName("dicksize")
+    .setDescription("Tell's you your dicksize or battle against someone else's dicksize")
+    .addUserOption((option) => option
+      .setName("user")
+      .setDescription("the user to battle against")
+      .setRequired(false)
+    ),
   requiresProcessing: false,
-  execute: async (message) => {
-    if (message.mentions.members && message.mentions.members.size !== 0) {
+  execute: async (interaction) => {
+    const otherUser = interaction.options.getUser("user");
+    if (otherUser) {
       const dicksize = randomDickSize();
       const enemyDicksize = randomDickSize();
 
@@ -15,26 +23,26 @@ export default defineCommand({
         return {
           content:
             `This battle of the dongs is too much to just say as is, so here's the brief:\n` +
-            `${message.author}: ${dicksize}cm\n` +
-            `${message.mentions.members.first()}: ${enemyDicksize}cm` +
+            `${interaction.user}: ${dicksize}cm\n` +
+            `${otherUser}: ${enemyDicksize}cm` +
             `diff: ${Math.abs(dicksize - enemyDicksize)}cm` +
-            `winner: ${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}`,
+            `winner: ${dicksize > enemyDicksize ? interaction.user : otherUser}`,
           files: [
             {
               name: "battle.txt",
               attachment: Readable.from(
-                `${message.author.username}'s long dong:\n 8${"=".repeat(dicksize)}D\n` +
-                  `${message.mentions.users.first()?.username}'s long dong:\n 8${"=".repeat(enemyDicksize)}D\n`
+                `${interaction.user.username}'s long dong:\n 8${"=".repeat(dicksize)}D\n` +
+                  `${otherUser.username}'s long dong:\n 8${"=".repeat(enemyDicksize)}D\n`
               ),
             },
           ],
         };
       } else
         return `
-        8${"=".repeat(dicksize)}D ${dicksize}cm ${message.author}
-        8${"=".repeat(enemyDicksize)}D ${enemyDicksize}cm ${message.mentions.members.first()}
+        8${"=".repeat(dicksize)}D ${dicksize}cm ${interaction.user}
+        8${"=".repeat(enemyDicksize)}D ${enemyDicksize}cm ${otherUser}
         diff: ${Math.abs(dicksize - enemyDicksize)}cm
-        winner: ${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}
+        winner: ${dicksize > enemyDicksize ? interaction.user : otherUser}
       `;
     } else {
       const dicksize = randomDickSize();
