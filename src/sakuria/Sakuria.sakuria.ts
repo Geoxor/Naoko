@@ -56,7 +56,9 @@ class Sakuria {
       this.bot.user?.setActivity(`/help v${version}`, { type: "LISTENING" });
     });
     // this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
-    this.bot.on('interactionCreate', async interaction => this.onInteractionCreate(interaction));
+    this.bot.on('interactionCreate', async interaction => {
+      this.onInteractionCreate(interaction)
+    });
   }
 
   /**
@@ -74,13 +76,12 @@ class Sakuria {
   }
 
   private async registerSlashCommands(){
-    console.log(this.slashCommands);
     const commandsJSON = this.slashCommands.map(command => command.toJSON());
 
     try {
       logger.command.print('Started refreshing global application (/) commands.');
       await this.rest.put(Routes.applicationCommands(this.CLIENT_ID), { body: commandsJSON });
-      logger.command.print('Successfully reloaded global application (/) commands.');
+      logger.command.print(`Successfully reloaded ${this.slashCommands.length} global application (/) commands.`);
     } catch (error) {
       console.log(error);
     }
@@ -88,7 +89,7 @@ class Sakuria {
     try {
       logger.command.print('Started refreshing dev server application (/) commands.');
       await this.rest.put(Routes.applicationGuildCommands(this.CLIENT_ID, this.DEV_SERVER_ID), { body: commandsJSON });
-      logger.command.print('Successfully reloaded dev server application (/) commands.');
+      logger.command.print(`Successfully reloaded ${this.slashCommands.length} dev server application (/) commands.`);
     } catch (error) {
       console.log(error);
     }
@@ -134,69 +135,6 @@ class Sakuria {
 
     return await interaction.reply(result).catch(err => console.log(err));
   }
-
-  // // onMessageCreate handler
-  // private onMessageCreate(message: Discord.Message) {
-  //   commandMiddleware(message, async (message: IMessage) => {
-  //     // Slurs for idiots
-  //     const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
-
-  //     // Fetch the command
-  //     const command = this.commands.get(message.command);
-
-  //     // If it doesn't exist we respond
-  //     if (!command) {
-  //       message.reply(`That command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
-  //       return;
-  //     }
-
-  //     // Notify the user their shit's processing
-  //     if (command.requiresProcessing) {
-  //       var processingMessage = await message.channel.send("Processing...");
-  //       var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
-  //     }
-
-  //     // Get the result to send from the command
-  //     try {
-  //       let timeStart = Date.now();
-  //       var result = await command.execute(message);
-  //       let timeEnd = Date.now();
-  //       logger.command.executedCommand(
-  //         timeEnd - timeStart,
-  //         command.name,
-  //         message.author.username,
-  //         message.guild?.name || "dm"
-  //       );
-  //     } catch (error) {
-  //       console.log(error);
-  //       await message.reply(`\`\`\`${error}\`\`\``);
-  //     }
-
-  //     // Delete the processing message if it exists
-  //     // @ts-ignore
-  //     if (processingMessage) {
-  //       processingMessage.delete();
-  //       // @ts-ignore
-  //       clearInterval(typingInterval);
-  //     }
-
-  //     // If the command returns void we just return
-  //     if (!result) return;
-
-  //     // Send the result
-  //     try {
-  //       await message.reply(result);
-  //     } catch (error) {
-  //       try {
-  //         await message.channel.send(result);
-  //       } catch (error) {
-  //         console.log(error);
-  //         if (error.code === 500) await message.reply("⚠️ when the upload speed");
-  //         else await message.reply(`\`\`\`${error}\`\`\``);
-  //       }
-  //     }
-  //   });
-  // }
 }
 
 export default new Sakuria();
