@@ -3,7 +3,7 @@ import { Collection, CommandInteraction, ImageURLOptions, GuildMemberManager, Sn
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { randomDickSize } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
-import SakuriaEmbed, { createErrorEmbed, createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
+import SakuriaEmbed, { createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
 const USER_ID_REGEX = /<@!?(\d{18})>/g
 const displayAvatarSetting: ImageURLOptions = {
@@ -23,11 +23,12 @@ export default defineCommand({
       option.setName("mentions").setDescription("people to fight with").setRequired(false)
     ),
   execute: (interaction) => {
-    const content = interaction.options.getString("mentions", false);
+    const mentions = interaction.options.getString("mentions", false);
 
-    if (!content) return singleUserHandler(interaction)
+    if (!mentions) return singleUserHandler(interaction)
     else if (interaction.guild) {
-      const regexResult = USER_ID_REGEX.exec(content) ?? [];
+      const regexResult = mentions.split(USER_ID_REGEX).filter(mention => !!mention);
+      console.log(regexResult);
       const allDicks: Collection<string, number> = new Collection();
       const memberManager = interaction.guild.members;
       const authorDickSize = randomDickSize();
