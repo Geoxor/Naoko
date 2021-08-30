@@ -50,15 +50,13 @@ class Sakuria {
     });
     logger.sakuria.login();
     this.bot.login(config.token);
-    this.bot.on("ready", async () => {
-      this.onReady;
+    this.bot.once("ready", async () => {
+      this.onReady();
       logger.sakuria.numServers(this.bot.guilds.cache.size);
       this.bot.user?.setActivity(`/help v${version}`, { type: "LISTENING" });
     });
     // this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
-    this.bot.on("interactionCreate", async (interaction) => {
-      this.onInteractionCreate(interaction);
-    });
+    this.bot.on("interactionCreate", async (interaction) => this.onInteractionCreate(interaction));
   }
 
   /**
@@ -101,7 +99,6 @@ class Sakuria {
     }
   }
 
-  // onMessageCreate handler, doesn't work apparently
   private onReady() {
     logger.sakuria.print(`Logged in as ${this.bot.user!.tag}!`);
   }
@@ -136,10 +133,12 @@ class Sakuria {
     if (!result) return;
 
     if (command.requiresProcessing) {
-      return await interaction.editReply(result).catch((err) => console.log(err));
+      await interaction.editReply(result).catch((err) => console.log(err));
+      return;
     }
 
-    return await interaction.reply(result).catch((err) => console.log(err));
+    await interaction.reply(result).catch((err) => console.log(err));
+    return;
   }
 }
 

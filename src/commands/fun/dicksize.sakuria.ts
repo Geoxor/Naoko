@@ -1,7 +1,7 @@
 import { randomDickSize } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
 import { Readable } from "stream";
-import { User } from "discord.js";
+import { ImageURLOptions, User } from "discord.js";
 import SakuriaEmbed, { createErrorEmbed, createInlineBlankField } from "src/sakuria/SakuriaEmbed.sakuria";
 
 export default defineCommand({
@@ -10,21 +10,26 @@ export default defineCommand({
   requiresProcessing: false,
   execute: async (message) => {
     const mentionedUsers = message.mentions.users;
+    const displayAvatarSetting: ImageURLOptions = {
+      dynamic: true,
+      format: "png",
+      size: 128,
+    };
 
     if (mentionedUsers.size) {
       if (mentionedUsers.size > 20) {
-        return {
+        await message.reply({
           embeds: [createErrorEmbed("For you guys' healthiness, only 20 people can join the fight at once(including you).")]
-        };
+        });
+        return;
       }
-
+  
       const authorDickSize = randomDickSize();
       const allDicks: [User, number][] = [[message.author, authorDickSize]];
       const toFieldData = function([name, value]: string[]): { name: string, value: string, inline: true } {
         return { name, value, inline: true }
       };
-      // actually only used for embed image because there might be multiple
-      let winner: User = message.author;
+      let winner = message.author;
       let largestDickSize = authorDickSize;
 
       mentionedUsers.forEach((user: User) => {
@@ -38,13 +43,10 @@ export default defineCommand({
       });
 
       const dickAmountMod3 = allDicks.length % 3;
+      const spacer = dickAmountMod3 ? createInlineBlankField(dickAmountMod3) : []
       const embedTemplate = new SakuriaEmbed({
         title: "The legendary battle of dongs",
-        thumbnail: winner.displayAvatarURL({
-          dynamic: true,
-          format: "png",
-          size: 128,
-        })
+        thumbnail: winner.displayAvatarURL(displayAvatarSetting)
       });
 
       // 2000 not 1900 here because the maximum text in Embed is 2048
@@ -55,23 +57,18 @@ export default defineCommand({
               .setDescription("This battle of the dongs is too much to just say as is, so here's the brief:\n")
               .setFields([
                 ...allDicks
-                  .map(([user, dickSize]) =>
-                    [
-                      `${dickSize >= largestDickSize ? "(Winner) " : ""}${user.tag}`,
-                      `Dong size: ${dickSize.toString()}`
-                    ]
-                  )
+                  .map(formatUserDickSize(largestDickSize, false))
                   .map(toFieldData),
-                ...(dickAmountMod3 ? createInlineBlankField(dickAmountMod3) : [])
+                ...spacer
               ])
           ],
           files: [
             {
               name: "battle.txt",
               attachment: Readable.from(
-                allDicks.reduce((acc, [user, dickSize]) =>
-                  `${user.tag}'s dong: 8${"=".repeat(dickSize)}D`, ""
-                )
+                allDicks
+                  .map(([user, dickSize]) => `${user.tag}'s dong: 8${"=".repeat(dickSize)}D`)
+                  .join("\n")
               ),
             },
           ]
@@ -81,50 +78,36 @@ export default defineCommand({
           embeds: [
             embedTemplate.setFields([
               ...allDicks
-                .map(([user, dickSize]) =>
-                  [
-                    `${dickSize >= largestDickSize ? "(Winner) " : ""}${user.tag}`,
-                    `Dong:8${"=".repeat(dickSize)}D\nDong size: ${dickSize.toString()}`
-                  ]
-                )
+                .map(formatUserDickSize(largestDickSize, true))
                 .map(toFieldData),
-              ...(dickAmountMod3 ? createInlineBlankField(dickAmountMod3) : [])
+              ...spacer
             ])
           ]
         }
       }
     } else {
       const dickSize = randomDickSize();
+      const embedTemplate = new SakuriaEmbed({
+        title: "Your dong info",
+        thumbnail: message.author.displayAvatarURL(displayAvatarSetting),
+        fields: [{ name: "Total length:", value: `**${dickSize}**cm` }]
+      });
 
       if (dickSize > 2000) {
-        return {
-          embeds: [
-            new SakuriaEmbed({
-              title: "Your mass info",
-              description: "My goodness that's some schlong",
-              fields: [{ name: "Total length:", value: dickSize.toString() }]
-            })
-          ],
+        message.reply({
+          embeds: [embedTemplate.setDescription("My goodness that's some schlong")],
           files: [{name: "magnum.txt", attachment: Readable.from(`8${"=".repeat(dickSize)}D`)}],
-        };
+        });
       } else {
-        return {
-          embeds: [
-            new SakuriaEmbed({
-              title: "Your dong info",
-              thumbnail: message.author.displayAvatarURL({
-                dynamic: true,
-                format: "png",
-                size: 128,
-              }) || "",
-              fields: [
-                { name: "Your mass:", value: `8${"=".repeat(dickSize)}D` },
-                { name: "Total length:", value: dickSize.toString() }
-              ]
-            })
-          ]
-        };
+        message.reply({ embeds: [embedTemplate.addField("Your dong:", `8${"=".repeat(dickSize)}D`)] });
       }
     }
   },
 });
+
+function formatUserDickSize(largestDickSize: number, showDick: boolean) {
+  return ([userTag, dickSize]: [string, number]) => [
+    `${dickSize >= largestDickSize ? "(Winner) " : ""}${userTag}`,
+    `${showDick ? `Dong:8${"=".repeat(dickSize)}D\n` : ""}Dong size: ${dickSize.toString()}`
+  ];
+}

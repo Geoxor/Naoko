@@ -30,7 +30,7 @@ class Config {
 
     // save this.config as config.sakuria.json
     try {
-      await fs.promises.writeFile("./sakuria.json", JSON.stringify(this.config, null, 2));
+      await fs.promises.writeFile("./src/sakuria.json", JSON.stringify(this.config, null, 2));
       logger.config.created();
     } catch (error) {
       logger.config.failedCreation();
