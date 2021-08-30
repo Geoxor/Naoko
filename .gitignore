@@ -6,6 +6,8 @@ music/*
 prisma/*
 dist
 cache/*
+libs/*
+src/cache/*
 sakuria.json
 !prisma/migrations
 !prisma/schema.prisma

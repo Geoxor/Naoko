@@ -2,9 +2,10 @@ import fs from "fs";
 import logger from "./Logger.sakuria";
 
 interface IConfig {
-  prefix: string;
-  musicDirectory: string;
-  token: string;
+  PREFIX: string;
+  MUSIC_DIRECTORY: string;
+  TOKEN: string;
+  WAIFU_2X_PATH: string;
 }
 
 class Config {
@@ -23,9 +24,10 @@ class Config {
     logger.config.creating();
 
     this.config = {
-      prefix: "~",
-      musicDirectory: "./music",
-      token: "",
+      PREFIX: "~",
+      MUSIC_DIRECTORY: "./music",
+      TOKEN: "",
+      WAIFU_2X_PATH: ""
     };
 
     // save this.config as config.sakuria.json

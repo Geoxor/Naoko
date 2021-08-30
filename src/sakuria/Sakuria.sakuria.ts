@@ -30,7 +30,7 @@ class Sakuria {
 
   constructor() {
     logger.sakuria.instantiated();
-    this.rest = new REST({ version: "9" }).setToken(config.token);
+    this.rest = new REST({ version: "9" }).setToken(config.TOKEN);
 
     this.commands = new Discord.Collection();
     this.loadCommands();
@@ -49,7 +49,7 @@ class Sakuria {
       ],
     });
     logger.sakuria.login();
-    this.bot.login(config.token);
+    this.bot.login(config.TOKEN);
     this.bot.once("ready", async () => {
       this.onReady();
       logger.sakuria.numServers(this.bot.guilds.cache.size);
@@ -111,10 +111,7 @@ class Sakuria {
 
     if (!command) return;
 
-    if (command.requiresProcessing) {
-      console.log("defer");
-      await interaction.deferReply();
-    }
+    command.requiresProcessing && await interaction.deferReply();
 
     try {
       let timeStart = Date.now();
@@ -132,12 +129,8 @@ class Sakuria {
 
     if (!result) return;
 
-    if (command.requiresProcessing) {
-      await interaction.editReply(result).catch((err) => console.log(err));
-      return;
-    }
-
-    await interaction.reply(result).catch((err) => console.log(err));
+    command.requiresProcessing && await interaction.editReply(result).catch((err) => console.log(err));
+    !command.requiresProcessing && await interaction.reply(result).catch((err) => console.log(err));
     return;
   }
 }

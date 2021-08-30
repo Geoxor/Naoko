@@ -128,7 +128,7 @@ export default class MusicPlayer {
    * @author N1kO23
    */
   public async initQueue() {
-    this.queue = await walkDirectory(config.musicDirectory);
+    this.queue = await walkDirectory(config.MUSIC_DIRECTORY);
     this.shuffle();
     this.skip();
     try {

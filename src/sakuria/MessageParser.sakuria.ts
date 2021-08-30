@@ -12,7 +12,7 @@ export default class MessageParser {
   }
 
   extractArgs(message: string): string[] {
-    return message.slice(config.prefix.length).trim().split(/ +/);
+    return message.slice(config.PREFIX.length).trim().split(/ +/);
   }
 
   extractCommand(): string {

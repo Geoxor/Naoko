@@ -8,6 +8,11 @@ import cache from "../sakuria/Cache.sakuria";
 import petPetGif from "pet-pet-gif";
 import { getRGBAUintArray, encodeFramesToGif, bipolarRandom } from "./logic.sakuria";
 import logger from "../sakuria/Logger.sakuria";
+import fs from "fs";
+// @ts-ignore this has broken types :whyyyyyyyyyyy:
+import fileType from "file-type";
+import config from "../sakuria/Config.sakuria";
+import child_process from "child_process";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -37,6 +42,7 @@ export const imageProcessors: ImageProcessors = {
   cart,
   car,
   amogus,
+  waifu2x,
   miku,
   trackmania,
 };
@@ -66,6 +72,33 @@ export async function transform(pipeline: string[], buffer: Buffer) {
     if (Date.now() - start > 10000) return fuckedBuffer;
   }
   return fuckedBuffer;
+}
+
+export async function waifu2x(buffer: Buffer): Promise<Buffer> {
+  return new Promise(async (resolve, reject) => {
+    const curData = Date.now();
+    const mime = await fileType(buffer);
+    const inputPath = `./src/cache/${curData}-in-randomFile.${mime.ext}`;
+    const outputPath = `./src/cache/${curData}-out-randomFile.png`;
+    await fs.promises.writeFile(inputPath, buffer).catch(err => reject(err));
+
+    // Creates a new subprocess
+    var subprocess = child_process.execFile(config.WAIFU_2X_PATH, [`-i`, inputPath, `-o`, outputPath], async (err) => {
+      err && subprocess.removeAllListeners('close') && reject(err);
+    });
+
+    // Triggers when subprocess is finished
+    subprocess.on('close', async () => {
+      // Removes the source file
+      fs.promises.unlink(inputPath);
+      logger.command.print(`[SUBTASK] Image ${curData} upscaled!`);
+
+      const file = await fs.promises.readFile(outputPath).catch(err => reject(err));
+      if (!file) return reject(`${file} was not found!`);
+
+      resolve(file);
+    });
+  });
 }
 
 /**
