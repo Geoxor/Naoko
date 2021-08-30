@@ -20,6 +20,43 @@ const defaultImageOptions: Discord.ImageURLOptions = {
 };
 
 /**
+ * Creates commands for the image processor functions
+ * @param fns all the image processor functions
+ * @author Bluskript
+ */
+export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
+  return fns.map((fn) => {
+    const cmdName = fn.name.toLowerCase();
+    logger.command.print(`Generated command ${cmdName}`);
+    return {
+      data: new SlashCommandBuilder()
+        .setName(cmdName)
+        .setDescription(`${cmdName} image processor`)
+        .addStringOption((option) =>
+          option.setName("source").setDescription("a URL, Emoji or User ID to use as a texture").setRequired(true)
+        ),
+      requiresProcessing: true,
+      execute: imageProcess(fn),
+    };
+  });
+}
+
+/**
+ * Gets the used/total heap in ram used
+ * @author Geoxor
+ */
+export function getCurrentMemoryHeap() {
+  const mem = process.memoryUsage();
+  const used = mem.heapUsed / 1000 / 1000;
+  const total = mem.heapTotal / 1000 / 1000;
+
+  const usedPadded = used < 100 ? "0" + used.toFixed(2) : used.toFixed(2);
+  const totalPadded = total < 100 ? "0" + total.toFixed(2) : total.toFixed(2);
+
+  return `${usedPadded}/${totalPadded}MB`;
+}
+
+/**
  * Gets the RGBA values of an image
  * @param buffer the buffer to get the values from
  * @author Geoxor & Bluskript
@@ -118,70 +155,42 @@ export async function animeQuery(query: string) {
   }
 }
 
-/**
- * Fetches and rescales an image from a discord message for
- * it to be deformed by an image processor
- * @param message discord message to get buffer from
- * @returns {Promise<buffer>}
- * @author Geoxor
- */
-export async function parseBufferFromMessage(message: IMessage): Promise<Buffer> {
-  const imageURL = await getImageURLFromMessage(message);
-  const targetBuffer = await getBufferFromUrl(imageURL);
-  const preProccessed = await preProcessBuffer(targetBuffer);
-  return preProccessed;
+export function getSourceURL(source: string, interaction: CommandInteraction) {
+  return 0
+    || getEmojiURL(source)
+    || getAvatarURLFromID(source, interaction) 
+    || (isValidHttpUrl(source) ? resolveTenor(source) : undefined);
 }
 
 /**
  * Returns an execute function to use in a image process command
  * @param process the image processor function
- * @author Bluskript
+ * @author Bluskript & Geoxor
  */
 export function imageProcess(process: ImageProcessorFn) {
   return async (interaction: CommandInteraction): Promise<string | Discord.ReplyMessageOptions> => {
-    const buffer = await getBufferFromUrl(interaction.options.getString("url", true));
+    // Get the user's input
+    const source = interaction.options.getString("source", true);
+
+    const sourceURL = getSourceURL(source, interaction);
+
+    if (!sourceURL) return "Invalid source type";
+
+    // Load the URL into a buffer
+    const buffer = await getBufferFromUrl(sourceURL);
+
+    // Process the buffer with the selected image processor
     const resultbuffer = await process(buffer);
+
+    // Check if the result is a GIF or PNG
     const mimetype = await fileType(resultbuffer);
+
+    // Create an attachment with the correct file extension
+    // so discord plays it properly in chat
     const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
+
     return { files: [attachment] };
   };
-}
-
-/**
- * Creates commands for the image processor functions
- * @param fns all the image processor functions
- * @author Bluskript
- */
-export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
-  return fns.map((fn) => {
-    const cmdName = fn.name.toLowerCase();
-    logger.command.print(`Generated command ${cmdName}`);
-    return {
-      data: new SlashCommandBuilder()
-        .setName(cmdName)
-        .setDescription(`${cmdName} image processor`)
-        .addStringOption((option) =>
-          option.setName("url").setDescription("the URL of the image to process").setRequired(true)
-        ),
-      requiresProcessing: true,
-      execute: imageProcess(fn),
-    };
-  });
-}
-
-/**
- * Gets the used/total heap in ram used
- * @author Geoxor
- */
-export function getCurrentMemoryHeap() {
-  const mem = process.memoryUsage();
-  const used = mem.heapUsed / 1000 / 1000;
-  const total = mem.heapTotal / 1000 / 1000;
-
-  const usedPadded = used < 100 ? "0" + used.toFixed(2) : used.toFixed(2);
-  const totalPadded = total < 100 ? "0" + total.toFixed(2) : total.toFixed(2);
-
-  return `${usedPadded}/${totalPadded}MB`;
 }
 
 /**
@@ -205,7 +214,7 @@ export function isValidHttpUrl(string: string) {
  * @param message message to parse
  * @author Geoxor
  */
-export function getFirstEmojiURL(message: string) {
+export function getEmojiURL(message: string) {
   const emoteRegex = /<:.+:(\d+)>/gm;
   const animatedEmoteRegex = /<a:.+:(\d+)>/gm;
   const staticEmoji = message.split(emoteRegex)[1];
@@ -213,6 +222,22 @@ export function getFirstEmojiURL(message: string) {
   if (staticEmoji) return "https://cdn.discordapp.com/emojis/" + staticEmoji + ".png?v=1";
   if (animatedEmoji) return "https://cdn.discordapp.com/emojis/" + animatedEmoji + ".gif?v=1";
   else return undefined;
+}
+
+/**
+ * Get's a user's avatar from an ID through an interaction if the
+ * ID passes validation
+ *
+ * It is kinda hacky
+ * @param id the user id to check
+ * @param interaction the interaction
+ * @author Geoxor
+ */
+export function getAvatarURLFromID(id: string, interaction: CommandInteraction) {
+  if (/[0-9]{18}$/g.test(id)) {
+    const avatarURL = interaction.guild?.members.cache.get(id)?.user.displayAvatarURL(defaultImageOptions);
+    return avatarURL;
+  }
 }
 
 /**
@@ -417,22 +442,6 @@ export function britify(sentence: string): string {
 }
 
 /**
- * Gets an image url from attachments > stickers > first emoji > mentioned user avatar > author avatar > default avatar
- * @param message the discord message to fetch from
- * @author Bluskript
- */
-export function getMostRelevantImageURL(message: Discord.Message) {
-  return (
-    message.attachments.first()?.url ||
-    message.stickers.first()?.url ||
-    getFirstEmojiURL(message.content) ||
-    message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
-    message.author.displayAvatarURL(defaultImageOptions) ||
-    message.author.defaultAvatarURL
-  );
-}
-
-/**
  * Generates text to speech wav buffer from a string
  * @param string the string to text to speech
  * @author Geoxor
@@ -441,6 +450,12 @@ export async function tts(string: string): Promise<Buffer> {
   return speak(string);
 }
 
+/**
+ * Finds the index of a URL in an array of strings
+ * @param array the array to search
+ * @returns {number} the index of the first URL in the array
+ * @author Geoxor
+ */
 export function findIndexOfURL(array: string[]) {
   for (let i = 0; i < array.length; i++) {
     if (isValidHttpUrl(array[i])) return i;
@@ -448,47 +463,16 @@ export function findIndexOfURL(array: string[]) {
   return -1;
 }
 
-
 /**
- * It only parses tenor links but it might do more in the future
+ * Fixes tenor URLs
  * @param url parses a url
  * @author Geoxor
  */
-export function resolveURL(url: string): string {
+export function resolveTenor(url: string): string {
   if (url.startsWith("https://tenor") && !url.endsWith(".gif")) {
     return url + ".gif";
   }
-
   return url;
-}
-
-/**
- * Gets a URL from a message, it will try to get a message
- * from replies, attachments, links, or user avatars
- * @author Geoxor & Bluskript
- */
-export async function getImageURLFromMessage(message: IMessage): Promise<string> {
-  const arg = message.args[findIndexOfURL(message.args)];
-  const userMention = message.mentions.users.first();
-
-  // If theres a reply
-  if (message.reference) {
-    const reference = await message.fetchReference();
-    return getMostRelevantImageURL(reference);
-  }
-
-  if (isValidHttpUrl(arg)) {
-    if (arg.startsWith("https://tenor") && !arg.endsWith(".gif")) {
-      return arg + ".gif";
-    }
-    return arg;
-  }
-
-  if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:"))
-    return getMostRelevantImageURL(message); // this is a hack...
-
-  const user = await message.client.users.fetch(arg);
-  return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL;
 }
 
 /**
@@ -561,8 +545,8 @@ export async function getBufferFromUrl(url: string) {
  * @returns a buffer of the last attachment
  * @author Geoxor
  */
-export async function getLastAttachmentInChannel(message: IMessage) {
-  const messages = await message.channel.messages.fetch();
+export async function getLastAttachmentInChannel(channel: Discord.TextChannel) {
+  const messages = await channel.messages.fetch();
   const lastMessage = messages
     .sort((a, b) => b.createdTimestamp - a.createdTimestamp)
     .filter((m) => m.attachments.size > 0)

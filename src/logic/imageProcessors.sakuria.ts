@@ -80,24 +80,28 @@ export async function waifu2x(buffer: Buffer): Promise<Buffer> {
     const mime = await fileType(buffer);
     const inputPath = `./src/cache/${curData}-in-randomFile.${mime.ext}`;
     const outputPath = `./src/cache/${curData}-out-randomFile.png`;
-    await fs.promises.writeFile(inputPath, buffer).catch(err => reject(err));
+    await fs.promises.writeFile(inputPath, buffer).catch((err) => reject(err));
 
     // Creates a new subprocess
-    var subprocess = child_process.execFile(config.WAIFU_2X_PATH, [`-i`, inputPath, `-o`, outputPath], async (err) => {
-      err && subprocess.removeAllListeners('close') && reject(err);
-    });
+    var subprocess = child_process.execFile(
+      config.WAIFU_2X_PATH,
+      [`-i`, inputPath, `-o`, outputPath],
+      async (err) => {
+        err && subprocess.removeAllListeners("close") && reject(err);
+      }
+    );
 
     // Triggers when subprocess is finished
-    subprocess.on('close', async () => {
+    subprocess.on("close", async () => {
       // Removes the source file
       fs.promises.unlink(inputPath);
 
-      const file = await fs.promises.readFile(outputPath).catch(err => reject(err));
+      const file = await fs.promises.readFile(outputPath).catch((err) => reject(err));
       if (!file) return reject(`${file} was not found!`);
 
       // Removes the output file
       fs.promises.unlink(outputPath);
-      
+
       resolve(file);
     });
   });

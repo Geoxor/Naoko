@@ -20,7 +20,6 @@ export default defineCommand({
       size: 128,
     };
 
-
     if (!content) {
       const dickSize = randomDickSize();
       const embedTemplate = new SakuriaEmbed({
@@ -38,12 +37,18 @@ export default defineCommand({
         return { embeds: [embedTemplate.addField("Your dong:", `8${"=".repeat(dickSize)}D`)] };
       }
     } else if (interaction.guild) {
-      const mentionedUsers = content.match(/<@!?(\d{18})>/g)?.map((str: string) => str.match(/\d{18}/g)?.[0]) || null;
+      const mentionedUsers =
+        content.match(/<@!?(\d{18})>/g)?.map((str: string) => str.match(/\d{18}/g)?.[0]) || null;
 
       if (!mentionedUsers) return { embeds: [createErrorEmbed("You must provide mentions!")] };
-      if (mentionedUsers.length > 20) return {
-        embeds: [createErrorEmbed("For you guys' healthiness, only 20 people can join the fight at once(including you).")]
-      }
+      if (mentionedUsers.length > 20)
+        return {
+          embeds: [
+            createErrorEmbed(
+              "For you guys' healthiness, only 20 people can join the fight at once(including you)."
+            ),
+          ],
+        };
 
       const memberManager = interaction.guild.members;
       const authorDickSize = randomDickSize();
@@ -81,18 +86,19 @@ export default defineCommand({
             embedTemplate
               .setDescription("This battle of the dongs is too much to just say as is, so here's the brief:\n")
               .setFields([
-                ...allDicks
-                  .map(formatUserDickSize(largestDickSize, false, memberManager))
-                  .map(toFieldData),
+                ...allDicks.map(formatUserDickSize(largestDickSize, false, memberManager)).map(toFieldData),
                 ...spacer,
-              ])
+              ]),
           ],
           files: [
             {
               name: "battle.txt",
               attachment: Readable.from(
                 allDicks
-                  .map(([user, dickSize]) => `${memberManager.resolve(user)?.user?.tag || "?"}'s dong: 8${"=".repeat(dickSize)}D`)
+                  .map(
+                    ([user, dickSize]) =>
+                      `${memberManager.resolve(user)?.user?.tag || "?"}'s dong: 8${"=".repeat(dickSize)}D`
+                  )
                   .join("\n")
               ),
             },
@@ -102,11 +108,9 @@ export default defineCommand({
         return {
           embeds: [
             embedTemplate.setFields([
-              ...allDicks
-                .map(formatUserDickSize(largestDickSize, true, memberManager))
-                .map(toFieldData),
+              ...allDicks.map(formatUserDickSize(largestDickSize, true, memberManager)).map(toFieldData),
               ...spacer,
-            ])
+            ]),
           ],
         };
       }

@@ -20,19 +20,19 @@ class Config {
     }
   }
 
-  private async createNewConfig() {
+  private createNewConfig() {
     logger.config.creating();
 
     this.config = {
       PREFIX: "~",
       MUSIC_DIRECTORY: "./music",
       TOKEN: "",
-      WAIFU_2X_PATH: ""
+      WAIFU_2X_PATH: "",
     };
 
     // save this.config as config.sakuria.json
     try {
-      await fs.promises.writeFile("./src/sakuria.json", JSON.stringify(this.config, null, 2));
+      fs.writeFileSync("./src/sakuria.json", JSON.stringify(this.config, null, 2));
       logger.config.created();
     } catch (error) {
       logger.config.failedCreation();

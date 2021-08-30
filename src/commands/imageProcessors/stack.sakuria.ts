@@ -1,6 +1,11 @@
 import { defineCommand } from "../../types";
 import Discord from "discord.js";
-import { getBufferFromUrl, parseBufferFromMessage, preProcessBuffer, resolveURL } from "../../logic/logic.sakuria";
+import {
+  getBufferFromUrl,
+  getSourceURL,
+  preProcessBuffer,
+  resolveURL,
+} from "../../logic/logic.sakuria";
 import { imageProcessors, stack } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
@@ -22,7 +27,7 @@ export default defineCommand({
     .setName("stack")
     .setDescription("Stack an image processor and make a GIF out of it (this might cause seizures)")
     .addStringOption((option) =>
-      option.setName("url").setDescription("A URL to fetch the image from").setRequired(true)
+      option.setName("source").setDescription("a URL, Emoji or User ID to use as a texture").setRequired(true)
     )
     .addStringOption((option) =>
       option
@@ -38,8 +43,10 @@ export default defineCommand({
   execute: async (interaction) => {
     const processor = interaction.options.getString("processor", true);
     const fps = interaction.options.getInteger("fps");
-    const url = resolveURL(interaction.options.getString("url", true));
-    const buffer = await getBufferFromUrl(url);
+    const source = interaction.options.getString("source", true);
+    const sourceURL = getSourceURL(source, interaction);
+    if (!sourceURL) return "Invalid source type";
+    const buffer = await getBufferFromUrl(sourceURL);
     const preProccessed = await preProcessBuffer(buffer);
     const resultbuffer = await stack(processor, preProccessed, stacks[processor], fps || undefined);
     const mimetype = await fileType(resultbuffer);

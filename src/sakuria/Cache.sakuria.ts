@@ -32,10 +32,10 @@ class Cache {
     return { name, buffer };
   }
 
-  clearCache(){
+  clearCache() {
     logger.config.print(`Deleting reminent cache files`);
     if (fs.existsSync(this.CACHE_PATH)) {
-      fs.rmSync(this.CACHE_PATH, {recursive: true, force: true});
+      fs.rmSync(this.CACHE_PATH, { recursive: true, force: true });
     }
     fs.mkdirSync(this.CACHE_PATH);
   }
