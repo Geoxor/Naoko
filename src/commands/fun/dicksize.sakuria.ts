@@ -1,18 +1,9 @@
 import { Readable } from "stream";
-import { Collection, CommandInteraction, ImageURLOptions, GuildMemberManager, Snowflake } from "discord.js";
+import { ImageURLOptions, GuildMemberManager, Snowflake } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { randomDickSize } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
 import SakuriaEmbed, { createErrorEmbed, createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
-
-const displayAvatarSetting: ImageURLOptions = {
-  dynamic: true,
-  format: "png",
-  size: 128,
-};
-const toFieldData = function ([name, value]: string[]): { name: string; value: string; inline: true } {
-  return { name, value, inline: true };
-};
 
 export default defineCommand({
   data: new SlashCommandBuilder()
@@ -23,7 +14,6 @@ export default defineCommand({
     ),
   execute: (interaction) => {
     const content = interaction.options.getString("mentions", false);
-
     const displayAvatarSetting: ImageURLOptions = {
       dynamic: true,
       format: "png",
@@ -60,44 +50,34 @@ export default defineCommand({
           ],
         };
 
-    if (!content) singleUserHandler(interaction)
-    else if (interaction.guild) {
-      const mentionedUsersIterator = content.matchAll(/<@!?(\d{18})>/g);
-      const authorDickSize = randomDickSize();
-      const allDicks = new Collection<string, number>([[interaction.user.id, authorDickSize]]);
       const memberManager = interaction.guild.members;
+      const authorDickSize = randomDickSize();
+      const allDicks: [Snowflake, number][] = [[interaction.user.id, authorDickSize]];
+      const toFieldData = function ([name, value]: string[]): { name: string; value: string; inline: true } {
+        return { name, value, inline: true };
+      };
       // actually only used for embed image because there might be multiple
       let winnerID: Snowflake = interaction.user.id;
-      let largestDickSize = authorDickSize
+      let largestDickSize = authorDickSize;
 
-      let mentionedUser: IteratorResult<RegExpMatchArray> = mentionedUsersIterator.next();
-      while (!mentionedUser.done) {
-        const mentionedUserID = mentionedUser.value[1];
+      mentionedUsers.forEach((userID: string | undefined) => {
+        if (!userID) return;
 
-        if (mentionedUserID && !allDicks.has(mentionedUserID)) {
-          const dickSize = randomDickSize()
+        const dickSize = randomDickSize();
 
-          if (dickSize > largestDickSize) {
-            winnerID = mentionedUserID;
-            largestDickSize = dickSize;
-          }
-          allDicks.set(mentionedUserID, dickSize);
+        if (dickSize > largestDickSize) {
+          winnerID = userID;
+          largestDickSize = dickSize;
         }
-        mentionedUser = mentionedUsersIterator.next();
-      }
-
-      const spacer = createInlineBlankField(allDicks.size % 3);
-      const embedTemplate = new SakuriaEmbed({
-        title: "The legendary battle of dongs",
-        thumbnail: memberManager.resolve(winnerID)?.user?.displayAvatarURL(displayAvatarSetting) || ""
+        allDicks.push([userID, dickSize]);
       });
 
-      if (allDicks.size < 2) return singleUserHandler(interaction);
-      if (allDicks.size > 20) {
-        return {
-          embeds: [createErrorEmbed("For you guys' healthiness, only 20 people can join the fight at once(including you).")]
-        };
-      }
+      const dickAmountMod3 = allDicks.length % 3;
+      const spacer = dickAmountMod3 ? createInlineBlankField(dickAmountMod3) : [];
+      const embedTemplate = new SakuriaEmbed({
+        title: "The legendary battle of dongs",
+        thumbnail: memberManager.resolve(winnerID)?.user?.displayAvatarURL(displayAvatarSetting) || "",
+      });
 
       // 2000 not 1900 here because the maximum text in Embed is 2048
       if (largestDickSize > 2000) {
@@ -137,24 +117,6 @@ export default defineCommand({
     }
   },
 });
-
-function singleUserHandler(interaction: CommandInteraction) {
-  const dickSize = randomDickSize();
-  const embedTemplate = new SakuriaEmbed({
-    title: "Your dong info",
-    thumbnail: interaction.user.displayAvatarURL(displayAvatarSetting),
-    fields: [{ name: "Total length:", value: `**${dickSize}**cm` }],
-  });
-
-  if (dickSize > 2000) {
-    return {
-      embeds: [embedTemplate.setDescription("My goodness that's some schlong")],
-      files: [{ name: "magnum.txt", attachment: Readable.from(`8${"=".repeat(dickSize)}D`) }],
-    };
-  } else {
-    return { embeds: [embedTemplate.addField("Your dong:", `8${"=".repeat(dickSize)}D`)] };
-  }
-}
 
 function formatUserDickSize(largestDickSize: number, showDick: boolean, memberManager: GuildMemberManager) {
   return ([userID, dickSize]: [string, number]) => [
