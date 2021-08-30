@@ -42,6 +42,37 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
 }
 
 /**
+ * Returns an execute function to use in a image process command
+ * @param process the image processor function
+ * @author Bluskript & Geoxor
+ */
+ export function imageProcess(process: ImageProcessorFn) {
+  return async (interaction: CommandInteraction): Promise<string | Discord.ReplyMessageOptions> => {
+    // Get the user's input
+    const source = interaction.options.getString("source", true);
+
+    const sourceURL = getSourceURL(source, interaction);
+
+    if (!sourceURL) return "Invalid source type";
+
+    // Load the URL into a buffer
+    const buffer = await getBufferFromUrl(sourceURL);
+
+    // Process the buffer with the selected image processor
+    const resultbuffer = await process(buffer);
+
+    // Check if the result is a GIF or PNG
+    const mimetype = await fileType(resultbuffer);
+
+    // Create an attachment with the correct file extension
+    // so discord plays it properly in chat
+    const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
+
+    return { files: [attachment] };
+  };
+}
+
+/**
  * Gets the used/total heap in ram used
  * @author Geoxor
  */
@@ -155,42 +186,19 @@ export async function animeQuery(query: string) {
   }
 }
 
+/**
+ * Figures out what type of input the user has given as the source
+ * and gets the url for that type
+ * @param source the source to get the URL from
+ * @param interaction the discord interaction to scope from
+ * @returns the URL of the source
+ * @author Geoxor
+ */
 export function getSourceURL(source: string, interaction: CommandInteraction) {
   return 0
     || getEmojiURL(source)
     || getAvatarURLFromID(source, interaction) 
     || (isValidHttpUrl(source) ? resolveTenor(source) : undefined);
-}
-
-/**
- * Returns an execute function to use in a image process command
- * @param process the image processor function
- * @author Bluskript & Geoxor
- */
-export function imageProcess(process: ImageProcessorFn) {
-  return async (interaction: CommandInteraction): Promise<string | Discord.ReplyMessageOptions> => {
-    // Get the user's input
-    const source = interaction.options.getString("source", true);
-
-    const sourceURL = getSourceURL(source, interaction);
-
-    if (!sourceURL) return "Invalid source type";
-
-    // Load the URL into a buffer
-    const buffer = await getBufferFromUrl(sourceURL);
-
-    // Process the buffer with the selected image processor
-    const resultbuffer = await process(buffer);
-
-    // Check if the result is a GIF or PNG
-    const mimetype = await fileType(resultbuffer);
-
-    // Create an attachment with the correct file extension
-    // so discord plays it properly in chat
-    const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
-
-    return { files: [attachment] };
-  };
 }
 
 /**
