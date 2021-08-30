@@ -5,6 +5,7 @@ import { randomDickSize } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
 import SakuriaEmbed, { createErrorEmbed, createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
+const USER_ID_REGEX = new RegExp("(?:<@!?(\\d{18})>)?".repeat(19));
 const displayAvatarSetting: ImageURLOptions = {
   dynamic: true,
   format: "png",
@@ -26,42 +27,37 @@ export default defineCommand({
 
     if (!content) singleUserHandler(interaction)
     else if (interaction.guild) {
-      const mentionedUsersIterator = content.matchAll(/<@!?(\d{18})>/g);
-      const authorDickSize = randomDickSize();
-      const allDicks = new Collection<string, number>([[interaction.user.id, authorDickSize]]);
+      const regexResult = USER_ID_REGEX.exec(content) ?? [];
+      const allDicks: Collection<string, number> = new Collection();
       const memberManager = interaction.guild.members;
-      // actually only used for embed image because there might be multiple
-      let winnerID: Snowflake = interaction.user.id;
-      let largestDickSize = authorDickSize
+      const authorDickSize = randomDickSize();
 
-      let mentionedUser: IteratorResult<RegExpMatchArray> = mentionedUsersIterator.next();
-      while (!mentionedUser.done) {
-        const mentionedUserID = mentionedUser.value[1];
+      allDicks.set(interaction.user.id, authorDickSize);
 
-        if (mentionedUserID && !allDicks.has(mentionedUserID)) {
-          const dickSize = randomDickSize()
+      let winnerID = interaction.user.id;
+      let largestDickSize = authorDickSize;
+      // starts at 1 because 1 is the input
+      let i = 1;
+      while (regexResult[i]) {
+        if (!allDicks.has(regexResult[i])) {
+          const dickSize = randomDickSize();
 
           if (dickSize > largestDickSize) {
-            winnerID = mentionedUserID;
+            winnerID = regexResult[i];
             largestDickSize = dickSize;
           }
-          allDicks.set(mentionedUserID, dickSize);
+          allDicks.push([regexResult[i], dickSize]);
         }
-        mentionedUser = mentionedUsersIterator.next();
+        i++;
       }
 
       const spacer = createInlineBlankField(allDicks.size % 3);
       const embedTemplate = new SakuriaEmbed({
         title: "The legendary battle of dongs",
-        thumbnail: memberManager.resolve(winnerID)?.user?.displayAvatarURL(displayAvatarSetting) || ""
+        thumbnail: memberManager.resolve(winnerID)?.user?.displayAvatarURL(displayAvatarSetting) || "",
       });
 
       if (allDicks.size < 2) return singleUserHandler(interaction);
-      if (allDicks.size > 20) {
-        return {
-          embeds: [createErrorEmbed("For you guys' healthiness, only 20 people can join the fight at once(including you).")]
-        };
-      }
 
       // 2000 not 1900 here because the maximum text in Embed is 2048
       if (largestDickSize > 2000) {
