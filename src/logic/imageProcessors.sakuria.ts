@@ -91,11 +91,13 @@ export async function waifu2x(buffer: Buffer): Promise<Buffer> {
     subprocess.on('close', async () => {
       // Removes the source file
       fs.promises.unlink(inputPath);
-      logger.command.print(`[SUBTASK] Image ${curData} upscaled!`);
 
       const file = await fs.promises.readFile(outputPath).catch(err => reject(err));
       if (!file) return reject(`${file} was not found!`);
 
+      // Removes the output file
+      fs.promises.unlink(outputPath);
+      
       resolve(file);
     });
   });

@@ -1,4 +1,5 @@
 import fs from "fs";
+import { walkDirectory } from "../logic/logic.sakuria";
 // @ts-ignore gotta use this garbage npm package cus built-in
 // three.js shit doesn't work (good job cunts)
 // and import the actual shit for types cus FUCK YOU THREE.JS
@@ -10,8 +11,11 @@ import logger from "./Logger.sakuria";
 class Cache {
   public files: string[] = [];
   public objects: { [key: string]: THREE.Group } = {};
+  public CACHE_PATH = "./src/cache";
 
   constructor() {
+    this.clearCache();
+
     this.files = fs.readdirSync("./src/assets/models/");
 
     // Load 3D Objects
@@ -26,6 +30,14 @@ class Cache {
     const name = path.split("/")[path.split("/").length - 1].replace(".obj", "");
     const buffer = fs.readFileSync(`./src/assets/models/${path}`);
     return { name, buffer };
+  }
+
+  clearCache(){
+    logger.config.print(`Deleting reminent cache files`);
+    if (fs.existsSync(this.CACHE_PATH)) {
+      fs.rmSync(this.CACHE_PATH, {recursive: true, force: true});
+    }
+    fs.mkdirSync(this.CACHE_PATH);
   }
 }
 

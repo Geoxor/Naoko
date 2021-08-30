@@ -525,8 +525,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
   for (let file of files) {
     const isDirectory = (await fs.promises.stat(dir + "/" + file)).isDirectory();
     if (isDirectory) filelist = await walkDirectory(dir + "/" + file, filelist);
-    if (file.endsWith(".flac") || file.endsWith(".mp3") || file.endsWith(".ogg") || file.endsWith(".wav"))
-      filelist.push(path.resolve(dir + "/" + file));
+    filelist.push(path.resolve(dir + "/" + file));
   }
   return filelist;
 }

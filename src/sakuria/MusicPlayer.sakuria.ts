@@ -20,6 +20,13 @@ import * as mm from "music-metadata";
 import fs from "fs";
 import Jimp from "jimp";
 
+const musicFileTypes = [
+  "flac",
+  "mp3",
+  "ogg",
+  "wav"
+]
+
 /**
  * The MusicPlayer class responsible for handling connection and audio playback in a voice channel
  * @author N1kO23
@@ -128,7 +135,7 @@ export default class MusicPlayer {
    * @author N1kO23
    */
   public async initQueue() {
-    this.queue = await walkDirectory(config.MUSIC_DIRECTORY);
+    this.queue = (await walkDirectory(config.MUSIC_DIRECTORY)).filter(file => musicFileTypes.includes(file.split(".")[file.split(".").length - 1]));
     this.shuffle();
     this.skip();
     try {
