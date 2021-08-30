@@ -25,7 +25,7 @@ export default defineCommand({
   execute: (interaction) => {
     const content = interaction.options.getString("mentions", false);
 
-    if (!content) singleUserHandler(interaction)
+    if (!content) return singleUserHandler(interaction)
     else if (interaction.guild) {
       const regexResult = USER_ID_REGEX.exec(content) ?? [];
       const allDicks: Collection<string, number> = new Collection();
