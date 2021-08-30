@@ -117,6 +117,6 @@ export default defineCommand({
 function formatUserDickSize(largestDickSize: number, showDick: boolean, memberManager: GuildMemberManager) {
   return ([userID, dickSize]: [string, number]) => [
     `${dickSize >= largestDickSize ? "(Winner) " : ""}${memberManager.resolve(userID)?.user?.tag || "?"}`,
-    `${showDick ? `Dong:8${"=".repeat(dickSize)}D\n` : ""}Dong size: ${dickSize.toString()}`,
+    `${showDick ? `Dong:8${"=".repeat(dickSize)}D\n` : ""}Dong size: ${dickSize.toString()}cm`,
   ];
 }
