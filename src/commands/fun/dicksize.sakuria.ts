@@ -5,7 +5,7 @@ import { randomDickSize } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
 import SakuriaEmbed, { createErrorEmbed, createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
-const USER_ID_REGEX = /<@!(\d{18})>/g
+const USER_ID_REGEX = /<@!?(\d{18})>/g
 const displayAvatarSetting: ImageURLOptions = {
   dynamic: true,
   format: "png",
