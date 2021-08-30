@@ -24,6 +24,42 @@ export default defineCommand({
   execute: (interaction) => {
     const content = interaction.options.getString("mentions", false);
 
+    const displayAvatarSetting: ImageURLOptions = {
+      dynamic: true,
+      format: "png",
+      size: 128,
+    };
+
+    if (!content) {
+      const dickSize = randomDickSize();
+      const embedTemplate = new SakuriaEmbed({
+        title: "Your dong info",
+        thumbnail: interaction.user.displayAvatarURL(displayAvatarSetting),
+        fields: [{ name: "Total length:", value: `**${dickSize}**cm` }],
+      });
+
+      if (dickSize > 2000) {
+        return {
+          embeds: [embedTemplate.setDescription("My goodness that's some schlong")],
+          files: [{ name: "magnum.txt", attachment: Readable.from(`8${"=".repeat(dickSize)}D`) }],
+        };
+      } else {
+        return { embeds: [embedTemplate.addField("Your dong:", `8${"=".repeat(dickSize)}D`)] };
+      }
+    } else if (interaction.guild) {
+      const mentionedUsers =
+        content.match(/<@!?(\d{18})>/g)?.map((str: string) => str.match(/\d{18}/g)?.[0]) || null;
+
+      if (!mentionedUsers) return { embeds: [createErrorEmbed("You must provide mentions!")] };
+      if (mentionedUsers.length > 20)
+        return {
+          embeds: [
+            createErrorEmbed(
+              "For you guys' healthiness, only 20 people can join the fight at once(including you)."
+            ),
+          ],
+        };
+
     if (!content) singleUserHandler(interaction)
     else if (interaction.guild) {
       const mentionedUsersIterator = content.matchAll(/<@!?(\d{18})>/g);
@@ -70,19 +106,18 @@ export default defineCommand({
             embedTemplate
               .setDescription("This battle of the dongs is too much to just say as is, so here's the brief:\n")
               .setFields([
-                ...allDicks
-                  .map(formatUserDickSize(largestDickSize, false, memberManager))
-                  .map(toFieldData),
+                ...allDicks.map(formatUserDickSize(largestDickSize, false, memberManager)).map(toFieldData),
                 ...spacer,
-              ])
+              ]),
           ],
           files: [
             {
               name: "battle.txt",
               attachment: Readable.from(
                 allDicks
-                  .map((dickSize: number, user: Snowflake) =>
-                    `${memberManager.resolve(user)?.user?.tag || "?"}'s dong: 8${"=".repeat(dickSize)}D`
+                  .map(
+                    ([user, dickSize]) =>
+                      `${memberManager.resolve(user)?.user?.tag || "?"}'s dong: 8${"=".repeat(dickSize)}D`
                   )
                   .join("\n")
               ),
@@ -93,11 +128,9 @@ export default defineCommand({
         return {
           embeds: [
             embedTemplate.setFields([
-              ...allDicks
-                .map(formatUserDickSize(largestDickSize, true, memberManager))
-                .map(toFieldData),
+              ...allDicks.map(formatUserDickSize(largestDickSize, true, memberManager)).map(toFieldData),
               ...spacer,
-            ])
+            ]),
           ],
         };
       }

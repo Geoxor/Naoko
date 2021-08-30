@@ -111,7 +111,7 @@ class Sakuria {
 
     if (!command) return;
 
-    command.requiresProcessing && await interaction.deferReply();
+    command.requiresProcessing && (await interaction.deferReply());
 
     try {
       let timeStart = Date.now();
@@ -129,8 +129,8 @@ class Sakuria {
 
     if (!result) return;
 
-    command.requiresProcessing && await interaction.editReply(result).catch((err) => console.log(err));
-    !command.requiresProcessing && await interaction.reply(result).catch((err) => console.log(err));
+    command.requiresProcessing && (await interaction.editReply(result).catch((err) => console.log(err)));
+    !command.requiresProcessing && (await interaction.reply(result).catch((err) => console.log(err)));
     return;
   }
 }
