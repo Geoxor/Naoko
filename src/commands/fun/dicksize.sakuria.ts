@@ -1,16 +1,12 @@
 import { Readable } from "stream";
-import { Collection, CommandInteraction, ImageURLOptions, GuildMemberManager, Snowflake } from "discord.js";
+import { Collection, CommandInteraction, GuildMemberManager, Snowflake } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { defaultImageOptions, getAvatarURLFromID, randomDickSize } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
 import SakuriaEmbed, { createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
 const USER_ID_REGEX = /<@!?(\d{18})>/g
-const displayAvatarSetting: ImageURLOptions = {
-  dynamic: true,
-  format: "png",
-  size: 128,
-};
+
 const toFieldData = function ([name, value]: string[]): { name: string; value: string; inline: true } {
   return { name, value, inline: true };
 };
