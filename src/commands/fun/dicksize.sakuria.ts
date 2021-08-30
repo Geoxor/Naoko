@@ -87,8 +87,8 @@ export default defineCommand({
                   .join("\n")
               ),
             },
-          ]
-        }
+          ],
+        };
       } else {
         return {
           embeds: [
@@ -98,8 +98,8 @@ export default defineCommand({
                 .map(toFieldData),
               ...spacer,
             ])
-          ]
-        }
+          ],
+        };
       }
     }
   },
