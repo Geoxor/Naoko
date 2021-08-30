@@ -25,7 +25,7 @@ export default defineCommand({
   execute: async (interaction) => {
     const pipeline = interaction.options.getString("pipeline", true).split(" ");
     if (pipeline.length > 10) return "pipeline can't be longer than 10 iterators";
-    const source = interaction.options.getString("source", true)
+    const source = interaction.options.getString("source", true);
     const sourceURL = getSourceURL(source, interaction);
     if (!sourceURL) return "Invalid source type";
     const buffer = await getBufferFromUrl(sourceURL);

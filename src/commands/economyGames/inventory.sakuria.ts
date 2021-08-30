@@ -3,9 +3,7 @@ import { defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
-  data: new SlashCommandBuilder()
-    .setName("inventory")
-    .setDescription("Shows the inventory of the user"),
+  data: new SlashCommandBuilder().setName("inventory").setDescription("Shows the inventory of the user"),
   requiresProcessing: false,
   execute: async (interaction) => {
     try {

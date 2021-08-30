@@ -5,7 +5,7 @@ import { defaultImageOptions, getAvatarURLFromID, randomDickSize } from "../../l
 import { defineCommand } from "../../types";
 import SakuriaEmbed, { createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
-const USER_ID_REGEX = /<@!?(\d{18})>/g
+const USER_ID_REGEX = /<@!?(\d{18})>/g;
 
 const toFieldData = function ([name, value]: string[]): { name: string; value: string; inline: true } {
   return { name, value, inline: true };
@@ -21,9 +21,9 @@ export default defineCommand({
   execute: (interaction) => {
     const mentions = interaction.options.getString("mentions", false);
 
-    if (!mentions) return singleUserHandler(interaction)
+    if (!mentions) return singleUserHandler(interaction);
     else if (interaction.guild) {
-      const regexResult = mentions.split(USER_ID_REGEX).filter(mention => !!mention);
+      const regexResult = mentions.split(USER_ID_REGEX).filter((mention) => !!mention);
       const allDicks = new Collection<string, number>();
       const memberManager = interaction.guild.members;
       const authorDickSize = randomDickSize();
@@ -62,36 +62,33 @@ export default defineCommand({
             embedTemplate
               .setDescription("This battle of the dongs is too much to just say as is, so here's the brief:\n")
               .setFields([
-                ...allDicks
-                  .map(formatUserDickSize(largestDickSize, false, memberManager))
-                  .map(toFieldData),
+                ...allDicks.map(formatUserDickSize(largestDickSize, false, memberManager)).map(toFieldData),
                 ...spacer,
-              ])
+              ]),
           ],
           files: [
             {
               name: "battle.txt",
               attachment: Readable.from(
                 allDicks
-                  .map((dickSize: number, user: Snowflake) =>
-                    `${memberManager.cache.get(user)?.user?.tag || "?"}'s dong: 8${"=".repeat(dickSize)}D`
+                  .map(
+                    (dickSize: number, user: Snowflake) =>
+                      `${memberManager.cache.get(user)?.user?.tag || "?"}'s dong: 8${"=".repeat(dickSize)}D`
                   )
                   .join("\n")
               ),
             },
-          ]
-        }
+          ],
+        };
       } else {
         return {
           embeds: [
             embedTemplate.setFields([
-              ...allDicks
-                .map(formatUserDickSize(largestDickSize, true, memberManager))
-                .map(toFieldData),
+              ...allDicks.map(formatUserDickSize(largestDickSize, true, memberManager)).map(toFieldData),
               ...spacer,
-            ])
-          ]
-        }
+            ]),
+          ],
+        };
       }
     }
   },

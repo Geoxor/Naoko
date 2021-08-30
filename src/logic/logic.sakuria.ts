@@ -34,7 +34,10 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
         .setName(cmdName)
         .setDescription(`${cmdName} image processor`)
         .addStringOption((option) =>
-          option.setName("source").setDescription("a URL, Emoji or User ID to use as a texture").setRequired(true)
+          option
+            .setName("source")
+            .setDescription("a URL, Emoji or User ID to use as a texture")
+            .setRequired(true)
         ),
       requiresProcessing: true,
       execute: imageProcess(fn),
@@ -47,7 +50,7 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
  * @param process the image processor function
  * @author Bluskript & Geoxor
  */
- export function imageProcess(process: ImageProcessorFn) {
+export function imageProcess(process: ImageProcessorFn) {
   return async (interaction: CommandInteraction): Promise<string | Discord.ReplyMessageOptions> => {
     // Get the user's input
     const source = interaction.options.getString("source", true);
@@ -196,10 +199,12 @@ export async function animeQuery(query: string) {
  * @author Geoxor
  */
 export function getSourceURL(source: string, interaction: CommandInteraction) {
-  return 0
-    || getEmojiURL(source)
-    || getAvatarURLFromID(source, interaction) 
-    || (isValidHttpUrl(source) ? resolveTenor(source) : undefined);
+  return (
+    0 ||
+    getEmojiURL(source) ||
+    getAvatarURLFromID(source, interaction) ||
+    (isValidHttpUrl(source) ? resolveTenor(source) : undefined)
+  );
 }
 
 /**
