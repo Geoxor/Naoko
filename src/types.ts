@@ -1,4 +1,4 @@
-import Discord, { CommandInteraction, Interaction } from "discord.js";
+import Discord, { ColorResolvable, CommandInteraction, EmbedFieldData, Interaction } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export type Coords = {
@@ -23,6 +23,19 @@ export interface ICommand {
   execute: CommandExecute;
   requiresProcessing?: boolean;
   data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
+}
+
+export interface ISakuriaEmbed {
+  title?: string;
+  description?: string;
+  url?: string;
+  timestamp?: Date | number;
+  color?: ColorResolvable;
+  footer?: { text: string; iconURL?: string } | string;
+  image?: string;
+  thumbnail?: string;
+  author?: { name: string; iconURL?: string; url?: string };
+  fields?: EmbedFieldData[];
 }
 
 export const defineCommand = (cmd: ICommand): ICommand => cmd;

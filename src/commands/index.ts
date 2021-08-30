@@ -14,7 +14,7 @@ import { imageProcessors } from "../logic/imageProcessors.sakuria";
 // fun commands
 import anime from "./fun/anime.sakuria";
 import ask from "./fun/ask.sakuria";
-import dicksize from "./fun/dicksize.sakuria";
+// import dicksize from "./fun/dicksize.sakuria";
 import tts from "./fun/tts.sakuria";
 import morse from "./fun/morse.sakuria";
 import traceAnime from "./fun/trace.sakuria";
@@ -67,7 +67,7 @@ export const commands: ICommand[] = [
   anime,
   ask,
   clear,
-  dicksize,
+  // dicksize,
   invite,
   morse,
   traceAnime,
