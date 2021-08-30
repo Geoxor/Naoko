@@ -36,7 +36,7 @@ export default defineCommand({
 
       let winnerID = interaction.user.id;
       let largestDickSize = authorDickSize;
-      // starts at 1 because 1 is the input
+      // starts at 1 because 0 is the input
       let i = 1;
       while (regexResult[i]) {
         if (!allDicks.has(regexResult[i])) {
