@@ -1,6 +1,6 @@
 import { defineCommand } from "../../types";
 import Discord from "discord.js";
-import { getBufferFromUrl, parseBufferFromMessage, preProcessBuffer } from "../../logic/logic.sakuria";
+import { getBufferFromUrl, parseBufferFromMessage, preProcessBuffer, resolveURL } from "../../logic/logic.sakuria";
 import { imageProcessors, stack } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
@@ -36,9 +36,9 @@ export default defineCommand({
     ),
   requiresProcessing: true,
   execute: async (interaction) => {
-    const url = interaction.options.getString("url", true);
     const processor = interaction.options.getString("processor", true);
     const fps = interaction.options.getInteger("fps");
+    const url = resolveURL(interaction.options.getString("url", true));
     const buffer = await getBufferFromUrl(url);
     const preProccessed = await preProcessBuffer(buffer);
     const resultbuffer = await stack(processor, preProccessed, stacks[processor], fps || undefined);

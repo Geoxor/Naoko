@@ -448,6 +448,20 @@ export function findIndexOfURL(array: string[]) {
   return -1;
 }
 
+
+/**
+ * It only parses tenor links but it might do more in the future
+ * @param url parses a url
+ * @author Geoxor
+ */
+export function resolveURL(url: string): string {
+  if (url.startsWith("https://tenor") && !url.endsWith(".gif")) {
+    return url + ".gif";
+  }
+
+  return url;
+}
+
 /**
  * Gets a URL from a message, it will try to get a message
  * from replies, attachments, links, or user avatars

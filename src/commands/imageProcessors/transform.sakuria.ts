@@ -1,6 +1,6 @@
 import { defineCommand } from "../../types";
 import Discord from "discord.js";
-import { getBufferFromUrl, parseBufferFromMessage } from "../../logic/logic.sakuria";
+import { getBufferFromUrl, parseBufferFromMessage, resolveURL } from "../../logic/logic.sakuria";
 import { transform } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
@@ -24,7 +24,7 @@ export default defineCommand({
   requiresProcessing: true,
   execute: async (interaction) => {
     const pipeline = interaction.options.getString("pipeline", true).split(" ");
-    const url = interaction.options.getString("url", true);
+    const url = resolveURL(interaction.options.getString("url", true));
     if (pipeline.length > 10) return "pipeline can't be longer than 10 iterators";
     const buffer = await getBufferFromUrl(url);
     const resultbuffer = await transform(pipeline, buffer);
