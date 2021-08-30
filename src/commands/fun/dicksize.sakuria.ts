@@ -1,9 +1,9 @@
-import { randomDickSize } from "src/logic/logic.sakuria";
-import { defineCommand } from "src/types";
 import { Readable } from "stream";
 import { ImageURLOptions, GuildMemberManager, Snowflake } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
-import SakuriaEmbed, { createErrorEmbed, createInlineBlankField } from "src/sakuria/SakuriaEmbed.sakuria";
+import { randomDickSize } from "../../logic/logic.sakuria";
+import { defineCommand } from "../../types";
+import SakuriaEmbed, { createErrorEmbed, createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
 export default defineCommand({
   data: new SlashCommandBuilder()
@@ -19,6 +19,7 @@ export default defineCommand({
       format: "png",
       size: 128,
     };
+
 
     if (!content) {
       const dickSize = randomDickSize();
@@ -36,7 +37,7 @@ export default defineCommand({
       } else {
         return { embeds: [embedTemplate.addField("Your dong:", `8${"=".repeat(dickSize)}D`)] };
       }
-    } else {
+    } else if (interaction.guild) {
       const mentionedUsers = content.match(/<@!?(\d{18})>/g)?.map((str: string) => str.match(/\d{18}/g)?.[0]) || null;
 
       if (!mentionedUsers) return { embeds: [createErrorEmbed("You must provide mentions!")] };
