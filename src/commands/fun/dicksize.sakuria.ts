@@ -46,7 +46,7 @@ export default defineCommand({
             winnerID = regexResult[i];
             largestDickSize = dickSize;
           }
-          allDicks.push([regexResult[i], dickSize]);
+          allDicks.set(regexResult[i], dickSize);
         }
         i++;
       }
