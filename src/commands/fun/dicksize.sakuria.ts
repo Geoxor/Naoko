@@ -28,7 +28,6 @@ export default defineCommand({
     if (!mentions) return singleUserHandler(interaction)
     else if (interaction.guild) {
       const regexResult = mentions.split(USER_ID_REGEX).filter(mention => !!mention);
-      console.log(regexResult);
       const allDicks: Collection<string, number> = new Collection();
       const memberManager = interaction.guild.members;
       const authorDickSize = randomDickSize();
