@@ -365,7 +365,7 @@ export function getWaifuNameFromFileName(filename: string) {
  * Gets a random number between 1 and 1.000.000 with an exponential factor
  * @author MaidMarija
  */
-export function randomDickSize(): number {
+export function randomDongSize(): number {
   const x = Math.random();
   return Math.min(~~(1 / (1 - x) + 30 * x), 1_000_000);
 }
