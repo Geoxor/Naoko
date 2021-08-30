@@ -33,7 +33,7 @@ export default defineCommand({
       let largestDickSize = authorDickSize;
 
       mentionedUsers.forEach((user: User) => {
-        const dickSize = 3000;
+        const dickSize = randomDickSize();
 
         if (dickSize > largestDickSize) {
           winner = user;
