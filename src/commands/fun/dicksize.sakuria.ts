@@ -1,7 +1,7 @@
 import { Readable } from "stream";
 import { Collection, CommandInteraction, ImageURLOptions, GuildMemberManager, Snowflake } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { randomDickSize } from "../../logic/logic.sakuria";
+import { defaultImageOptions, getAvatarURLFromID, randomDickSize } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
 import SakuriaEmbed, { createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
@@ -28,7 +28,7 @@ export default defineCommand({
     if (!mentions) return singleUserHandler(interaction)
     else if (interaction.guild) {
       const regexResult = mentions.split(USER_ID_REGEX).filter(mention => !!mention);
-      const allDicks: Collection<string, number> = new Collection();
+      const allDicks = new Collection<string, number>();
       const memberManager = interaction.guild.members;
       const authorDickSize = randomDickSize();
 
@@ -54,7 +54,7 @@ export default defineCommand({
       const spacer = createInlineBlankField(allDicks.size % 3);
       const embedTemplate = new SakuriaEmbed({
         title: "The legendary battle of dongs",
-        thumbnail: memberManager.resolve(winnerID)?.user?.displayAvatarURL(displayAvatarSetting) || "",
+        thumbnail: getAvatarURLFromID(winnerID, interaction),
       });
 
       if (allDicks.size < 2) return singleUserHandler(interaction);
@@ -78,7 +78,7 @@ export default defineCommand({
               attachment: Readable.from(
                 allDicks
                   .map((dickSize: number, user: Snowflake) =>
-                    `${memberManager.resolve(user)?.user?.tag || "?"}'s dong: 8${"=".repeat(dickSize)}D`
+                    `${memberManager.cache.get(user)?.user?.tag || "?"}'s dong: 8${"=".repeat(dickSize)}D`
                   )
                   .join("\n")
               ),
@@ -105,7 +105,7 @@ function singleUserHandler(interaction: CommandInteraction) {
   const dickSize = randomDickSize();
   const embedTemplate = new SakuriaEmbed({
     title: "Your dong info",
-    thumbnail: interaction.user.displayAvatarURL(displayAvatarSetting),
+    thumbnail: interaction.user.displayAvatarURL(defaultImageOptions),
     fields: [{ name: "Total length:", value: `**${dickSize}**cm` }],
   });
 
@@ -121,7 +121,7 @@ function singleUserHandler(interaction: CommandInteraction) {
 
 function formatUserDickSize(largestDickSize: number, showDick: boolean, memberManager: GuildMemberManager) {
   return (dickSize: number, userID: string) => [
-    `${dickSize >= largestDickSize ? "(Winner) " : ""}${memberManager.resolve(userID)?.user?.tag || "?"}`,
+    `${dickSize >= largestDickSize ? "(Winner) " : ""}${memberManager.cache.get(userID)?.user?.tag || "?"}`,
     `${showDick ? `Dong:8${"=".repeat(dickSize)}D\n` : ""}Dong size: ${dickSize.toString()}cm`,
   ];
 }

@@ -14,7 +14,8 @@ import { GIFEncoder, quantize, applyPalette } from "gifenc";
 import Jimp from "jimp";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
-const defaultImageOptions: Discord.ImageURLOptions = {
+export const defaultImageOptions: Discord.ImageURLOptions = {
+  dynamic: true,
   format: "png",
   size: 512,
 };
