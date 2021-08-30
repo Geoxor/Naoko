@@ -4,7 +4,6 @@ import {
   getBufferFromUrl,
   getSourceURL,
   preProcessBuffer,
-  resolveURL,
 } from "../../logic/logic.sakuria";
 import { imageProcessors, stack } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:

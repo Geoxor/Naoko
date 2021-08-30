@@ -1,6 +1,6 @@
 import { defineCommand } from "../../types";
 import Discord from "discord.js";
-import { getBufferFromUrl, getSourceURL, preProcessBuffer, resolveURL } from "../../logic/logic.sakuria";
+import { getBufferFromUrl, getSourceURL, preProcessBuffer } from "../../logic/logic.sakuria";
 import { transform } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
