@@ -1,7 +1,7 @@
 import { defineCommand, IMessage } from "../../types";
 import Discord from "discord.js";
-import { anilistQuery, traceAnime } from "../../logic/logic.sakuria";
 import { SlashCommandBuilder } from "@discordjs/builders";
+import { anilistQuery, traceAnime } from "../../logic/network.sakuria";
 
 export default defineCommand({
   data: new SlashCommandBuilder()

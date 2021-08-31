@@ -1,10 +1,12 @@
 import { defineCommand } from "../../types";
 import Discord from "discord.js";
-import { getBufferFromUrl, getSourceURL, preProcessBuffer } from "../../logic/logic.sakuria";
+import { getSourceURL } from "../../logic/logic.sakuria";
 import { transform } from "../../logic/imageProcessors.sakuria";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
 import { SlashCommandBuilder } from "@discordjs/builders";
+import { getBufferFromUrl } from "../../logic/network.sakuria";
+import { preProcessBuffer } from "../../logic/image.sakuria";
 
 export default defineCommand({
   data: new SlashCommandBuilder()

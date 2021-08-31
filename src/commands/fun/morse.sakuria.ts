@@ -1,6 +1,6 @@
-import { encodeMorse, decodeMorse } from "../../logic/logic.sakuria";
 import { defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
+import { decodeMorse, encodeMorse } from "../../logic/formatters.sakuria";
 
 export default defineCommand({
   data: new SlashCommandBuilder()

@@ -1,7 +1,7 @@
 import quotes from "../assets/quotes.json";
 import chalk from "chalk";
-import { getCurrentMemoryHeap } from "../logic/logic.sakuria";
 import MultiProgress from "multi-progress";
+import { getCurrentMemoryHeap } from "../logic/formatters.sakuria";
 
 /**
  * Main logging wrapper that creates beautiful colors and emojis
