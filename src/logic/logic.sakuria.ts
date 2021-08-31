@@ -377,9 +377,9 @@ export function randomDongSize(): number {
  */
 export function calcDamage(): number {
   let damage = 100;
-  let critChance = 0.5;
-  let critMulti = 2;
-  let rng = Math.random(); //😎
+  const critChance = 0.5;
+  const critMulti = 2;
+  const rng = Math.random(); //😎
 
   if (rng > critChance) damage = damage * critMulti;
 
@@ -406,10 +406,10 @@ export function calcDefense(defense: number): number {
  * @author azur1s & MaidMarija
  */
 export function calcSpread(value: number): number {
-  let rng = Math.random();
-  let min = value - value * 0.1;
-  let max = value + value * 0.1;
-  let spread = ~~((max - min) * rng + min);
+  const rng = Math.random();
+  const min = value - value * 0.1;
+  const max = value + value * 0.1;
+  const spread = ~~((max - min) * rng + min);
   return spread;
 }
 
