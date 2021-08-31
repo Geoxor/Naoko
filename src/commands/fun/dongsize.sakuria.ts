@@ -9,7 +9,7 @@ const USER_ID_REGEX = /<@!?(\d{18})>/g;
 
 function toFieldData([name, value]: string[]): { name: string; value: string; inline: boolean } {
   return { name, value, inline: true };
-};
+}
 
 export default defineCommand({
   data: new SlashCommandBuilder()

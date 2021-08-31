@@ -4,7 +4,7 @@
  * @author Bluskript
  * @pure
  */
- export function isValidHttpUrl(string: string) {
+export function isValidHttpUrl(string: string) {
   try {
     var url = new URL(string);
   } catch (_) {
@@ -19,7 +19,7 @@
  * @author Geoxor
  * @pure
  */
- export function resolveTenor(url: string): string {
+export function resolveTenor(url: string): string {
   if (url.startsWith("https://tenor") && !url.endsWith(".gif")) {
     return url + ".gif";
   }

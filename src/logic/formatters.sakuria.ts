@@ -6,7 +6,7 @@ import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
  * @author Geoxor
  * @pure
  */
- export function getCurrentMemoryHeap() {
+export function getCurrentMemoryHeap() {
   const mem = process.memoryUsage();
   const used = mem.heapUsed / 1000 / 1000;
   const total = mem.heapTotal / 1000 / 1000;
@@ -17,14 +17,13 @@ import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
   return `${usedPadded}/${totalPadded}MB`;
 }
 
-
 /**
  * Convert milliseconds to human readable
  * @param ms miliseconds to convert
  * @author Geoxor
  * @pure
  */
- export function msToTime(ms: number) {
+export function msToTime(ms: number) {
   const seconds = ms / 1000;
   const minutes = ms / (1000 * 60);
   const hours = ms / (1000 * 60 * 60);
@@ -43,7 +42,7 @@ import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
  * @author Geoxor
  * @pure
  */
- export function getShipName(matcher: string, matchee: string) {
+export function getShipName(matcher: string, matchee: string) {
   return matcher.substring(0, matcher.length >> 1) + matchee.substring(matchee.length >> 1);
 }
 
@@ -95,7 +94,7 @@ export function capitalizeFirstLetter(string: string) {
  * @author azur1s
  * @pure
  */
- export function uwufy(sentence: string): string {
+export function uwufy(sentence: string): string {
   return sentence
     .replace(/(?:r|l)/g, "w")
     .replace(/(?:R|L)/g, "W")
@@ -119,11 +118,14 @@ export function capitalizeFirstLetter(string: string) {
  */
 export function britify(sentence: string): string {
   // first delete any disgusting american dialect (IMPORTANT, NEEDS IMPROVEMENT)
-  return sentence.replace(/mom/g, "mum")
-  // and make some suitable other word replacements
-  .replace(/what/g, "wot")
-  // personally "what the fuck mate" sounds better than "what the fuck cunt"
-  .replace(/man|bud(dy)?|bro/g, "mate")
-  // we don't use t (sometimes) nor the -ing suffix
-  .replace(/(?<!\s|k|x|')t+(?!(\w*')|h|ch|ion)|(?<=\win)g/g, "'");
+  return (
+    sentence
+      .replace(/mom/g, "mum")
+      // and make some suitable other word replacements
+      .replace(/what/g, "wot")
+      // personally "what the fuck mate" sounds better than "what the fuck cunt"
+      .replace(/man|bud(dy)?|bro/g, "mate")
+      // we don't use t (sometimes) nor the -ing suffix
+      .replace(/(?<!\s|k|x|')t+(?!(\w*')|h|ch|ion)|(?<=\win)g/g, "'")
+  );
 }

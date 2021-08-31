@@ -11,7 +11,7 @@ class DB {
   constructor() {
     this.prisma = new PrismaClient();
   }
-  
+
   /**
    * Adds a new user if not exists in the database
    * @author Bluskript, Geoxor

@@ -5,7 +5,6 @@ import { capitalizeFirstLetter, decodeMorse, encodeMorse, msToTime, uwufy } from
 import { calcSpread, getWaifuNameFromFileName } from "../logic/logic.sakuria";
 import { isValidHttpUrl } from "../logic/validators.sakuria";
 
-
 describe("⚡ Morse Encoder (encodeMorse)", () => {
   it("can encode a normal string", async () => {
     const morseCode = encodeMorse("hello world");

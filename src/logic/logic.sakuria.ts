@@ -136,7 +136,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
  * @param message message to parse
  * @author Geoxor
  */
- export function getEmojiURL(message: string) {
+export function getEmojiURL(message: string) {
   const emoteRegex = /<:.+:(\d+)>/gm;
   const animatedEmoteRegex = /<a:.+:(\d+)>/gm;
   const staticEmoji = message.split(emoteRegex)[1];
@@ -146,15 +146,13 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
   else return undefined;
 }
 
-
-
 /**
  * Searches for an anime on the internet
  * @param query the anime to search for
  * @returns {Discord.MessageEmbed | string} a Discord message of the resulting anime
  * @author Geoxor
  */
- export async function animeQuery(query: string) {
+export async function animeQuery(query: string) {
   try {
     const animeMeta = await anilistSearch(query);
     // prepare an embed to send to the user
@@ -180,7 +178,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
  * @returns a buffer of the last attachment
  * @author Geoxor
  */
- export async function getLastAttachmentInChannel(channel: Discord.TextChannel) {
+export async function getLastAttachmentInChannel(channel: Discord.TextChannel) {
   const messages = await channel.messages.fetch();
   const lastMessage = messages
     .sort((a, b) => b.createdTimestamp - a.createdTimestamp)
@@ -198,7 +196,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
  * @param interaction the interaction
  * @author Geoxor
  */
- export function getAvatarURLFromID(id: string, interaction: CommandInteraction) {
+export function getAvatarURLFromID(id: string, interaction: CommandInteraction) {
   if (/[0-9]{18}$/g.test(id)) {
     const avatarURL = interaction.guild?.members.cache.get(id)?.user.displayAvatarURL(defaultImageOptions);
     return avatarURL;
@@ -212,7 +210,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
  * @returns {String}
  * @author Geoxor
  */
- export function match(matcher: Discord.User, matchee: Discord.User) {
+export function match(matcher: Discord.User, matchee: Discord.User) {
   const matcherValue = parseInt(matcher.id);
   const matcheeValue = parseInt(matchee.id as string);
   const matchValue = (matcherValue + matcheeValue) % 22;
@@ -233,7 +231,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
  * @returns the URL of the source
  * @author Geoxor
  */
- export function getSourceURL(source: string, interaction: CommandInteraction) {
+export function getSourceURL(source: string, interaction: CommandInteraction) {
   return (
     0 ||
     getEmojiURL(source) ||
@@ -247,7 +245,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
  * @param process the image processor function
  * @author Bluskript & Geoxor
  */
- export function imageProcess(process: ImageProcessorFn) {
+export function imageProcess(process: ImageProcessorFn) {
   return async (interaction: CommandInteraction): Promise<string | Discord.ReplyMessageOptions> => {
     // Get the user's input
     const source = interaction.options.getString("source", true);
@@ -281,7 +279,7 @@ export async function walkDirectory(dir: string, filelist: string[] = []): Promi
  * @returns damage
  * @author azur1s
  */
- export function calcDamage(): number {
+export function calcDamage(): number {
   let damage = 100;
   const critChance = 0.5;
   const critMulti = 2;

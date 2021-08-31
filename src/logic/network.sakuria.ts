@@ -8,7 +8,7 @@ import { IAnilistAnime, IAnime } from "src/types";
  * @copyright trace.moe
  * @pure
  */
- export async function traceAnime(url: string): Promise<IAnime> {
+export async function traceAnime(url: string): Promise<IAnime> {
   const { data } = await axios.get(`https://api.trace.moe/search?url=${encodeURIComponent(url)}`);
   return data.result[0];
 }
@@ -48,7 +48,7 @@ export async function anilistSearch(search: string): Promise<IAnilistAnime> {
  * @author Geoxor
  * @pure
  */
- export async function getBufferFromUrl(url: string) {
+export async function getBufferFromUrl(url: string) {
   const response = await axios({ method: "GET", url, responseType: "arraybuffer" });
   return Buffer.from(response.data);
 }
