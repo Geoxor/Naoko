@@ -2,7 +2,7 @@ import { defineCommand } from "../../types";
 import Discord from "discord.js";
 import { systemInfo } from "../../sakuria/Sakuria.sakuria";
 import { version } from "../../../package.json";
-import { msToTime } from "../../logic/logic.sakuria";
+import { msToTime } from "../../logic/formatters.sakuria";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 const startTime = Date.now();

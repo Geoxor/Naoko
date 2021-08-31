@@ -1,16 +1,10 @@
-require("ts-mocha");
+import "ts-mocha";
 import chai from "chai";
 import { it } from "mocha";
-import {
-  encodeMorse,
-  decodeMorse,
-  uwufy,
-  getWaifuNameFromFileName,
-  calcSpread,
-  isValidHttpUrl,
-  capitalizeFirstLetter,
-  msToTime,
-} from "../logic/logic.sakuria";
+import { capitalizeFirstLetter, decodeMorse, encodeMorse, msToTime, uwufy } from "../logic/formatters.sakuria";
+import { calcSpread, getWaifuNameFromFileName } from "../logic/logic.sakuria";
+import { isValidHttpUrl } from "../logic/validators.sakuria";
+
 
 describe("⚡ Morse Encoder (encodeMorse)", () => {
   it("can encode a normal string", async () => {

@@ -6,13 +6,14 @@ import comicSans from "../assets/comic_sans_font.json";
 import cache from "../sakuria/Cache.sakuria";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import petPetGif from "pet-pet-gif";
-import { getRGBAUintArray, encodeFramesToGif, bipolarRandom } from "./logic.sakuria";
+import { bipolarRandom } from "./logic.sakuria";
 import logger from "../sakuria/Logger.sakuria";
 import fs from "fs";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
 import config from "../sakuria/Config.sakuria";
 import child_process from "child_process";
+import { encodeFramesToGif, getRGBAUintArray } from "./image.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
