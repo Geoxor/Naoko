@@ -34,7 +34,7 @@ class DB {
         statistics: true,
       },
     });
-    logger.prisma.generic(`UPSERT: User: ${id}`);
+    logger.prisma.print(`UPSERT: User: ${id}`);
     return user;
   }
 
@@ -49,7 +49,7 @@ class DB {
     const { id: byUserId } = await this.newUser(kicker);
     const { id: userId } = await this.newUser(kickee);
     await this.prisma.kick.create({ data: { byUserId, userId, timestamp } });
-    return logger.prisma.generic(`CREATE: Kick: kicker: ${kicker} - kickee: ${kickee}`);
+    return logger.prisma.print(`CREATE: Kick: kicker: ${kicker} - kickee: ${kickee}`);
   }
 
   /**
@@ -63,7 +63,7 @@ class DB {
       where: { userId },
     });
 
-    logger.prisma.generic(`GET Inventory: ${userId}`);
+    logger.prisma.print(`GET Inventory: ${userId}`);
     return inventory!;
   }
 
@@ -78,7 +78,7 @@ class DB {
       where: { userId },
     });
 
-    logger.prisma.generic(`GET Statistics: ${userId}`);
+    logger.prisma.print(`GET Statistics: ${userId}`);
     return statistics!;
   }
 
@@ -99,14 +99,14 @@ class DB {
       data: statistics,
       where: { userId: user },
     });
-    logger.prisma.generic(`UPDATE: Statistics: ${user}`);
+    logger.prisma.print(`UPDATE: Statistics: ${user}`);
 
     // Commit their new prisms to their inventory
     await this.prisma.inventory.update({
       data: { prisms: { increment: battle.money } },
       where: { userId: user },
     });
-    logger.prisma.generic(`UPDATE: Inventory: ${user}`);
+    logger.prisma.print(`UPDATE: Inventory: ${user}`);
     return;
   }
 }

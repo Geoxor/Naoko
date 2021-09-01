@@ -15,11 +15,13 @@ class Logger {
   private errorEmoji: "👺";
 
   constructor() {
-    this.emoji = "🌸";
-    this.color = "#FF90E0";
+    this.emoji = "[core]";
+    this.color = "#676767";
     this.errorEmoji = "👺";
     this.errorColor = "#F03A17";
   }
+
+  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
 
   /**
    * Returns a the current time for the log to prefix
@@ -35,7 +37,7 @@ class Logger {
    * @author Geoxor
    */
   public print(log: string): void {
-    console.log(chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.time()} ${this.emoji}  ${log}`));
+    console.log(chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.time()} ${this.emoji} ${log}`));
   }
 
   /**
@@ -54,16 +56,6 @@ class SakuriaLogger extends Logger {
     super();
     this.multiProgress = new MultiProgress(process.stdout);
   }
-  public numServers = (numGuilds: number) => this.print(`Currently in ${numGuilds} servers`);
-  public login = () => this.print("Sakuria logging in...");
-  public instantiated = () => this.print("Instantiated Discord client instance");
-  public creating = () => this.print("Creating new Sakuria instance...");
-  public loadingCommands = () => this.print("Loading commands...");
-  public importedCommand = (command: string) => this.print(`┖ Imported command ${command}`);
-  public created = () => this.print("Sakuria created");
-  public inspiration = () =>
-    console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
-  public generic = (string: string) => console.log(`  ${getCurrentMemoryHeap()}  ${this.time()} 🗻  ${string}`);
 
   /**
    * Sets a progress bar
@@ -82,7 +74,7 @@ class SakuriaLogger extends Logger {
     );
   }
 
-  public setProgressValue(bar: ProgressBar, value: number) {
+  public static setProgressValue(bar: ProgressBar, value: number) {
     bar.update(value);
     bar.tick();
   }
@@ -90,19 +82,14 @@ class SakuriaLogger extends Logger {
 class ConfigLogger extends Logger {
   constructor() {
     super();
-    this.emoji = "🧪";
+    this.emoji = "[config]";
     this.color = "#00B294";
   }
-  public loading = () => this.print("Loading config...");
-  public loaded = () => this.print("Config loaded");
-  public creating = () => this.print("Creating new config...");
-  public created = () => this.print("Created new sakuria.json config");
-  public failedCreation = () => this.error("Failed to create sakuria.json config");
 }
 class CommandLogger extends Logger {
   constructor() {
     super();
-    this.emoji = "🔮";
+    this.emoji = "[commands]";
     this.color = "#886CE4";
   }
   public executedCommand = (time: number, command: string, username: string, guild: string) =>
@@ -111,11 +98,9 @@ class CommandLogger extends Logger {
 class PrismaLogger extends Logger {
   constructor() {
     super();
-    this.emoji = "💎";
+    this.emoji = "[db]";
     this.color = "#31D2F7";
   }
-  public loaded = () => this.print(`Prisma loaded`);
-  public generic = (string: string) => this.print(string);
 }
 
 export default {

@@ -11,17 +11,17 @@ interface IConfig {
 class Config {
   config!: IConfig;
   constructor() {
-    logger.config.loading();
+    logger.config.print("Loading config...");
     try {
       this.config = require("../sakuria.json");
-      logger.config.loaded();
+      logger.config.print("Config loaded");
     } catch (error) {
       this.createNewConfig();
     }
   }
 
   private createNewConfig() {
-    logger.config.creating();
+    logger.config.print("Creating new config...");
 
     this.config = {
       PREFIX: "~",
@@ -33,9 +33,9 @@ class Config {
     // save this.config as config.sakuria.json
     try {
       fs.writeFileSync("./src/sakuria.json", JSON.stringify(this.config, null, 2));
-      logger.config.created();
+      logger.config.print("Created new sakuria.json config");
     } catch (error) {
-      logger.config.failedCreation();
+      logger.config.print("Failed to create sakuria.json config");
       console.error(error);
     }
   }

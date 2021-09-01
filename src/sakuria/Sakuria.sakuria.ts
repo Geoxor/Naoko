@@ -29,7 +29,7 @@ class Sakuria {
   public DEV_SERVER_ID: string = "385387666415550474";
 
   constructor() {
-    logger.sakuria.instantiated();
+    logger.sakuria.print("Instantiated Discord client instance");
     this.rest = new REST({ version: "9" }).setToken(config.TOKEN);
 
     this.commands = new Discord.Collection();
@@ -48,11 +48,11 @@ class Sakuria {
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
     });
-    logger.sakuria.login();
+    logger.sakuria.print("Sakuria logging in...");
     this.bot.login(config.TOKEN);
     this.bot.once("ready", async () => {
       this.onReady();
-      logger.sakuria.numServers(this.bot.guilds.cache.size);
+      logger.sakuria.print(`Currently in ${this.bot.guilds.cache.size} servers`);
       this.bot.user?.setActivity(`/help v${version}`, { type: "LISTENING" });
     });
     // this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
@@ -63,12 +63,12 @@ class Sakuria {
    * Loads all the command files from ./commands
    */
   private loadCommands() {
-    logger.sakuria.loadingCommands();
+    logger.sakuria.print("Loading commands...");
 
     for (const command of commands) {
       if (command.data?.name) {
         this.commands.set(command.data.name, command);
-        logger.sakuria.importedCommand(command.data.name);
+        logger.sakuria.print(`┖ Imported command ${command.data.name}`);
       }
     }
   }

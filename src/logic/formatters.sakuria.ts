@@ -10,11 +10,7 @@ export function getCurrentMemoryHeap() {
   const mem = process.memoryUsage();
   const used = mem.heapUsed / 1000 / 1000;
   const total = mem.heapTotal / 1000 / 1000;
-
-  const usedPadded = used < 100 ? "0" + used.toFixed(2) : used.toFixed(2);
-  const totalPadded = total < 100 ? "0" + total.toFixed(2) : total.toFixed(2);
-
-  return `${usedPadded}/${totalPadded}MB`;
+  return `${used.toFixed(2)}/${total.toFixed(2)}MB`;
 }
 
 /**
