@@ -111,7 +111,6 @@ class Sakuria {
 
     if (!command) return;
 
-
     try {
       command.requiresProcessing && (await interaction.deferReply());
     } catch (error) {
@@ -134,9 +133,14 @@ class Sakuria {
 
     if (!result) return;
 
-    command.requiresProcessing && (await interaction.editReply(result).catch((err) => console.log(err)));
-    !command.requiresProcessing && (await interaction.reply(result).catch((err) => console.log(err)));
-    return;
+
+    try {
+      command.requiresProcessing && (await interaction.editReply(result).catch((err) => console.log(err)));
+      !command.requiresProcessing && (await interaction.reply(result).catch((err) => console.log(err)));
+      return;
+    } catch (error) {
+      return;
+    }
   }
 }
 
