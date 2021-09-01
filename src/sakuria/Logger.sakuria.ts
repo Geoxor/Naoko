@@ -3,22 +3,25 @@ import chalk from "chalk";
 import MultiProgress from "multi-progress";
 import { getCurrentMemoryHeap } from "../logic/formatters.sakuria";
 
+type HexColor = `#${string}`;
+type Prefix = `[${string}]`
+
 /**
- * Main logging wrapper that creates beautiful colors and emojis
+ * Main logging wrapper that creates beautiful colors and prefixs
  * for logging what the bot is currently doing
  * @author Geoxor
  */
 class Logger {
-  protected emoji: string;
-  protected color: string;
-  private errorColor: "#F03A17";
-  private errorEmoji: "👺";
+  private errorColor: HexColor = "#F03A17";
+  private errorPrefix: Prefix = "[error]";
+  public multiProgress: MultiProgress;
+  public color: HexColor;
+  public prefix: Prefix;
 
-  constructor() {
-    this.emoji = "[core]";
-    this.color = "#676767";
-    this.errorEmoji = "👺";
-    this.errorColor = "#F03A17";
+  constructor(prefix: Prefix, color: HexColor) {
+    this.prefix = prefix;
+    this.color = color;
+    this.multiProgress = new MultiProgress(process.stdout);
   }
 
   public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
@@ -32,12 +35,12 @@ class Logger {
   }
 
   /**
-   * prints a log to the console with colors and an emoji
+   * prints a log to the console with colors and an prefix
    * @param log the message to print
    * @author Geoxor
    */
   public print(log: string): void {
-    console.log(chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.time()} ${this.emoji} ${log}`));
+    console.log(chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.time()} ${this.prefix} ${log}`));
   }
 
   /**
@@ -46,20 +49,13 @@ class Logger {
    * @author Geoxor
    */
   public error(log: string): void {
-    console.log(chalk.hex(this.errorColor)(`  ${this.time()} ${this.errorEmoji}  ${log}`));
-  }
-}
-class SakuriaLogger extends Logger {
-  public multiProgress: MultiProgress;
-
-  constructor() {
-    super();
-    this.multiProgress = new MultiProgress(process.stdout);
+    console.log(chalk.hex(this.errorColor)(`  ${this.time()} ${this.errorPrefix}  ${log}`));
   }
 
   /**
-   * Sets a progress bar
-   */
+ * Creates a new progress bar
+ * @author Bluskript & Geoxor
+ */
   public progress(name: string, tickCount: number) {
     return this.multiProgress.newBar(
       `  ${getCurrentMemoryHeap()}  ${this.time()} 🧪 ${chalk.hex("#00B294")(name)}${chalk.hex("#00B294")(
@@ -74,38 +70,31 @@ class SakuriaLogger extends Logger {
     );
   }
 
+  /**
+  * Updates a progress bar
+  * @author Bluskript & Geoxor
+  */
   public setProgressValue(bar: ProgressBar, value: number) {
     bar.update(value);
     bar.tick();
   }
-}
-class ConfigLogger extends Logger {
-  constructor() {
-    super();
-    this.emoji = "[config]";
-    this.color = "#00B294";
-  }
-}
-class CommandLogger extends Logger {
-  constructor() {
-    super();
-    this.emoji = "[commands]";
-    this.color = "#886CE4";
-  }
+
+  /**
+   * Prints the execute command
+   * @param time the time the command took to execute
+   * @param command the name of the command
+   * @param username the username of the user who executed the command
+   * @param guild the guild name the command was executed in
+   * @returns {string}
+   * @author Geoxor
+   */
   public executedCommand = (time: number, command: string, username: string, guild: string) =>
     this.print(`${time}ms - Executed command: ${command} - User: ${username} - Guild: ${guild}`);
 }
-class PrismaLogger extends Logger {
-  constructor() {
-    super();
-    this.emoji = "[db]";
-    this.color = "#31D2F7";
-  }
-}
 
 export default {
-  config: new ConfigLogger(),
-  sakuria: new SakuriaLogger(),
-  command: new CommandLogger(),
-  prisma: new PrismaLogger(),
+  sakuria: new Logger("[core]", "#676767"),
+  config: new Logger("[config]", "#00B294"),
+  command: new Logger("[commands]", "#886CE4"),
+  prisma: new Logger("[db]", "#31D2F7"),
 };
