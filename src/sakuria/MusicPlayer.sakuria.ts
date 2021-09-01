@@ -49,7 +49,7 @@ export default class MusicPlayer {
   private onChange =
     (name: string) =>
     (oldState: AudioPlayerState | VoiceConnectionState, newState: AudioPlayerState | VoiceConnectionState) => {
-      logger.sakuria.generic(`[${name}]` + ` Changed from ${oldState.status} to ${newState.status}`);
+      logger.sakuria.print(`[${name}]` + ` Changed from ${oldState.status} to ${newState.status}`);
     };
 
   /**
@@ -61,7 +61,7 @@ export default class MusicPlayer {
     this.nowPlayingFile = audio;
     if (this.queue.length !== 0) {
       this.queue.shift();
-      logger.sakuria.generic(`Playing ${audio}`);
+      logger.sakuria.print(`Playing ${audio}`);
       return createAudioResource(audio, { inlineVolume: true });
     }
   }

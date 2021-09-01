@@ -74,7 +74,7 @@ class SakuriaLogger extends Logger {
     );
   }
 
-  public static setProgressValue(bar: ProgressBar, value: number) {
+  public setProgressValue(bar: ProgressBar, value: number) {
     bar.update(value);
     bar.tick();
   }
