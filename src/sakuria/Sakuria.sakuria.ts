@@ -111,7 +111,12 @@ class Sakuria {
 
     if (!command) return;
 
-    command.requiresProcessing && (await interaction.deferReply());
+
+    try {
+      command.requiresProcessing && (await interaction.deferReply());
+    } catch (error) {
+      return
+    }
 
     try {
       let timeStart = Date.now();
