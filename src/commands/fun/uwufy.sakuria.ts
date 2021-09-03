@@ -9,7 +9,5 @@ export default defineCommand({
     .addStringOption((option) =>
       option.setName("sentence").setDescription("the sentence to uwufy").setRequired(true)
     ),
-  execute: (interaction) => {
-    return uwufy(interaction.options.getString("sentence", true));
-  },
+  execute: (interaction) => uwufy(interaction.options.getString("sentence", true))
 });
