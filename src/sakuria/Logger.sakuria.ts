@@ -4,7 +4,7 @@ import MultiProgress from "multi-progress";
 import { getCurrentMemoryHeap } from "../logic/formatters.sakuria";
 
 type HexColor = `#${string}`;
-type Prefix = `[${string}]`
+type Prefix = `[${string}]`;
 
 /**
  * Main logging wrapper that creates beautiful colors and prefixs
@@ -24,7 +24,8 @@ class Logger {
     this.multiProgress = new MultiProgress(process.stdout);
   }
 
-  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
+  public inspiration = () =>
+    console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
 
   /**
    * Returns a the current time for the log to prefix
@@ -53,9 +54,9 @@ class Logger {
   }
 
   /**
- * Creates a new progress bar
- * @author Bluskript & Geoxor
- */
+   * Creates a new progress bar
+   * @author Bluskript & Geoxor
+   */
   public progress(name: string, tickCount: number) {
     return this.multiProgress.newBar(
       `  ${getCurrentMemoryHeap()}  ${this.time()} 🧪 ${chalk.hex("#00B294")(name)}${chalk.hex("#00B294")(
@@ -71,9 +72,9 @@ class Logger {
   }
 
   /**
-  * Updates a progress bar
-  * @author Bluskript & Geoxor
-  */
+   * Updates a progress bar
+   * @author Bluskript & Geoxor
+   */
   public setProgressValue(bar: ProgressBar, value: number) {
     bar.update(value);
     bar.tick();

@@ -114,7 +114,7 @@ class Sakuria {
     try {
       command.requiresProcessing && (await interaction.deferReply());
     } catch (error) {
-      return
+      return;
     }
 
     try {
@@ -127,12 +127,11 @@ class Sakuria {
         interaction.user.username,
         interaction.guild?.name || "dm"
       );
-    } catch (error) {
+    } catch (error: any) {
       if (error) result = error.toString();
     }
 
     if (!result) return;
-
 
     try {
       command.requiresProcessing && (await interaction.editReply(result).catch((err) => console.log(err)));
