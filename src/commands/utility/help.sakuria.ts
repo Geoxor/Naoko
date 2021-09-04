@@ -44,7 +44,6 @@ export default defineCommand({
           title: "\\~\\~ Commands \\~\\~",
           fields: [
             ...embedFields,
-            ...createInlineBlankField(commandArray.length % 3),
           ],
         })
       ]
