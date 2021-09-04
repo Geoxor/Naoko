@@ -2,7 +2,7 @@ import { CommandType, defineCommand, ICommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { EmbedFieldData } from "discord.js";
 import sakuria from "../../sakuria/Sakuria.sakuria";
-import SakuriaEmbed, { createInlineBlankField } from "src/sakuria/SakuriaEmbed.sakuria";
+import SakuriaEmbed, { createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
 export default defineCommand({
   data: new SlashCommandBuilder().setName("help").setDescription("See all possible commands sakuria has!"),
