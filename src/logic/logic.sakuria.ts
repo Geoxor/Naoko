@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { AxiosError } from "axios";
-import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn } from "../types";
+import { CommandType, IAnilistAnime, IAnime, ICommand, ImageProcessorFn } from "../types";
 import Discord, { CommandInteraction } from "discord.js";
 import { speak } from "windows-tts";
 import logger from "../sakuria/Logger.sakuria";
