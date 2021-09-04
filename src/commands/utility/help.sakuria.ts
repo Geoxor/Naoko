@@ -42,9 +42,7 @@ export default defineCommand({
       embeds: [
         new SakuriaEmbed({
           title: "\\~\\~ Commands \\~\\~",
-          fields: [
-            ...embedFields,
-          ],
+          fields: embedFields,
         })
       ]
     };
