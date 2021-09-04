@@ -19,14 +19,17 @@ export default defineCommand({
     commandArray.forEach((command) => {
       commandMap.get(command.type)?.push([command.data.name, command.data.description]);
     });
+    
+    // Filter out the empty CommandType entry
+    const filteredCommandMap = commandMap.filter((nameDescriptionArray) => nameDescriptionArray.length > 1);
 
     // Makes the command alphabetical ordered. (https://canary.discord.com/channels/385387666415550474/823647553680703529/877873819161862195)
-    commandMap.forEach((stringArray) => {
+    filteredCommandMap.forEach((stringArray) => {
       stringArray.sort(([cmdAName], [cmdBName]) => cmdAName.localeCompare(cmdBName));
     });
 
     // Formats all elements of commandMap into EmbedFieldData and inserts it into embedFields.
-    commandMap.forEach((nameDescriptionArray, commandType) => {
+    filteredCommandMap.forEach((nameDescriptionArray, commandType) => {
       const fieldValue = nameDescriptionArray
         .map(([name, description]) => `**${name}**:\n${description}`)
         .join("\n");
