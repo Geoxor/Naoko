@@ -1,6 +1,6 @@
 import { CommandType, defineCommand, ICommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { EmbedFieldData } from "discord.js";
+import { Collection, EmbedFieldData } from "discord.js";
 import sakuria from "../../sakuria/Sakuria.sakuria";
 import SakuriaEmbed, { createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
@@ -12,7 +12,7 @@ export default defineCommand({
       .map((command) => command[1]);
 
     // Creates a Map that holds every CommandType value as key, and an empty array as value.
-    const commandMap = new Map<CommandType, [string, string][]>(Object.values(CommandType).map((commandType) => [commandType, []]));
+    const commandMap = new Collection<CommandType, [string, string][]>(Object.values(CommandType).map((commandType) => [commandType, []]));
     const embedFields: EmbedFieldData[] = [];
 
     // Inserts every commands into it's referring commandMap key.
