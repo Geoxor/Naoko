@@ -38,6 +38,7 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
             .setDescription("a URL, Emoji or User ID to use as a texture")
             .setRequired(true)
         ),
+      type: CommandType.IMAGE_PROCESSORS,
       requiresProcessing: true,
       execute: imageProcess(fn),
     };
