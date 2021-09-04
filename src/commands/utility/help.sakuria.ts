@@ -38,12 +38,16 @@ export default defineCommand({
       });
     });
 
-    return new SakuriaEmbed({
-      title: "\\~\\~ Commands \\~\\~",
-      fields: [
-        ...embedFields,
-        ...createInlineBlankField(commandArray.length % 3),
-      ],
-    });
+    return {
+      embeds: [
+        new SakuriaEmbed({
+          title: "\\~\\~ Commands \\~\\~",
+          fields: [
+            ...embedFields,
+            ...createInlineBlankField(commandArray.length % 3),
+          ],
+        })
+      ]
+    };
   },
 });
