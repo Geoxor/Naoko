@@ -22,7 +22,17 @@ export type CommandExecute = (
 export interface ICommand {
   execute: CommandExecute;
   requiresProcessing?: boolean;
+  type: CommandType;
   data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
+}
+
+export enum CommandType {
+  ECONOMY = "Economy",
+  FUN = "Fun",
+  IMAGE_PROCESSORS = "Image Processors",
+  MODERATION = "Moderation",
+  MUSIC_PLAYER = "Music Player",
+  UTILITY = "Utility",
 }
 
 export interface ISakuriaEmbed {
