@@ -21,7 +21,7 @@ export default defineCommand({
     });
     
     // Filter out the empty CommandType entry
-    commandMap.filter((stringArray) => stringArray.length);
+    commandMap.filter((stringArray) => stringArray.length ? true : false);
 
     // Makes the command alphabetical ordered. (https://canary.discord.com/channels/385387666415550474/823647553680703529/877873819161862195)
     commandMap.forEach((stringArray) => {
