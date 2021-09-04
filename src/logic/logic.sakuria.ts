@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { AxiosError } from "axios";
-import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn } from "../types";
+import { CommandType, IAnilistAnime, IAnime, ICommand, ImageProcessorFn } from "../types";
 import Discord, { CommandInteraction } from "discord.js";
 import { speak } from "windows-tts";
 import logger from "../sakuria/Logger.sakuria";
@@ -38,6 +38,7 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
             .setDescription("a URL, Emoji or User ID to use as a texture")
             .setRequired(true)
         ),
+      type: CommandType.IMAGE_PROCESSORS,
       requiresProcessing: true,
       execute: imageProcess(fn),
     };

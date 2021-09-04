@@ -1,5 +1,5 @@
 import { tts } from "../../logic/logic.sakuria";
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import Discord from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
@@ -10,6 +10,7 @@ export default defineCommand({
     .addStringOption((option) =>
       option.setName("sentence").setDescription("the sentence to turn into text to speech").setRequired(true)
     ),
+  type: CommandType.FUN,
   requiresProcessing: true,
   execute: async (interaction) => {
     const sentence = interaction.options.getString("sentence", true);

@@ -1,4 +1,4 @@
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import Discord from "discord.js";
 import { getSourceURL } from "../../logic/logic.sakuria";
 import { imageProcessors, stack } from "../../logic/imageProcessors.sakuria";
@@ -36,6 +36,7 @@ export default defineCommand({
     .addIntegerOption((option) =>
       option.setName("fps").setDescription("The framerate (0-60)").setRequired(false)
     ),
+  type: CommandType.IMAGE_PROCESSORS,
   requiresProcessing: true,
   execute: async (interaction) => {
     const processor = interaction.options.getString("processor", true);

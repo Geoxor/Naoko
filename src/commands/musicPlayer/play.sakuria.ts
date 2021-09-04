@@ -1,9 +1,10 @@
 import { musicMiddleware } from "../../middleware/musicMiddleware.sakuria";
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
   data: new SlashCommandBuilder().setName("play").setDescription("Start playing music from the music folder"),
+  type: CommandType.MUSIC_PLAYER,
   requiresProcessing: true,
   execute: async (interaction) => {
     return musicMiddleware(interaction, async (channel, player) => {

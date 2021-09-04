@@ -1,5 +1,5 @@
 import { GuildMember } from "discord.js";
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
@@ -7,6 +7,7 @@ export default defineCommand({
     .setName("kick")
     .setDescription("Kick a user")
     .addUserOption((option) => option.setName("user").setDescription("the user to kick").setRequired(true)),
+  type: CommandType.MODERATION,
   execute: async (interaction) => {
     const targetUser = interaction.options.getUser("user", true);
     const targetMember = interaction.guild?.members.cache.get(targetUser.id);

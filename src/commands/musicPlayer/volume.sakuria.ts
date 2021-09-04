@@ -1,5 +1,5 @@
 import { musicMiddleware } from "../../middleware/musicMiddleware.sakuria";
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
@@ -9,6 +9,7 @@ export default defineCommand({
     .addIntegerOption((option) =>
       option.setName("volume").setDescription("the volume to set the music to").setRequired(true)
     ),
+  type: CommandType.MUSIC_PLAYER,
   execute: async (interaction) => {
     return musicMiddleware(interaction, async (channel, player) => {
       const volume = interaction.options.getInteger("volume") || 1;

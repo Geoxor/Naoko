@@ -1,4 +1,4 @@
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { britify } from "../../logic/formatters.sakuria";
 
@@ -9,6 +9,7 @@ export default defineCommand({
     .addStringOption((option) =>
       option.setName("sentence").setDescription("the sentence to britify").setRequired(true)
     ),
+  type: CommandType.FUN,
   execute: (interaction) => {
     return britify(interaction.options.getString("sentence", true));
   },

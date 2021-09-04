@@ -1,4 +1,4 @@
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import Discord from "discord.js";
 import { getSourceURL } from "../../logic/logic.sakuria";
 import { transform } from "../../logic/imageProcessors.sakuria";
@@ -23,6 +23,7 @@ export default defineCommand({
         )
         .setRequired(true)
     ),
+  type: CommandType.IMAGE_PROCESSORS,
   requiresProcessing: true,
   execute: async (interaction) => {
     const pipeline = interaction.options.getString("pipeline", true).split(" ");

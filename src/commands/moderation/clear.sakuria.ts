@@ -1,5 +1,5 @@
 import { DiscordAPIError, GuildMember, TextChannel } from "discord.js";
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
@@ -9,6 +9,7 @@ export default defineCommand({
     .addIntegerOption((option) =>
       option.setName("amount").setDescription("the amount of messages to delete").setRequired(true)
     ),
+  type: CommandType.MODERATION,
   execute: async (interaction) => {
     if (!(interaction.member as GuildMember)?.permissions.has("MANAGE_MESSAGES"))
       return "you don't have perms cunt";

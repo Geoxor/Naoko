@@ -2,7 +2,7 @@ import { Readable } from "stream";
 import { Collection, CommandInteraction, GuildMemberManager, Snowflake } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { defaultImageOptions, getAvatarURLFromID, randomDongSize } from "../../logic/logic.sakuria";
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import SakuriaEmbed, { createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
 
 const USER_ID_REGEX = /<@!?(\d{18})>/g;
@@ -18,6 +18,7 @@ export default defineCommand({
     .addStringOption((option) =>
       option.setName("mentions").setDescription("people to fight with").setRequired(false)
     ),
+  type: CommandType.FUN,
   execute: (interaction) => {
     const mentions = interaction.options.getString("mentions", false);
 

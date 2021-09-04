@@ -1,4 +1,4 @@
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { uwufy } from "../../logic/formatters.sakuria";
 
@@ -9,5 +9,6 @@ export default defineCommand({
     .addStringOption((option) =>
       option.setName("sentence").setDescription("the sentence to uwufy").setRequired(true)
     ),
+  type: CommandType.FUN,
   execute: (interaction) => uwufy(interaction.options.getString("sentence", true)),
 });

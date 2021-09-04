@@ -1,4 +1,4 @@
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import facts from "../../assets/funFacts.json";
 import { randomChoice } from "../../logic/logic.sakuria";
 import Discord from "discord.js";
@@ -6,6 +6,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
   data: new SlashCommandBuilder().setName("funfact").setDescription("Says a random fun fact"),
+  type: CommandType.FUN,
   execute: () => {
     const embed = new Discord.MessageEmbed()
       .setColor("#d2185e")

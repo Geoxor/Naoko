@@ -1,4 +1,4 @@
-import { defineCommand, IMessage } from "../../types";
+import { CommandType, defineCommand, IMessage } from "../../types";
 import Discord from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { anilistQuery, traceAnime } from "../../logic/network.sakuria";
@@ -10,6 +10,7 @@ export default defineCommand({
     .addStringOption((option) =>
       option.setName("url").setDescription("The image URL to trace").setRequired(true)
     ),
+  type: CommandType.FUN,
   requiresProcessing: true,
   execute: async (interaction) => {
     // Check if they sent shit

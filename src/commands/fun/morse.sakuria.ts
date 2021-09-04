@@ -1,4 +1,4 @@
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { decodeMorse, encodeMorse } from "../../logic/formatters.sakuria";
 
@@ -17,6 +17,7 @@ export default defineCommand({
     .addStringOption((option) =>
       option.setName("string").setDescription("the string to parse").setRequired(true)
     ),
+  type: CommandType.FUN,
   execute: (interaction) => {
     const method = interaction.options.getString("method", true);
     const string = interaction.options.getString("string", true);

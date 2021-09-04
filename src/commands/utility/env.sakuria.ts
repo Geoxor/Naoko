@@ -1,4 +1,4 @@
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import Discord from "discord.js";
 import { systemInfo } from "../../sakuria/Sakuria.sakuria";
 import { version } from "../../../package.json";
@@ -23,6 +23,7 @@ export default defineCommand({
   data: new SlashCommandBuilder()
     .setName("env")
     .setDescription("See the environment this shard of Sakuria is hosted in"),
+  type: CommandType.UTILITY,
   execute: (interaction) => {
     // Shorthand
     const emoji = (id: string) => interaction.client.emojis.cache.get(id);

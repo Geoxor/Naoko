@@ -1,4 +1,4 @@
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
@@ -8,6 +8,7 @@ export default defineCommand({
     .addUserOption((option) =>
       option.setName("user").setDescription("the user to fetch the avatar of").setRequired(false)
     ),
+  type: CommandType.UTILITY,
   execute: (interaction) => {
     const otherUser = interaction.options.getUser("user");
     const link =

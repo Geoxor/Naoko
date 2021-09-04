@@ -1,5 +1,5 @@
 import { match } from "../../logic/logic.sakuria";
-import { defineCommand } from "../../types";
+import { CommandType, defineCommand } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
@@ -9,6 +9,7 @@ export default defineCommand({
     .addUserOption((option) =>
       option.setName("user").setDescription("the user to match with").setRequired(true)
     ),
+  type: CommandType.FUN,
   execute: (interaction) => {
     const matcher = interaction.user;
     const matchee = interaction.options.getUser("user", true);
