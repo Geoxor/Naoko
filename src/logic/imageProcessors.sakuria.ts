@@ -79,7 +79,7 @@ export async function waifu2x(buffer: Buffer): Promise<Buffer> {
   return new Promise(async (resolve, reject) => {
     const curData = Date.now();
     const mime = await fileType(buffer);
-    const inputPath = `./src/cache/${curData}-in-randomFile.${mime.ext}`;
+    const inputPath = `./src/cache/${curData}-in-randomFile.${mime?.ext}`;
     const outputPath = `./src/cache/${curData}-out-randomFile.png`;
     await fs.promises.writeFile(inputPath, buffer).catch((err) => reject(err));
 
@@ -94,14 +94,16 @@ export async function waifu2x(buffer: Buffer): Promise<Buffer> {
 
     // Triggers when subprocess is finished
     subprocess.on("close", async () => {
-      // Removes the source file
-      fs.promises.unlink(inputPath);
+ 
 
       const file = await fs.promises.readFile(outputPath).catch((err) => reject(err));
       if (!file) return reject(`${file} was not found!`);
 
+      // Removes the source file
+      await fs.promises.unlink(inputPath);
+
       // Removes the output file
-      fs.promises.unlink(outputPath);
+      // await fs.promises.unlink(outputPath);
 
       resolve(file);
     });
