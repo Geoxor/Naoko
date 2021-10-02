@@ -42,7 +42,7 @@ export function createErrorEmbed(description: string, extraTitle?: string): Saku
   });
 }
 
-export function createNotInlineBlankField(amount = 1): EmbedFieldData[] {
+export function createNotInlineBlankFields(amount = 1): EmbedFieldData[] {
   const arr: EmbedFieldData[] = [];
 
   for (let i = 0; i < amount; i++) {
@@ -52,7 +52,7 @@ export function createNotInlineBlankField(amount = 1): EmbedFieldData[] {
   return arr;
 }
 
-export function createInlineBlankField(amount = 1): EmbedFieldData[] {
+export function createInlineBlankFields(amount = 1): EmbedFieldData[] {
   const arr: EmbedFieldData[] = [];
 
   for (let i = 0; i < amount; i++) {
