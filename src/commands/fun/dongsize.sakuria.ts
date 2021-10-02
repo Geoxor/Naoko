@@ -1,15 +1,9 @@
 import { Readable } from "stream";
-import { Collection, CommandInteraction, GuildMemberManager, Snowflake } from "discord.js";
+import { Collection, CommandInteraction, User } from "discord.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { defaultImageOptions, getAvatarURLFromID, randomDongSize } from "../../logic/logic.sakuria";
+import { defaultImageOptions, randomDongSize } from "../../logic/logic.sakuria";
 import { CommandType, defineCommand } from "../../types";
-import SakuriaEmbed, { createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
-
-const USER_ID_REGEX = /<@!?(\d{18})>/g;
-
-function toFieldData([name, value]: string[]): { name: string; value: string; inline: boolean } {
-  return { name, value, inline: true };
-}
+import SakuriaEmbed, { createInlineBlankFields } from "../../sakuria/SakuriaEmbed.sakuria";
 
 export default defineCommand({
   data: new SlashCommandBuilder()
@@ -24,46 +18,38 @@ export default defineCommand({
 
     if (!mentions) return singleUserHandler(interaction);
     else if (interaction.guild) {
-      const regexResult = mentions.split(USER_ID_REGEX).filter((mention) => !!mention);
-      const allDongs = new Collection<string, number>();
-      const memberManager = interaction.guild.members;
-      const authorDongSize = randomDongSize();
+      let winner = interaction.user;
+      let winnerDongSize = randomDongSize();
+      const allDongs = new Collection<User, number>();
 
-      allDongs.set(interaction.user.id, authorDongSize);
+      interaction.options.resolved.users.forEach((user) => {
+        const dongSize = randomDongSize();
 
-      let winnerID = interaction.user.id;
-      let largestDongSize = authorDongSize;
-      // starts at 1 because 0 is the input
-      let i = 1;
-      while (regexResult[i]) {
-        if (!allDongs.has(regexResult[i])) {
-          const dongSize = randomDongSize();
-
-          if (dongSize > largestDongSize) {
-            winnerID = regexResult[i];
-            largestDongSize = dongSize;
-          }
-          allDongs.set(regexResult[i], dongSize);
+        if (dongSize > winnerDongSize) {
+          winner = user;
+          winnerDongSize = dongSize;
         }
-        i++;
-      }
 
-      const spacer = createInlineBlankField(allDongs.size % 3);
-      const embedTemplate = new SakuriaEmbed({
-        title: "The legendary battle of dongs",
-        thumbnail: getAvatarURLFromID(winnerID, interaction),
+        allDongs.set(user, dongSize);
       });
 
       if (allDongs.size < 2) return singleUserHandler(interaction);
 
-      // 2000 not 1900 here because the maximum text in Embed is 2048
-      if (largestDongSize > 2000) {
+      const spacer = createInlineBlankFields(allDongs.size % 3);
+      const embedTemplate = new SakuriaEmbed({
+        title: "The legendary battle of dongs",
+        thumbnail: winner.displayAvatarURL(defaultImageOptions),
+      });
+
+
+      // 2000 not 1900 here because the maximum text count in Embed is 2048
+      if (winnerDongSize > 2000) {
         return {
           embeds: [
             embedTemplate
               .setDescription("This battle of the dongs is too much to just say as is, so here's the brief:\n")
               .setFields([
-                ...allDongs.map(formatUserDongSize(largestDongSize, false, memberManager)).map(toFieldData),
+                ...allDongs.map(formatUserDongSize(winnerDongSize, false)).map(toFieldData),
                 ...spacer,
               ]),
           ],
@@ -72,10 +58,7 @@ export default defineCommand({
               name: "battle.txt",
               attachment: Readable.from(
                 allDongs
-                  .map(
-                    (dongSize: number, user: Snowflake) =>
-                      `${memberManager.cache.get(user)?.user?.tag || "?"}'s dong: 8${"=".repeat(dongSize)}D`
-                  )
+                  .map((dongSize: number, user: User) => `${user?.tag || "?"}'s dong: 8${"=".repeat(dongSize)}D`)
                   .join("\n")
               ),
             },
@@ -85,7 +68,7 @@ export default defineCommand({
         return {
           embeds: [
             embedTemplate.setFields([
-              ...allDongs.map(formatUserDongSize(largestDongSize, true, memberManager)).map(toFieldData),
+              ...allDongs.map(formatUserDongSize(winnerDongSize, true)).map(toFieldData),
               ...spacer,
             ]),
           ],
@@ -94,6 +77,10 @@ export default defineCommand({
     }
   },
 });
+
+function toFieldData([name, value]: string[]): { name: string; value: string; inline: boolean } {
+  return { name, value, inline: true };
+}
 
 function singleUserHandler(interaction: CommandInteraction) {
   const dongSize = randomDongSize();
@@ -113,9 +100,9 @@ function singleUserHandler(interaction: CommandInteraction) {
   }
 }
 
-function formatUserDongSize(largestDongSize: number, showDong: boolean, memberManager: GuildMemberManager) {
-  return (dongSize: number, userID: string) => [
-    `${dongSize >= largestDongSize ? "(Winner) " : ""}${memberManager.cache.get(userID)?.user?.tag || "?"}`,
+function formatUserDongSize(largestDongSize: number, showDong: boolean) {
+  return (dongSize: number, user: User) => [
+    `${dongSize >= largestDongSize ? "(Winner) " : ""}${user?.tag || "?"}`,
     `${showDong ? `Dong:8${"=".repeat(dongSize)}D\n` : ""}Dong size: ${dongSize.toString()}cm`,
   ];
 }
