@@ -1,12 +1,12 @@
-import Discord from "discord.js";
 import badWords from "../assets/badWords.json";
 import goodWords from "../assets/goodWords.json";
 import {Utils} from "@taku.moe/utils";
+import { IMessage } from "../types";
 
 const badWordRegexs = badWords.map(word => new RegExp(word, "gi"));
 const goodWordRegexs = goodWords.map(word => new RegExp(word, "gi"));
 
-export function isBadWord (message: Discord.Message) {
+export function isBadWord (message: IMessage) {
   
   let normalized = Utils.Formatters.normalize(message.content).replace(/\s/g, "");
 
