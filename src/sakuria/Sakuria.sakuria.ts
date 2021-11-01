@@ -25,6 +25,9 @@ si.getStaticData().then((info) => {
 class Sakuria {
   public bot: Discord.Client;
   public commands: Discord.Collection<string, ICommand>;
+  public SAKURIA_ID = "870496144881492069";
+  public GEOXOR_GUILD_ID = "385387666415550474";
+  public geoxorGuild: Discord.Guild | undefined;
 
   constructor() {
     this.commands = new Discord.Collection();
@@ -38,12 +41,15 @@ class Sakuria {
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
     });
-    this.bot.on("ready", this.onReady);
+    this.bot.on("ready", (bot) => this.onReady(bot));
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.bot.on("messageDelete", (message) => this.onMessageDelete(message));
     this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
     this.bot.on("guildMemberRemove", (member) => this.onGuildMemberRemove(member));
     this.bot.on("guildMemberAdd", (member) => this.onGuildMemberAdd(member));
+    this.bot.on("threadCreate", (thread) => {
+      thread.join();
+    })
     this.bot.login(config.token);
     logger.sakuria.login();
   }
@@ -60,11 +66,30 @@ class Sakuria {
     }
   }
 
-  private onReady(bot: Discord.Client) {
+  private async onReady(bot: Discord.Client) {
     logger.sakuria.instantiated();
     console.log(`Logged in as ${bot.user!.tag}!`);
     logger.sakuria.numServers(bot.guilds.cache.size);
     bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
+    this.leaveRogueGuilds();
+    this.joinThreads();
+  }
+
+  private joinThreads(){
+    const channels = this.bot.channels.cache.values();
+    for (let channel of channels){
+      if(channel.isThread()) {
+        channel.join().then(() => logger.sakuria.print(`Joined thread ${channel.id}`));
+      }
+    }
+  }
+
+  private leaveRogueGuilds(){
+    for(let guild of this.bot.guilds.cache.values()){
+      if (guild.id !== this.GEOXOR_GUILD_ID) {
+        guild.leave().then(() => logger.sakuria.print(`Left guild ${guild.name}`));
+      }
+    }
   }
 
   private async onGuildMemberAdd(member: Discord.GuildMember) {
@@ -81,6 +106,7 @@ class Sakuria {
   }
 
   private async onGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember) {
+    if (member.id === this.SAKURIA_ID) return;
     let user = await User.findOneOrCreate(member);
     logger.sakuria.print(`Updating roles for ${member.user.username}`);
     user.updateRoles(Array.from(member.roles.cache.keys()));
