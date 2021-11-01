@@ -1,9 +1,8 @@
-import { CommandType, defineCommand } from "../../types";
+import { defineCommand } from "../../types";
 import Discord from "discord.js";
 import { systemInfo } from "../../sakuria/Sakuria.sakuria";
 import { version } from "../../../package.json";
-import { msToTime } from "../../logic/formatters.sakuria";
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { msToTime } from "../../logic/logic.sakuria";
 
 const startTime = Date.now();
 
@@ -20,13 +19,12 @@ const NVIDIA_EMOJI = "878991967500001291";
 const RADEON_EMOJI = "878992223809732638";
 
 export default defineCommand({
-  data: new SlashCommandBuilder()
-    .setName("env")
-    .setDescription("See the environment this shard of Sakuria is hosted in"),
-  type: CommandType.UTILITY,
-  execute: (interaction) => {
+  name: "env",
+  description: "Show environment details",
+  requiresProcessing: false,
+  execute: (message) => {
     // Shorthand
-    const emoji = (id: string) => interaction.client.emojis.cache.get(id);
+    const emoji = (id: string) => message.client.emojis.cache.get(id);
 
     // Leave these in here because systeminfo takes 10 hours to fetch data
     // and putting these out there will cause it to be undefined

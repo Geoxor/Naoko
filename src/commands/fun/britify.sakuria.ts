@@ -1,16 +1,12 @@
-import { CommandType, defineCommand } from "../../types";
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { britify } from "../../logic/formatters.sakuria";
+import { britify } from "../../logic/logic.sakuria";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
-  data: new SlashCommandBuilder()
-    .setName("britify")
-    .setDescription("Turn a sentence into british")
-    .addStringOption((option) =>
-      option.setName("sentence").setDescription("the sentence to britify").setRequired(true)
-    ),
-  type: CommandType.FUN,
-  execute: (interaction) => {
-    return britify(interaction.options.getString("sentence", true));
+  name: "britify",
+  description: "Transforms your sentence to british",
+  requiresProcessing: false,
+  execute: async (message) => {
+    if (message.args.length === 0) return "tell me what u want in bri'ish cunt";
+    return britify(message.args.join(" "));
   },
 });

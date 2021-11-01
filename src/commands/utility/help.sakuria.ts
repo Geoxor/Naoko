@@ -1,56 +1,14 @@
-import { CommandType, defineCommand, ICommand } from "../../types";
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { Collection, EmbedFieldData } from "discord.js";
 import sakuria from "../../sakuria/Sakuria.sakuria";
-import SakuriaEmbed, { createInlineBlankField } from "../../sakuria/SakuriaEmbed.sakuria";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
-  data: new SlashCommandBuilder().setName("help").setDescription("See all possible commands sakuria has!"),
-  type: CommandType.UTILITY,
+  name: "help",
+  description: "The command you just did",
+  requiresProcessing: false,
   execute: () => {
-    const commandArray = Array.from(sakuria.commands)
-      .map((command) => command[1]);
-
-    // Creates a Map that holds every CommandType value as key, and an empty array as value.
-    const commandMap = new Collection<CommandType, [string, string][]>(Object.values(CommandType).map((commandType) => [commandType, []]));
-    const embedFields: EmbedFieldData[] = [];
-
-    // Inserts every commands into it's referring commandMap key.
-    commandArray.forEach((command) => {
-      commandMap.get(command.type)?.push([command.data.name, command.data.description]);
-    });
-    
-    // Filter out the empty CommandType entry
-    const filteredCommandMap = commandMap.filter((nameDescriptionArray) => nameDescriptionArray.length > 1);
-
-    // Makes the command alphabetical ordered. (https://canary.discord.com/channels/385387666415550474/823647553680703529/877873819161862195)
-    filteredCommandMap.forEach((stringArray) => {
-      stringArray.sort(([cmdAName], [cmdBName]) => cmdAName.localeCompare(cmdBName));
-    });
-
-    // Formats all elements of commandMap into EmbedFieldData and inserts it into embedFields.
-    filteredCommandMap.forEach((nameDescriptionArray, commandType) => {
-      const fieldValue = nameDescriptionArray
-        .map(([name, description]) => `**${name}**:\n${description}`)
-        .join("\n");
-
-      embedFields.push({
-        name: commandType,
-        value: fieldValue,
-        inline: true,
-      });
-    });
-
-    return {
-      embeds: [
-        new SakuriaEmbed({
-          title: "\\~\\~ Commands \\~\\~",
-          fields: [
-            ...embedFields,
-            ...createInlineBlankField(commandArray.length % 3),
-          ],
-        })
-      ]
-    };
+    let commandArray = Array.from(sakuria.commands)
+      .map((command) => command[1])
+      .map((command) => `${command.name} - ${command.description}`);
+    return commandArray.join("\n");
   },
 });

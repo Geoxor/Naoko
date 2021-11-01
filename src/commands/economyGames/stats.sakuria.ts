@@ -1,14 +1,14 @@
+import Discord from "discord.js";
 import InventoryManager from "../../sakuria/InventoryManager.sakuria";
-import { CommandType, defineCommand } from "../../types";
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { defineCommand, IMessage } from "../../types";
 
 export default defineCommand({
-  data: new SlashCommandBuilder().setName("stats").setDescription("Shows the statistics of the user"),
+  name: "stats",
+  description: "Shows the statistics of the user",
   requiresProcessing: false,
-  type: CommandType.ECONOMY,
-  execute: async (interaction) => {
+  execute: async (message) => {
     try {
-      const embed = await InventoryManager.getStatistics(interaction.user);
+      const embed = await InventoryManager.getStatistics(message.author);
       return { embeds: [embed] };
     } catch (error) {
       return "You don't have statistics";

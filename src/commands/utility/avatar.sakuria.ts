@@ -1,18 +1,12 @@
-import { CommandType, defineCommand } from "../../types";
-import { SlashCommandBuilder } from "@discordjs/builders";
-
+import { defineCommand } from "../../types";
 export default defineCommand({
-  data: new SlashCommandBuilder()
-    .setName("avatar")
-    .setDescription("Get the avatar of a user or yours")
-    .addUserOption((option) =>
-      option.setName("user").setDescription("the user to fetch the avatar of").setRequired(false)
-    ),
-  type: CommandType.UTILITY,
-  execute: (interaction) => {
-    const otherUser = interaction.options.getUser("user");
+  name: "avatar",
+  description: "Get the avatar of a user or yours",
+  requiresProcessing: false,
+  execute: (message) => {
+    const otherUser = message.mentions.users.first();
     const link =
-      (otherUser ? otherUser.avatarURL() : interaction.user.avatarURL()) || interaction.user.defaultAvatarURL;
-    return link.replace("webp", "png") + "?size=2048";
+      (otherUser ? otherUser.avatarURL() : message.author.avatarURL()) || message.author.defaultAvatarURL;
+    return link + "?size=2048";
   },
 });

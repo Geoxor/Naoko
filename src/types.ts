@@ -1,6 +1,4 @@
-import Discord, { ColorResolvable, CommandInteraction, EmbedFieldData, Interaction } from "discord.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
-
+import Discord from "discord.js";
 export type Coords = {
   x?: number;
   y?: number;
@@ -16,36 +14,14 @@ export interface IMessage extends Discord.Message {
 }
 
 export type CommandExecute = (
-  interaction: CommandInteraction
+  message: IMessage
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
 export interface ICommand {
   execute: CommandExecute;
+  name: string;
+  description: string;
   requiresProcessing?: boolean;
-  type: CommandType;
-  data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
-}
-
-export enum CommandType {
-  ECONOMY = "Economy",
-  FUN = "Fun",
-  IMAGE_PROCESSORS = "Image Processors",
-  MODERATION = "Moderation",
-  MUSIC_PLAYER = "Music Player",
-  UTILITY = "Utility",
-}
-
-export interface ISakuriaEmbed {
-  title?: string;
-  description?: string;
-  url?: string;
-  timestamp?: Date | number;
-  color?: ColorResolvable;
-  footer?: { text: string; iconURL?: string } | string;
-  image?: string;
-  thumbnail?: string;
-  author?: { name: string; iconURL?: string; url?: string };
-  fields?: EmbedFieldData[];
 }
 
 export const defineCommand = (cmd: ICommand): ICommand => cmd;

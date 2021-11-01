@@ -1,24 +1,20 @@
-import { GuildMember } from "discord.js";
-import { CommandType, defineCommand } from "../../types";
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { db } from "../../sakuria/Database.sakuria";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
-  data: new SlashCommandBuilder()
-    .setName("kick")
-    .setDescription("Kick a user")
-    .addUserOption((option) => option.setName("user").setDescription("the user to kick").setRequired(true)),
-  type: CommandType.MODERATION,
-  execute: async (interaction) => {
-    const targetUser = interaction.options.getUser("user", true);
-    const targetMember = interaction.guild?.members.cache.get(targetUser.id);
-
+  name: "kick",
+  description: "Kicks a user",
+  requiresProcessing: false,
+  execute: async (message) => {
+    const targetUser = message.mentions.members?.first();
     if (!targetUser) return "please mention the user you wanna kick";
-    if (!targetMember) return "member not found";
-    if (!(interaction.member as GuildMember)?.permissions.has("KICK_MEMBERS"))
-      return "you don't have perms cunt";
+    if (!message.member?.permissions.has("KICK_MEMBERS")) return "you don't have perms cunt";
 
     // Kick him
-    await targetMember.kick();
+    await targetUser.kick();
+
+    // Keep track of the kick
+    await db.newKick(message.author.id, targetUser.id);
 
     // Get fucked
     return `Kicked user <@${targetUser.id}>`;

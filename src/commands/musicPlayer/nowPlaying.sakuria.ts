@@ -1,13 +1,12 @@
 import { musicMiddleware } from "../../middleware/musicMiddleware.sakuria";
-import { CommandType, defineCommand } from "../../types";
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
-  data: new SlashCommandBuilder().setName("np").setDescription("Shows you the currently playing song"),
-  type: CommandType.MUSIC_PLAYER,
+  name: "np",
+  description: "Shows you the currently playing song",
   requiresProcessing: true,
-  execute: async (interaction) => {
-    return musicMiddleware(interaction, async (channel, player) => {
+  execute: async (message) => {
+    return musicMiddleware(message, async (channel, player) => {
       return await player.createNowPlayingEmbed();
     });
   },

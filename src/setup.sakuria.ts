@@ -36,9 +36,9 @@ try {
   var vscodeSettings = require(settingsPath);
 } catch (error) {
   console.log(error);
-  console.log("VS Code settings.json not found or has syntax errors");
+  console.log("VS Code settings.json not found, creating a new one");
   // @ts-ignore
-  return;
+  var vscodeSettings = {};
 }
 vscodeSettings["material-icon-theme.files.associations"] = {};
 vscodeSettings["material-icon-theme.files.associations"]["sakuria.json"] = "../../icons/sakuria-json";
@@ -47,17 +47,6 @@ vscodeSettings["material-icon-theme.files.associations"]["*.sakuria"] = "../../i
 vscodeSettings["material-icon-theme.files.associations"]["*.sakuria.ts"] = "../../icons/sakuria";
 vscodeSettings["material-icon-theme.files.associations"]["Logger.sakuria.ts"] = "../../icons/sakuria-logger";
 vscodeSettings["material-icon-theme.files.associations"]["Sakuria.sakuria.ts"] = "../../icons/sakuria-main";
-vscodeSettings["material-icon-theme.files.associations"]["network.sakuria.ts"] = "../../icons/sakuria-logic";
-vscodeSettings["material-icon-theme.files.associations"]["image.sakuria.ts"] = "../../icons/sakuria-logic";
-vscodeSettings["material-icon-theme.files.associations"]["imageProcessors.sakuria.ts"] =
-  "../../icons/sakuria-logic";
-vscodeSettings["material-icon-theme.files.associations"]["logic.sakuria.ts"] = "../../icons/sakuria-logic";
-vscodeSettings["material-icon-theme.files.associations"]["validators.sakuria.ts"] =
-  "../../icons/sakuria-validators";
-vscodeSettings["material-icon-theme.files.associations"]["3DRenderer.sakuria.ts"] =
-  "../../icons/sakuria-3drenderer";
-vscodeSettings["material-icon-theme.files.associations"]["formatters.sakuria.ts"] =
-  "../../icons/sakuria-formatters";
 
 vscodeSettings["material-icon-theme.folders.associations"] = {};
 vscodeSettings["material-icon-theme.folders.associations"]["sakuria"] = "../../../../icons/sakuria-folder";

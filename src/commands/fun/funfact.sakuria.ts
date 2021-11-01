@@ -1,13 +1,13 @@
-import { CommandType, defineCommand } from "../../types";
+import { defineCommand } from "../../types";
 import facts from "../../assets/funFacts.json";
 import { randomChoice } from "../../logic/logic.sakuria";
 import Discord from "discord.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
 
 export default defineCommand({
-  data: new SlashCommandBuilder().setName("funfact").setDescription("Says a random fun fact"),
-  type: CommandType.FUN,
-  execute: () => {
+  name: "funfact",
+  description: "Random fun fact",
+  requiresProcessing: false,
+  execute: (message) => {
     const embed = new Discord.MessageEmbed()
       .setColor("#d2185e")
       .setAuthor(`Fun Facts by azur`)
@@ -18,6 +18,7 @@ export default defineCommand({
         inline: true,
       })
       .setFooter(`Total of ${facts.length} fun facts`);
+
     return { embeds: [embed] };
   },
 });

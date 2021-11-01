@@ -12,7 +12,7 @@ import { IMessage } from "../types";
  * @author Geoxor
  */
 export default function (message: Discord.Message, next: (message: IMessage) => any): void {
-  if (message.content.lastIndexOf(config.PREFIX) !== 0) return;
+  if (message.content.lastIndexOf(config.prefix) !== 0) return;
   if (message.author.bot) return;
   const { command, args } = new MessageParser(message.content);
   const updatedMessage = message as IMessage;

@@ -1,14 +1,12 @@
-import { CommandType, defineCommand } from "../../types";
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { uwufy } from "../../logic/formatters.sakuria";
+import { uwufy } from "../../logic/logic.sakuria";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
-  data: new SlashCommandBuilder()
-    .setName("uwufy")
-    .setDescription("Turn a sentence into UwU")
-    .addStringOption((option) =>
-      option.setName("sentence").setDescription("the sentence to uwufy").setRequired(true)
-    ),
-  type: CommandType.FUN,
-  execute: (interaction) => uwufy(interaction.options.getString("sentence", true)),
+  name: "uwufy",
+  description: "Transforms your sentence to uwu",
+  requiresProcessing: false,
+  execute: async (message) => {
+    if (message.args.length === 0) return "b-baka!! you need to give me s-something! uwu";
+    return uwufy(message.args.join(" "));
+  },
 });

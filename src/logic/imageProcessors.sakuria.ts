@@ -6,14 +6,8 @@ import comicSans from "../assets/comic_sans_font.json";
 import cache from "../sakuria/Cache.sakuria";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import petPetGif from "pet-pet-gif";
-import { bipolarRandom } from "./logic.sakuria";
+import { getRGBAUintArray, encodeFramesToGif, bipolarRandom } from "./logic.sakuria";
 import logger from "../sakuria/Logger.sakuria";
-import fs from "fs";
-// @ts-ignore this has broken types :whyyyyyyyyyyy:
-import fileType from "file-type";
-import config from "../sakuria/Config.sakuria";
-import child_process from "child_process";
-import { encodeFramesToGif, getRGBAUintArray } from "./image.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -43,7 +37,6 @@ export const imageProcessors: ImageProcessors = {
   cart,
   car,
   amogus,
-  waifu2x,
   miku,
   trackmania,
 };
@@ -75,41 +68,6 @@ export async function transform(pipeline: string[], buffer: Buffer) {
   return fuckedBuffer;
 }
 
-export async function waifu2x(buffer: Buffer): Promise<Buffer> {
-  return new Promise(async (resolve, reject) => {
-    const curData = Date.now();
-    const mime = await fileType(buffer);
-    const inputPath = `./src/cache/${curData}-in-randomFile.${mime?.ext}`;
-    const outputPath = `./src/cache/${curData}-out-randomFile.png`;
-    await fs.promises.writeFile(inputPath, buffer).catch((err) => reject(err));
-
-    // Creates a new subprocess
-    var subprocess = child_process.execFile(
-      config.WAIFU_2X_PATH,
-      [`-i`, inputPath, `-o`, outputPath],
-      async (err) => {
-        err && subprocess.removeAllListeners("close") && reject(err);
-      }
-    );
-
-    // Triggers when subprocess is finished
-    subprocess.on("close", async () => {
- 
-
-      const file = await fs.promises.readFile(outputPath).catch((err) => reject(err));
-      if (!file) return reject(`${file} was not found!`);
-
-      // Removes the source file
-      await fs.promises.unlink(inputPath);
-
-      // Removes the output file
-      // await fs.promises.unlink(outputPath);
-
-      resolve(file);
-    });
-  });
-}
-
 /**
  * Stacks image processors and creates a gif out of them
  * @param name the name of the image processor function to apply
@@ -117,12 +75,7 @@ export async function waifu2x(buffer: Buffer): Promise<Buffer> {
  * @returns {Buffer} the modified buffer
  * @author Geoxor
  */
-export async function stack(
-  name: string,
-  buffer: Buffer,
-  iterations: number = 6,
-  fps: number = 60
-): Promise<Buffer> {
+export async function stack(name: string, buffer: Buffer, iterations: number = 6): Promise<Buffer> {
   // Get the processor function
   const processorFunction = imageProcessors[name];
 
@@ -151,7 +104,7 @@ export async function stack(
     logger.sakuria.setProgressValue(bar, i / iterations);
   }
 
-  return await encodeFramesToGif(renderedFrames, width, height, ~~(1000 / fps));
+  return await encodeFramesToGif(renderedFrames, width, height, ~~(1000 / 60));
 }
 
 /**

@@ -2,7 +2,7 @@
 // when they are hardcoded like this than
 // dynamically importing them with FS
 
-import { ICommand } from "src/types";
+import { ICommand } from "../types";
 import { genCommands } from "../logic/logic.sakuria";
 import { imageProcessors } from "../logic/imageProcessors.sakuria";
 
@@ -14,9 +14,11 @@ import { imageProcessors } from "../logic/imageProcessors.sakuria";
 // fun commands
 import anime from "./fun/anime.sakuria";
 import ask from "./fun/ask.sakuria";
-import dongsize from "./fun/dongsize.sakuria";
+import decode from "./fun/decode.sakuria";
+import dicksize from "./fun/dicksize.sakuria";
 import tts from "./fun/tts.sakuria";
-import morse from "./fun/morse.sakuria";
+import mors from "./fun/mors.sakuria";
+import say from "./fun/say.sakuria";
 import traceAnime from "./fun/trace.sakuria";
 import uwuify from "./fun/uwufy.sakuria";
 import britify from "./fun/britify.sakuria";
@@ -28,11 +30,11 @@ import clear from "./moderation/clear.sakuria";
 import kick from "./moderation/kick.sakuria";
 
 // utility commands
+import help from "./utility/help.sakuria";
 import invite from "./utility/invite.sakuria";
 import ping from "./utility/ping.sakuria";
 import avatar from "./utility/avatar.sakuria";
 import env from "./utility/env.sakuria";
-import help from "./utility/help.sakuria";
 
 // music player commands
 import play from "./musicPlayer/play.sakuria";
@@ -52,7 +54,6 @@ export const commands: ICommand[] = [
   transform,
   stack,
   avatar,
-  help,
   tts,
   match,
   ping,
@@ -67,9 +68,12 @@ export const commands: ICommand[] = [
   anime,
   ask,
   clear,
-  dongsize,
+  decode,
+  dicksize,
+  help,
   invite,
-  morse,
+  mors,
+  say,
   traceAnime,
   uwuify,
   kick,

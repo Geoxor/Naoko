@@ -1,9 +1,10 @@
-import { CommandType, defineCommand } from "../../types";
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
-  data: new SlashCommandBuilder().setName("invite").setDescription("Gives you an invite link for sakuria"),
-  type: CommandType.UTILITY,
-  execute: async () =>
-    "Oh? You want to have me on your server? Here you go:\nhttps://discord.com/oauth2/authorize?client_id=870496144881492069&scope=bot+applications.commands",
+  name: "invite",
+  description: "Gives you an invite link for sakuria",
+  requiresProcessing: false,
+  execute: () => {
+    return "Oh? You want to have me on your server? Here you go:\nhttps://discord.com/oauth2/authorize?client_id=870496144881492069&permissions=8&scope=bot";
+  },
 });

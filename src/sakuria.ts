@@ -30,9 +30,6 @@ console.log(
 logger.sakuria.inspiration();
 
 // Create sakuria
-logger.sakuria.print("Creating new Sakuria instance...");
-// Main import
-import "./sakuria/Database.sakuria";
-logger.prisma.print("Prisma loaded");
+logger.sakuria.creating();
 import "./sakuria/Sakuria.sakuria";
-logger.sakuria.print("Sakuria created");
+logger.sakuria.created();

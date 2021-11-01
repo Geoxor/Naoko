@@ -1,17 +1,14 @@
 import * as THREE from "three";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
-import { NodeCanvasElement, createCanvas } from "node-canvas-webgl";
+import { NodeCanvasElement, createCanvas } from "canvas";
 import Jimp from "jimp";
 import logger from "../sakuria/Logger.sakuria";
 import { GifUtil, GifFrame } from "gifwrap";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
 import { Coords, GeometrySceneOptions } from "src/types";
-import { getRGBAUintArray, encodeFramesToGif } from "./image.sakuria";
+import { getRGBAUintArray, encodeFramesToGif } from "./logic.sakuria";
 
-/**
- *
- */
 export class SceneProcessor {
   public width: number;
   public height: number;

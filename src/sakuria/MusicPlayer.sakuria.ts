@@ -20,8 +20,6 @@ import * as mm from "music-metadata";
 import fs from "fs";
 import Jimp from "jimp";
 
-const musicFileTypes = ["flac", "mp3", "ogg", "wav"];
-
 /**
  * The MusicPlayer class responsible for handling connection and audio playback in a voice channel
  * @author N1kO23
@@ -49,7 +47,7 @@ export default class MusicPlayer {
   private onChange =
     (name: string) =>
     (oldState: AudioPlayerState | VoiceConnectionState, newState: AudioPlayerState | VoiceConnectionState) => {
-      logger.sakuria.print(`[${name}]` + ` Changed from ${oldState.status} to ${newState.status}`);
+      logger.sakuria.generic(`[${name}]` + ` Changed from ${oldState.status} to ${newState.status}`);
     };
 
   /**
@@ -61,7 +59,7 @@ export default class MusicPlayer {
     this.nowPlayingFile = audio;
     if (this.queue.length !== 0) {
       this.queue.shift();
-      logger.sakuria.print(`Playing ${audio}`);
+      logger.sakuria.generic(`Playing ${audio}`);
       return createAudioResource(audio, { inlineVolume: true });
     }
   }
@@ -130,9 +128,7 @@ export default class MusicPlayer {
    * @author N1kO23
    */
   public async initQueue() {
-    this.queue = (await walkDirectory(config.MUSIC_DIRECTORY)).filter((file) =>
-      musicFileTypes.includes(file.split(".")[file.split(".").length - 1])
-    );
+    this.queue = await walkDirectory(config.musicDirectory);
     this.shuffle();
     this.skip();
     try {

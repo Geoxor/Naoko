@@ -1,14 +1,13 @@
 import InventoryManager from "../../sakuria/InventoryManager.sakuria";
-import { CommandType, defineCommand } from "../../types";
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
-  data: new SlashCommandBuilder().setName("inventory").setDescription("Shows the inventory of the user"),
+  name: "inventory",
+  description: "Shows the inventory of the user",
   requiresProcessing: false,
-  type: CommandType.ECONOMY,
-  execute: async (interaction) => {
+  execute: async (message) => {
     try {
-      const embed = await InventoryManager.getInventory(interaction.user);
+      const embed = await InventoryManager.getInventory(message.author);
       return { embeds: [embed] };
     } catch (error) {
       return "You don't have an inventory";
