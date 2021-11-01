@@ -12,13 +12,13 @@ import {
   VoiceConnectionState,
 } from "@discordjs/voice";
 import Discord from "discord.js";
-import { walkDirectory } from "../logic/logic.sakuria";
 import config from "./Config.sakuria";
 import logger from "./Logger.sakuria";
 import getColors from "get-image-colors";
 import * as mm from "music-metadata";
 import fs from "fs";
 import Jimp from "jimp";
+import { walkDirectory } from "src/logic/logic.sakuria";
 
 /**
  * The MusicPlayer class responsible for handling connection and audio playback in a voice channel
