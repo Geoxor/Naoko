@@ -40,6 +40,7 @@ export interface IUser {
 export interface IMessage extends Discord.Message {
   command: string;
   args: string[];
+  databaseUser: DatabaseUser;
 }
 
 export type DatabaseUser = (Document<any, any, IUser> & IUser & {
@@ -47,7 +48,7 @@ export type DatabaseUser = (Document<any, any, IUser> & IUser & {
 });
 
 export type CommandExecute = (
-  message: IMessage & {databaseUser: DatabaseUser}
+  message: IMessage
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
 export interface ICommand {

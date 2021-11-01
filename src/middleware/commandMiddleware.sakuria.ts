@@ -11,7 +11,7 @@ import { DatabaseUser, IMessage } from "../types";
  * @param {CommandExecute} next
  * @author Geoxor
  */
-export default function (message: Discord.Message, next: (message: IMessage & {databaseUser: DatabaseUser}) => any): void {
+export default function (message: Discord.Message, next: (message: IMessage) => any): void {
   if (message.content.lastIndexOf(config.prefix) !== 0) return;
   if (message.author.bot) return;
   if (message.channelId === "845328432715923487") return;
@@ -19,6 +19,5 @@ export default function (message: Discord.Message, next: (message: IMessage & {d
   const updatedMessage = message as IMessage;
   updatedMessage.command = command.toLowerCase();
   updatedMessage.args = args;
-  //@ts-ignore
   next(updatedMessage);
 }

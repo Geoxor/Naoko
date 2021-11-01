@@ -1,8 +1,8 @@
 import Discord from "discord.js";
 import { User } from "../sakuria/Database.sakuria";
-import { DatabaseUser } from "../types";
+import { DatabaseUser, IMessage } from "../types";
 
-export async function userMiddleware(message: Discord.Message, next: (message: Discord.Message & {databaseUser: DatabaseUser}) => any): Promise<void> {
+export async function userMiddleware(message: Discord.Message, next: (message: IMessage) => any): Promise<void> {
   let databaseUser = await User.findOne({discord_id: message.author.id});
   if (!databaseUser) {
     databaseUser = await new User({
@@ -22,6 +22,8 @@ export async function userMiddleware(message: Discord.Message, next: (message: D
       previous_usernames: [],
     }).save();
   };
-  // @ts-ignore
-  next({...message, databaseUser});
+
+  (message as IMessage).databaseUser = databaseUser
+
+  next(message as IMessage);
 }
