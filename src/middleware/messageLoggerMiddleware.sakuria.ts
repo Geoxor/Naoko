@@ -28,6 +28,7 @@ export function logEdit(oldMessage: Discord.Message | Discord.PartialMessage, ne
 
 export function logDelete(message: Discord.Message | Discord.PartialMessage, next: (message: Discord.Message | Discord.PartialMessage) => any) {
   if (message.channel.type == "DM") { return; }
+  if (message.author?.id === "870496144881492069") { return; } // Check if from sakuria itself
 
   const message_delete_embed = new Discord.MessageEmbed()
     .setColor('#eb4034')

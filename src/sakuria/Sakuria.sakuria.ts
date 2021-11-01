@@ -37,9 +37,9 @@ class Sakuria {
       ],
     });
     this.bot.on("ready", this.onReady);
-    this.bot.on("messageCreate", this.onMessageCreate);
-    this.bot.on("messageUpdate", this.onMessageUpdate);
-    this.bot.on("messageDelete", this.onMessageDelete);
+    this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
+    this.bot.on("messageDelete", (message) => this.onMessageDelete(message));
+    this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
     this.bot.login(config.token);
     logger.sakuria.login();
   }
