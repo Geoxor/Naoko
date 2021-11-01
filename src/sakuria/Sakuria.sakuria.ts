@@ -56,12 +56,11 @@ class Sakuria {
     }
   }
 
-  // onMessageCreate handler, doesn't work apparently
-  private onReady() {
+  private onReady(bot: Discord.Client) {
     logger.sakuria.instantiated();
-    console.log(`Logged in as ${this.bot.user!.tag}!`);
-    logger.sakuria.numServers(this.bot.guilds.cache.size);
-    this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
+    console.log(`Logged in as ${bot.user!.tag}!`);
+    logger.sakuria.numServers(bot.guilds.cache.size);
+    bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
   }
 
   private onMessageUpdate(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) {
