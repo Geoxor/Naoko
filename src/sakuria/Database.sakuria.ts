@@ -17,20 +17,13 @@ const schema = new Schema<IUser>({
   joined_at: {type: "Number", required: true},
   account_created_at: {type: "Number", required: true},
 
-  // @ts-ignore
-  kick_history: {type: "Array", default: []},
-  // @ts-ignore
-  mute_history: {type: "Array", default: []},
-  // @ts-ignore
-  ban_history: {type: "Array", default: []},
-  // @ts-ignore
-  bonk_history: {type: "Array", default: []},
-  // @ts-ignore
-  previous_usernames: {type: "Array", default: []},
-  // @ts-ignore
-  roles: {type: "Array", required: true},
-  // @ts-ignore
-  previous_nicks: {type: "Array", default: []},
+  kick_history: Array,
+  mute_history: Array,
+  ban_history: Array,
+  bonk_history: Array,
+  previous_usernames: Array,
+  roles: Array,
+  previous_nicks: Array,
 });
 
 schema.methods.updateRoles = function (roles: string[]) {
@@ -40,13 +33,16 @@ schema.methods.updateRoles = function (roles: string[]) {
 
 schema.statics.findOneOrCreate = async function (member: Discord.GuildMember | Discord.PartialGuildMember) {
   let user = await User.findOne({discord_id: member.id});
+
   if (!user) {
-    user = await new User({
+    const userData = {
       discord_id: member.id,
       roles: Array.from(member.roles.cache.keys() || []),
       joined_at: member.joinedTimestamp || Date.now(),
       account_created_at: member.user.createdTimestamp,
-    }).save();
+    };
+
+    user = await new User(userData).save();
   }
   return user;
 }

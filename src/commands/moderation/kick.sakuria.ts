@@ -19,7 +19,7 @@ export default defineCommand({
     await targetUser.kick();
 
     // Keep track of the kick
-    await User.kick(message.author.id, targetUser.id, reason);
+    await User.kick(message.author.id, targetUser.id, reason).catch(() => console.log('kick database update failed'));
 
     // Get fucked
     return `Kicked user <@${targetUser.id}>`;

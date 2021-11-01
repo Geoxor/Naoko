@@ -70,11 +70,12 @@ class Sakuria {
   private async onGuildMemberAdd(member: Discord.GuildMember) {
     let user = await User.findOneOrCreate(member);
     for (const roleId of user.roles){
-      const role = member.guild.roles.cache.get(roleId) || await member.guild.roles.fetch(roleId);
+      const role = member.guild.roles.cache.find(role => role.id === roleId);
       if (role) {
+        logger.sakuria.print(`Adding return role ${roleId} to ${member.user.username}`)
         member.roles.add(role)
           .then(() => logger.sakuria.print(`Added return role ${roleId} to ${member.user.username}`))
-          .catch((err) => console.log(err));
+          .catch(() => {});
       }
     }
   }
@@ -82,6 +83,7 @@ class Sakuria {
   private async onGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember) {
     let user = await User.findOneOrCreate(member);
     logger.sakuria.print(`Updating roles for ${member.user.username}`);
+    console.log(Array.from(member.roles.cache.keys()));
     user.updateRoles(Array.from(member.roles.cache.keys()));
   }
 
