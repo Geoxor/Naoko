@@ -18,7 +18,6 @@ export default function (message: IMessage, next: (message: IMessage) => any): v
     const checkFn = checks[i];
     const idxString = `[${i + 1}/${checks.length}]`;
     const isFailed = checkFn(message);
-    Logger.command.print(`${idxString} Checking ${checkFn.name}`);
     if (isFailed){
       message.delete();
       return Logger.command.error(`${idxString} Check ${checkFn.name} failed for ${message.author.username}`);
