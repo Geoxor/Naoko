@@ -41,7 +41,7 @@ class Sakuria {
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
     });
-    this.bot.on("ready", (bot) => this.onReady(bot));
+    this.bot.on("ready", () => this.onReady());
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.bot.on("messageDelete", (message) => this.onMessageDelete(message));
     this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
@@ -66,13 +66,17 @@ class Sakuria {
     }
   }
 
-  private async onReady(bot: Discord.Client) {
+  private async onReady() {
     logger.sakuria.instantiated();
-    console.log(`Logged in as ${bot.user!.tag}!`);
-    logger.sakuria.numServers(bot.guilds.cache.size);
-    bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
+    console.log(`Logged in as ${this.bot.user!.tag}!`);
+    logger.sakuria.numServers(this.bot.guilds.cache.size);
+    this.updateActivity();
     this.leaveRogueGuilds();
     this.joinThreads();
+  }
+
+  private updateActivity(){
+    this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
   }
 
   private joinThreads(){

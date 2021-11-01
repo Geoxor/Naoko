@@ -26,8 +26,6 @@ export function isBadWord (message: Discord.Message) {
   
       // If it contains a bad word
       if (badRegex.test(word)) {
-        console.log('  bad word', badRegex);
-        message.delete();
         return true;
       };
     }

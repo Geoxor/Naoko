@@ -20,6 +20,7 @@ export default function (message: IMessage, next: (message: IMessage) => any): v
     const isFailed = checkFn(message);
     Logger.command.print(`${idxString} Checking ${checkFn.name}`);
     if (isFailed){
+      message.delete();
       return Logger.command.error(`${idxString} Check ${checkFn.name} failed for ${message.author.username}`);
     }
   }
