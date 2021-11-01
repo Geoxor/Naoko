@@ -94,7 +94,7 @@ class Sakuria {
           message.author.username,
           message.guild?.name || "dm"
         );
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
         await message.reply(`\`\`\`${error}\`\`\``);
       }
@@ -113,10 +113,10 @@ class Sakuria {
       // Send the result
       try {
         await message.reply(result);
-      } catch (error) {
+      } catch (error: any) {
         try {
           await message.channel.send(result);
-        } catch (error) {
+        } catch (error: any) {
           console.log(error);
           if (error.code === 500) await message.reply("⚠️ when the upload speed");
           else await message.reply(`\`\`\`${error}\`\`\``);

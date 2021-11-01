@@ -22,7 +22,7 @@ export default defineCommand({
         );
       else embed.setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}`);
       return { embeds: [embed] };
-    } catch (error) {
+    } catch (error: any) {
       return error.response?.data?.error || error.response?.statusText || "Couldn't find anime..";
     }
   },

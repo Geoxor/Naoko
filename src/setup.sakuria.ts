@@ -34,7 +34,7 @@ console.log("Icons installed");
 // Update the user's VS Code settings to use the new icons for the sakuria files
 try {
   var vscodeSettings = require(settingsPath);
-} catch (error) {
+} catch (error: any) {
   console.log(error);
   console.log("VS Code settings.json not found, creating a new one");
   // @ts-ignore

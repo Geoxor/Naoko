@@ -96,7 +96,7 @@ export default class MusicPlayer {
         await voiceChannel.guild.me.voice.setSuppressed(false).catch((error) => console.error(error));
       }
       connection.subscribe(this.player);
-    } catch (error) {
+    } catch (error: any) {
       console.error(`[PLAYER HANDLER]` + ` Error with connection: ` + error);
     }
   }
@@ -134,7 +134,7 @@ export default class MusicPlayer {
     try {
       // Add the event listener to make the playback continuous as long as queue is not empty
       this.player.on(AudioPlayerStatus.Idle, () => this.skip());
-    } catch (error) {
+    } catch (error: any) {
       console.error(`[PLAYER HANDLER] Error with player: ${error}`);
     }
   }
@@ -160,7 +160,7 @@ export default class MusicPlayer {
   public async getMetadata(file: string) {
     try {
       return await mm.parseFile(file);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
     }
   }

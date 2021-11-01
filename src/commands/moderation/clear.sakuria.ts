@@ -15,7 +15,7 @@ export default defineCommand({
     try {
       await (message.channel as TextChannel).bulkDelete(count);
       return `Cleared ${count} messages!`;
-    } catch (error) {
+    } catch (error: any) {
       const err = error as DiscordAPIError;
       return err.message;
     }

@@ -9,7 +9,7 @@ export default defineCommand({
     try {
       const embed = await InventoryManager.getInventory(message.author);
       return { embeds: [embed] };
-    } catch (error) {
+    } catch (error: any) {
       return "You don't have an inventory";
     }
   },

@@ -281,7 +281,7 @@ export default class WaifuBattle {
     setTimeout(async () => {
       try {
         this.channel.name === "sakuria" ? await this.thread!.setArchived(true) : await this.thread?.delete();
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
       }
     }, this.aftermathTime);

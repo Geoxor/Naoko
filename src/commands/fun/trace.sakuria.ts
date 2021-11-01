@@ -31,7 +31,7 @@ export default defineCommand({
         .setImage(anime.image);
 
       return { embeds: [embed] };
-    } catch (error) {
+    } catch (error: any) {
       return error.response?.data?.error || error.response?.statusText || "Couldn't find anime..";
     }
   },
