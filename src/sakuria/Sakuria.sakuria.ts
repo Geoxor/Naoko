@@ -36,12 +36,7 @@ class Sakuria {
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
     });
-    logger.sakuria.instantiated();
-    this.bot.on("ready", async () => {
-      this.onReady;
-      logger.sakuria.numServers(this.bot.guilds.cache.size);
-      this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
-    });
+    this.bot.on("ready", this.onReady);
     this.bot.on("messageCreate", this.onMessageCreate);
     this.bot.on("messageUpdate", this.onMessageUpdate);
     this.bot.on("messageDelete", this.onMessageDelete);
@@ -63,7 +58,10 @@ class Sakuria {
 
   // onMessageCreate handler, doesn't work apparently
   private onReady() {
+    logger.sakuria.instantiated();
     console.log(`Logged in as ${this.bot.user!.tag}!`);
+    logger.sakuria.numServers(this.bot.guilds.cache.size);
+    this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
   }
 
   private onMessageUpdate(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) {
