@@ -4,6 +4,7 @@ import logger from "./Logger.sakuria";
 import mongoose from "mongoose";
 import config from "./Config.sakuria";
 import { IUser, IUserFunctions, Kick } from "../types";
+import Discord from "discord.js";
 mongoose.connect(config.mongo).then(() => console.log('connected'));
 const { Schema } = mongoose;
 
@@ -35,6 +36,19 @@ const schema = new Schema<IUser>({
 schema.methods.updateRoles = function (roles: string[]) {
   this.roles = roles;
   return this.save();
+}
+
+schema.statics.findOneOrCreate = async function (member: Discord.GuildMember | Discord.PartialGuildMember) {
+  let user = await User.findOne({discord_id: member.id});
+  if (!user) {
+    user = await new User({
+      discord_id: member.id,
+      roles: Array.from(member.roles.cache.keys() || []),
+      joined_at: member.joinedTimestamp || Date.now(),
+      account_created_at: member.user.createdTimestamp,
+    }).save();
+  }
+  return user;
 }
 
 schema.statics.kick = async function (kicker_id: string, kickee_id: string, reason: string = "") {

@@ -2,7 +2,7 @@ import Discord, { Intents } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.sakuria";
 import moderationMiddleware from "../middleware/moderationMiddleware.sakuria";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.sakuria";
-import { ICommand, IMessage } from "../types";
+import { ICommand } from "../types";
 import logger from "./Logger.sakuria";
 import { commands } from "../commands";
 import config from "./Config.sakuria";
@@ -42,7 +42,7 @@ class Sakuria {
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.bot.on("messageDelete", (message) => this.onMessageDelete(message));
     this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
-    this.bot.on("guildMemberUpdate", (oldMember, newMember) => this.onGuildMemberUpdate(oldMember, newMember));
+    this.bot.on("guildMemberRemove", (member) => this.onGuildMemberRemove(member));
     this.bot.on("guildMemberAdd", (member) => this.onGuildMemberAdd(member));
     this.bot.login(config.token);
     logger.sakuria.login();
@@ -68,30 +68,21 @@ class Sakuria {
   }
 
   private async onGuildMemberAdd(member: Discord.GuildMember) {
-    let databaseUser = await User.findOne({discord_id: member.id});
-    if (!databaseUser) {
-      logger.sakuria.print(`Created new user in DB ${member.user.username}`);
-
-      databaseUser = await new User({
-        discord_id: member.id,
-        roles: Array.from(member.roles.cache.keys() || []),
-        joined_at: member.joinedTimestamp,
-        account_created_at: member.user.createdTimestamp,
-      }).save();
-    } else {
-      for (const role of databaseUser.roles){
-        logger.sakuria.print(`Adding return role ${role} to ${member.user.username}`);
-        member.roles.add(role);
+    let user = await User.findOneOrCreate(member);
+    for (const roleId of user.roles){
+      const role = member.guild.roles.cache.get(roleId) || await member.guild.roles.fetch(roleId);
+      if (role) {
+        member.roles.add(role)
+          .then(() => logger.sakuria.print(`Added return role ${roleId} to ${member.user.username}`))
+          .catch((err) => console.log(err));
       }
     }
   }
 
-  private async onGuildMemberUpdate(oldMember: Discord.GuildMember | Discord.PartialGuildMember, newMember: Discord.GuildMember | Discord.PartialGuildMember) {
-    const user = await User.findOne({discord_id: oldMember.id});
-    if (user && oldMember.roles !== newMember.roles) {
-      logger.sakuria.print(`Updating roles for ${oldMember.user}`);
-      user.updateRoles(Array.from(newMember.roles.cache.keys()));
-    }
+  private async onGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember) {
+    let user = await User.findOneOrCreate(member);
+    logger.sakuria.print(`Updating roles for ${member.user.username}`);
+    user.updateRoles(Array.from(member.roles.cache.keys()));
   }
 
   private onMessageUpdate(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) {

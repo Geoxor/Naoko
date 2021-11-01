@@ -41,6 +41,7 @@ export interface IUser extends mongoose.Document, IUserFunctions {
 export interface IUserFunctions {
   kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
   updateRoles(roles: string[]): Promise<IUser>;
+  findOneOrCreate(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<IUser & {_id: any}>;
 }
 
 export interface IMessage extends Discord.Message {
