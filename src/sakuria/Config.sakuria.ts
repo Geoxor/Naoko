@@ -14,7 +14,7 @@ class Config {
       musicDirectory: "./music",
       token: "ODcwNDk2MTQ0ODgxNDkyMDY5.YQNmtQ.ucXqGrpEDj8twKtQXqrmJK2-6Bk",
       chatLogChannel: "393914221693239298",
-      mongo: "mongodb+srv://shaii:QEIg2vovIAm3sMyG@cluster0.bgxl7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+      mongo: "mongodb+srv://shaii:QEIg2vovIAm3sMyG@cluster0.bgxl7.mongodb.net/shaii?retryWrites=true&w=majority",
     };
   }
 }

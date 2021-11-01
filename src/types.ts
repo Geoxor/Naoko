@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import mongoose from "mongoose";
 import { Mongoose, Types, Document } from "mongoose";
 export type Coords = {
   x?: number;
@@ -20,7 +21,7 @@ export type Mute = Kick;
 export type Ban = Kick;
 export type Bonk = Kick;
 
-export interface IUser {
+export interface IUser extends mongoose.Document, IUserFunctions {
   discord_id: String,
   xp: Number,
   bonks: Number,
@@ -35,6 +36,11 @@ export interface IUser {
   account_created_at: Number,
   previous_nicks: string[],
   previous_usernames: string[],
+}
+
+export interface IUserFunctions {
+  kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
+  updateRoles(roles: string[]): Promise<IUser>;
 }
 
 export interface IMessage extends Discord.Message {

@@ -1,4 +1,4 @@
-import { db } from "../../sakuria/Database.sakuria";
+import { User } from "../../sakuria/Database.sakuria";
 import { defineCommand } from "../../types";
 
 export default defineCommand({
@@ -10,11 +10,14 @@ export default defineCommand({
     if (!targetUser) return "please mention the user you wanna kick";
     if (!message.member?.permissions.has("KICK_MEMBERS")) return "you don't have perms cunt";
 
+    message.args.shift() // remove the mention
+    const reason = message.args.join(" ");
+
     // Kick him
     await targetUser.kick();
 
     // Keep track of the kick
-    await db.newKick(message.author.id, targetUser.id);
+    await User.kick(message.author.id, targetUser.id, reason);
 
     // Get fucked
     return `Kicked user <@${targetUser.id}>`;

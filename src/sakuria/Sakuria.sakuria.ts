@@ -9,6 +9,7 @@ import config from "./Config.sakuria";
 import { version } from "../../package.json";
 import si from "systeminformation";
 import { userMiddleware } from "../middleware/userMiddleware.sakuria";
+import { User } from "./Database.sakuria";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");
@@ -41,6 +42,7 @@ class Sakuria {
     this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
     this.bot.on("messageDelete", (message) => this.onMessageDelete(message));
     this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
+    this.bot.on("guildMemberUpdate", (oldMember, newMember) => this.onGuildMemberUpdate(oldMember, newMember));
     this.bot.login(config.token);
     logger.sakuria.login();
   }
@@ -62,6 +64,14 @@ class Sakuria {
     console.log(`Logged in as ${bot.user!.tag}!`);
     logger.sakuria.numServers(bot.guilds.cache.size);
     bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
+  }
+
+  private async onGuildMemberUpdate(oldMember: Discord.GuildMember | Discord.PartialGuildMember, newMember: Discord.GuildMember | Discord.PartialGuildMember) {
+    const user = await User.findOne({discord_id: oldMember.id});
+    if (user && oldMember.roles !== newMember.roles) {
+      logger.sakuria.print(`Updating roles for ${oldMember.user}`);
+      user.updateRoles(Array.from(newMember.roles.cache.keys()));
+    }
   }
 
   private onMessageUpdate(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) {
