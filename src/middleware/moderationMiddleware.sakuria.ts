@@ -1,12 +1,15 @@
 import Discord from "discord.js";
 import {isFreeNitro} from "../moderation/isFreeNitro.sakuria";
+import {isBadWord} from "../moderation/isBadWord.sakuria";
 import Logger from "../sakuria/Logger.sakuria";
 
 const checks = [
-  isFreeNitro
+  isFreeNitro,
+  isBadWord
 ];
 
 export default function (message: Discord.Message, next: (message: Discord.Message) => any): void {
+  if (message.author.bot) return next(message);
   for (let i = 0; i < checks.length; i++) {
     const checkFn = checks[i];
     const idxString = `[${i + 1}/${checks.length}]`;
@@ -17,5 +20,5 @@ export default function (message: Discord.Message, next: (message: Discord.Messa
     }
   }
 
-  next(message);
+  return next(message);
 }
