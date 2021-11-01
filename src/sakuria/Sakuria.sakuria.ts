@@ -43,6 +43,7 @@ class Sakuria {
     this.bot.on("messageDelete", (message) => this.onMessageDelete(message));
     this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
     this.bot.on("guildMemberUpdate", (oldMember, newMember) => this.onGuildMemberUpdate(oldMember, newMember));
+    this.bot.on("guildMemberAdd", (member) => this.onGuildMemberAdd(member));
     this.bot.login(config.token);
     logger.sakuria.login();
   }
@@ -64,6 +65,25 @@ class Sakuria {
     console.log(`Logged in as ${bot.user!.tag}!`);
     logger.sakuria.numServers(bot.guilds.cache.size);
     bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
+  }
+
+  private async onGuildMemberAdd(member: Discord.GuildMember) {
+    let databaseUser = await User.findOne({discord_id: member.id});
+    if (!databaseUser) {
+      logger.sakuria.print(`Created new user in DB ${member.user.username}`);
+
+      databaseUser = await new User({
+        discord_id: member.id,
+        roles: Array.from(member.roles.cache.keys() || []),
+        joined_at: member.joinedTimestamp,
+        account_created_at: member.user.createdTimestamp,
+      }).save();
+    } else {
+      for (const role of databaseUser.roles){
+        logger.sakuria.print(`Adding return role ${role} to ${member.user.username}`);
+        member.roles.add(role);
+      }
+    }
   }
 
   private async onGuildMemberUpdate(oldMember: Discord.GuildMember | Discord.PartialGuildMember, newMember: Discord.GuildMember | Discord.PartialGuildMember) {
