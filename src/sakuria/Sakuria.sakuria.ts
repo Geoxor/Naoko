@@ -1,6 +1,7 @@
 import Discord, { Intents } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.sakuria";
 import moderationMiddleware from "../middleware/moderationMiddleware.sakuria";
+import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.sakuria";
 import { ICommand, IMessage } from "../types";
 import logger from "./Logger.sakuria";
 import { commands } from "../commands";
@@ -41,7 +42,9 @@ class Sakuria {
       logger.sakuria.numServers(this.bot.guilds.cache.size);
       this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
     });
-    this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
+    this.bot.on("messageCreate", this.onMessageCreate);
+    this.bot.on("messageUpdate", this.onMessageUpdate);
+    this.bot.on("messageDelete", this.onMessageDelete);
     this.bot.login(config.token);
     logger.sakuria.login();
   }
@@ -62,6 +65,18 @@ class Sakuria {
   private onReady() {
     console.log(`Logged in as ${this.bot.user!.tag}!`);
   }
+
+  private onMessageUpdate(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) {
+    logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {
+
+    });
+  };
+
+  private onMessageDelete(message: Discord.Message | Discord.PartialMessage) {
+    logDelete(message, (message) => {
+
+    });
+  };
 
   // onMessageCreate handler
   private onMessageCreate(message: Discord.Message) {

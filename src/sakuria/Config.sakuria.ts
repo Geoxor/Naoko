@@ -2,6 +2,7 @@ interface IConfig {
   prefix: string;
   musicDirectory: string;
   token: string;
+  chatLogChannel: string;
 }
 
 class Config {
@@ -11,6 +12,7 @@ class Config {
       prefix: "~",
       musicDirectory: "./music",
       token: "ODcwNDk2MTQ0ODgxNDkyMDY5.YQNmtQ.ucXqGrpEDj8twKtQXqrmJK2-6Bk",
+      chatLogChannel: "393914221693239298"
     };
   }
 }
