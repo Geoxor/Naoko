@@ -35,6 +35,7 @@
     "@discordjs/voice": "^0.5.5",
     "@hbis/three-obj-mtl-loader": "^1.1.0",
     "@jimp/plugin-fisheye": "^0.16.1",
+    "@taku.moe/utils": "^1.0.8",
     "axios": "^0.21.1",
     "canvas": "^2.8.0",
     "chalk": "^4.1.1",

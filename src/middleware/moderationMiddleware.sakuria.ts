@@ -1,7 +1,7 @@
 import Discord from "discord.js";
+import Logger from "../sakuria/Logger.sakuria";
 import {isFreeNitro} from "../moderation/isFreeNitro.sakuria";
 import {isBadWord} from "../moderation/isBadWord.sakuria";
-import Logger from "../sakuria/Logger.sakuria";
 
 const checks = [
   isFreeNitro,
@@ -16,7 +16,7 @@ export default function (message: Discord.Message, next: (message: Discord.Messa
     const isFailed = checkFn(message);
     Logger.command.print(`${idxString} Checking ${checkFn.name}`);
     if (isFailed){
-      return Logger.command.print(`${idxString} Check ${checkFn.name} failed for ${message.author.username}`);
+      return Logger.command.error(`${idxString} Check ${checkFn.name} failed for ${message.author.username}`);
     }
   }
 
