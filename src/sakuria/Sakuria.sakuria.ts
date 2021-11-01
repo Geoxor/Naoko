@@ -83,7 +83,6 @@ class Sakuria {
   private async onGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember) {
     let user = await User.findOneOrCreate(member);
     logger.sakuria.print(`Updating roles for ${member.user.username}`);
-    console.log(Array.from(member.roles.cache.keys()));
     user.updateRoles(Array.from(member.roles.cache.keys()));
   }
 
