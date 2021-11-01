@@ -8,6 +8,7 @@ import { commands } from "../commands";
 import config from "./Config.sakuria";
 import { version } from "../../package.json";
 import si from "systeminformation";
+import { userMiddleware } from "../middleware/userMiddleware.sakuria";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");
@@ -77,65 +78,68 @@ class Sakuria {
 
   // onMessageCreate handler
   private onMessageCreate(message: Discord.Message) {
-    moderationMiddleware(message, (message: Discord.Message) => {
-      commandMiddleware(message, async (message: IMessage) => {
-        // Slurs for idiots
-        const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
+    userMiddleware(message, message => {
+      moderationMiddleware(message, message => {
+        commandMiddleware(message, async message => {
 
-        // Fetch the command
-        const command = this.commands.get(message.command);
-
-        // If it doesn't exist we respond
-        if (!command) {
-          message.reply(`That command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
-          return;
-        }
-
-        // Notify the user their shit's processing
-        if (command.requiresProcessing) {
-          var processingMessage = await message.channel.send("Processing...");
-          var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
-        }
-
-        // Get the result to send from the command
-        try {
-          let timeStart = Date.now();
-          var result = await command.execute(message);
-          let timeEnd = Date.now();
-          logger.command.executedCommand(
-            timeEnd - timeStart,
-            command.name,
-            message.author.username,
-            message.guild?.name || "dm"
-          );
-        } catch (error: any) {
-          console.log(error);
-          await message.reply(`\`\`\`${error}\`\`\``);
-        }
-
-        // Delete the processing message if it exists
-        // @ts-ignore
-        if (processingMessage) {
-          processingMessage.delete();
-          // @ts-ignore
-          clearInterval(typingInterval);
-        }
-
-        // If the command returns void we just return
-        if (!result) return;
-
-        // Send the result
-        try {
-          await message.reply(result);
-        } catch (error: any) {
+          // Slurs for idiots
+          const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
+  
+          // Fetch the command
+          const command = this.commands.get(message.command);
+  
+          // If it doesn't exist we respond
+          if (!command) {
+            message.reply(`That command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
+            return;
+          }
+  
+          // Notify the user their shit's processing
+          if (command.requiresProcessing) {
+            var processingMessage = await message.channel.send("Processing...");
+            var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
+          }
+  
+          // Get the result to send from the command
           try {
-            await message.channel.send(result);
+            let timeStart = Date.now();
+            var result = await command.execute(message);
+            let timeEnd = Date.now();
+            logger.command.executedCommand(
+              timeEnd - timeStart,
+              command.name,
+              message.author.username,
+              message.guild?.name || "dm"
+            );
           } catch (error: any) {
             console.log(error);
-            if (error.code === 500) await message.reply("⚠️ when the upload speed");
-            else await message.reply(`\`\`\`${error}\`\`\``);
+            await message.reply(`\`\`\`${error}\`\`\``);
           }
-        }
+  
+          // Delete the processing message if it exists
+          // @ts-ignore
+          if (processingMessage) {
+            processingMessage.delete();
+            // @ts-ignore
+            clearInterval(typingInterval);
+          }
+  
+          // If the command returns void we just return
+          if (!result) return;
+  
+          // Send the result
+          try {
+            await message.reply(result);
+          } catch (error: any) {
+            try {
+              await message.channel.send(result);
+            } catch (error: any) {
+              console.log(error);
+              if (error.code === 500) await message.reply("⚠️ when the upload speed");
+              else await message.reply(`\`\`\`${error}\`\`\``);
+            }
+          }
+        });
       });
     });
   }

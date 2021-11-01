@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import { Mongoose, Types, Document } from "mongoose";
 export type Coords = {
   x?: number;
   y?: number;
@@ -8,13 +9,45 @@ export type ImageProcessorFn = (buffer: Buffer, ...args: any) => Promise<Buffer>
 export interface ImageProcessors {
   [key: string]: ImageProcessorFn;
 }
+
+export interface Kick {
+  timestamp: number;
+  casted_by: string;
+  reason: string;
+}
+
+export type Mute = Kick;
+export type Ban = Kick;
+export type Bonk = Kick;
+
+export interface IUser {
+  discord_id: String,
+  xp: Number,
+  bonks: Number,
+  kick_history: Kick[],
+  mute_history: Mute[],
+  is_muted: Boolean,
+  is_banned: Boolean,
+  ban_history: Ban[],
+  bonk_history: Bonk[],
+  roles: string[],
+  joined_at: Number,
+  account_created_at: Number,
+  previous_nicks: string[],
+  previous_usernames: string[],
+}
+
 export interface IMessage extends Discord.Message {
   command: string;
   args: string[];
 }
 
+export type DatabaseUser = (Document<any, any, IUser> & IUser & {
+  _id: Types.ObjectId;
+});
+
 export type CommandExecute = (
-  message: IMessage
+  message: IMessage & {databaseUser: DatabaseUser}
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
 export interface ICommand {

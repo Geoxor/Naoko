@@ -2,15 +2,18 @@ import Discord from "discord.js";
 import Logger from "../sakuria/Logger.sakuria";
 import {isFreeNitro} from "../moderation/isFreeNitro.sakuria";
 import {isBadWord} from "../moderation/isBadWord.sakuria";
+import { DatabaseUser } from "src/types";
 
 const checks = [
   isFreeNitro,
   isBadWord
 ];
 
-export default function (message: Discord.Message, next: (message: Discord.Message) => any): void {
+export default function (message: Discord.Message & {databaseUser: DatabaseUser}, next: (message: Discord.Message & {databaseUser: DatabaseUser}) => any): void {
   if (message.author.bot) return next(message);
-  if (message.guild?.id !== "385387666415550474") return;
+  if (message.guildId !== "385387666415550474") return;
+  console.log('testfuck');
+  
   for (let i = 0; i < checks.length; i++) {
     const checkFn = checks[i];
     const idxString = `[${i + 1}/${checks.length}]`;
