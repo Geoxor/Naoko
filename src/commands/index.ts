@@ -28,6 +28,7 @@ import fact from "./fun/funfact.sakuria";
 // moderation commands
 import clear from "./moderation/clear.sakuria";
 import kick from "./moderation/kick.sakuria";
+import whois from "./moderation/whois.sakuria";
 
 // utility commands
 import help from "./utility/help.sakuria";
@@ -54,6 +55,7 @@ export const commands: ICommand[] = [
   transform,
   stack,
   avatar,
+  whois,
   tts,
   match,
   ping,

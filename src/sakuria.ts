@@ -32,4 +32,5 @@ logger.sakuria.inspiration();
 // Create sakuria
 logger.sakuria.creating();
 import "./sakuria/Sakuria.sakuria";
+import "./sakuria/Database.sakuria";
 logger.sakuria.created();

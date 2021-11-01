@@ -1,114 +1,67 @@
 // import { PrismaClient } from "@prisma/client";
 // import { IBattle } from "../types";
-// import logger from "./Logger.sakuria";
+import logger from "./Logger.sakuria";
+import mongoose from "mongoose";
+import config from "./Config.sakuria";
+import { IUser, IUserFunctions, Kick } from "../types";
+import Discord from "discord.js";
+mongoose.connect(config.mongo).then(() => console.log('connected'));
+const { Schema } = mongoose;
 
-// /**
-//  * Prisma wrapper for making shit simple
-//  * @author Bluskript, Geoxor
-//  */
-// class DB {
-//   private prisma: PrismaClient;
-//   constructor() {
-//     this.prisma = new PrismaClient();
-//   }
+const schema = new Schema<IUser>({
+  discord_id: {type: "String", required: true},
+  xp: {type: "Number", default: 0},
+  bonks: {type: "Number", default: 0},
+  is_muted: {type: "Boolean", default: false},
+  is_banned: {type: "Boolean", default: false},
+  joined_at: {type: "Number", required: true},
+  account_created_at: {type: "Number", required: true},
 
-//   /**
-//    * Adds a new user if not exists in the database
-//    * @author Bluskript, Geoxor
-//    */
-//   public async newUser(id: string) {
-//     const user = await this.prisma.user.upsert({
-//       where: { id },
-//       update: {},
-//       create: {
-//         id,
-//         inventory: {
-//           create: {},
-//         },
-//         statistics: {
-//           create: {},
-//         },
-//       },
-//       include: {
-//         inventory: true,
-//         statistics: true,
-//       },
-//     });
-//     logger.prisma.generic(`UPSERT: User: ${id}`);
-//     return user;
-//   }
+  kick_history: Array,
+  mute_history: Array,
+  ban_history: Array,
+  bonk_history: Array,
+  previous_usernames: Array,
+  roles: Array,
+  previous_nicks: Array,
+});
 
-//   /**
-//    * Makes a DB record for a kick
-//    * @param {string} kicker the user (admin) who is casting the kick
-//    * @param {string} kickee the user (victim) who is getting kicked
-//    * @author Bluskript, Geoxor
-//    */
-//   public async newKick(kicker: string, kickee: string) {
-//     const timestamp = Date.now();
-//     const { id: byUserId } = await this.newUser(kicker);
-//     const { id: userId } = await this.newUser(kickee);
-//     await this.prisma.kick.create({ data: { byUserId, userId, timestamp } });
-//     return logger.prisma.generic(`CREATE: Kick: kicker: ${kicker} - kickee: ${kickee}`);
-//   }
+schema.methods.updateRoles = function (roles: string[]) {
+  this.roles = roles;
+  return this.save();
+}
 
-//   /**
-//    * Get's a user's inventory from the database
-//    * If the user doesn't exist in the database it will create it
-//    * @param {string} userId the user to get
-//    * @author Geoxor
-//    */
-//   public async getInventory(userId: string) {
-//     const inventory = await this.prisma.inventory.findFirst({
-//       where: { userId },
-//     });
+schema.statics.findOneOrCreate = async function (member: Discord.GuildMember | Discord.PartialGuildMember) {
+  let user = await User.findOne({discord_id: member.id});
 
-//     logger.prisma.generic(`GET Inventory: ${userId}`);
-//     return inventory!;
-//   }
+  if (!user) {
+    const userData = {
+      discord_id: member.id,
+      roles: Array.from(member.roles.cache.keys() || []),
+      joined_at: member.joinedTimestamp || Date.now(),
+      account_created_at: member.user.createdTimestamp,
+    };
 
-//   /**
-//    * Get's a user's statistics from the database
-//    * If the user doesn't exist in the database it will create it
-//    * @param {string} userId the user to get
-//    * @author Geoxor
-//    */
-//   public async getStatistics(userId: string) {
-//     const statistics = await this.prisma.statistics.findFirst({
-//       where: { userId },
-//     });
+    user = await new User(userData).save();
+  }
+  return user;
+}
 
-//     logger.prisma.generic(`GET Statistics: ${userId}`);
-//     return statistics!;
-//   }
+schema.statics.kick = async function (kicker_id: string, kickee_id: string, reason: string = "") {
 
-//   public async addBattleRewardsToUser(user: string, battle: IBattle) {
-//     // Prepare the statistics to commit to the database
-//     let statistics = {
-//       xp: { increment: battle.xp },
-//       totalAttacks: { increment: battle.totalAttacks },
-//       totalDamageDealt: { increment: battle.totalDamageDealt },
-//       totalPrismsCollected: { increment: battle.money },
-//     } as { [key: string]: any };
+  const kickee = await User.findOne({discord_id: kickee_id});
+  if (!kickee) return;
 
-//     // Increment the waifu rarity they killed
-//     statistics[`${battle.rarity}WaifusKilled`] = { increment: 1 };
+  const kick: Kick = {
+    timestamp: Date.now(),
+    casted_by: kicker_id,
+    reason,
+  };
 
-//     // Commit their statistics
-//     await this.prisma.statistics.update({
-//       data: statistics,
-//       where: { userId: user },
-//     });
-//     logger.prisma.generic(`UPDATE: Statistics: ${user}`);
+  kickee.kick_history.push(kick)
 
-//     // Commit their new prisms to their inventory
-//     await this.prisma.inventory.update({
-//       data: { prisms: { increment: battle.money } },
-//       where: { userId: user },
-//     });
-//     logger.prisma.generic(`UPDATE: Inventory: ${user}`);
-//     return;
-//   }
-// }
+  return kickee.save().catch((err: any) => console.log(err));
+};
 
-// export const db = new DB();
+// @ts-ignore
+export const User: mongoose.Model<IUser, {}, {}, {}> & IUserFunctions = mongoose.model<IUser>("User", schema);
