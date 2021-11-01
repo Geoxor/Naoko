@@ -1,6 +1,6 @@
 import * as THREE from "three";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
-import { NodeCanvasElement, createCanvas } from "canvas";
+import { NodeCanvasElement, createCanvas } from "node-canvas-webgl";
 import Jimp from "jimp";
 import logger from "../sakuria/Logger.sakuria";
 import { GifUtil, GifFrame } from "gifwrap";

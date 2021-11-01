@@ -1,6 +1,3 @@
-import fs from "fs";
-import logger from "./Logger.sakuria";
-
 interface IConfig {
   prefix: string;
   musicDirectory: string;
