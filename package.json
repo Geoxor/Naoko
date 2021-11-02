@@ -6,13 +6,9 @@
   "scripts": {
     "test": "npm i && ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
     "dev": "nodemon ./src/sakuria.ts",
-    "setup": "npm i && npm run prettify && ts-node ./src/setup.sakuria.ts && npm run gen-db ",
-    "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.sakuria.ts && npm run gen-db ",
-    "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\"",
-    "gen-db": "npx prisma generate --schema ./src/prisma/schema.prisma",
-    "reset-db": "npx prisma migrate reset -f --schema ./src/prisma/schema.prisma",
-    "migrate-db": "npx prisma migrate dev --schema ./src/prisma/schema.prisma ",
-    "init-db": "npx prisma migrate dev --name init --schema ./src/prisma/schema.prisma "
+    "setup": "npm i && npm run prettify && ts-node ./src/setup.sakuria.ts",
+    "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.sakuria.ts",
+    "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
   "repository": {
     "type": "git",
@@ -43,8 +39,6 @@
     "file-type": "^9.0.0",
     "get-image-colors": "^2.0.1",
     "gifenc": "^1.0.3",
-    "gifencoder": "^2.0.1",
-    "gifwrap": "^0.9.2",
     "jimp": "^0.16.1",
     "mongoose": "^6.0.12",
     "multi-progress": "^4.0.0",
@@ -52,7 +46,6 @@
     "node": "16.6.1",
     "node-canvas-webgl": "^0.2.6",
     "pet-pet-gif": "^1.0.9",
-    "prisma": "^2.28.0",
     "progress": "^2.0.3",
     "systeminformation": "^5.8.0",
     "three": "^0.131.3",
