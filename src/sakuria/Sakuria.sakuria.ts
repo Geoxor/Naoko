@@ -101,7 +101,6 @@ class Sakuria {
     for (const roleId of user.roles){
       const role = member.guild.roles.cache.find(role => role.id === roleId);
       if (role) {
-        logger.sakuria.print(`Adding return role ${roleId} to ${member.user.username}`)
         member.roles.add(role)
           .then(() => logger.sakuria.print(`Added return role ${roleId} to ${member.user.username}`))
           .catch(() => {});
