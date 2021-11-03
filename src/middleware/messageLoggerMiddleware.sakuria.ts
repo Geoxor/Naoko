@@ -4,6 +4,7 @@ import config from "../sakuria/Config.sakuria";
 
 export function logEdit(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage, next: (oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) => any): void {
   if (oldMessage.channel.type == "DM") return;
+  if (oldMessage.content == newMessage.content) return;
   if (oldMessage.author?.id === "870496144881492069") return;
 
   const embed = new Discord.MessageEmbed()
