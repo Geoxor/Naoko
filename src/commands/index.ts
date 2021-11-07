@@ -7,6 +7,7 @@ import { genCommands } from "../logic/logic.sakuria";
 import { imageProcessors } from "../logic/imageProcessors.sakuria";
 
 // economy game commands
+import rank from "./economyGames/rank.sakuria";
 // import battle from "./economyGames/battle.sakuria";
 // import inventory from "./economyGames/inventory.sakuria";
 // import stats from "./economyGames/stats.sakuria";
@@ -55,6 +56,7 @@ export const commands: ICommand[] = [
   transform,
   stack,
   avatar,
+  rank,
   whois,
   tts,
   match,
