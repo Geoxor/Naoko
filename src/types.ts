@@ -22,26 +22,26 @@ export type Ban = Kick;
 export type Bonk = Kick;
 
 export interface IUser extends mongoose.Document, IUserFunctions {
-  discord_id: String,
-  xp: Number,
-  bonks: Number,
-  kick_history: Kick[],
-  mute_history: Mute[],
-  is_muted: Boolean,
-  is_banned: Boolean,
-  ban_history: Ban[],
-  bonk_history: Bonk[],
-  roles: string[],
-  joined_at: Number,
-  account_created_at: Number,
-  previous_nicks: string[],
-  previous_usernames: string[],
+  discord_id: String;
+  xp: Number;
+  bonks: Number;
+  kick_history: Kick[];
+  mute_history: Mute[];
+  is_muted: Boolean;
+  is_banned: Boolean;
+  ban_history: Ban[];
+  bonk_history: Bonk[];
+  roles: string[];
+  joined_at: Number;
+  account_created_at: Number;
+  previous_nicks: string[];
+  previous_usernames: string[];
 }
 
 export interface IUserFunctions {
   kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
   updateRoles(roles: string[]): Promise<IUser>;
-  findOneOrCreate(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<IUser & {_id: any}>;
+  findOneOrCreate(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<IUser & { _id: any }>;
 }
 
 export interface IMessage extends Discord.Message {
@@ -50,9 +50,10 @@ export interface IMessage extends Discord.Message {
   databaseUser: DatabaseUser;
 }
 
-export type DatabaseUser = (Document<any, any, IUser> & IUser & {
-  _id: Types.ObjectId;
-});
+export type DatabaseUser = Document<any, any, IUser> &
+  IUser & {
+    _id: Types.ObjectId;
+  };
 
 export type CommandExecute = (
   message: IMessage

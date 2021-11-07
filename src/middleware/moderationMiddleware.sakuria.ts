@@ -1,15 +1,11 @@
 import Discord from "discord.js";
 import Logger from "../sakuria/Logger.sakuria";
-import {isFreeNitro} from "../moderation/isFreeNitro.sakuria";
-import {isBadWord} from "../moderation/isBadWord.sakuria";
+import { isFreeNitro } from "../moderation/isFreeNitro.sakuria";
+import { isBadWord } from "../moderation/isBadWord.sakuria";
 import { DatabaseUser, IMessage } from "../types";
 import { isMuted } from "../moderation/isMuted.sakuria";
 
-const checks = [
-  isFreeNitro,
-  isBadWord,
-  isMuted,
-];
+const checks = [isFreeNitro, isBadWord, isMuted];
 
 export default function (message: IMessage, next: (message: IMessage) => any): void {
   if (message.author.bot) return next(message);
@@ -18,7 +14,7 @@ export default function (message: IMessage, next: (message: IMessage) => any): v
     const checkFn = checks[i];
     const idxString = `[${i + 1}/${checks.length}]`;
     const isFailed = checkFn(message);
-    if (isFailed){
+    if (isFailed) {
       message.delete();
       return Logger.command.error(`${idxString} Check ${checkFn.name} failed for ${message.author.username}`);
     }

@@ -44,7 +44,9 @@ class Logger {
    * @author Geoxor
    */
   public error(log: string): void {
-    console.log(chalk.hex(this.errorColor)(`  ${getCurrentMemoryHeap()}  ${this.time()} ${this.errorEmoji}  ${log}`));
+    console.log(
+      chalk.hex(this.errorColor)(`  ${getCurrentMemoryHeap()}  ${this.time()} ${this.errorEmoji}  ${log}`)
+    );
   }
 }
 class SakuriaLogger extends Logger {

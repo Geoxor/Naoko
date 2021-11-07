@@ -7,9 +7,7 @@ export default defineCommand({
   requiresProcessing: false,
   execute: async (message) => {
     if (!message.mentions.members?.first()) {
-      
-      console.log('who is');
-      
+      console.log("who is");
     }
   },
 });

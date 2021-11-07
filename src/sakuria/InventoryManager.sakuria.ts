@@ -29,7 +29,7 @@
 
 //     let statKeys = `
 //       \`Experience\`
-      
+
 //       \`Total Attacks\`
 //       \`Total Dmg Dealt\`
 //       \`Total Prisms Collected\`

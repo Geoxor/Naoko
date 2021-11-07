@@ -5,17 +5,17 @@ import mongoose from "mongoose";
 import config from "./Config.sakuria";
 import { IUser, IUserFunctions, Kick } from "../types";
 import Discord from "discord.js";
-mongoose.connect(config.mongo).then(() => console.log('connected'));
+mongoose.connect(config.mongo).then(() => console.log("connected"));
 const { Schema } = mongoose;
 
 const schema = new Schema<IUser>({
-  discord_id: {type: "String", required: true},
-  xp: {type: "Number", default: 0},
-  bonks: {type: "Number", default: 0},
-  is_muted: {type: "Boolean", default: false},
-  is_banned: {type: "Boolean", default: false},
-  joined_at: {type: "Number", required: true},
-  account_created_at: {type: "Number", required: true},
+  discord_id: { type: "String", required: true },
+  xp: { type: "Number", default: 0 },
+  bonks: { type: "Number", default: 0 },
+  is_muted: { type: "Boolean", default: false },
+  is_banned: { type: "Boolean", default: false },
+  joined_at: { type: "Number", required: true },
+  account_created_at: { type: "Number", required: true },
 
   kick_history: Array,
   mute_history: Array,
@@ -29,10 +29,10 @@ const schema = new Schema<IUser>({
 schema.methods.updateRoles = function (roles: string[]) {
   this.roles = roles;
   return this.save();
-}
+};
 
 schema.statics.findOneOrCreate = async function (member: Discord.GuildMember | Discord.PartialGuildMember) {
-  let user = await User.findOne({discord_id: member.id});
+  let user = await User.findOne({ discord_id: member.id });
 
   if (!user) {
     const userData = {
@@ -45,11 +45,10 @@ schema.statics.findOneOrCreate = async function (member: Discord.GuildMember | D
     user = await new User(userData).save();
   }
   return user;
-}
+};
 
 schema.statics.kick = async function (kicker_id: string, kickee_id: string, reason: string = "") {
-
-  const kickee = await User.findOne({discord_id: kickee_id});
+  const kickee = await User.findOne({ discord_id: kickee_id });
   if (!kickee) return;
 
   const kick: Kick = {
@@ -58,7 +57,7 @@ schema.statics.kick = async function (kicker_id: string, kickee_id: string, reas
     reason,
   };
 
-  kickee.kick_history.push(kick)
+  kickee.kick_history.push(kick);
 
   return kickee.save().catch((err: any) => console.log(err));
 };

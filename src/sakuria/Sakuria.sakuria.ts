@@ -49,7 +49,7 @@ class Sakuria {
     this.bot.on("guildMemberAdd", (member) => this.onGuildMemberAdd(member));
     this.bot.on("threadCreate", (thread) => {
       thread.join();
-    })
+    });
     this.bot.login(config.token);
     logger.sakuria.login();
   }
@@ -75,21 +75,21 @@ class Sakuria {
     this.joinThreads();
   }
 
-  private updateActivity(){
+  private updateActivity() {
     this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
   }
 
-  private joinThreads(){
+  private joinThreads() {
     const channels = this.bot.channels.cache.values();
-    for (let channel of channels){
-      if(channel.isThread()) {
+    for (let channel of channels) {
+      if (channel.isThread()) {
         channel.join().then(() => logger.sakuria.print(`Joined thread ${channel.id}`));
       }
     }
   }
 
-  private leaveRogueGuilds(){
-    for(let guild of this.bot.guilds.cache.values()){
+  private leaveRogueGuilds() {
+    for (let guild of this.bot.guilds.cache.values()) {
       if (guild.id !== this.GEOXOR_GUILD_ID) {
         guild.leave().then(() => logger.sakuria.print(`Left guild ${guild.name}`));
       }
@@ -98,10 +98,11 @@ class Sakuria {
 
   private async onGuildMemberAdd(member: Discord.GuildMember) {
     let user = await User.findOneOrCreate(member);
-    for (const roleId of user.roles){
-      const role = member.guild.roles.cache.find(role => role.id === roleId);
+    for (const roleId of user.roles) {
+      const role = member.guild.roles.cache.find((role) => role.id === roleId);
       if (role) {
-        member.roles.add(role)
+        member.roles
+          .add(role)
           .then(() => logger.sakuria.print(`Added return role ${roleId} to ${member.user.username}`))
           .catch(() => {});
       }
@@ -115,42 +116,40 @@ class Sakuria {
     user.updateRoles(Array.from(member.roles.cache.keys()));
   }
 
-  private onMessageUpdate(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) {
-    logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {
-
-    });
-  };
+  private onMessageUpdate(
+    oldMessage: Discord.Message | Discord.PartialMessage,
+    newMessage: Discord.Message | Discord.PartialMessage
+  ) {
+    logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
+  }
 
   private onMessageDelete(message: Discord.Message | Discord.PartialMessage) {
-    logDelete(message, (message) => {
-
-    });
-  };
+    logDelete(message, (message) => {});
+  }
 
   // onMessageCreate handler
   private onMessageCreate(message: Discord.Message) {
-    userMiddleware(message, message => {
-      moderationMiddleware(message, message => {
-        commandMiddleware(message, async message => {
-
+    userMiddleware(message, (message) => {
+      moderationMiddleware(message, (message) => {
+        commandMiddleware(message, async (message) => {
           // Slurs for idiots
           const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
-  
+
           // Fetch the command
           const command = this.commands.get(message.command);
-  
+
           // If it doesn't exist we respond
           if (!command) {
             message.reply(`That command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
             return;
           }
-  
+
           // Notify the user their shit's processing
           if (command.requiresProcessing) {
             var processingMessage = await message.channel.send("Processing...");
             var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
           }
-  
+
           // Get the result to send from the command
           try {
             let timeStart = Date.now();
@@ -166,7 +165,7 @@ class Sakuria {
             console.log(error);
             await message.reply(`\`\`\`${error}\`\`\``);
           }
-  
+
           // Delete the processing message if it exists
           // @ts-ignore
           if (processingMessage) {
@@ -174,10 +173,10 @@ class Sakuria {
             // @ts-ignore
             clearInterval(typingInterval);
           }
-  
+
           // If the command returns void we just return
           if (!result) return;
-  
+
           // Send the result
           try {
             await message.reply(result);
