@@ -150,6 +150,15 @@ class Sakuria {
             var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
           }
 
+          // Check permissions
+          if (command.permissions) {
+            for (const perm of command.permissions) {
+              if (!message.member?.permissions.has(perm)) {
+                return message.reply(`You don't have the \`${perm}\` perm cunt`);
+              }
+            }
+          }
+
           // Get the result to send from the command
           try {
             let timeStart = Date.now();

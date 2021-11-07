@@ -1,7 +1,7 @@
 import config from "../sakuria/Config.sakuria";
 import Discord from "discord.js";
 import MessageParser from "../sakuria/MessageParser.sakuria";
-import { DatabaseUser, IMessage } from "../types";
+import { IMessage } from "../types";
 
 /**
  * Returns the function if the message doesn't meet requirements

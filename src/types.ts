@@ -63,6 +63,7 @@ export interface ICommand {
   execute: CommandExecute;
   name: string;
   description: string;
+  permissions?: Discord.PermissionResolvable[];
   requiresProcessing?: boolean;
 }
 
