@@ -1,24 +1,37 @@
 import Discord from "discord.js";
-import logger from "../sakuria/Logger.sakuria"
+import logger from "../sakuria/Logger.sakuria";
 import config from "../sakuria/Config.sakuria";
 
-export function logEdit(oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage, next: (oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) => any): void {
+export function logEdit(
+  oldMessage: Discord.Message | Discord.PartialMessage,
+  newMessage: Discord.Message | Discord.PartialMessage,
+  next: (
+    oldMessage: Discord.Message | Discord.PartialMessage,
+    newMessage: Discord.Message | Discord.PartialMessage
+  ) => any
+): void {
   if (oldMessage.channel.type == "DM") return;
   if (oldMessage.content == newMessage.content) return;
   if (oldMessage.author?.id === "870496144881492069") return;
 
   const embed = new Discord.MessageEmbed()
-    .setColor('#fff06e')
+    .setColor("#fff06e")
     .setTitle(`Message edited in #${oldMessage.channel.name}`)
-    .setAuthor(oldMessage.author!.username, oldMessage.author?.avatarURL() || oldMessage.author?.defaultAvatarURL)
+    .setAuthor(
+      oldMessage.author!.username,
+      oldMessage.author?.avatarURL() || oldMessage.author?.defaultAvatarURL
+    )
     .setThumbnail(`${oldMessage.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${oldMessage.author?.id}>` },
-      { name: `From`, value: `\`\`\`${oldMessage.content}\`\`\`` },
-      { name: `To`, value: `\`\`\`${newMessage.content}\`\`\`` },
-      { name: `Link`, value: `https://canary.discord.com/channels/${newMessage.guildId}/${newMessage.channelId}/${newMessage.id}` },
-    ) 
-    .setTimestamp()
+      { name: `From`, value: `\`\`\`${oldMessage.content?.substr(0, 480)}\`\`\`` },
+      { name: `To`, value: `\`\`\`${newMessage.content?.substr(0, 480)}\`\`\`` },
+      {
+        name: `Link`,
+        value: `https://canary.discord.com/channels/${newMessage.guildId}/${newMessage.channelId}/${newMessage.id}`,
+      }
+    )
+    .setTimestamp();
 
   const logChannel = oldMessage.client.channels.cache.get(config.chatLogChannel) as Discord.TextChannel;
 
@@ -28,26 +41,32 @@ export function logEdit(oldMessage: Discord.Message | Discord.PartialMessage, ne
   next(oldMessage, newMessage);
 }
 
-export function logDelete(message: Discord.Message | Discord.PartialMessage, next: (message: Discord.Message | Discord.PartialMessage) => any) {
+export function logDelete(
+  message: Discord.Message | Discord.PartialMessage,
+  next: (message: Discord.Message | Discord.PartialMessage) => any
+) {
   if (message.channel.type == "DM") return;
   if (message.author?.id === "870496144881492069") return;
 
   const embed = new Discord.MessageEmbed()
-    .setColor('#eb4034')
+    .setColor("#eb4034")
     .setTitle(`Message deleted in #${message.channel.name}`)
     .setAuthor(message.author!.username, message.author?.avatarURL() || message.author?.defaultAvatarURL)
     .setThumbnail(`${message.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${message.author?.id}>` },
-      { name: `Message Content`, value: `\`\`\`${message.content}\`\`\`` },
-      { name: `Link`, value: `https://canary.discord.com/channels/${message.guildId}/${message.channelId}/${message.id}` },
+      { name: `Message Content`, value: `\`\`\`${message.content?.substr(0, 960)}\`\`\`` },
+      {
+        name: `Link`,
+        value: `https://canary.discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`,
+      }
     )
-    .setTimestamp()    
-      
+    .setTimestamp();
+
   const logChannel = message.client.channels.cache.get(config.chatLogChannel) as Discord.TextChannel;
 
   logChannel.send({ embeds: [embed] });
-  logger.command.print(`Message deleted at #${message.channel.name} by ${message.author?.username}`)
+  logger.command.print(`Message deleted at #${message.channel.name} by ${message.author?.username}`);
 
   next(message);
-};
+}
