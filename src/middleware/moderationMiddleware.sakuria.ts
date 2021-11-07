@@ -1,8 +1,7 @@
-import Discord from "discord.js";
 import Logger from "../sakuria/Logger.sakuria";
 import { isFreeNitro } from "../moderation/isFreeNitro.sakuria";
 import { isBadWord } from "../moderation/isBadWord.sakuria";
-import { DatabaseUser, IMessage } from "../types";
+import { IMessage } from "../types";
 import { isMuted } from "../moderation/isMuted.sakuria";
 
 const checks = [isFreeNitro, isBadWord, isMuted];
