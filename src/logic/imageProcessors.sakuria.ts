@@ -1,9 +1,6 @@
 import Jimp from "jimp";
 import { ImageProcessors } from "../types";
-import { GeometryScene } from "./3DRenderer.sakuria";
-import * as THREE from "three";
-import comicSans from "../assets/comic_sans_font.json";
-import cache from "../sakuria/Cache.sakuria";
+
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import petPetGif from "pet-pet-gif";
 import { getRGBAUintArray, encodeFramesToGif, bipolarRandom } from "./logic.sakuria";
@@ -22,23 +19,9 @@ export const imageProcessors: ImageProcessors = {
   fisheye,
   squish,
   grayscale,
-  trollcart,
-  troll,
   wasted,
   deepfry,
-  cube,
   pat,
-  prism,
-  wtf,
-  sphere,
-  cylinder,
-  donut,
-  text,
-  cart,
-  car,
-  amogus,
-  miku,
-  trackmania,
 };
 
 /**
@@ -54,6 +37,7 @@ export const imageProcessors: ImageProcessors = {
  */
 export async function transform(pipeline: string[], buffer: Buffer) {
   let fuckedBuffer = buffer;
+
   const functions = pipeline.map((name) => imageProcessors[name]).filter((processor) => !!processor);
   const bar = logger.sakuria.progress("Pipelines - ", functions.length);
   for (let i = 0; i < functions.length; i++) {
@@ -105,238 +89,6 @@ export async function stack(name: string, buffer: Buffer, iterations: number = 6
   }
 
   return await encodeFramesToGif(renderedFrames, width, height, ~~(1000 / 60));
-}
-
-/**
- * Creates a spinning prism out of a texture
- * @param texture the image buffer to use as a texture
- * @author Bluskript & Geoxor
- */
-export async function prism(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0 },
-    camera: { y: -1, z: 7 },
-    geometry: new THREE.ConeGeometry(4, 4.5, 4),
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates a torus knot out of a texture
- * @param texture the image buffer to use as a texture
- * @author Bluskript & Geoxor
- */
-export async function wtf(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: Math.random() / 3 },
-    camera: { z: 3 },
-    shading: true,
-    geometry: new THREE.TorusKnotGeometry(1),
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates a spinning cube out of a texture
- * @param texture the image buffer to use as a texture
- * @author Bluskript & Geoxor
- */
-export async function cube(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.05, y: 0.0125 },
-    camera: { z: 1.3 },
-    geometry: new THREE.BoxGeometry(1, 1, 1),
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates a spinning donut out of a texture
- * @param texture the image buffer to use as a texture
- * @author Bluskript & Geoxor
- */
-export async function donut(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.05, y: 0.0125 },
-    shading: true,
-    camera: { z: 2.5 },
-    geometry: new THREE.TorusGeometry(1, 0.5, 16, 100),
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates a spinning sphere out of a texture
- * @param texture the image buffer to use as a texture
- * @author azur1s, Geoxor
- */
-export async function sphere(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0 },
-    camera: { z: 1.25 },
-    geometry: new THREE.SphereGeometry(0.75, 32, 16),
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates a spinning cylinder out of a texture
- * @param texture the image buffer to use as a texture
- * @author azur1s, Geoxor
- */
-export async function cylinder(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.01, y: 0.07 },
-    camera: { z: 2 },
-    geometry: new THREE.CylinderGeometry(1, 1, 1, 32),
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates spinning 3d text out of a texture and a sentence
- * @param texture the image buffer to use as a texture
- * @param text the text to render on the scene
- * @author N1kO23 & Geoxor
- */
-export async function text(texture: Buffer, text?: string) {
-  const loader = new THREE.FontLoader();
-  const font = loader.parse(comicSans);
-  const geometry = new THREE.TextGeometry(text || "your mom", {
-    font: font,
-    size: 12,
-    height: 4,
-    curveSegments: 12,
-    bevelEnabled: false,
-  });
-  geometry.center();
-  const scene = await GeometryScene.create({
-    rotation: { x: 0 },
-    shading: true,
-    camera: { z: 16 + (text?.length || 0) * Math.PI },
-    geometry,
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates spinning cart out of a texture and a sentence
- * @param texture the image buffer to use as a texture
- * @param text the text to render on the scene
- * @author N1kO23 & Geoxor
- */
-export async function cart(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.05, y: 0.05 },
-    camera: { z: 10 },
-    shading: true,
-    geometry: cache.objects.cart,
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates spinning car out of a texture
- * @param texture the image buffer to use as a texture
- * @author N1kO23 & Geoxor
- */
-export async function car(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.0, y: 0.05 },
-    camera: { z: 6 },
-    shading: true,
-    geometry: cache.objects.car,
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates spinning miku out of a texture
- * @param texture the image buffer to use as a texture
- * @author N1kO23 & Geoxor
- */
-export async function miku(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.0, y: 0.05 },
-    camera: { y: 10, z: 16 },
-    shading: true,
-    geometry: cache.objects.miku,
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates spinning amogus out of a texture
- * @param texture the image buffer to use as a texture
- * @author N1kO23 & Geoxor
- */
-export async function amogus(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.025, y: 0.05 },
-    camera: { z: 4 },
-    shading: true,
-    geometry: cache.objects.amogus,
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates spinning trackmania car out of a texture
- * @param texture the image buffer to use as a texture
- * @author N1kO23 & Geoxor
- */
-export async function trackmania(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.05, y: 0.05 },
-    camera: { z: 4 },
-    shading: true,
-    geometry: cache.objects.trackmania,
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates spinning trollface out of a texture
- * @param texture the image buffer to use as a texture
- * @author N1kO23 & Geoxor
- */
-export async function troll(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.0, y: 0.05 },
-    camera: { z: 3, y: 1 },
-    shading: true,
-    geometry: cache.objects.troll,
-    texture,
-  });
-  return scene.render();
-}
-
-/**
- * Creates spinning trolley out of a texture
- * @param texture the image buffer to use as a texture
- * @author N1kO23 & Geoxor
- */
-export async function trollcart(texture: Buffer) {
-  const scene = await GeometryScene.create({
-    rotation: { x: 0.0, y: 0.05 },
-    camera: { z: 6 },
-    shading: true,
-    geometry: cache.objects.trolley,
-    texture,
-  });
-  return scene.render();
 }
 
 /**

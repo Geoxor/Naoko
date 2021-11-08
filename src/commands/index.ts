@@ -5,6 +5,7 @@
 import { ICommand } from "../types";
 import { genCommands } from "../logic/logic.sakuria";
 import { imageProcessors } from "../logic/imageProcessors.sakuria";
+import { getGPUTier } from "detect-gpu";
 
 // economy game commands
 import rank from "./economyGames/rank.sakuria";
@@ -50,38 +51,49 @@ import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
 import transform from "./imageProcessors/transform.sakuria";
 import stack from "./imageProcessors/stack.sakuria";
 
-export const commands: ICommand[] = [
-  ...genCommands(Object.values(imageProcessors)),
-  nowPlaying,
-  transform,
-  stack,
-  avatar,
-  rank,
-  whois,
-  tts,
-  match,
-  ping,
-  volume,
-  fact,
-  env,
-  queue,
-  shuffle,
-  skip,
-  britify,
-  play,
-  anime,
-  ask,
-  clear,
-  decode,
-  dicksize,
-  help,
-  invite,
-  mors,
-  say,
-  traceAnime,
-  uwuify,
-  kick,
-  // stats,
-  // inventory,
-  // battle,
-];
+export const getCommands = async () => {
+  let commands = [
+    ...genCommands(Object.values(imageProcessors)),
+    nowPlaying,
+    transform,
+    stack,
+    avatar,
+    rank,
+    whois,
+    tts,
+    match,
+    ping,
+    volume,
+    fact,
+    env,
+    queue,
+    shuffle,
+    skip,
+    britify,
+    play,
+    anime,
+    ask,
+    clear,
+    decode,
+    dicksize,
+    help,
+    invite,
+    mors,
+    say,
+    traceAnime,
+    uwuify,
+    kick,
+    // stats,
+    // inventory,
+    // battle,
+  ];
+
+  const gpuTier = await getGPUTier();
+
+  if (gpuTier.tier !== 0) {
+    const { commands3D } = await import("../logic/3DRenderer.sakuria");
+    genCommands(Object.values(commands3D)).forEach((command) => commands.push(command));
+  }
+
+  return commands;
+};

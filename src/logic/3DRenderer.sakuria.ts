@@ -9,6 +9,171 @@ import fileType from "file-type";
 import { Coords, GeometrySceneOptions } from "src/types";
 import { getRGBAUintArray, encodeFramesToGif } from "./logic.sakuria";
 
+import comicSans from "../assets/comic_sans_font.json";
+import cache from "../sakuria/Cache.sakuria";
+
+export const commands3D = {
+  async prism(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0 },
+      camera: { y: -1, z: 7 },
+      geometry: new THREE.ConeGeometry(4, 4.5, 4),
+      texture,
+    });
+    return scene.render();
+  },
+
+  async wtf(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: Math.random() / 3 },
+      camera: { z: 3 },
+      shading: true,
+      geometry: new THREE.TorusKnotGeometry(1),
+      texture,
+    });
+    return scene.render();
+  },
+
+  async cube(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.05, y: 0.0125 },
+      camera: { z: 1.3 },
+      geometry: new THREE.BoxGeometry(1, 1, 1),
+      texture,
+    });
+    return scene.render();
+  },
+
+  async donut(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.05, y: 0.0125 },
+      shading: true,
+      camera: { z: 2.5 },
+      geometry: new THREE.TorusGeometry(1, 0.5, 16, 100),
+      texture,
+    });
+    return scene.render();
+  },
+
+  async sphere(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0 },
+      camera: { z: 1.25 },
+      geometry: new THREE.SphereGeometry(0.75, 32, 16),
+      texture,
+    });
+    return scene.render();
+  },
+
+  async cylinder(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.01, y: 0.07 },
+      camera: { z: 2 },
+      geometry: new THREE.CylinderGeometry(1, 1, 1, 32),
+      texture,
+    });
+    return scene.render();
+  },
+
+  async text(texture: Buffer, text?: string) {
+    const loader = new THREE.FontLoader();
+    const font = loader.parse(comicSans);
+    const geometry = new THREE.TextGeometry(text || "your mom", {
+      font: font,
+      size: 12,
+      height: 4,
+      curveSegments: 12,
+      bevelEnabled: false,
+    });
+    geometry.center();
+    const scene = await GeometryScene.create({
+      rotation: { x: 0 },
+      shading: true,
+      camera: { z: 16 + (text?.length || 0) * Math.PI },
+      geometry,
+      texture,
+    });
+    return scene.render();
+  },
+
+  async cart(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.05, y: 0.05 },
+      camera: { z: 10 },
+      shading: true,
+      geometry: cache.objects.cart,
+      texture,
+    });
+    return scene.render();
+  },
+
+  async car(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.0, y: 0.05 },
+      camera: { z: 6 },
+      shading: true,
+      geometry: cache.objects.car,
+      texture,
+    });
+    return scene.render();
+  },
+
+  async miku(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.0, y: 0.05 },
+      camera: { y: 10, z: 16 },
+      shading: true,
+      geometry: cache.objects.miku,
+      texture,
+    });
+    return scene.render();
+  },
+
+  async amogus(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.025, y: 0.05 },
+      camera: { z: 4 },
+      shading: true,
+      geometry: cache.objects.amogus,
+      texture,
+    });
+    return scene.render();
+  },
+
+  async trackmania(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.05, y: 0.05 },
+      camera: { z: 4 },
+      shading: true,
+      geometry: cache.objects.trackmania,
+      texture,
+    });
+    return scene.render();
+  },
+
+  async troll(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.0, y: 0.05 },
+      camera: { z: 3, y: 1 },
+      shading: true,
+      geometry: cache.objects.troll,
+      texture,
+    });
+    return scene.render();
+  },
+
+  async trollcart(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.0, y: 0.05 },
+      camera: { z: 6 },
+      shading: true,
+      geometry: cache.objects.trolley,
+      texture,
+    });
+    return scene.render();
+  },
+};
+
 export class SceneProcessor {
   public width: number;
   public height: number;

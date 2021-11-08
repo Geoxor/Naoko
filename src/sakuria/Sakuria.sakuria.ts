@@ -4,7 +4,7 @@ import moderationMiddleware from "../middleware/moderationMiddleware.sakuria";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.sakuria";
 import { ICommand } from "../types";
 import logger from "./Logger.sakuria";
-import { commands } from "../commands";
+import { getCommands } from "../commands";
 import config from "./Config.sakuria";
 import { version } from "../../package.json";
 import si from "systeminformation";
@@ -57,10 +57,10 @@ class Sakuria {
   /**
    * Loads all the command files from ./commands
    */
-  private loadCommands() {
+  private async loadCommands() {
     logger.sakuria.loadingCommands();
 
-    for (const command of commands) {
+    for (const command of await getCommands()) {
       this.commands.set(command.name, command);
       logger.sakuria.importedCommand(command.name);
     }
