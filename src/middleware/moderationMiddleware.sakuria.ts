@@ -3,8 +3,9 @@ import { isFreeNitro } from "../moderation/isFreeNitro.sakuria";
 import { isBadWord } from "../moderation/isBadWord.sakuria";
 import { IMessage } from "../types";
 import { isMuted } from "../moderation/isMuted.sakuria";
+import { isIP } from "../moderation/isIP.sakuria";
 
-const checks = [isFreeNitro, isBadWord, isMuted];
+const checks = [isFreeNitro, isBadWord, isMuted, isIP];
 
 export default function (message: IMessage, next: (message: IMessage) => any): void {
   if (message.author.bot) return next(message);
