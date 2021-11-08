@@ -5,6 +5,7 @@
 import { ICommand } from "../types";
 import { genCommands } from "../logic/logic.sakuria";
 import { imageProcessors } from "../logic/imageProcessors.sakuria";
+import logger from "../sakuria/Logger.sakuria";
 import { getGPUTier } from "detect-gpu";
 
 // economy game commands
@@ -91,6 +92,7 @@ export const getCommands = async () => {
   const gpuTier = await getGPUTier();
 
   if (gpuTier.tier !== 0) {
+    logger.config.print("3D Capabilities acknowledged, loading 3D commands...");
     const { commands3D } = await import("../logic/3DRenderer.sakuria");
     genCommands(Object.values(commands3D)).forEach((command) => commands.push(command));
   }

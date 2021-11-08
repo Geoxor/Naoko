@@ -12,7 +12,6 @@ const levels = [90, 215, 370, 555, 775, 1035, 1335, 1685, 2085, 2545];
 // Calculate levels 10-300
 for (let i = 10; i <= 300; i++) {
   const levelXP = ~~formula(i);
-  Logger.sakuria.print(`Calculated level: ${i} at: ${levelXP}`);
   levels.push(levelXP);
 }
 
