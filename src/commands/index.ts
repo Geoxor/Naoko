@@ -89,15 +89,11 @@ export const getCommands = async () => {
     // battle,
   ];
 
-  const gpuTier = await getGPUTier();
-
-  console.log(gpuTier);
-
-  if (gpuTier.tier !== 0) {
+  if (true) {
     logger.config.print("3D Capabilities acknowledged, loading 3D commands...");
     const { commands3D } = await import("../logic/3DRenderer.sakuria");
-    // genCommands(Object.values(commands3D)).forEach((command) => commands.push(command));
+    genCommands(Object.values(commands3D)).forEach((command) => commands.push(command));
   }
 
-  // return commands;
+  return commands;
 };
