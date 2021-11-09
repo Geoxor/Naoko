@@ -6,7 +6,6 @@ import { ICommand } from "../types";
 import { genCommands } from "../logic/logic.sakuria";
 import { imageProcessors } from "../logic/imageProcessors.sakuria";
 import logger from "../sakuria/Logger.sakuria";
-import { getGPUTier } from "detect-gpu";
 
 // economy game commands
 import rank from "./economyGames/rank.sakuria";
