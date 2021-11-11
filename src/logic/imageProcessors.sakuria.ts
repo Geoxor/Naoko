@@ -8,8 +8,10 @@ import logger from "../sakuria/Logger.sakuria";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
+let bobbyImage: Jimp;
 let wastedImage: Jimp;
 Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
+Jimp.read("./src/assets/images/bobbyTemplate.png").then(async (image) => (bobbyImage = image));
 Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
 
 export const imageProcessors: ImageProcessors = {
@@ -22,6 +24,7 @@ export const imageProcessors: ImageProcessors = {
   wasted,
   deepfry,
   pat,
+  expert,
 };
 
 /**
@@ -131,6 +134,20 @@ export async function trolley(texture: Buffer) {
   const size = 48;
   image.resize(size * 2, size);
   const composite = trolley.composite(image, 4, 24).getBufferAsync("image/png");
+  return composite;
+}
+
+/**
+ * Creates a expert bobby
+ * @param texture the texture to process
+ * @author Geoxor
+ */
+export async function expert(texture: Buffer) {
+  const bobby = bobbyImage.clone();
+  const image = await Jimp.read(texture);
+  const size = 66;
+  image.scaleToFit(size, size);
+  const composite = bobby.composite(image, 0, bobby.bitmap.height - size).getBufferAsync("image/png");
   return composite;
 }
 
