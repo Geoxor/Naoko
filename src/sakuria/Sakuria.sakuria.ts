@@ -47,6 +47,16 @@ class Sakuria {
     this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
     this.bot.on("guildMemberRemove", (member) => this.onGuildMemberRemove(member));
     this.bot.on("guildMemberAdd", (member) => this.onGuildMemberAdd(member));
+    this.bot.on("voiceStateUpdate", (oldState, newState) => {
+      // If geoxor is in vc and tardoki kun joins kick him out
+      if (
+        newState.channel?.members.some((member) => member.id === "153274351561605120") &&
+        newState.channel?.members.some((member) => member.id === "858340143131787274")
+      ) {
+        const tardoki = newState.channel?.members.get("858340143131787274");
+        tardoki?.voice.disconnect();
+      }
+    });
     this.bot.on("threadCreate", (thread) => {
       thread.join();
     });
@@ -112,7 +122,6 @@ class Sakuria {
   private async onGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember) {
     if (member.id === this.SAKURIA_ID) return;
     let user = await User.findOneOrCreate(member);
-    logger.sakuria.print(`Updating roles for ${member.user.username}`);
     user.updateRoles(Array.from(member.roles.cache.keys()));
   }
 
