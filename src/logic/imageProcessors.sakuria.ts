@@ -216,13 +216,19 @@ export async function flip(texture: Buffer) {
 }
 
 export async function haah(texture: Buffer) {
-  const image = await Jimp.read(texture);
-  const { width, height } = image.bitmap;
-  const flipped = image
+  const textureImage = await Jimp.read(texture);
+  const { width, height } = textureImage.bitmap;
+
+  const right = textureImage
     .clone()
     .flip(true, false)
     .crop(width / 2, 0, width / 2, height);
-  image.composite(flipped, width / 2, 0);
+
+  const left = textureImage.crop(0, 0, width / 2, height);
+
+  const image = await Jimp.create(width, height);
+
+  image.blit(left, 0, 0).blit(right, width / 2, 0);
   return await image.getBufferAsync("image/png");
 }
 
