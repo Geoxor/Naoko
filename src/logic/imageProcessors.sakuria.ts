@@ -27,6 +27,7 @@ export const imageProcessors: ImageProcessors = {
   haah,
   expert,
   flip,
+  scale,
 };
 
 /**
@@ -213,6 +214,11 @@ export async function squish(texture: Buffer) {
 export async function flip(texture: Buffer) {
   const image = await Jimp.read(texture);
   return await image.flip(true, false).getBufferAsync("image/png");
+}
+
+export async function scale(texture: Buffer) {
+  const image = await Jimp.read(texture);
+  return await image.scale(4).getBufferAsync("image/png");
 }
 
 export async function haah(texture: Buffer) {
