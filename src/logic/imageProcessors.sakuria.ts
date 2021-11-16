@@ -24,7 +24,9 @@ export const imageProcessors: ImageProcessors = {
   wasted,
   deepfry,
   pat,
+  haah,
   expert,
+  flip,
 };
 
 /**
@@ -205,6 +207,22 @@ export async function squish(texture: Buffer) {
   const image = await Jimp.read(texture);
   const { width, height } = image.bitmap;
   image.resize(width * 3, height);
+  return await image.getBufferAsync("image/png");
+}
+
+export async function flip(texture: Buffer) {
+  const image = await Jimp.read(texture);
+  return await image.flip(true, false).getBufferAsync("image/png");
+}
+
+export async function haah(texture: Buffer) {
+  const image = await Jimp.read(texture);
+  const { width, height } = image.bitmap;
+  const flipped = image
+    .clone()
+    .flip(true, false)
+    .crop(width / 2, 0, width / 2, height);
+  image.composite(flipped, width / 2, 0);
   return await image.getBufferAsync("image/png");
 }
 
