@@ -15,6 +15,7 @@ Jimp.read("./src/assets/images/bobbyTemplate.png").then(async (image) => (bobbyI
 Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
 
 export const imageProcessors: ImageProcessors = {
+  autocrop,
   stretch,
   trolley,
   invert,
@@ -114,6 +115,11 @@ export async function pat(image: Buffer): Promise<Buffer> {
 export async function invert(texture: Buffer) {
   const image = await Jimp.read(texture);
   return image.invert().getBufferAsync("image/jpeg");
+}
+
+export async function autocrop(texture: Buffer) {
+  const image = await Jimp.read(texture);
+  return image.autocrop(0.01).getBufferAsync("image/jpeg");
 }
 
 /**
