@@ -34,7 +34,6 @@ import whois from "./moderation/whois.sakuria";
 
 // utility commands
 import help from "./utility/help.sakuria";
-import invite from "./utility/invite.sakuria";
 import ping from "./utility/ping.sakuria";
 import avatar from "./utility/avatar.sakuria";
 import env from "./utility/env.sakuria";
@@ -77,7 +76,6 @@ export const getCommands = async () => {
     decode,
     dicksize,
     help,
-    invite,
     mors,
     say,
     traceAnime,
