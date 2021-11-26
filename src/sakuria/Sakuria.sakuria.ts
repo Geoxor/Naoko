@@ -27,6 +27,7 @@ class Sakuria {
   public commands: Discord.Collection<string, ICommand>;
   public SAKURIA_ID = "870496144881492069";
   public GEOXOR_GUILD_ID = "385387666415550474";
+  public SECRET_GUILD_ID = "911762334538670160";
   public geoxorGuild: Discord.Guild | undefined;
 
   constructor() {
@@ -100,7 +101,7 @@ class Sakuria {
 
   private leaveRogueGuilds() {
     for (let guild of this.bot.guilds.cache.values()) {
-      if (guild.id !== this.GEOXOR_GUILD_ID) {
+      if (guild.id !== this.GEOXOR_GUILD_ID && guild.id !== this.SECRET_GUILD_ID) {
         guild.leave().then(() => logger.sakuria.print(`Left guild ${guild.name}`));
       }
     }
