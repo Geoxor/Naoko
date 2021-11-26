@@ -9,7 +9,7 @@ const checks = [isFreeNitro, isBadWord, isMuted, isIP];
 
 export default function (message: IMessage, next: (message: IMessage) => any): void {
   if (message.author.bot) return next(message);
-  if (message.guild?.id !== "385387666415550474") return;
+  if (message.guild?.id !== "385387666415550474" && message.guild?.id !== "911762334538670160") return;
   if (message.channel.id === "881632596298170399") return next(message);
   for (let i = 0; i < checks.length; i++) {
     const checkFn = checks[i];
