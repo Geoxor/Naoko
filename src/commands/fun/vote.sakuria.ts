@@ -11,7 +11,9 @@ export default defineCommand({
   description: "Creates a vote",
   requiresProcessing: false,
   execute: async (message) => {
-    const voteContext = message.args.join(" ");
+    const voteContext = message.args.join(" ").trim();
+
+    if (!voteContext) return "Please write what your vote is about";
 
     const embed = new Discord.MessageEmbed()
       .setColor("#ff00b6")
@@ -26,7 +28,9 @@ export default defineCommand({
     vote.react(DOWNVOTE_EMOJI_ID);
     vote.react(UPVOTE_EMOJI_ID);
 
-    const collector = vote.createReactionCollector({ filter, time: VOTE_TIME });
+    const collector = vote.createReactionCollector({ time: VOTE_TIME });
+
+    collector.on("collect", (reaction, user) => filter(reaction, user) || reaction.remove());
 
     collector.on("end", (collected) => {
       const downvotes = collected.get(DOWNVOTE_EMOJI_ID);
