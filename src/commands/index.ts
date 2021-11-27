@@ -49,6 +49,7 @@ import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
 // image processing
 import transform from "./imageProcessors/transform.sakuria";
 import stack from "./imageProcessors/stack.sakuria";
+import vote from "./fun/vote.sakuria";
 
 export const getCommands = async () => {
   let commands = [
@@ -80,6 +81,7 @@ export const getCommands = async () => {
     say,
     traceAnime,
     uwuify,
+    vote,
     kick,
     // stats,
     // inventory,
