@@ -15,7 +15,6 @@ import rank from "./economyGames/rank.sakuria";
 
 // fun commands
 import anime from "./fun/anime.sakuria";
-import ask from "./fun/ask.sakuria";
 import decode from "./fun/decode.sakuria";
 import dicksize from "./fun/dicksize.sakuria";
 import tts from "./fun/tts.sakuria";
@@ -72,7 +71,6 @@ export const getCommands = async () => {
     britify,
     play,
     anime,
-    ask,
     clear,
     decode,
     dicksize,

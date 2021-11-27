@@ -11,6 +11,8 @@ import si from "systeminformation";
 import { userMiddleware } from "../middleware/userMiddleware.sakuria";
 import { User } from "./Database.sakuria";
 import { GEOXOR_GUILD_ID, SAKURIA_ID, SECRET_GUILD_ID } from "../constants";
+import { randomChoice } from "../logic/logic.sakuria";
+import answers from "../assets/answers.json";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");
@@ -140,6 +142,11 @@ class Sakuria {
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
+        // Reply with a funny message when they mention her
+        if (message.mentions.members?.first()?.id === SAKURIA_ID) {
+          return message.reply(randomChoice(answers));
+        }
+
         commandMiddleware(message, async (message) => {
           // Slurs for idiots
           const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
@@ -149,7 +156,7 @@ class Sakuria {
 
           // If it doesn't exist we respond
           if (!command) {
-            message.reply(`That command doesn't exist ${slurs[~~(Math.random() * slurs.length)]}`);
+            message.reply(`That command doesn't exist ${randomChoice(slurs)}`);
             return;
           }
 
