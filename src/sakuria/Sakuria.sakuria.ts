@@ -10,9 +10,17 @@ import { version } from "../../package.json";
 import si from "systeminformation";
 import { userMiddleware } from "../middleware/userMiddleware.sakuria";
 import { User } from "./Database.sakuria";
-import { GEOXOR_GUILD_ID, SAKURIA_ID, SECRET_GUILD_ID } from "../constants";
+import {
+  GEOXOR_GENERAL_CHANNEL_ID,
+  GEOXOR_GUILD_ID,
+  GEOXOR_ID,
+  SAKURIA_ID,
+  SECRET_GUILD_ID,
+  SLURS,
+} from "../constants";
 import { randomChoice } from "../logic/logic.sakuria";
 import answers from "../assets/answers.json";
+import LoggerSakuria from "./Logger.sakuria";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");
@@ -142,23 +150,24 @@ class Sakuria {
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
+        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
+
         // Reply with a funny message when they mention her
-        if (message.mentions.members?.first()?.id === SAKURIA_ID) {
+        if (message.mentions.members?.first()?.id === SAKURIA_ID && message.type !== "REPLY") {
+          logger.command.executedCommand(0, "@mention", message.author.username, message.guild?.name || "dm");
+
+          // Reply with this when they purely ping her with no question
+          if (!message.content.substr(`<@!${SAKURIA_ID}>`.length).trim())
+            return message.reply("what tf do you want");
           return message.reply(randomChoice(answers));
         }
 
         commandMiddleware(message, async (message) => {
-          // Slurs for idiots
-          const slurs = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
-
           // Fetch the command
           const command = this.commands.get(message.command);
 
           // If it doesn't exist we respond
-          if (!command) {
-            message.reply(`That command doesn't exist ${randomChoice(slurs)}`);
-            return;
-          }
+          if (!command) return message.reply(`That command doesn't exist ${randomChoice(SLURS)}`);
 
           // Notify the user their shit's processing
           if (command.requiresProcessing) {

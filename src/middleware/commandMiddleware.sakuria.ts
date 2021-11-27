@@ -15,7 +15,6 @@ import { GEOXOR_GENERAL_CHANNEL_ID, GEOXOR_ID } from "../constants";
 export default function (message: Discord.Message, next: (message: IMessage) => any): void {
   if (message.content.lastIndexOf(config.prefix) !== 0) return;
   if (message.author.bot) return;
-  // if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
   const { command, args } = new MessageParser(message.content);
   const updatedMessage = message as IMessage;
   updatedMessage.command = command.toLowerCase();

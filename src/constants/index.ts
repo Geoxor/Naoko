@@ -7,6 +7,8 @@ export const UPVOTE_EMOJI_ID = "834402501397577729";
 export const GEOXOR_ID = "153274351561605120";
 export const VOTE_TIME = 30000;
 
+export const SLURS = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker", "you dumb fucking twat"];
+
 // Regex
 export const IPV4_REGEX =
   /((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g;
