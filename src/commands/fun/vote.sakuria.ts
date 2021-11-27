@@ -1,14 +1,9 @@
 import { defineCommand } from "../../types";
 import Discord from "discord.js";
-
-const DOWNVOTE_EMOJI = "823666555123662888";
-const UPVOTE_EMOJI = "834402501397577729";
-const VOTE_TIME = 30000;
+import { DOWNVOTE_EMOJI_ID, UPVOTE_EMOJI_ID, VOTE_TIME } from "../../constants";
 
 const filter = (reaction: Discord.MessageReaction, user: Discord.User) => {
-  console.log(reaction);
-
-  return reaction.emoji.id === DOWNVOTE_EMOJI || reaction.emoji.id === UPVOTE_EMOJI;
+  return reaction.emoji.id === DOWNVOTE_EMOJI_ID || reaction.emoji.id === UPVOTE_EMOJI_ID;
 };
 
 export default defineCommand({
@@ -28,14 +23,14 @@ export default defineCommand({
       .setFooter(`Vote with the reactions bellow, results in ${VOTE_TIME / 1000} seconds`);
 
     const vote = await message.channel.send({ embeds: [embed] });
-    vote.react(DOWNVOTE_EMOJI);
-    vote.react(UPVOTE_EMOJI);
+    vote.react(DOWNVOTE_EMOJI_ID);
+    vote.react(UPVOTE_EMOJI_ID);
 
     const collector = vote.createReactionCollector({ filter, time: VOTE_TIME });
 
     collector.on("end", (collected) => {
-      const downvotes = collected.get(DOWNVOTE_EMOJI);
-      const upvotes = collected.get(UPVOTE_EMOJI);
+      const downvotes = collected.get(DOWNVOTE_EMOJI_ID);
+      const upvotes = collected.get(UPVOTE_EMOJI_ID);
 
       if (downvotes && upvotes) {
         const winner = downvotes.count > upvotes.count ? downvotes : upvotes;

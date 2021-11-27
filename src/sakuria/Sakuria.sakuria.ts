@@ -10,6 +10,7 @@ import { version } from "../../package.json";
 import si from "systeminformation";
 import { userMiddleware } from "../middleware/userMiddleware.sakuria";
 import { User } from "./Database.sakuria";
+import { GEOXOR_GUILD_ID, SAKURIA_ID, SECRET_GUILD_ID } from "../constants";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");
@@ -25,9 +26,6 @@ si.getStaticData().then((info) => {
 class Sakuria {
   public bot: Discord.Client;
   public commands: Discord.Collection<string, ICommand>;
-  public SAKURIA_ID = "870496144881492069";
-  public GEOXOR_GUILD_ID = "385387666415550474";
-  public SECRET_GUILD_ID = "911762334538670160";
   public geoxorGuild: Discord.Guild | undefined;
 
   constructor() {
@@ -102,7 +100,7 @@ class Sakuria {
 
   private leaveRogueGuilds() {
     for (let guild of this.bot.guilds.cache.values()) {
-      if (guild.id !== this.GEOXOR_GUILD_ID && guild.id !== this.SECRET_GUILD_ID) {
+      if (guild.id !== GEOXOR_GUILD_ID && guild.id !== SECRET_GUILD_ID) {
         guild.leave().then(() => logger.sakuria.print(`Left guild ${guild.name}`));
       }
     }
@@ -122,7 +120,7 @@ class Sakuria {
   }
 
   private async onGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember) {
-    if (member.id === this.SAKURIA_ID) return;
+    if (member.id === SAKURIA_ID) return;
     let user = await User.findOneOrCreate(member);
     user.updateRoles(Array.from(member.roles.cache.keys()));
   }
