@@ -11,8 +11,8 @@ export default defineCommand({
 
     if (!matchee) return "Tag the person you wanna match with!";
 
-    const matcherValue = parseInt(matcher.id);
-    const matcheeValue = parseInt(matchee.id as string);
+    const matcherValue = parseFloat(matcher.id);
+    const matcheeValue = parseFloat(matchee.id as string);
     const matchValue = (matcherValue + matcheeValue) % 22;
     const matchCalculation = ((22 - matchValue) / 22) * 100;
 
