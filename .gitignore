@@ -8,6 +8,7 @@ dist
 cache/*
 libs/*
 src/cache/*
+badWords.json
 sakuria.json
 !prisma/migrations
 !prisma/schema.prisma
