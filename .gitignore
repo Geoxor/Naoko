@@ -10,5 +10,6 @@ libs/*
 src/cache/*
 badWords.json
 sakuria.json
+config.sakuria.json
 !prisma/migrations
 !prisma/schema.prisma

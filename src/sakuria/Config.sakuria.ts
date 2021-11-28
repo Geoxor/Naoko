@@ -1,3 +1,5 @@
+import fs from "fs";
+
 interface IConfig {
   prefix: string;
   musicDirectory: string;
@@ -9,14 +11,13 @@ interface IConfig {
 class Config {
   config!: IConfig;
   constructor() {
-    this.config = {
-      prefix: "~",
-      musicDirectory: "X:/Repository/Music/nonbluskmusic",
-      token: "ODcwNDk2MTQ0ODgxNDkyMDY5.YQNmtQ.ucXqGrpEDj8twKtQXqrmJK2-6Bk",
-      chatLogChannel: "393914221693239298",
-      mongo:
-        "mongodb+srv://shaii:QEIg2vovIAm3sMyG@cluster0.bgxl7.mongodb.net/shaii?retryWrites=true&w=majority",
-    };
+    try {
+      var configJSON = require("../config.sakuria.json");
+    } catch (error) {
+      console.log("you don't have a config set, please fill in your config.sakuria.json");
+    }
+
+    this.config = configJSON;
   }
 }
 
