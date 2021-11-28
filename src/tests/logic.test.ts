@@ -10,7 +10,7 @@ import {
   isValidHttpUrl,
   capitalizeFirstLetter,
   msToTime,
-} from "../logic/logic.sakuria";
+} from "../logic/logic.shaii";
 
 describe("⚡ Morse Encoder (encodeMorse)", () => {
   it("can encode a normal string", async () => {

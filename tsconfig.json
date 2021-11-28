@@ -17,5 +17,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["./src", "./src/assets/*"],
-  "exclude": ["./src/setup.sakuria.ts"]
+  "exclude": ["src/setup.shaii.ts"]
 }

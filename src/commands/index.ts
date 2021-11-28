@@ -3,52 +3,52 @@
 // dynamically importing them with FS
 
 import { ICommand } from "../types";
-import { genCommands } from "../logic/logic.sakuria";
-import { imageProcessors } from "../logic/imageProcessors.sakuria";
-import logger from "../sakuria/Logger.sakuria";
+import { genCommands } from "../logic/logic.shaii";
+import { imageProcessors } from "../logic/imageProcessors.shaii";
+import logger from "../shaii/Logger.shaii";
 
 // economy game commands
-import rank from "./economyGames/rank.sakuria";
-// import battle from "./economyGames/battle.sakuria";
-// import inventory from "./economyGames/inventory.sakuria";
-// import stats from "./economyGames/stats.sakuria";
+import rank from "./economyGames/rank.shaii";
+// import battle from "./economyGames/battle.shaii";
+// import inventory from "./economyGames/inventory.shaii";
+// import stats from "./economyGames/stats.shaii";
 
 // fun commands
-import anime from "./fun/anime.sakuria";
-import decode from "./fun/decode.sakuria";
-import dicksize from "./fun/dicksize.sakuria";
-import tts from "./fun/tts.sakuria";
-import mors from "./fun/mors.sakuria";
-import say from "./fun/say.sakuria";
-import traceAnime from "./fun/trace.sakuria";
-import uwuify from "./fun/uwufy.sakuria";
-import britify from "./fun/britify.sakuria";
-import match from "./fun/match.sakuria";
-import fact from "./fun/funfact.sakuria";
+import anime from "./fun/anime.shaii";
+import decode from "./fun/decode.shaii";
+import dicksize from "./fun/dicksize.shaii";
+import tts from "./fun/tts.shaii";
+import mors from "./fun/mors.shaii";
+import say from "./fun/say.shaii";
+import traceAnime from "./fun/trace.shaii";
+import uwuify from "./fun/uwufy.shaii";
+import britify from "./fun/britify.shaii";
+import match from "./fun/match.shaii";
+import fact from "./fun/funfact.shaii";
 
 // moderation commands
-import clear from "./moderation/clear.sakuria";
-import kick from "./moderation/kick.sakuria";
-import whois from "./moderation/whois.sakuria";
+import clear from "./moderation/clear.shaii";
+import kick from "./moderation/kick.shaii";
+import whois from "./moderation/whois.shaii";
 
 // utility commands
-import help from "./utility/help.sakuria";
-import ping from "./utility/ping.sakuria";
-import avatar from "./utility/avatar.sakuria";
-import env from "./utility/env.sakuria";
+import help from "./utility/help.shaii";
+import ping from "./utility/ping.shaii";
+import avatar from "./utility/avatar.shaii";
+import env from "./utility/env.shaii";
 
 // music player commands
-import play from "./musicPlayer/play.sakuria";
-import skip from "./musicPlayer/skip.sakuria";
-import volume from "./musicPlayer/volume.sakuria";
-import shuffle from "./musicPlayer/shuffle.sakuria";
-import queue from "./musicPlayer/queue.sakuria";
-import nowPlaying from "./musicPlayer/nowPlaying.sakuria";
+import play from "./musicPlayer/play.shaii";
+import skip from "./musicPlayer/skip.shaii";
+import volume from "./musicPlayer/volume.shaii";
+import shuffle from "./musicPlayer/shuffle.shaii";
+import queue from "./musicPlayer/queue.shaii";
+import nowPlaying from "./musicPlayer/nowPlaying.shaii";
 
 // image processing
-import transform from "./imageProcessors/transform.sakuria";
-import stack from "./imageProcessors/stack.sakuria";
-import vote from "./fun/vote.sakuria";
+import transform from "./imageProcessors/transform.shaii";
+import stack from "./imageProcessors/stack.shaii";
+import vote from "./fun/vote.shaii";
 
 export const getCommands = async () => {
   let commands = [
@@ -88,7 +88,7 @@ export const getCommands = async () => {
 
   if (true) {
     logger.config.print("3D Capabilities acknowledged, loading 3D commands...");
-    const { commands3D } = await import("../logic/3DRenderer.sakuria");
+    const { commands3D } = await import("../logic/3DRenderer.shaii");
     genCommands(Object.values(commands3D)).forEach((command) => commands.push(command));
   }
 

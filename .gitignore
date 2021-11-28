@@ -9,7 +9,7 @@ cache/*
 libs/*
 src/cache/*
 badWords.json
-sakuria.json
-config.sakuria.json
+shaii.json
+config.shaii.json
 !prisma/migrations
 !prisma/schema.prisma

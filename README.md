@@ -1,4 +1,4 @@
-# 🌸 Sakuria General Purpose Bot
+# 🌸 Shaii General Purpose Bot
 
 ![image](https://user-images.githubusercontent.com/34042825/127648920-e2917b37-945b-49cd-b032-fb2b62b40ced.png)
 
@@ -13,15 +13,15 @@
 
 - [ ] Args Parser Class
 - [ ] Implement MP4 to GIF Conversion using [FFmpeg](https://ffmpeg.org/) and [node-gify](https://github.com/tj/node-gify)
-- [ ] Figure out how to keep the sakuria icons witout having to specify \*.sakuria on every file
+- [ ] Figure out how to keep the shaii icons witout having to specify \*.shaii on every file
 - [ ] Say prefix when tagged
 - [ ] Add pay (so users can give their game currency to others)
 - [ ] Replace garbage SQL with mongo
 - [x] Add currency
 - [x] Add at least a single game
-- [X] Set sakuria status
+- [x] Set shaii status
 - [x] Logger Class
 - [x] Implement AniList using [AniAPI](https://github.com/AniAPI-Team/AniAPI) or [AniList/APIv2](https://github.com/AniList/ApiV2-GraphQL-Docs)
 - [x] Unit tests
-- [x] Add sakuria about me description
+- [x] Add shaii about me description
 - [x] Add help command

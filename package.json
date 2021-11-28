@@ -1,18 +1,18 @@
 {
-  "name": "sakuria",
+  "name": "shaii",
   "version": "1.3.4",
-  "description": "Sakuria general purpose discord bot",
-  "main": "./src/sakuria.ts",
+  "description": "Shaii is Geoxor's Discord Bot",
+  "main": "./src/shaii.ts",
   "scripts": {
     "test": "npm i && ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
-    "dev": "nodemon ./src/sakuria.ts",
-    "setup": "npm i && npm run prettify && ts-node ./src/setup.sakuria.ts",
-    "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.sakuria.ts",
+    "dev": "nodemon ./src/shaii.ts",
+    "setup": "npm i && npm run prettify && ts-node ./src/setup.shaii.ts",
+    "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.shaii.ts",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Geoxor/sakuria.git"
+    "url": "git+https://github.com/Geoxor/shaii.git"
   },
   "keywords": [
     "bot",
@@ -23,9 +23,9 @@
   "author": "Geoxor",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Geoxor/sakuria/issues"
+    "url": "https://github.com/Geoxor/shaii/issues"
   },
-  "homepage": "https://github.com/Geoxor/sakuria#readme",
+  "homepage": "https://github.com/Geoxor/shaii#readme",
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
     "@discordjs/voice": "^0.5.5",
