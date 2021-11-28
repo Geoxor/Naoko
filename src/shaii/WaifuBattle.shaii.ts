@@ -3,6 +3,7 @@ import Discord from "discord.js";
 import { IWaifu, IWaifuRarity } from "../types";
 import { randomChoice, calcDamage } from "../logic/logic.shaii";
 import { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON } from "./WaifuRarities.shaii";
+// @ts-ignore
 import { db } from "./Database.shaii";
 
 /**
