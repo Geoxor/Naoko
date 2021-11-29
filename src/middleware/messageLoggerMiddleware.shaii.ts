@@ -14,6 +14,7 @@ export function logEdit(
   if (oldMessage.channel.type == "DM") return;
   if (oldMessage.content == newMessage.content) return;
   if (oldMessage.author?.id === SAKURIA_ID) return;
+  if (oldMessage.guild?.id !== "385387666415550474") return;
 
   const embed = new Discord.MessageEmbed()
     .setColor("#fff06e")
