@@ -1,8 +1,8 @@
-import Discord, {Client, User} from "discord.js";
-import {version} from "../../../package.json";
-import {msToFullTime} from "../../logic/logic.shaii";
-import {defineCommand, IMessage, Kick} from "../../types";
-import {User as UserDb} from "../../shaii/Database.shaii";
+import Discord, { Client, User } from "discord.js";
+import { version } from "../../../package.json";
+import { msToFullTime } from "../../logic/logic.shaii";
+import { defineCommand, IMessage, Kick } from "../../types";
+import { User as UserDb } from "../../shaii/Database.shaii";
 
 export default defineCommand({
   name: "whois",
@@ -14,7 +14,7 @@ export default defineCommand({
       try {
         user = await message.client.users.fetch(message.args[0]);
       } catch (e) {
-        await message.reply(`I couldn't find a user with \`${message.args[0]}\``)
+        await message.reply(`I couldn't find a user with \`${message.args[0]}\``);
         return;
       }
     }
@@ -31,7 +31,7 @@ export default defineCommand({
 });
 
 async function collectFields(message: IMessage, user: User): Promise<Discord.EmbedFieldData[]> {
-  const fields: Discord.EmbedFieldData[] = []
+  const fields: Discord.EmbedFieldData[] = [];
   fields.push({ name: "ID:", value: `${user.id}` });
   fields.push({ name: "Account created:", value: user.createdAt.toUTCString() });
   fields.push({ name: "Account age:", value: msToFullTime(Date.now() - user.createdTimestamp) });
@@ -43,28 +43,28 @@ async function collectFields(message: IMessage, user: User): Promise<Discord.Emb
       fields.push({ name: "Server join age:", value: msToFullTime(Date.now() - member.joinedTimestamp) });
     }
   } catch {
-    fields.push({ name: "Server joined:", value: 'User is not in this server' });
+    fields.push({ name: "Server joined:", value: "User is not in this server" });
   }
 
-  const dbUser = await UserDb.findOne({ discord_id: user.id })
+  const dbUser = await UserDb.findOne({ discord_id: user.id });
   if (dbUser) {
     const banHistory = historyToField(dbUser.ban_history, message.client);
-    if (banHistory) fields.push({ name: 'Ban History', value: banHistory });
+    if (banHistory) fields.push({ name: "Ban History", value: banHistory });
 
     const bonkHistory = historyToField(dbUser.bonk_history, message.client);
-    if (bonkHistory) fields.push({ name: 'Bonk History', value: bonkHistory });
+    if (bonkHistory) fields.push({ name: "Bonk History", value: bonkHistory });
 
     const kickHistory = historyToField(dbUser.kick_history, message.client);
-    if (kickHistory) fields.push({ name: 'Kick History', value: kickHistory });
+    if (kickHistory) fields.push({ name: "Kick History", value: kickHistory });
 
     const muteHistory = historyToField(dbUser.mute_history, message.client);
-    if (muteHistory) fields.push({ name: 'Mute History', value: muteHistory });
+    if (muteHistory) fields.push({ name: "Mute History", value: muteHistory });
   }
 
   return fields;
 }
 
-function historyToField(history: Kick[], client: Client): string|null {
+function historyToField(history: Kick[], client: Client): string | null {
   if (history.length === 0) {
     return null;
   }
@@ -72,7 +72,7 @@ function historyToField(history: Kick[], client: Client): string|null {
   const historyString = history.reduce((acc, kick) => {
     const kicker = client.users.cache.get(`${kick.casted_by}`)!.username || kick.casted_by;
     return `${acc}${kick.reason} by ${kicker}\n`;
-  }, '');
+  }, "");
 
   return `\`\`\`\n${historyString}\`\`\``;
 }
