@@ -206,11 +206,11 @@ export function msToTime(ms: number) {
  */
 export function msToFullTime(ms: number): string {
   const seconds = Number(ms / 1000);
-  const y = Math.floor(seconds / (3600 * 24 * 365));
-  const d = Math.floor((seconds / (3600 * 24)) % 365);
-  const h = Math.floor((seconds % (3600 * 24)) / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = Math.floor(seconds % 60);
+  const y = ~~(seconds / (3600 * 24 * 365));
+  const d = ~~((seconds / (3600 * 24)) % 365);
+  const h = ~~((seconds % (3600 * 24)) / 3600);
+  const m = ~~((seconds % 3600) / 60);
+  const s = ~~(seconds % 60);
 
   const yDisplay = y > 0 && d > 0 ? y + (y === 1 ? " year, " : " years, ") : "";
   const dDisplay = d > 0 ? d + (d === 1 ? " day, " : " days, ") : "";
@@ -225,7 +225,7 @@ export function msToFullTime(ms: number): string {
  * @author MaidMarija
  */
 export function randomChoice<T>(l: Array<T>): T {
-  return l[Math.floor(Math.random() * l.length)];
+  return l[~~(Math.random() * l.length)];
 }
 
 /**
