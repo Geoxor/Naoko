@@ -167,11 +167,12 @@ class Shaii {
           const command = this.commands.get(message.command);
 
           // If it doesn't exist we respond
-          if (!command) return message.reply(`That command doesn't exist ${randomChoice(SLURS)}`);
+          if (!command)
+            return message.reply(`That command doesn't exist ${randomChoice(SLURS)}`).catch(() => {});
 
           // Notify the user their shit's processing
           if (command.requiresProcessing) {
-            var processingMessage = await message.channel.send("Processing...");
+            var processingMessage = await message.channel.send("Processing...").catch(() => {});
             var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
           }
 
@@ -179,7 +180,7 @@ class Shaii {
           if (command.permissions) {
             for (const perm of command.permissions) {
               if (!message.member?.permissions.has(perm)) {
-                return message.reply(`You don't have the \`${perm}\` perm cunt`);
+                return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => {});
               }
             }
           }
@@ -196,8 +197,7 @@ class Shaii {
               message.guild?.name || "dm"
             );
           } catch (error: any) {
-            console.log(error);
-            await message.reply(`\`\`\`${error}\`\`\``);
+            await message.reply(`\`\`\`${error}\`\`\``).catch(() => {});
           }
 
           // Delete the processing message if it exists
@@ -218,9 +218,8 @@ class Shaii {
             try {
               await message.channel.send(result);
             } catch (error: any) {
-              console.log(error);
               if (error.code === 500) await message.reply("⚠️ when the upload speed");
-              else await message.reply(`\`\`\`${error}\`\`\``);
+              else await message.reply(`\`\`\`${error}\`\`\``).catch(() => {});
             }
           }
         });

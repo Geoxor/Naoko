@@ -24,9 +24,13 @@ export default defineCommand({
       )
       .setFooter(`Vote with the reactions bellow, results in ${VOTE_TIME / 1000} seconds`);
 
-    const vote = await message.channel.send({ embeds: [embed] });
-    vote.react(DOWNVOTE_EMOJI_ID);
-    vote.react(UPVOTE_EMOJI_ID);
+    try {
+      var vote = await message.channel.send({ embeds: [embed] });
+      vote.react(DOWNVOTE_EMOJI_ID);
+      vote.react(UPVOTE_EMOJI_ID);
+    } catch (error) {
+      return;
+    }
 
     const collector = vote.createReactionCollector({ time: VOTE_TIME });
 
