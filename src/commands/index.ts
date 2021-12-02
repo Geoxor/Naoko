@@ -19,7 +19,6 @@ import decode from "./fun/decode.shaii";
 import dicksize from "./fun/dicksize.shaii";
 import tts from "./fun/tts.shaii";
 import mors from "./fun/mors.shaii";
-import say from "./fun/say.shaii";
 import traceAnime from "./fun/trace.shaii";
 import uwuify from "./fun/uwufy.shaii";
 import britify from "./fun/britify.shaii";
@@ -76,7 +75,6 @@ export const getCommands = async () => {
     dicksize,
     help,
     mors,
-    say,
     traceAnime,
     uwuify,
     vote,
