@@ -166,6 +166,14 @@ class Shaii {
           // Fetch the command
           const command = this.commands.get(message.command);
 
+          const clearTyping = () => {
+            if (processingMessage) {
+              processingMessage.delete();
+              // @ts-ignore
+              clearInterval(typingInterval);
+            }
+          };
+
           // If it doesn't exist we respond
           if (!command)
             return message.reply(`That command doesn't exist ${randomChoice(SLURS)}`).catch(() => {});
@@ -197,12 +205,9 @@ class Shaii {
               message.guild?.name || "dm"
             );
           } catch (error: any) {
-            if (processingMessage) {
-              processingMessage.delete();
-              // @ts-ignore
-              clearInterval(typingInterval);
-            }
+            clearTyping();
 
+            // This is pretty cringe
             if (error == "TypeError: Cannot read property 'getUniformLocation' of null") {
               return message.reply(
                 "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server shes running on"
@@ -214,11 +219,7 @@ class Shaii {
 
           // Delete the processing message if it exists
           // @ts-ignore
-          if (processingMessage) {
-            processingMessage.delete();
-            // @ts-ignore
-            clearInterval(typingInterval);
-          }
+          clearTyping();
 
           // If the command returns void we just return
           if (!result) return;
