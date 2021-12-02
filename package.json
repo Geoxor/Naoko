@@ -57,7 +57,6 @@
     "windows-tts": "^1.0.3"
   },
   "devDependencies": {
-    "@prisma/client": "^2.28.0",
     "@types/chai": "^4.2.21",
     "@types/file-type": "^10.9.1",
     "@types/get-image-colors": "^4.0.1",
