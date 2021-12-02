@@ -12,3 +12,10 @@ export const SLURS = ["idiot", "baka", "mennn", "cunt", "noob", "scrub", "fucker
 // Regex
 export const IPV4_REGEX =
   /((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g;
+
+export const WINDOWS_LOGO =
+  "https://cdn.discordapp.com/attachments/816028632269979668/878984332025397258/windows.png";
+export const LINUX_LOGO =
+  "https://cdn.discordapp.com/attachments/816028632269979668/878984391936847882/LINUX-LOGO.png";
+export const SAKURIA_LOGO =
+  "https://cdn.discordapp.com/avatars/870496144881492069/0cbefb1d82d00b23cff4bc64ba6406d7.png?size=2048";
