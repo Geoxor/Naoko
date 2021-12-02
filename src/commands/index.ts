@@ -8,7 +8,7 @@ import { imageProcessors } from "../logic/imageProcessors.shaii";
 import logger from "../shaii/Logger.shaii";
 
 // economy game commands
-import rank from "./economyGames/rank.shaii";
+// import rank from "./economyGames/rank.shaii";
 // import battle from "./economyGames/battle.shaii";
 // import inventory from "./economyGames/inventory.shaii";
 // import stats from "./economyGames/stats.shaii";
@@ -56,7 +56,6 @@ export const getCommands = async () => {
     transform,
     stack,
     avatar,
-    rank,
     whois,
     tts,
     match,
