@@ -7,6 +7,6 @@ export default defineCommand({
   execute: (message) => {
     if (message.mentions.everyone) return "you can't make me tag everyone idiot";
     message.delete();
-    return message.args.join(" ");
+    return message.args.join(" ").replace("@","*@*");
   },
 });
