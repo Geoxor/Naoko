@@ -197,7 +197,12 @@ class Shaii {
               message.guild?.name || "dm"
             );
           } catch (error: any) {
-            console.log(error);
+            if (processingMessage) {
+              processingMessage.delete();
+              // @ts-ignore
+              clearInterval(typingInterval);
+            }
+
             if (error == "TypeError: Cannot read property 'getUniformLocation' of null") {
               return message.reply(
                 "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server shes running on"
