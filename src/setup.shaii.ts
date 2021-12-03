@@ -35,8 +35,6 @@ console.log("Icons installed");
 try {
   var vscodeSettings = require(settingsPath);
 } catch (error: any) {
-  console.log(error);
-
   console.log(
     "VS Code settings.json has syntax errors (dangling commas), can't update settings, cancelling..."
   );
