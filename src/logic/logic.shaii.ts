@@ -319,7 +319,7 @@ export async function rigChooseWaifu(
   let rarities = { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON };
 
   for (const rarity of Object.values(rarities)) {
-    const searchResult = rarity.waifus.find((waifu) => waifu.name.toLowerCase() === name.toLowerCase());
+    const searchResult = rarity.waifus.find((waifu) => waifu.name.toLowerCase().includes(name.toLowerCase()));
     if (searchResult) {
       return { chosenWaifu: searchResult, chosenRarity: rarity };
     }
