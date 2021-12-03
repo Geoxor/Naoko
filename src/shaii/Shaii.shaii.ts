@@ -103,6 +103,10 @@ class Shaii {
     const channels = this.bot.channels.cache.values();
     for (let channel of channels) {
       if (channel.isThread()) {
+        if (channel.ownerId === SAKURIA_ID) {
+          channel.delete().then(() => logger.shaii.print(`Deleted residual battle thread ${channel.id}`));
+          continue;
+        }
         channel.join().then(() => logger.shaii.print(`Joined thread ${channel.id}`));
       }
     }
