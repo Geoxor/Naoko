@@ -237,24 +237,24 @@ export default class WaifuBattle {
 
     if (this.waifu.isDead) {
       await Promise.all([
-        this.thread!.setName(`✅ Victory`),
         this.thread!.send({
           content: `Battle ended, here's your rewards - deleting thread in ${
             this.AFTERMATH_TIME / 1000
           } seconds`,
           embeds: [this.createRewardEmbed()],
         }),
+        this.thread!.setName(`✅ Victory`),
         await this.rewardPlayers(),
       ]);
     } else {
       await Promise.all([
-        this.thread!.setName(`❌ Defeat`),
         this.thread!.send({
           content: `Battle ended, no one killed the waifu - deleting thread in ${
             this.AFTERMATH_TIME / 1000
           } seconds`,
           embeds: [this.createDefeatEmbed()],
         }),
+        this.thread!.setName(`❌ Defeat`),
       ]);
     }
 
