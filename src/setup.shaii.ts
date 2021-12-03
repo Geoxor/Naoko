@@ -36,9 +36,11 @@ try {
   var vscodeSettings = require(settingsPath);
 } catch (error: any) {
   console.log(error);
-  console.log("VS Code settings.json not found, creating a new one");
-  // @ts-ignore
-  var vscodeSettings = {};
+
+  console.log(
+    "VS Code settings.json has syntax errors (dangling commas), can't update settings, cancelling..."
+  );
+  process.exit(1);
 }
 vscodeSettings["material-icon-theme.files.associations"] = {};
 vscodeSettings["material-icon-theme.files.associations"]["shaii.json"] = "../../icons/shaii-json";

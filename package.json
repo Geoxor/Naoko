@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm i && ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
     "dev": "nodemon ./src/shaii.ts",
-    "setup": "npm i && npm run prettify && ts-node ./src/setup.shaii.ts",
+    "setup": "ts-node ./src/setup.shaii.ts",
     "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.shaii.ts",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
