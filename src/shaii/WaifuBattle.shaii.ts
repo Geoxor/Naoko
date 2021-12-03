@@ -126,7 +126,10 @@ export default class WaifuBattle {
   public async updateBossbar() {
     const newBossbar = this.waifu.getHpBar();
     if (!this.ended) {
-      this.lastBossbarMessage = await this.thread!.send({ embeds: [newBossbar] });
+      this.lastBossbarMessage = await this.thread!.send({
+        embeds: [newBossbar],
+        files: [this.waifu.attachment],
+      });
     }
   }
 
