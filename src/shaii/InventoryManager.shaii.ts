@@ -62,8 +62,8 @@ export default class InventoryManager {
       \`${statistics.waifu_types_killed.mythical}\`
     `;
 
-    embed.addField("Stat", statKeys, true);
-    embed.addField("Value", statValues, true);
+    embed.addField("Stat", statKeys || "", true);
+    embed.addField("Value", statValues || "", true);
     return embed;
   }
 }

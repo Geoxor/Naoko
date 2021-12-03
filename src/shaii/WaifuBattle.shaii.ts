@@ -14,7 +14,6 @@ import { db, User } from "./Database.shaii";
  */
 export default class WaifuBattle {
   private lastBossbarMessage: Discord.Message | null = null;
-  public waifu: Waifu;
   public participants: {
     [key: string]: {
       totalAttacks: number;
@@ -32,40 +31,10 @@ export default class WaifuBattle {
   public battleStart: number = 0;
   public battleEnd: number = 0;
 
-  public constructor(public startUser: Discord.User, public channel: Discord.TextChannel) {
-    const { chosenWaifu, chosenRarity } = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHICAL]);
-    this.waifu = new Waifu(chosenWaifu, chosenRarity);
+  public constructor(public startUser: Discord.User, public channel: Discord.TextChannel, public waifu: Waifu) {
     this.startUser = startUser;
     this.channel = channel;
     this.threadName = `${this.waifu.emoji} ${this.waifu.rarity} waifu battle!`;
-  }
-
-  /**
-   * Returns a random waifu based on rarities
-   * @returns {Waifu} the waifu JSON
-   * @author MaidMarija
-   */
-  public chooseWaifu(rarities: IWaifuRarity[]): { chosenWaifu: IWaifu; chosenRarity: IWaifuRarity } {
-    // sum up all these relative frequencies to generate a maximum for our random number generation
-    let maximum = 0;
-    rarities.forEach((w) => (maximum += w.relativeFrequency));
-
-    let choiceValue = Math.random() * maximum;
-
-    // next we iterate through our rarities to determine which this choice refers to
-    // we use < instead of <= because Math.random() is in the range [0,1)
-    for (let rarity of rarities) {
-      if (choiceValue < rarity.relativeFrequency) {
-        // This is kinda dumb it returns the entire rarity which contains the entire array of waifus as well
-        // performance--;
-        return { chosenWaifu: randomChoice<IWaifu>(rarity.waifus), chosenRarity: rarity };
-      } else {
-        choiceValue -= rarity.relativeFrequency;
-      }
-    }
-
-    // If for some reason we can't get a waifu just return a common one
-    return { chosenWaifu: randomChoice<IWaifu>(rarities[0].waifus), chosenRarity: rarities[0] };
   }
 
   /**
