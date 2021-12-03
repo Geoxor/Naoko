@@ -5,7 +5,6 @@ export default class InventoryManager {
   static async getInventory(user: Discord.User): Promise<Discord.MessageEmbed> {
     const dbUser = await User.findOne({ discord_id: user.id })!;
     const { statistics } = dbUser!;
-    console.log(dbUser);
 
     const embed = new Discord.MessageEmbed()
       .setAuthor(
