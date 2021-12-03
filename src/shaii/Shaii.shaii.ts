@@ -150,6 +150,7 @@ class Shaii {
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
+        if (!message.channel.id) return;
         if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
 
         // Reply with a funny message when they mention her
