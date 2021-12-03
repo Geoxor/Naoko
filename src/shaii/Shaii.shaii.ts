@@ -156,8 +156,12 @@ class Shaii {
       moderationMiddleware(message, (message) => {
         if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
 
-        // Reply with a funny message when they mention her
-        if (message.mentions.members?.first()?.id === SHAII_ID && message.type !== "REPLY") {
+        // Reply with a funny message if they mention her at the start of the message
+        if (
+          message.content.startsWith("@") &&
+          message.mentions.members?.first()?.id === SHAII_ID &&
+          message.type !== "REPLY"
+        ) {
           logger.command.executedCommand(0, "@mention", message.author.username, message.guild?.name || "dm");
 
           // Reply with this when they purely ping her with no question
