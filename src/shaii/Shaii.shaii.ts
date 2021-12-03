@@ -157,7 +157,7 @@ class Shaii {
 
         // Reply with a funny message if they mention her at the start of the message
         if (
-          message.content.startsWith("@") &&
+          message.content.startsWith("<@!") &&
           message.mentions.members?.first()?.id === SHAII_ID &&
           message.type !== "REPLY"
         ) {
