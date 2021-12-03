@@ -20,7 +20,6 @@ import {
 } from "../constants";
 import { randomChoice } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
-import LoggerShaii from "./Logger.shaii";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");
