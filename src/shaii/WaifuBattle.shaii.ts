@@ -1,10 +1,7 @@
 import Waifu from "./Waifu.shaii";
 import Discord from "discord.js";
-import { IWaifu, IWaifuRarity } from "../types";
-import { randomChoice, calcDamage } from "../logic/logic.shaii";
-import { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON } from "./WaifuRarities.shaii";
-// @ts-ignore
-import { db, User } from "./Database.shaii";
+import { calcDamage } from "../logic/logic.shaii";
+import { User } from "./Database.shaii";
 
 /**
  * This manages a waifu battle, randomly picking enemy waifus,

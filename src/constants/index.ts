@@ -1,4 +1,4 @@
-export const SAKURIA_ID = "870496144881492069";
+export const SHAII_ID = "870496144881492069";
 export const GEOXOR_GUILD_ID = "385387666415550474";
 export const SECRET_GUILD_ID = "911762334538670160";
 export const GEOXOR_GENERAL_CHANNEL_ID = "845328432715923487";
@@ -17,5 +17,5 @@ export const WINDOWS_LOGO =
   "https://cdn.discordapp.com/attachments/816028632269979668/878984332025397258/windows.png";
 export const LINUX_LOGO =
   "https://cdn.discordapp.com/attachments/816028632269979668/878984391936847882/LINUX-LOGO.png";
-export const SAKURIA_LOGO =
+export const SHAII_LOGO =
   "https://cdn.discordapp.com/avatars/870496144881492069/0cbefb1d82d00b23cff4bc64ba6406d7.png?size=2048";

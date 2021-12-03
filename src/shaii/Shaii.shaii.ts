@@ -14,7 +14,7 @@ import {
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
-  SAKURIA_ID,
+  SHAII_ID,
   SECRET_GUILD_ID,
   SLURS,
 } from "../constants";
@@ -103,7 +103,7 @@ class Shaii {
     const channels = this.bot.channels.cache.values();
     for (let channel of channels) {
       if (channel.isThread()) {
-        if (channel.ownerId === SAKURIA_ID) {
+        if (channel.ownerId === SHAII_ID) {
           channel.delete().then(() => logger.shaii.print(`Deleted residual battle thread ${channel.id}`));
           continue;
         }
@@ -134,7 +134,7 @@ class Shaii {
   }
 
   private async onGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember) {
-    if (member.id === SAKURIA_ID) return;
+    if (member.id === SHAII_ID) return;
     let user = await User.findOneOrCreate(member);
     user.updateRoles(Array.from(member.roles.cache.keys()));
   }
@@ -157,11 +157,11 @@ class Shaii {
         if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
 
         // Reply with a funny message when they mention her
-        if (message.mentions.members?.first()?.id === SAKURIA_ID && message.type !== "REPLY") {
+        if (message.mentions.members?.first()?.id === SHAII_ID && message.type !== "REPLY") {
           logger.command.executedCommand(0, "@mention", message.author.username, message.guild?.name || "dm");
 
           // Reply with this when they purely ping her with no question
-          if (!message.content.substr(`<@!${SAKURIA_ID}>`.length).trim())
+          if (!message.content.substr(`<@!${SHAII_ID}>`.length).trim())
             return message.reply("what tf do you want");
           return message.reply(randomChoice(answers));
         }

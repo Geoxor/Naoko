@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import logger from "../shaii/Logger.shaii";
 import config from "../shaii/Config.shaii";
-import { SAKURIA_ID } from "../constants";
+import { SHAII_ID } from "../constants";
 
 export function logEdit(
   oldMessage: Discord.Message | Discord.PartialMessage,
@@ -13,7 +13,7 @@ export function logEdit(
 ): void {
   if (oldMessage.channel.type == "DM") return;
   if (oldMessage.content == newMessage.content) return;
-  if (oldMessage.author?.id === SAKURIA_ID) return;
+  if (oldMessage.author?.id === SHAII_ID) return;
   if (oldMessage.guild?.id !== "385387666415550474") return;
 
   const embed = new Discord.MessageEmbed()
@@ -48,7 +48,7 @@ export function logDelete(
   next: (message: Discord.Message | Discord.PartialMessage) => any
 ) {
   if (message.channel.type == "DM") return;
-  if (message.author?.id === SAKURIA_ID) return;
+  if (message.author?.id === SHAII_ID) return;
 
   const embed = new Discord.MessageEmbed()
     .setColor("#eb4034")

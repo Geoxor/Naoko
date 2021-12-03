@@ -3,7 +3,7 @@ import Discord from "discord.js";
 import { systemInfo } from "../../shaii/Shaii.shaii";
 import { version } from "../../../package.json";
 import { msToTime } from "../../logic/logic.shaii";
-import { LINUX_LOGO, SAKURIA_LOGO, WINDOWS_LOGO } from "../../constants";
+import { LINUX_LOGO, SHAII_LOGO, WINDOWS_LOGO } from "../../constants";
 
 const startTime = Date.now();
 
@@ -21,7 +21,7 @@ export default defineCommand({
     const totalRam = systemInfo.memLayout.reduce((acc, mem) => acc + mem.size, 0);
 
     const embed = new Discord.MessageEmbed()
-      .setAuthor(`Shaii v${version}`, SAKURIA_LOGO)
+      .setAuthor(`Shaii v${version}`, SHAII_LOGO)
       .setColor("#FF00B6")
       .setThumbnail(platform === "win32" ? WINDOWS_LOGO : LINUX_LOGO)
       .addFields(
