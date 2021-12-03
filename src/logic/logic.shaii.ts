@@ -344,7 +344,10 @@ export function calcSpread(value: number): number {
 
 /**
  * Calculates participation rewards
- *
+ * This will split the rewards in equal amount if all the players participated equally
+ * @param {number} participatedDamage damage dealt by the participant
+ * @param {number} totalHp total HP of the enemy
+ * @param {number} playerAmount the total amount of players/participants
  */
 export function calcParticipated(participatedDamage: number, totalHp: number, playerAmount: number): number {
   return (participatedDamage / totalHp) * playerAmount;
