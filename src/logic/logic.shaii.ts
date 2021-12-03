@@ -342,6 +342,10 @@ export function calcSpread(value: number): number {
   return spread;
 }
 
+export function calcParticipated(participatedDamage: number, totalHp: number, playerAmount: number): number {
+  return ~~(participatedDamage / totalHp) * playerAmount;
+}
+
 /**
  * Uwu-ify sentences
  * @param {string} sentence the sentence to uwu-ify

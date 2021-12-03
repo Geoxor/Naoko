@@ -31,7 +31,7 @@ export default class WaifuBattle {
   public constructor(public startUser: Discord.User, public channel: Discord.TextChannel, public waifu: Waifu) {
     this.startUser = startUser;
     this.channel = channel;
-    this.threadName = `⚔ ${this.waifu.name} Battle!`.substring(0, 64);
+    this.threadName = `${this.waifu.emoji} ${this.waifu.name} Battle!`.substring(0, 64);
   }
 
   /**
@@ -124,9 +124,9 @@ export default class WaifuBattle {
    * @author Geoxor, Cimok
    */
   public async updateBossbar() {
-    const newBossbar = `${this.waifu.name} still has *${~~this.waifu.currentHp}* HP!`;
-    if (!this.ended && this.lastBossbarMessage?.content !== newBossbar) {
-      this.lastBossbarMessage = await this.thread!.send(newBossbar);
+    const newBossbar = this.waifu.getHpBar();
+    if (!this.ended) {
+      this.lastBossbarMessage = await this.thread!.send({ embeds: [newBossbar] });
     }
   }
 

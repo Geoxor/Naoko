@@ -2,6 +2,7 @@ import Discord from "discord.js";
 import fs from "fs";
 import { IRewards, IWaifuRarity, IWaifu, IWaifuRarityName, IWaifuRarityEmoji } from "../types";
 import { calcDefense } from "../logic/logic.shaii";
+import { SHAII_LOGO } from "src/constants";
 
 /**
  * Per guild waifu fights that people initiate with a command
@@ -15,6 +16,7 @@ export default class Waifu {
   public attachment: Discord.MessageAttachment;
   public currentHp: number;
   public maxHp: number;
+  public attacksDealt: number = 0;
   public armor: number;
   public rewards: IRewards;
   public isDead: boolean;
@@ -42,18 +44,26 @@ export default class Waifu {
     this.ui = this.prepareUi();
   }
 
+  public getHpBar() {
+    return new Discord.MessageEmbed()
+      .setColor(this.color)
+      .setTitle(`${this.name} still has *${~~this.currentHp}* HP!`)
+      .addField("Current HP: ", this.currentHp.toString(), true)
+      .addField("Total Attacks Dealt: ", this.attacksDealt.toString(), true)
+      .setAuthor(SHAII_LOGO);
+  }
+
   private prepareUi() {
-    const embed = new Discord.MessageEmbed();
-    embed
+    return new Discord.MessageEmbed()
       .setColor(this.color)
       .setTitle(this.name)
       .addField("Rarity", `${this.emoji} ${this.rarity}`, true)
       .setDescription(`${this.maxHp} HP ${this.armor} AP`)
       .setImage(`attachment://waifu.png`);
-    return embed;
   }
 
   public dealDamage(damage: number) {
+    this.attacksDealt++;
     if (this.armor)
       // Check if the armor is defined or not
       this.currentHp = this.currentHp - damage * calcDefense(this.armor);
