@@ -1,7 +1,7 @@
 import Discord, { Client, User } from "discord.js";
 import { version } from "../../../package.json";
-import { msToFullTime } from "../../logic/logic.shaii";
-import { defineCommand, IMessage, Kick } from "../../types";
+import { markdown, msToFullTime } from "../../logic/logic.shaii";
+import { Ban, Bonk, defineCommand, IMessage, Kick, Mute } from "../../types";
 import { User as UserDb } from "../../shaii/Database.shaii";
 
 export default defineCommand({
@@ -64,15 +64,15 @@ async function collectFields(message: IMessage, user: User): Promise<Discord.Emb
   return fields;
 }
 
-function historyToField(history: Kick[], client: Client): string | null {
+function historyToField(history: (Kick | Bonk | Mute | Ban)[], client: Client): string | null {
   if (history.length === 0) {
     return null;
   }
 
-  const historyString = history.reduce((acc, kick) => {
-    const kicker = client.users.cache.get(`${kick.casted_by}`)!.username || kick.casted_by;
-    return `${acc}${kick.reason} by ${kicker}\n`;
+  const historyString = history.reduce((acc, action) => {
+    const actor = client.users.cache.get(`${action.casted_by}`)!.username || action.casted_by;
+    return `${acc}${action.reason} by ${actor}\n`;
   }, "");
 
-  return `\`\`\`\n${historyString}\`\`\``;
+  return markdown(historyString);
 }
