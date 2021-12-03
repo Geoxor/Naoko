@@ -18,4 +18,4 @@ export const WINDOWS_LOGO =
 export const LINUX_LOGO =
   "https://cdn.discordapp.com/attachments/816028632269979668/878984391936847882/LINUX-LOGO.png";
 export const SHAII_LOGO =
-  "https://cdn.discordapp.com/avatars/870496144881492069/0cbefb1d82d00b23cff4bc64ba6406d7.png?size=2048";
+  "https://cdn.discordapp.com/avatars/870496144881492069/0d0f5a8cd8ad5e0e0a5eec0d40d2e2a5.webp";

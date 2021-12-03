@@ -1,6 +1,6 @@
 import Waifu from "./Waifu.shaii";
 import Discord from "discord.js";
-import { calcDamage } from "../logic/logic.shaii";
+import { calcDamage, calcParticipated } from "../logic/logic.shaii";
 import { User } from "./Database.shaii";
 
 /**
@@ -201,16 +201,20 @@ export default class WaifuBattle {
    * @author Geoxor
    */
   public async rewardPlayers() {
-    for (let [userId, stats] of Object.entries(this.participants)) {
+    const participants = Object.entries(this.participants);
+
+    for (let [userId, stats] of participants) {
       // Create the new user if they don't exist so we can
       // reward them later
       const user = await User.findOne({ discord_id: userId });
       if (user) {
+        // Calculate how much % of the reward each player gets based on their contribution ratio
+        const rewardRatio = calcParticipated(stats.totalDamageDealt, this.waifu.maxHp, participants.length);
         await user.addBattleRewards({
           totalAttacks: stats.totalAttacks,
           totalDamageDealt: stats.totalDamageDealt,
-          xp: this.waifu.rewards.xp,
-          money: this.waifu.rewards.money,
+          xp: this.waifu.rewards.xp * rewardRatio,
+          money: this.waifu.rewards.money * rewardRatio,
           rarity: this.waifu.rarity,
         });
       }
