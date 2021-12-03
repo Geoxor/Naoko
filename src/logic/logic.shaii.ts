@@ -194,10 +194,10 @@ export function msToTime(ms: number) {
   const minutes = ms / (1000 * 60);
   const hours = ms / (1000 * 60 * 60);
   const days = ms / (1000 * 60 * 60 * 24);
-  if (seconds < 60) return seconds + " sec";
-  else if (minutes < 60) return minutes + " min";
-  else if (hours < 24) return hours + " hour";
-  else return days + " days";
+  if (seconds < 60) return seconds.toFixed(2) + " sec";
+  else if (minutes < 60) return minutes.toFixed(2) + " min";
+  else if (hours < 24) return hours.toFixed(2) + " hour";
+  else return days.toFixed(2) + " days";
 }
 
 /**

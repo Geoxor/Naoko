@@ -34,7 +34,7 @@ export default class WaifuBattle {
   public constructor(public startUser: Discord.User, public channel: Discord.TextChannel, public waifu: Waifu) {
     this.startUser = startUser;
     this.channel = channel;
-    this.threadName = `${this.waifu.emoji} ${this.waifu.rarity} waifu battle!`;
+    this.threadName = `⚔ ${this.waifu.name} Battle!`.substring(0, 32);
   }
 
   /**
