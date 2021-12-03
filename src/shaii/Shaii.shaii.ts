@@ -18,7 +18,7 @@ import {
   SECRET_GUILD_ID,
   SLURS,
 } from "../constants";
-import { randomChoice } from "../logic/logic.shaii";
+import { markdown, randomChoice } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 
 export let systemInfo: si.Systeminformation.StaticData;
@@ -221,7 +221,7 @@ class Shaii {
               );
             }
 
-            await message.reply(`\`\`\`${error}\`\`\``).catch(() => {});
+            await message.reply(markdown(error)).catch(() => {});
           }
 
           // Delete the processing message if it exists
@@ -239,7 +239,7 @@ class Shaii {
               await message.channel.send(result);
             } catch (error: any) {
               if (error.code === 500) await message.reply("⚠️ when the upload speed");
-              else await message.reply(`\`\`\`${error}\`\`\``).catch(() => {});
+              else await message.reply(markdown(error)).catch(() => {});
             }
           }
         });

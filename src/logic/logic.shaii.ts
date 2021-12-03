@@ -301,6 +301,13 @@ export function randomDickSize(): number {
 }
 
 /**
+ * Wraps a string in discord markdown
+ * @param string the string to mardown
+ * @returns
+ */
+export const markdown = (string: string | undefined): string => `\`\`\`${string}\`\`\``;
+
+/**
  * Calculate attack damage
  * @param damage the damage
  * @param critChange critical change from 0.0 to 1.0

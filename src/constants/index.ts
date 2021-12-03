@@ -24,6 +24,8 @@ export const SLURS = [
 export const IPV4_REGEX =
   /((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g;
 
+export const INVENTORY_ICON =
+  "https://cdn.discordapp.com/attachments/806300597338767450/872917164091396126/unknown.png";
 export const WINDOWS_LOGO =
   "https://cdn.discordapp.com/attachments/816028632269979668/878984332025397258/windows.png";
 export const LINUX_LOGO =

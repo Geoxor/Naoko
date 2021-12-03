@@ -2,6 +2,7 @@ import Discord from "discord.js";
 import logger from "../shaii/Logger.shaii";
 import config from "../shaii/Config.shaii";
 import { SHAII_ID } from "../constants";
+import { markdown } from "../logic/logic.shaii";
 
 export function logEdit(
   oldMessage: Discord.Message | Discord.PartialMessage,
@@ -26,8 +27,8 @@ export function logEdit(
     .setThumbnail(`${oldMessage.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${oldMessage.author?.id}>` },
-      { name: `From`, value: `\`\`\`${oldMessage.content?.substr(0, 480)}\`\`\`` },
-      { name: `To`, value: `\`\`\`${newMessage.content?.substr(0, 480)}\`\`\`` },
+      { name: `From`, value: markdown(oldMessage.content?.substr(0, 480)) },
+      { name: `To`, value: markdown(newMessage.content?.substr(0, 480)) },
       {
         name: `Link`,
         value: `https://canary.discord.com/channels/${newMessage.guildId}/${newMessage.channelId}/${newMessage.id}`,
@@ -57,7 +58,7 @@ export function logDelete(
     .setThumbnail(`${message.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${message.author?.id}>` },
-      { name: `Message Content`, value: `\`\`\`${message.content?.substr(0, 960)}\`\`\`` },
+      { name: `Message Content`, value: markdown(message.content?.substr(0, 960)) },
       {
         name: `Link`,
         value: `https://canary.discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`,
