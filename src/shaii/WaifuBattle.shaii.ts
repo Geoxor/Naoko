@@ -233,7 +233,7 @@ export default class WaifuBattle {
 
     if (this.waifu.isDead) {
       await Promise.all([
-        this.thread!.setName(`${this.threadName} victory`),
+        this.thread!.setName(`✔ Victory`),
         this.thread!.send({
           content: `Battle ended, here's your rewards - deleting thread in ${
             this.AFTERMATH_TIME / 1000
@@ -244,7 +244,7 @@ export default class WaifuBattle {
       ]);
     } else {
       await Promise.all([
-        this.thread!.setName(`${this.threadName} defeat`),
+        this.thread!.setName(`❌ Defeat`),
         this.thread!.send({
           content: `Battle ended, no one killed the waifu - deleting thread in ${
             this.AFTERMATH_TIME / 1000
