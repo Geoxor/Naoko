@@ -50,7 +50,6 @@ export default class Waifu {
       .setTitle(`⚠️ ${this.name} still has *${~~this.currentHp}* HP!`)
       .addField("Current HP: ", this.currentHp.toFixed(2), true)
       .addField("Total Attacks Dealt: ", this.attacksDealt.toString(), true)
-      .setThumbnail(`attachment://waifu.png`)
       .setAuthor(this.name, SHAII_LOGO);
   }
 

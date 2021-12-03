@@ -128,7 +128,6 @@ export default class WaifuBattle {
     if (!this.ended) {
       this.lastBossbarMessage = await this.thread!.send({
         embeds: [newBossbar],
-        files: [this.waifu.attachment],
       });
     }
   }
