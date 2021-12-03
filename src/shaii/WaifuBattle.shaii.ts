@@ -22,19 +22,17 @@ export default class WaifuBattle {
       userId: string;
     };
   } = {};
-  public startUser: Discord.User;
-  public channel: Discord.TextChannel;
   public thread: Discord.ThreadChannel | null = null;
   public collector: Discord.MessageCollector | null = null;
   public bossbar: NodeJS.Timer | null = null;
-  public battleDuration: number = 60000;
-  public aftermathTime: number = 15000;
+  public BATTLE_DURATION: number = 60000;
+  public AFTERMATH_TIME: number = 15000;
   public threadName: string;
   public ended: boolean = false;
   public battleStart: number = 0;
   public battleEnd: number = 0;
 
-  constructor(startUser: Discord.User, channel: Discord.TextChannel) {
+  public constructor(public startUser: Discord.User, public channel: Discord.TextChannel) {
     const { chosenWaifu, chosenRarity } = this.chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHICAL]);
     this.waifu = new Waifu(chosenWaifu, chosenRarity);
     this.startUser = startUser;
@@ -47,7 +45,7 @@ export default class WaifuBattle {
    * @returns {Waifu} the waifu JSON
    * @author MaidMarija
    */
-  chooseWaifu(rarities: IWaifuRarity[]): { chosenWaifu: IWaifu; chosenRarity: IWaifuRarity } {
+  public chooseWaifu(rarities: IWaifuRarity[]): { chosenWaifu: IWaifu; chosenRarity: IWaifuRarity } {
     // sum up all these relative frequencies to generate a maximum for our random number generation
     let maximum = 0;
     rarities.forEach((w) => (maximum += w.relativeFrequency));
@@ -75,7 +73,7 @@ export default class WaifuBattle {
    * @returns {Discord.MessageOptions} of the waifu
    * @author Geoxor, Cimok
    */
-  getWaifu(): Discord.MessageOptions {
+  public getWaifu(): Discord.MessageOptions {
     return { content: "type !attack to kill her!", files: [this.waifu.attachment], embeds: [this.waifu.ui] };
   }
 
@@ -83,7 +81,7 @@ export default class WaifuBattle {
    * Starts the battle
    * @author Geoxor, Cimok
    */
-  async startBattle() {
+  public async startBattle() {
     // Create thread
     await this.initThread();
 
@@ -93,14 +91,14 @@ export default class WaifuBattle {
     // End the battle if its been more than the battle duration
     setTimeout(async () => {
       !this.ended && (await this.endBattle());
-    }, this.battleDuration);
+    }, this.BATTLE_DURATION);
   }
 
   /**
    * Creates the thread for the battle
    * @author Geoxor, Cimok
    */
-  async initThread() {
+  public async initThread() {
     this.thread = await this.channel.threads.create({
       name: this.threadName,
       autoArchiveDuration: 60,
@@ -116,7 +114,7 @@ export default class WaifuBattle {
    * Initializes the message collector
    * @author Geoxor, Cimok
    */
-  async initCollector() {
+  public async initCollector() {
     // Create the collector on the thread
     this.collector = new Discord.MessageCollector(this.thread!);
 
@@ -159,7 +157,7 @@ export default class WaifuBattle {
    * Updates the bossbar with the current battle stats
    * @author Geoxor, Cimok
    */
-  async updateBossbar() {
+  public async updateBossbar() {
     const newBossbar = `${this.waifu.name} still has *${~~this.waifu.currentHp}* HP!`;
     if (!this.ended && this.lastBossbarMessage?.content !== newBossbar) {
       this.lastBossbarMessage = await this.thread!.send(newBossbar);
@@ -170,7 +168,7 @@ export default class WaifuBattle {
    * Calculate how long the battle lasted
    * @author N1kO23, Geoxor
    */
-  calculateBattleDuration() {
+  public calculateBATTLE_DURATION() {
     return (this.battleEnd - this.battleStart) / 1000;
   }
 
@@ -178,8 +176,8 @@ export default class WaifuBattle {
    * The total DPS of the battle
    * @author N1kO23, Geoxor
    */
-  calculateDPS() {
-    return this.waifu.maxHp / this.calculateBattleDuration();
+  public calculateDPS() {
+    return this.waifu.maxHp / this.calculateBATTLE_DURATION();
   }
 
   /**
@@ -187,7 +185,7 @@ export default class WaifuBattle {
    * Returning their tags and sorted by their DPS
    * @author N1kO23, Geoxor
    */
-  getParticipantsString() {
+  public getParticipantsString() {
     const sortedArray = Object.values(this.participants).sort(
       (a, b) => b.totalDamageDealt - a.totalDamageDealt
     );
@@ -200,7 +198,7 @@ export default class WaifuBattle {
    * Returns the reward info string for the embed
    * @author N1kO23, Geoxor
    */
-  getRewardString() {
+  public getRewardString() {
     return `
       💎 Prisms: ${this.waifu.rewards.money}
       ✨ XP: ${this.waifu.rewards.xp}
@@ -211,32 +209,38 @@ export default class WaifuBattle {
    * Creates the defeat embed to display when the battle ends
    * @author Geoxor
    */
-  createDefeatEmbed() {
+  public createDefeatEmbed() {
     return new Discord.MessageEmbed()
       .setColor("#FF3136")
       .setTitle(`${this.waifu.name} has escaped with ${~~this.waifu.currentHp} HP!`)
       .addField("Participants", this.getParticipantsString(), false)
-      .setFooter(`${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`);
+      .setFooter(
+        `${this.calculateBATTLE_DURATION().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`
+      );
   }
 
   /**
    * Creates the reward embed to display when the battle ends
    * @author N1kO23, Geoxor
    */
-  createRewardEmbed() {
-    return new Discord.MessageEmbed()
-      .setColor("#2F3136")
-      .setTitle(`${this.waifu.name} has been defeated!`)
-      .addField("Rewards", this.getRewardString(), false)
-      .addField("Participants", this.getParticipantsString(), false)
-      .setFooter(`${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`);
+  public createRewardEmbed() {
+    return (
+      new Discord.MessageEmbed()
+        .setColor("#2F3136")
+        .setTitle(`${this.waifu.name} has been defeated!`)
+        // .addField("Rewards", this.getRewardString(), false)
+        .addField("Participants", this.getParticipantsString(), false)
+        .setFooter(
+          `${this.calculateBATTLE_DURATION().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`
+        )
+    );
   }
 
   /**
    * Rewards all the participating players
    * @author Geoxor
    */
-  async rewardPlayers() {
+  public async rewardPlayers() {
     for (let [userId, stats] of Object.entries(this.participants)) {
       // Create the new user if they don't exist so we can
       // reward them later
@@ -255,7 +259,7 @@ export default class WaifuBattle {
    * Ends the battle
    * @author Geoxor, Cimok
    */
-  async endBattle() {
+  public async endBattle() {
     if (this.ended) return;
     this.ended = true;
     this.battleEnd = Date.now();
@@ -265,15 +269,15 @@ export default class WaifuBattle {
     if (this.waifu.isDead) {
       await this.thread!.setName(`${this.threadName} victory`);
       await this.thread!.send({
-        content: `Battle ended, here's your rewards - deleting thread in ${this.aftermathTime / 1000} seconds`,
+        content: `Battle ended, here's your rewards - deleting thread in ${this.AFTERMATH_TIME / 1000} seconds`,
         embeds: [this.createRewardEmbed()],
       });
-      await this.rewardPlayers();
+      // await this.rewardPlayers();
     } else {
       await this.thread!.setName(`${this.threadName} defeat`);
       await this.thread!.send({
         content: `Battle ended, no one killed the waifu - deleting thread in ${
-          this.aftermathTime / 1000
+          this.AFTERMATH_TIME / 1000
         } seconds`,
         embeds: [this.createDefeatEmbed()],
       });
@@ -285,6 +289,6 @@ export default class WaifuBattle {
       } catch (error: any) {
         console.log(error);
       }
-    }, this.aftermathTime);
+    }, this.AFTERMATH_TIME);
   }
 }
