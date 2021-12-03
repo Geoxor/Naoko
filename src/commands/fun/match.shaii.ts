@@ -12,6 +12,7 @@ export default defineCommand({
     let matcher: Discord.User;
     let matchee: Discord.User;
 
+    // Check if they mentions 2 users or not
     if (message.mentions.users?.size >= 2) {
       matcher = message.mentions.users.at(0)!;
       matchee = message.mentions.users.at(1)!;
