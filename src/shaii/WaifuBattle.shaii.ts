@@ -4,7 +4,7 @@ import { IWaifu, IWaifuRarity } from "../types";
 import { randomChoice, calcDamage } from "../logic/logic.shaii";
 import { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON } from "./WaifuRarities.shaii";
 // @ts-ignore
-import { db } from "./Database.shaii";
+import { db, User } from "./Database.shaii";
 
 /**
  * This manages a waifu battle, randomly picking enemy waifus,
@@ -125,7 +125,7 @@ export default class WaifuBattle {
         if (this.battleStart == 0) this.battleStart = Date.now();
 
         // Calculate damage to deal
-        const damage = calcDamage();
+        const damage = calcDamage(100, 0.3, 2);
 
         // Add the player if they aren't in already
         if (!this.participants[message.author.id]) {
@@ -224,16 +224,14 @@ export default class WaifuBattle {
    * @author N1kO23, Geoxor
    */
   public createRewardEmbed() {
-    return (
-      new Discord.MessageEmbed()
-        .setColor("#2F3136")
-        .setTitle(`${this.waifu.name} has been defeated!`)
-        // .addField("Rewards", this.getRewardString(), false)
-        .addField("Participants", this.getParticipantsString(), false)
-        .setFooter(
-          `${this.calculateBATTLE_DURATION().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`
-        )
-    );
+    return new Discord.MessageEmbed()
+      .setColor("#2F3136")
+      .setTitle(`${this.waifu.name} has been defeated!`)
+      .addField("Rewards", this.getRewardString(), false)
+      .addField("Participants", this.getParticipantsString(), false)
+      .setFooter(
+        `${this.calculateBATTLE_DURATION().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`
+      );
   }
 
   /**
@@ -244,14 +242,16 @@ export default class WaifuBattle {
     for (let [userId, stats] of Object.entries(this.participants)) {
       // Create the new user if they don't exist so we can
       // reward them later
-      await db.newUser(userId);
-      await db.addBattleRewardsToUser(userId, {
-        totalAttacks: stats.totalAttacks,
-        totalDamageDealt: stats.totalDamageDealt,
-        xp: this.waifu.rewards.xp,
-        money: this.waifu.rewards.money,
-        rarity: this.waifu.rarity,
-      });
+      const user = await User.findOne({ discord_id: userId });
+      if (user) {
+        await user.addBattleRewards({
+          totalAttacks: stats.totalAttacks,
+          totalDamageDealt: stats.totalDamageDealt,
+          xp: this.waifu.rewards.xp,
+          money: this.waifu.rewards.money,
+          rarity: this.waifu.rarity,
+        });
+      }
     }
   }
 
@@ -267,20 +267,26 @@ export default class WaifuBattle {
     clearInterval(this.bossbar as NodeJS.Timeout);
 
     if (this.waifu.isDead) {
-      await this.thread!.setName(`${this.threadName} victory`);
-      await this.thread!.send({
-        content: `Battle ended, here's your rewards - deleting thread in ${this.AFTERMATH_TIME / 1000} seconds`,
-        embeds: [this.createRewardEmbed()],
-      });
-      // await this.rewardPlayers();
+      await Promise.all([
+        this.thread!.setName(`${this.threadName} victory`),
+        this.thread!.send({
+          content: `Battle ended, here's your rewards - deleting thread in ${
+            this.AFTERMATH_TIME / 1000
+          } seconds`,
+          embeds: [this.createRewardEmbed()],
+        }),
+        await this.rewardPlayers(),
+      ]);
     } else {
-      await this.thread!.setName(`${this.threadName} defeat`);
-      await this.thread!.send({
-        content: `Battle ended, no one killed the waifu - deleting thread in ${
-          this.AFTERMATH_TIME / 1000
-        } seconds`,
-        embeds: [this.createDefeatEmbed()],
-      });
+      await Promise.all([
+        this.thread!.setName(`${this.threadName} defeat`),
+        this.thread!.send({
+          content: `Battle ended, no one killed the waifu - deleting thread in ${
+            this.AFTERMATH_TIME / 1000
+          } seconds`,
+          embeds: [this.createDefeatEmbed()],
+        }),
+      ]);
     }
 
     setTimeout(async () => {

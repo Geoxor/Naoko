@@ -1,6 +1,7 @@
 import Discord from "discord.js";
 import mongoose from "mongoose";
 import { Mongoose, Types, Document } from "mongoose";
+import { IUserFunctions } from "./shaii/Database.shaii";
 export type Coords = {
   x?: number;
   y?: number;
@@ -23,8 +24,8 @@ export type Bonk = Kick;
 
 export interface IUser extends mongoose.Document, IUserFunctions {
   discord_id: String;
-  xp: Number;
-  bonks: Number;
+  chat_xp: number;
+  bonks: number;
   kick_history: Kick[];
   mute_history: Mute[];
   is_muted: Boolean;
@@ -32,16 +33,34 @@ export interface IUser extends mongoose.Document, IUserFunctions {
   ban_history: Ban[];
   bonk_history: Bonk[];
   roles: string[];
-  joined_at: Number;
-  account_created_at: Number;
-  previous_nicks: string[];
+  joined_at: number;
   previous_usernames: string[];
+  account_created_at: number;
+  previous_nicks: string[];
+  inventory: IGameInventory;
+  statistics: IGameStatistics;
 }
 
-export interface IUserFunctions {
-  kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
-  updateRoles(roles: string[]): Promise<IUser>;
-  findOneOrCreate(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<IUser & { _id: any }>;
+export interface IGameInventory {
+  [key: string]: any;
+}
+
+export interface IGameStatistics {
+  balance: number;
+  xp: number;
+  waifu_types_killed: IWaifuTypesKilled;
+  total_attacks: number;
+  total_damage_dealt: number;
+  total_prisms_collected: number;
+  total_prisms_spent: number;
+}
+
+export interface IWaifuTypesKilled {
+  common: number;
+  uncommon: number;
+  rare: number;
+  legendary: number;
+  mythical: number;
 }
 
 export interface IMessage extends Discord.Message {
@@ -111,6 +130,13 @@ export interface IRewards {
   money: number;
   xp: number;
 }
+
+export interface IBattleUserRewards extends IRewards {
+  totalAttacks: number;
+  totalDamageDealt: number;
+  rarity: IWaifuRarityName;
+}
+
 export interface IWaifu {
   name: string;
   image: string;

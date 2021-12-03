@@ -302,15 +302,14 @@ export function randomDickSize(): number {
 
 /**
  * Calculate attack damage
- * @returns damage
+ * @param damage the damage
+ * @param critChange critical change from 0.0 to 1.0
+ * @param critMulti critical multiplier to apply on critical
+ * @returns calculated damage
  * @author azur1s
  */
-export function calcDamage(): number {
-  let damage = 100;
-  let critChance = 0.5;
-  let critMulti = 2;
+export function calcDamage(damage: number, critChance: number, critMulti: number): number {
   let rng = Math.random(); //😎
-
   if (rng > critChance) damage = damage * critMulti;
 
   return damage;

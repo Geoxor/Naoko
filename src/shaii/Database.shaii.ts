@@ -1,21 +1,37 @@
-// import { PrismaClient } from "@prisma/client";
 // import { IBattle } from "../types";
 import logger from "./Logger.shaii";
 import mongoose from "mongoose";
 import config from "./Config.shaii";
-import { IUser, IUserFunctions, Kick } from "../types";
+import { IBattleUserRewards, IRewards, IUser, Kick } from "../types";
 import Discord from "discord.js";
 mongoose.connect(config.mongo).then(() => console.log("connected"));
 const { Schema } = mongoose;
 
+const DB_NUMBER = { type: "Number", default: 0 };
+
 const schema = new Schema<IUser>({
   discord_id: { type: "String", required: true },
-  xp: { type: "Number", default: 0 },
   bonks: { type: "Number", default: 0 },
+  chat_xp: { type: "Number", default: 0 },
   is_muted: { type: "Boolean", default: false },
   is_banned: { type: "Boolean", default: false },
   joined_at: { type: "Number", required: true },
   account_created_at: { type: "Number", required: true },
+  statistics: {
+    xp: DB_NUMBER,
+    balance: DB_NUMBER,
+    total_attacks: DB_NUMBER,
+    total_damage_dealt: DB_NUMBER,
+    total_prisms_collected: DB_NUMBER,
+    total_prisms_spent: DB_NUMBER,
+    waifu_types_killed: {
+      common: DB_NUMBER,
+      uncommon: DB_NUMBER,
+      rare: DB_NUMBER,
+      legendary: DB_NUMBER,
+      mythical: DB_NUMBER,
+    },
+  },
 
   kick_history: Array,
   mute_history: Array,
@@ -26,8 +42,25 @@ const schema = new Schema<IUser>({
   previous_nicks: Array,
 });
 
+export interface IUserFunctions {
+  addBattleRewards(rewards: IBattleUserRewards): Promise<IUser>;
+  kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
+  updateRoles(roles: string[]): Promise<IUser>;
+  findOneOrCreate(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<IUser & { _id: any }>;
+}
 schema.methods.updateRoles = function (roles: string[]) {
   this.roles = roles;
+  return this.save();
+};
+
+schema.methods.addBattleRewards = function (rewards: IBattleUserRewards) {
+  this.statistics.balance += rewards.money;
+  this.statistics.xp += rewards.money;
+  this.statistics.total_attacks += rewards.totalAttacks;
+  this.statistics.total_damage_dealt += rewards.totalDamageDealt;
+  this.statistics.waifu_types_killed[rewards.rarity]++;
+  this.statistics.total_prisms_collected += rewards.money;
+
   return this.save();
 };
 
