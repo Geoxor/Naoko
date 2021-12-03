@@ -137,7 +137,7 @@ export default class WaifuBattle {
    * Calculate how long the battle lasted
    * @author N1kO23, Geoxor
    */
-  public calculateBATTLE_DURATION() {
+  public calculateBattleDuration() {
     return (this.battleEnd - this.battleStart) / 1000;
   }
 
@@ -146,7 +146,7 @@ export default class WaifuBattle {
    * @author N1kO23, Geoxor
    */
   public calculateDPS() {
-    return this.waifu.maxHp / this.calculateBATTLE_DURATION();
+    return this.waifu.maxHp / this.calculateBattleDuration();
   }
 
   /**
@@ -182,10 +182,8 @@ export default class WaifuBattle {
     return new Discord.MessageEmbed()
       .setColor("#FF3136")
       .setTitle(`${this.waifu.name} has escaped with ${~~this.waifu.currentHp} HP!`)
-      .addField("Participants", this.getParticipantsString(), false)
-      .setFooter(
-        `${this.calculateBATTLE_DURATION().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`
-      );
+      .addField("Participants", this.getParticipantsString() || "When the software", false)
+      .setFooter(`${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`);
   }
 
   /**
@@ -198,9 +196,7 @@ export default class WaifuBattle {
       .setTitle(`${this.waifu.name} has been defeated!`)
       .addField("Rewards", this.getRewardString(), false)
       .addField("Participants", this.getParticipantsString(), false)
-      .setFooter(
-        `${this.calculateBATTLE_DURATION().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`
-      );
+      .setFooter(`${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`);
   }
 
   /**
