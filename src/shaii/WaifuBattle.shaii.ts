@@ -213,8 +213,8 @@ export default class WaifuBattle {
         await user.addBattleRewards({
           totalAttacks: stats.totalAttacks,
           totalDamageDealt: stats.totalDamageDealt,
-          xp: this.waifu.rewards.xp * rewardRatio,
-          money: this.waifu.rewards.money * rewardRatio,
+          xp: ~~(this.waifu.rewards.xp * rewardRatio),
+          money: ~~(this.waifu.rewards.money * rewardRatio),
           rarity: this.waifu.rarity,
         });
       }
