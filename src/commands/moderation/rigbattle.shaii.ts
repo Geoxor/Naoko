@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { rigChooseWaifu } from "../../logic/logic.shaii";
+import { rigChooseWaifu } from "../../shaii/WaifuRarities.shaii";
 import Waifu from "../../shaii/Waifu.shaii";
 import WaifuBattle from "../../shaii/WaifuBattle.shaii";
 import { defineCommand, IMessage } from "../../types";

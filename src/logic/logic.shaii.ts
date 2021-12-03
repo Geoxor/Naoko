@@ -279,54 +279,6 @@ export function capitalizeFirstLetter(string: string) {
 }
 
 /**
- * Returns a random waifu based on rarities
- * @returns {Waifu} the waifu JSON
- * @author MaidMarija
- */
-export function chooseWaifu(rarities: IWaifuRarity[]): { chosenWaifu: IWaifu; chosenRarity: IWaifuRarity } {
-  // sum up all these relative frequencies to generate a maximum for our random number generation
-  let maximum = 0;
-  rarities.forEach((w) => (maximum += w.relativeFrequency));
-
-  let choiceValue = Math.random() * maximum;
-
-  // next we iterate through our rarities to determine which this choice refers to
-  // we use < instead of <= because Math.random() is in the range [0,1)
-  for (let rarity of rarities) {
-    if (choiceValue < rarity.relativeFrequency) {
-      // This is kinda dumb it returns the entire rarity which contains the entire array of waifus as well
-      // performance--;
-      return { chosenWaifu: randomChoice<IWaifu>(rarity.waifus), chosenRarity: rarity };
-    } else {
-      choiceValue -= rarity.relativeFrequency;
-    }
-  }
-
-  // If for some reason we can't get a waifu just return a common one
-  return { chosenWaifu: randomChoice<IWaifu>(rarities[0].waifus), chosenRarity: rarities[0] };
-}
-
-/**
- * Returns a waifu from string
- * @param name the waifu name
- * @returns {Waifu} the waifu JSON
- * @author Geoxor, azur1s
- */
-export async function rigChooseWaifu(
-  name: string
-): Promise<{ chosenWaifu: IWaifu; chosenRarity: IWaifuRarity } | undefined> {
-  const { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON } = await import("../shaii/WaifuRarities.shaii");
-  let rarities = { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON };
-
-  for (const rarity of Object.values(rarities)) {
-    const searchResult = rarity.waifus.find((waifu) => waifu.name.toLowerCase().includes(name.toLowerCase()));
-    if (searchResult) {
-      return { chosenWaifu: searchResult, chosenRarity: rarity };
-    }
-  }
-}
-
-/**
  * Parses a filename e.g rem.png to Rem
  * @param fileName the file to parse
  * @author Geoxor

@@ -1,9 +1,8 @@
 import Discord from "discord.js";
 import Waifu from "../../shaii/Waifu.shaii";
-import { COMMON, LEGENDARY, MYTHICAL, RARE, UNCOMMON } from "../../shaii/WaifuRarities.shaii";
+import { chooseWaifu } from "../../shaii/WaifuRarities.shaii";
 import WaifuBattle from "../../shaii/WaifuBattle.shaii";
 import { defineCommand, IMessage } from "../../types";
-import { chooseWaifu } from "../../logic/logic.shaii";
 
 export default defineCommand({
   name: "battle",
@@ -11,7 +10,7 @@ export default defineCommand({
   requiresProcessing: false,
   execute: async (message) => {
     if (!(message.channel instanceof Discord.TextChannel)) return "Can't start battles in here!";
-    const { chosenWaifu, chosenRarity } = chooseWaifu([COMMON, UNCOMMON, RARE, LEGENDARY, MYTHICAL]);
+    const { chosenWaifu, chosenRarity } = chooseWaifu();
 
     const battle = new WaifuBattle(message.author, message.channel, new Waifu(chosenWaifu, chosenRarity));
     await battle.startBattle();
