@@ -82,8 +82,6 @@ export const getCommands = async () => {
     uwuify,
     vote,
     kick,
-    // stats,
-    // inventory,
     battle,
   ];
 
