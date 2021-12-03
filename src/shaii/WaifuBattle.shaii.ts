@@ -86,7 +86,7 @@ export default class WaifuBattle {
 
     // Collect messages
     this.collector.on("collect", async (message) => {
-      if (message.content === "!attack") {
+      if (message.content.includes("!attack")) {
         // Keep track of when the battle started
         if (this.battleStart == 0) this.battleStart = Date.now();
 
