@@ -6,7 +6,7 @@ import logger from "../shaii/Logger.shaii";
 import { GifUtil, GifFrame } from "gifwrap";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { Coords, GeometrySceneOptions } from "src/types";
+import { Coords, GeometrySceneOptions } from "../types";
 import { getRGBAUintArray, encodeFramesToGif } from "./logic.shaii";
 
 import comicSans from "../assets/comic_sans_font.json";

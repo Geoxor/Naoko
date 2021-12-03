@@ -342,8 +342,12 @@ export function calcSpread(value: number): number {
   return spread;
 }
 
+/**
+ * Calculates participation rewards
+ *
+ */
 export function calcParticipated(participatedDamage: number, totalHp: number, playerAmount: number): number {
-  return ~~(participatedDamage / totalHp) * playerAmount;
+  return (participatedDamage / totalHp) * playerAmount;
 }
 
 /**
