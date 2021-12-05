@@ -146,7 +146,9 @@ class Shaii {
   }
 
   private onMessageDelete(message: Discord.Message | Discord.PartialMessage) {
-    logDelete(message, (message) => {});
+    if (message.guild.id === GEOXOR_GUILD_ID) {
+      logDelete(message, (message) => {});
+    }
   }
 
   // onMessageCreate handler
