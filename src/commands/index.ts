@@ -21,8 +21,8 @@ import dicksize from "./fun/dicksize.shaii";
 import tts from "./fun/tts.shaii";
 import mors from "./fun/mors.shaii";
 import traceAnime from "./fun/trace.shaii";
-import uwuify from "./fun/uwufy.shaii";
-import britify from "./fun/britify.shaii";
+// import uwuify from "./fun/uwufy.shaii";
+// import britify from "./fun/britify.shaii";
 import match from "./fun/match.shaii";
 import fact from "./fun/funfact.shaii";
 
@@ -69,7 +69,6 @@ export const getCommands = async () => {
     queue,
     shuffle,
     skip,
-    britify,
     play,
     anime,
     clear,
@@ -79,7 +78,6 @@ export const getCommands = async () => {
     help,
     mors,
     traceAnime,
-    uwuify,
     vote,
     kick,
     battle,
