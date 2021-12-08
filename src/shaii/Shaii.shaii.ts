@@ -142,7 +142,10 @@ class Shaii {
     oldMessage: Discord.Message | Discord.PartialMessage,
     newMessage: Discord.Message | Discord.PartialMessage
   ) {
-    logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
+	logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
+	userMiddleware(newMessage, (newMessage) => {
+	  moderationMiddleware(newMessage, (newMessage) => {});
+	});
   }
 
   private onMessageDelete(message: Discord.Message | Discord.PartialMessage) {
