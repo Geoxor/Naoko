@@ -17,6 +17,7 @@ import {
   SHAII_ID,
   SECRET_GUILD_ID,
   SLURS,
+  NEOFETCH_CHANNEL_ID,
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
 import { markdown, randomChoice } from "../logic/logic.shaii";
@@ -189,6 +190,9 @@ class Shaii {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
         if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
+
+        if (message.channel.id === NEOFETCH_CHANNEL_ID && message.attachments.size === 0)
+          return message.delete();
 
         // Reply with a funny message if they mention her at the start of the message
         if (
