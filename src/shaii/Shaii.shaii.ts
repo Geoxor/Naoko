@@ -287,8 +287,7 @@ class Shaii {
                   .setColor("#ffcc4d")
                   .setDescription("⚠️ when the upload speed");
                 await message.reply({ embeds: [embed] });
-              }
-              else await message.reply(markdown(error)).catch(() => {});
+              } else await message.reply(markdown(error)).catch(() => {});
             }
           }
         });

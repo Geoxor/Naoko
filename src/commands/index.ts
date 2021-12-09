@@ -89,7 +89,7 @@ export const getCommands = async () => {
     ban,
     battle,
     say,
-    spongify
+    spongify,
   ];
 
   if (true) {

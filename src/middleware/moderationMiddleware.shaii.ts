@@ -11,7 +11,12 @@ const checks = [isFreeNitro, isBadWord, isMuted, isIP];
 export default function (message: IMessage, next: (message: IMessage) => any): void {
   try {
     if (message.author.bot) return next(message);
-    if (message.guild?.id !== GEOXOR_GUILD_ID && message.guild?.id !== SECRET_GUILD_ID && message.guild?.id !== QBOT_DEV_GUILD_ID) return;
+    if (
+      message.guild?.id !== GEOXOR_GUILD_ID &&
+      message.guild?.id !== SECRET_GUILD_ID &&
+      message.guild?.id !== QBOT_DEV_GUILD_ID
+    )
+      return;
     for (let i = 0; i < checks.length; i++) {
       const checkFn = checks[i];
       const idxString = `[${i + 1}/${checks.length}]`;

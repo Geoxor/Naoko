@@ -437,12 +437,14 @@ export function spongify(sentence: string, capsOdd: boolean = true): string {
   var newSentence = "";
   var lastNotSpaceChar;
 
-  capsOdd ? newSentence += sentence[0].toUpperCase() : newSentence += sentence[0].toLowerCase();
+  capsOdd ? (newSentence += sentence[0].toUpperCase()) : (newSentence += sentence[0].toLowerCase());
 
   // upper one character out of 2
   for (let i = 1; i < sentence.length; i++) {
-    sentence[i-1] === " " ? lastNotSpaceChar = newSentence[i-2] : lastNotSpaceChar = newSentence[i-1];
-    lastNotSpaceChar === lastNotSpaceChar.toUpperCase() ? newSentence += sentence[i].toLowerCase() : newSentence += sentence[i].toUpperCase();
+    sentence[i - 1] === " " ? (lastNotSpaceChar = newSentence[i - 2]) : (lastNotSpaceChar = newSentence[i - 1]);
+    lastNotSpaceChar === lastNotSpaceChar.toUpperCase()
+      ? (newSentence += sentence[i].toLowerCase())
+      : (newSentence += sentence[i].toUpperCase());
   }
 
   return newSentence;
