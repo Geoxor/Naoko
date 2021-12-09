@@ -10,6 +10,6 @@ export default defineCommand({
   description: "Shows latest console logs.",
   requiresProcessing: false,
   execute: async (message) => {
-    return markdown(logger.shaii.getLogHistory().substr(0, 1990));
+    return markdown(logger.shaii.getLogHistory().substring(0, 1990));
   },
 });

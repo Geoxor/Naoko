@@ -83,7 +83,7 @@ function actionHistoryToField(history: ActionHistory[], client: Client): string 
     return `${timeSince(action.timestamp)} ago - ${action.reason || "no reason given"} - by ${actor}\n${acc}`;
   }, "");
 
-  return markdown(historyString.substr(0, 512));
+  return markdown(historyString.substring(0, 512));
 }
 
 function historyToField(history: History[]): string | undefined {
@@ -93,5 +93,5 @@ function historyToField(history: History[]): string | undefined {
     return `${timeSince(action.timestamp)} ago - ${action.value.replace(/`/g, "\\`")}\n${acc}`;
   }, "");
 
-  return markdown(historyString.substr(0, 512));
+  return markdown(historyString.substring(0, 512));
 }

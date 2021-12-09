@@ -9,7 +9,7 @@ export default defineCommand({
   requiresProcessing: false,
   execute: async (message) => {
     return musicMiddleware(message, async (channel, player) => {
-      return player.queue.join("\n").substr(0, 2000);
+      return player.queue.join("\n").substring(0, 2000);
     });
   },
 });
