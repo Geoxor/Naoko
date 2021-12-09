@@ -180,7 +180,7 @@ class Shaii {
 
   private leaveRogueGuilds() {
     for (let guild of this.bot.guilds.cache.values()) {
-      if (guild.id !== GEOXOR_GUILD_ID && guild.id !== SECRET_GUILD_ID) {
+      if (guild.id ! === GEOXOR_GUILD_ID) {
         guild.leave().then(() => logger.shaii.print(`Left guild ${guild.name}`));
       }
     }
