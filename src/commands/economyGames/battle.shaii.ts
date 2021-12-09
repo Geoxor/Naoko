@@ -6,6 +6,7 @@ import { defineCommand, IMessage } from "../../types";
 
 export default defineCommand({
   name: "battle",
+  aliases: [],
   description: "Battle a random waifu with your friends for rewards!",
   requiresProcessing: false,
   execute: async (message) => {

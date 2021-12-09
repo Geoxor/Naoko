@@ -6,6 +6,7 @@ import { User as UserDb } from "../../shaii/Database.shaii";
 
 export default defineCommand({
   name: "whois",
+  aliases: ["who"],
   description: "Get information about a user",
   requiresProcessing: false,
   execute: async (message) => {

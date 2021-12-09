@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "decode",
+  aliases: [],
   description: "Decodes morse code",
   requiresProcessing: false,
   execute: async (message) => {

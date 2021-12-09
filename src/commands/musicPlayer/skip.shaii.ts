@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "skip",
+  aliases: ["next"],
   description: "Skips to the next song in the queue",
   requiresProcessing: false,
   execute: async (message) => {

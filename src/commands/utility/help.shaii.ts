@@ -5,6 +5,7 @@ import Discord from "discord.js";
 
 export default defineCommand({
   name: "help",
+  aliases: ["h"],
   description: "The command you just did",
   requiresProcessing: false,
   execute: (message: Discord.Message) => {

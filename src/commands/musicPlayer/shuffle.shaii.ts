@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "shuffle",
+  aliases: [],
   description: "Shuffles the queue",
   requiresProcessing: false,
   execute: async (message) => {

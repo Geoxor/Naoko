@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "np",
+  aliases: ["np", "playing", "nowPlaying"],
   description: "Shows you the currently playing song",
   requiresProcessing: true,
   execute: async (message) => {

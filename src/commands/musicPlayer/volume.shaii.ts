@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "volume",
+  aliases: ["vol"],
   description: "Change the volume of the music player",
   requiresProcessing: false,
   execute: async (message) => {

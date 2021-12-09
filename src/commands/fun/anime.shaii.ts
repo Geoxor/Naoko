@@ -4,6 +4,7 @@ import { anilistSearch } from "../../logic/logic.shaii";
 
 export default defineCommand({
   name: "anime",
+  aliases: [],
   description: "Looks up an anime on Anilist",
   requiresProcessing: true,
   execute: async (message) => {

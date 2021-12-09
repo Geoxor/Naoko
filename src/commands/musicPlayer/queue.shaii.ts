@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "queue",
+  aliases: ["q"],
   description: "Shows you the current queue",
   requiresProcessing: false,
   execute: async (message) => {

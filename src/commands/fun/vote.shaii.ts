@@ -8,6 +8,7 @@ const filter = (reaction: Discord.MessageReaction, user: Discord.User) => {
 
 export default defineCommand({
   name: "vote",
+  aliases: [],
   description: "Creates a vote",
   requiresProcessing: false,
   execute: async (message) => {

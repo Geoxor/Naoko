@@ -5,6 +5,7 @@ import { Readable } from "stream";
 
 export default defineCommand({
   name: "dicksize",
+  aliases: [],
   description: "Tell's you your dicksize or battle against someone else's dicksize!",
   requiresProcessing: false,
   execute: async (message) => {

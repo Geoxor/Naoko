@@ -6,6 +6,7 @@ import Shaii from "../../shaii/Shaii.shaii";
 
 export default defineCommand({
   name: "ban",
+  aliases: [],
   description: "bans a user",
   permissions: ["BAN_MEMBERS"],
   requiresProcessing: false,

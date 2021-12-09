@@ -6,6 +6,7 @@ import Shaii from "../../shaii/Shaii.shaii";
 
 export default defineCommand({
   name: "kick",
+  aliases: [],
   description: "Kicks a user",
   permissions: ["KICK_MEMBERS"],
   requiresProcessing: false,

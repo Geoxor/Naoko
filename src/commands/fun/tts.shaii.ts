@@ -4,6 +4,7 @@ import Discord from "discord.js";
 
 export default defineCommand({
   name: "tts",
+  aliases: [],
   description: "Turn a string into text to speech",
   requiresProcessing: false,
   execute: async (message) => {

@@ -5,6 +5,7 @@ import Discord from "discord.js";
 
 export default defineCommand({
   name: "funfact",
+  aliases: [],
   description: "Random fun fact",
   requiresProcessing: false,
   execute: (message) => {
