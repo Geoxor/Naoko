@@ -21,6 +21,7 @@ import {
 import welcomeMessages from "../assets/welcome_messages.json";
 import { markdown, randomChoice } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
+import { setTimeout } from "timers/promises";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");
@@ -53,12 +54,49 @@ class Shaii {
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
     });
-    this.bot.on("ready", () => this.onReady());
-    this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
-    this.bot.on("messageDelete", (message) => this.onMessageDelete(message));
-    this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
-    this.bot.on("guildMemberRemove", (member) => this.onGuildMemberRemove(member));
-    this.bot.on("guildMemberAdd", (member) => this.onGuildMemberAdd(member));
+    this.bot.on("ready", () => {
+      logger.shaii.instantiated();
+      console.log(`Logged in as ${this.bot.user!.tag}!`);
+      logger.shaii.numServers(this.bot.guilds.cache.size);
+      this.updateActivity();
+      this.leaveRogueGuilds();
+      this.joinThreads();
+    });
+    this.bot.on("messageCreate", async (message) => this.onMessageCreate(message));
+    this.bot.on("messageDelete", async (message) => {
+      if (message.guild?.id === GEOXOR_GUILD_ID) {
+        logDelete(message, (message) => {});
+      }
+    });
+    this.bot.on("messageUpdate", async (oldMessage, newMessage) => {
+      logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
+      userMiddleware(newMessage as Discord.Message, (newMessage) => {
+        moderationMiddleware(newMessage, (newMessage) => {});
+      });
+    });
+    this.bot.on("guildMemberRemove", async (member) => {
+      if (member.id === SHAII_ID) return;
+      let user = await User.findOneOrCreate(member);
+      user.updateRoles(Array.from(member.roles.cache.keys()));
+    });
+    this.bot.on("guildMemberAdd", async (member) => {
+      if (member.guild.id === GEOXOR_GUILD_ID) {
+        (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
+          .send(`<@${member.id}> ${randomChoice(welcomeMessages)}`)
+          .then((m) => m.react("👋"));
+      }
+
+      let user = await User.findOneOrCreate(member);
+      for (const roleId of user.roles) {
+        const role = member.guild.roles.cache.find((role) => role.id === roleId);
+        if (role) {
+          member.roles
+            .add(role)
+            .then(() => logger.shaii.print(`Added return role ${roleId} to ${member.user.username}`))
+            .catch(() => {});
+        }
+      }
+    });
     this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
       // Get their custom status
       const newStatus = newPresence.activities.find((activity) => activity.type === "CUSTOM")?.state;
@@ -123,15 +161,6 @@ class Shaii {
     }
   }
 
-  private async onReady() {
-    logger.shaii.instantiated();
-    console.log(`Logged in as ${this.bot.user!.tag}!`);
-    logger.shaii.numServers(this.bot.guilds.cache.size);
-    this.updateActivity();
-    this.leaveRogueGuilds();
-    this.joinThreads();
-  }
-
   private updateActivity() {
     this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
   }
@@ -157,48 +186,6 @@ class Shaii {
     }
   }
 
-  private async onGuildMemberAdd(member: Discord.GuildMember) {
-    if (member.guild.id === GEOXOR_GUILD_ID) {
-      (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
-        .send(`<@${member.id}> ${randomChoice(welcomeMessages)}`)
-        .then((m) => m.react("👋"));
-    }
-
-    let user = await User.findOneOrCreate(member);
-    for (const roleId of user.roles) {
-      const role = member.guild.roles.cache.find((role) => role.id === roleId);
-      if (role) {
-        member.roles
-          .add(role)
-          .then(() => logger.shaii.print(`Added return role ${roleId} to ${member.user.username}`))
-          .catch(() => {});
-      }
-    }
-  }
-
-  private async onGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember) {
-    if (member.id === SHAII_ID) return;
-    let user = await User.findOneOrCreate(member);
-    user.updateRoles(Array.from(member.roles.cache.keys()));
-  }
-
-  private onMessageUpdate(
-    oldMessage: Discord.Message | Discord.PartialMessage,
-    newMessage: Discord.Message | Discord.PartialMessage
-  ) {
-    logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
-    userMiddleware(newMessage as Discord.Message, (newMessage) => {
-      moderationMiddleware(newMessage, (newMessage) => {});
-    });
-  }
-
-  private onMessageDelete(message: Discord.Message | Discord.PartialMessage) {
-    if (message.guild?.id === GEOXOR_GUILD_ID) {
-      logDelete(message, (message) => {});
-    }
-  }
-
-  // onMessageCreate handler
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
