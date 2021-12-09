@@ -36,7 +36,7 @@ export const LINUX_LOGO =
 export const SHAII_LOGO =
   "https://cdn.discordapp.com/avatars/870496144881492069/0d0f5a8cd8ad5e0e0a5eec0d40d2e2a5.webp";
 
-export let APPROVED_GUILDS = [
+export const APPROVED_GUILDS = [
   GEOXOR_GUILD_ID,
   SECRET_GUILD_ID,
   QBOT_DEV_GUILD_ID
