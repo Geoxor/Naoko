@@ -58,13 +58,38 @@ class Shaii {
     this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
     this.bot.on("guildMemberRemove", (member) => this.onGuildMemberRemove(member));
     this.bot.on("guildMemberAdd", (member) => this.onGuildMemberAdd(member));
+    this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
+      // Get their custom status
+      const newStatus = newPresence.activities.find((activity) => activity.type === "CUSTOM")?.state;
+      const oldStatus = oldPresence?.activities.find((activity) => activity.type === "CUSTOM")?.state;
+
+      if (!newStatus || !newPresence.user) return;
+
+      // This stops it from acting when the user's status updates for another reason such as
+      // spotify changing tunes or not, we don't care about thoes events we just care
+      // about their custom status
+      if (newStatus === oldStatus) return;
+
+      const user = await User.findOne({ discord_id: newPresence.user.id });
+      if (!user) return;
+
+      // Get their latest status in the database
+      const lastStatus = user.status_history[user.status_history.length - 1];
+
+      // If they have no status yet or if their latest status in the database doesn't
+      // match their current status then update the database
+      if (!lastStatus || lastStatus.value !== newStatus) {
+        logger.shaii.print(`Updated user status history for ${newPresence.user.id} '${newStatus}'`);
+        User.pushHistory("status_history", newPresence.user.id, newStatus);
+      }
+    });
     this.bot.on("guildMemberUpdate", async (oldMember, newMember) => {
       if (oldMember.user.username !== newMember.user.username) {
-        logger.shaii.print(`Updated username history for ${oldMember.id}`);
+        logger.shaii.print(`Updated username history for ${oldMember.id} '${newMember.user.username}'`);
         User.pushHistory("username_history", oldMember.id, newMember.user.username);
       }
       if (oldMember.nickname !== newMember.nickname && newMember.nickname) {
-        logger.shaii.print(`Updated nickname history for ${oldMember.id}`);
+        logger.shaii.print(`Updated nickname history for ${oldMember.id} '${newMember.nickname}'`);
         User.pushHistory("nickname_history", oldMember.id, newMember.nickname);
       }
     });
