@@ -73,10 +73,8 @@ async function collectFields(message: IMessage, user: User): Promise<Discord.Emb
   return fields;
 }
 
-function actionHistoryToField(history: ActionHistory[], client: Client): string | null {
-  if (history.length === 0) {
-    return null;
-  }
+function actionHistoryToField(history: ActionHistory[], client: Client): string | undefined {
+  if (history.length === 0) return;
 
   const historyString = history.reduce((acc, action) => {
     const actor = client.users.cache.get(action.casted_by)!.username || action.casted_by;
@@ -86,10 +84,8 @@ function actionHistoryToField(history: ActionHistory[], client: Client): string 
   return markdown(historyString);
 }
 
-function historyToField(history: History[]): string | null {
-  if (history.length === 0) {
-    return null;
-  }
+function historyToField(history: History[]): string | undefined {
+  if (history.length === 0) return;
 
   const historyString = history.reduce((acc, action) => {
     return `${timeSince(action.timestamp)} ago - ${action.value}`;
