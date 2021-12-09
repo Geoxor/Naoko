@@ -27,8 +27,8 @@ export function logEdit(
     .setThumbnail(`${oldMessage.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${oldMessage.author?.id}>` },
-      { name: `From`, value: markdown(oldMessage.content?.substr(0, 480)) },
-      { name: `To`, value: markdown(newMessage.content?.substr(0, 480)) },
+      { name: `From`, value: markdown(oldMessage.content?.substring(0, 480)) },
+      { name: `To`, value: markdown(newMessage.content?.substring(0, 480)) },
       {
         name: `Link`,
         value: `https://canary.discord.com/channels/${newMessage.guildId}/${newMessage.channelId}/${newMessage.id}`,
@@ -58,7 +58,7 @@ export function logDelete(
     .setThumbnail(`${message.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${message.author?.id}>` },
-      { name: `Message Content`, value: markdown(message.content?.substr(0, 960)) },
+      { name: `Message Content`, value: markdown(message.content?.substring(0, 960)) },
       {
         name: `Link`,
         value: `https://canary.discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`,

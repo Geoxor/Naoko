@@ -1,0 +1,29 @@
+name: Build
+
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  CARGO_TERM_COLOR: always
+  
+jobs:
+  compile:
+    runs-on: windows-latest
+    name: "Compile Typescript"
+    steps: 
+      - name: 🛎 Checkout
+        uses: actions/checkout@v2
+      - name: 🛠 Install deps
+        run: npm ci
+      - name: 🛠 Compile 
+        run: tsc
+     
+  unit-test:
+    runs-on: windows-latest
+    name: "Run unit tests"
+    steps: 
+      - name: 🛎 Checkout
+        uses: actions/checkout@v2
+      - name: 🛠 Install deps
+        run: npm ci
+      - name: 🛠 Run tests 
+        run: npm run test
