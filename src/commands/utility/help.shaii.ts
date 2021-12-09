@@ -1,6 +1,6 @@
 import config from "../../shaii/Config.shaii";
 import { Collection, GuildMember, Message, MessageEmbed } from "discord.js";
-import { defineCommand, ICommand } from "../../types";
+import { defineCommand, ICommand, IMessage } from "../../types";
 import shaii from "../../shaii/Shaii.shaii";
 
 const categories = ["ECONOMY", "FUN", "IMAGE_PROCESSORS", "MODERATION", "MUSIC", "UTILITY"];
@@ -16,7 +16,7 @@ export default defineCommand({
     aliases: ["h"],
     description: "The command you just did",
     requiresProcessing: false,
-    execute(message: Message) {
+    execute(message: IMessage) {
         const categoryName = message.content.match(RegExp(`${config.prefix}${this.name}\s*(?<arg>.*)$`))!.groups!.arg!;
         const category = categoryCommands.get(categoryName.toUpperCase());
 
