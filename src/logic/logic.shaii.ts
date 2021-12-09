@@ -435,13 +435,25 @@ export function britify(sentence: string): string {
  */
 export function spongify(sentence: string, capsOdd: boolean = true): string {
   var newSentence = "";
+  var lastNotSpaceChar;
 
+  if (capsOdd) {
+    newSentence += sentence[0].toUpperCase();
+  } else {
+    newSentence += sentence[0].toLowerCase();
+  }
   // upper one character out of 2
-  for (var i = 0; i < sentence.length; i++) {
-    if (i % 2 == + capsOdd) {
-      // lower the not uppered case to avoid caps collision
-      newSentence += sentence[i].toLowerCase();
+  for (var i = 1; i < sentence.length; i++) {
+    if (sentence[i-1] === " ") {
+      lastNotSpaceChar = newSentence[i-2];
     } else {
+      lastNotSpaceChar = newSentence[i-1];
+    }
+
+    if (lastNotSpaceChar === lastNotSpaceChar.toUpperCase()) {
+      newSentence += sentence[i].toLowerCase();
+    }
+    else {
       newSentence += sentence[i].toUpperCase();
     }
   }
