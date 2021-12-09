@@ -1,5 +1,3 @@
-import fs from "fs";
-
 interface IConfig {
   prefix: string;
   musicDirectory: string;

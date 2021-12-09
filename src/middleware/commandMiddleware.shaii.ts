@@ -2,7 +2,6 @@ import config from "../shaii/Config.shaii";
 import Discord from "discord.js";
 import MessageParser from "../shaii/MessageParser.shaii";
 import { IMessage } from "../types";
-import { GEOXOR_GENERAL_CHANNEL_ID, GEOXOR_ID } from "../constants";
 
 /**
  * Returns the function if the message doesn't meet requirements

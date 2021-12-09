@@ -3,6 +3,8 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "ping",
+  category: "UTILITY",
+  aliases: [],
   description: "Get api latency.",
   requiresProcessing: false,
   execute: async (message) => {

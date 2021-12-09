@@ -3,6 +3,8 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "clear",
+  category: "MODERATION",
+  aliases: ["cls"],
   description: "Bulk delete messages up to 100",
   permissions: ["MANAGE_MESSAGES"],
   requiresProcessing: false,

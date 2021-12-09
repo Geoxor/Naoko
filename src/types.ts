@@ -12,31 +12,38 @@ export interface ImageProcessors {
   [key: string]: ImageProcessorFn;
 }
 
-export interface Kick {
+export interface History {
+  timestamp: number;
+  value: string;
+}
+
+export type HistoryTypes = "nickname_history" | "username_history" | "status_history";
+
+export interface ActionHistory {
   timestamp: number;
   casted_by: string;
   reason: string;
 }
 
-export type Mute = Kick;
-export type Ban = Kick;
-export type Bonk = Kick;
-
 export interface IUser extends mongoose.Document, IUserFunctions {
   discord_id: String;
+
+  kick_history: ActionHistory[];
+  mute_history: ActionHistory[];
+  ban_history: ActionHistory[];
+  bonk_history: ActionHistory[];
+
+  status_history: History[];
+  username_history: History[];
+  nickname_history: History[];
+
   chat_xp: number;
   bonks: number;
-  kick_history: Kick[];
-  mute_history: Mute[];
   is_muted: Boolean;
   is_banned: Boolean;
-  ban_history: Ban[];
-  bonk_history: Bonk[];
   roles: string[];
   joined_at: number;
-  previous_usernames: string[];
   account_created_at: number;
-  previous_nicks: string[];
   inventory: IGameInventory;
   statistics: IGameStatistics;
 }
@@ -78,11 +85,36 @@ export type CommandExecute = (
   message: IMessage
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
+export type CommandCategories = "ECONOMY" | "FUN" | "IMAGE_PROCESSORS" | "MODERATION" | "MUSIC" | "UTILITY";
+
 export interface ICommand {
+  /**
+   * The handler associated with this command
+   */
   execute: CommandExecute;
+  /**
+   * The name of the command
+   */
   name: string;
+  /**
+   * The description of the command
+   */
   description: string;
+  /**
+   * The category type the command belongs to, e.g. "FUN" or "MODERATION"
+   */
+  category: CommandCategories;
+  /**
+   * Alternative ways to call this command
+   */
+  aliases: string[];
+  /**
+   * Permissions the user needs to have to run this command
+   */
   permissions?: Discord.PermissionResolvable[];
+  /**
+   * This will send 'processing...' if set to true, (useful for commands that take long to complete asyncronous tasks)
+   */
   requiresProcessing?: boolean;
 }
 

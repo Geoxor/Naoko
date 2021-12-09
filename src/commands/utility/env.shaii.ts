@@ -8,7 +8,9 @@ import { LINUX_LOGO, SHAII_LOGO, WINDOWS_LOGO } from "../../constants";
 const startTime = Date.now();
 
 export default defineCommand({
-  name: "env",
+  name: "environment",
+  category: "UTILITY",
+  aliases: ["env"],
   description: "Show environment details",
   requiresProcessing: false,
   execute: (message) => {

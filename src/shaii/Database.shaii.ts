@@ -1,8 +1,6 @@
-// import { IBattle } from "../types";
-import logger from "./Logger.shaii";
 import mongoose from "mongoose";
 import config from "./Config.shaii";
-import { IBattleUserRewards, IRewards, IUser, Kick } from "../types";
+import { IBattleUserRewards, IRewards, IUser, ActionHistory, HistoryTypes } from "../types";
 import Discord from "discord.js";
 mongoose.connect(config.mongo).then(() => console.log("connected"));
 const { Schema } = mongoose;
@@ -34,18 +32,21 @@ const schema = new Schema<IUser>({
   },
 
   kick_history: Array,
+  status_history: Array,
   mute_history: Array,
   ban_history: Array,
   bonk_history: Array,
-  previous_usernames: Array,
+  username_history: Array,
   roles: Array,
-  previous_nicks: Array,
+  nickname_history: Array,
 });
 
 export interface IUserFunctions {
   addBattleRewards(rewards: IBattleUserRewards): Promise<IUser>;
   kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
+  ban(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
   updateRoles(roles: string[]): Promise<IUser>;
+  pushHistory(historyType: HistoryTypes, user_id: string, value: string): Promise<IUser>;
   findOneOrCreate(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<IUser & { _id: any }>;
 }
 schema.methods.updateRoles = function (roles: string[]) {
@@ -80,11 +81,15 @@ schema.statics.findOneOrCreate = async function (member: Discord.GuildMember | D
   return user;
 };
 
-schema.statics.kick = async function (kicker_id: string, kickee_id: string, reason: string = "") {
+schema.statics.kick = async function (
+  kicker_id: string,
+  kickee_id: string,
+  reason: string = "no reason given"
+) {
   const kickee = await User.findOne({ discord_id: kickee_id });
   if (!kickee) return;
 
-  const kick: Kick = {
+  const kick: ActionHistory = {
     timestamp: Date.now(),
     casted_by: kicker_id,
     reason,
@@ -93,6 +98,29 @@ schema.statics.kick = async function (kicker_id: string, kickee_id: string, reas
   kickee.kick_history.push(kick);
 
   return kickee.save().catch((err: any) => console.log(err));
+};
+
+schema.statics.ban = async function (baner_id: string, banee_id: string, reason: string = "no reason given") {
+  const banee = await User.findOne({ discord_id: banee_id });
+  if (!banee) return;
+
+  const ban: ActionHistory = {
+    timestamp: Date.now(),
+    casted_by: baner_id,
+    reason,
+  };
+
+  banee.ban_history.push(ban);
+
+  return banee.save().catch((err: any) => console.log(err));
+};
+
+schema.statics.pushHistory = async function (historyType: HistoryTypes, user_id: string, value: string) {
+  const user = await User.findOne({ discord_id: user_id });
+  if (!user) return;
+  user[historyType].push({ timestamp: Date.now(), value });
+  if (user[historyType].length > 50) user[historyType].shift();
+  return user.save().catch((err: any) => console.log(err));
 };
 
 // @ts-ignore

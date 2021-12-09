@@ -16,6 +16,8 @@ const stacks: {
 
 export default defineCommand({
   name: "stack",
+  category: "IMAGE_PROCESSORS",
+  aliases: [],
   description: "Stack an image processor and make a gif out of it",
   requiresProcessing: true,
   execute: async (message) => {

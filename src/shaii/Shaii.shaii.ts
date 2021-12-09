@@ -1,4 +1,4 @@
-import Discord, { Intents } from "discord.js";
+import Discord, { Intents, TextChannel } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -18,6 +18,7 @@ import {
   SECRET_GUILD_ID,
   SLURS,
 } from "../constants";
+import welcomeMessages from "../assets/welcome_messages.json";
 import { markdown, randomChoice } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 
@@ -36,10 +37,12 @@ class Shaii {
   public bot: Discord.Client;
   public commands: Discord.Collection<string, ICommand>;
   public geoxorGuild: Discord.Guild | undefined;
+  public version: string;
 
   constructor() {
     this.commands = new Discord.Collection();
     this.loadCommands();
+    this.version = require("../../package.json").version;
     this.bot = new Discord.Client({
       intents: [
         Intents.FLAGS.GUILDS,
@@ -50,12 +53,84 @@ class Shaii {
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
     });
-    this.bot.on("ready", () => this.onReady());
-    this.bot.on("messageCreate", (message) => this.onMessageCreate(message));
-    this.bot.on("messageDelete", (message) => this.onMessageDelete(message));
-    this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
-    this.bot.on("guildMemberRemove", (member) => this.onGuildMemberRemove(member));
-    this.bot.on("guildMemberAdd", (member) => this.onGuildMemberAdd(member));
+    this.bot.on("ready", () => {
+      logger.shaii.instantiated();
+      console.log(`Logged in as ${this.bot.user!.tag}!`);
+      logger.shaii.numServers(this.bot.guilds.cache.size);
+      this.updateActivity();
+      this.leaveRogueGuilds();
+      this.joinThreads();
+    });
+    this.bot.on("messageCreate", async (message) => this.onMessageCreate(message));
+    this.bot.on("messageDelete", async (message) => {
+      if (message.guild?.id === GEOXOR_GUILD_ID) {
+        logDelete(message, (message) => {});
+      }
+    });
+    this.bot.on("messageUpdate", async (oldMessage, newMessage) => {
+      logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
+      userMiddleware(newMessage as Discord.Message, (newMessage) => {
+        moderationMiddleware(newMessage, (newMessage) => {});
+      });
+    });
+    this.bot.on("guildMemberRemove", async (member) => {
+      if (member.id === SHAII_ID) return;
+      let user = await User.findOneOrCreate(member);
+      user.updateRoles(Array.from(member.roles.cache.keys()));
+    });
+    this.bot.on("guildMemberAdd", async (member) => {
+      if (member.guild.id === GEOXOR_GUILD_ID) {
+        (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
+          .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
+          .then((m) => m.react("👋"));
+      }
+
+      let user = await User.findOneOrCreate(member);
+      for (const roleId of user.roles) {
+        const role = member.guild.roles.cache.find((role) => role.id === roleId);
+        if (role) {
+          member.roles
+            .add(role)
+            .then(() => logger.shaii.print(`Added return role ${roleId} to ${member.user.username}`))
+            .catch(() => {});
+        }
+      }
+    });
+    this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
+      // Get their custom status
+      const newStatus = newPresence.activities.find((activity) => activity.type === "CUSTOM")?.state;
+      const oldStatus = oldPresence?.activities.find((activity) => activity.type === "CUSTOM")?.state;
+
+      if (!newStatus || !newPresence.user) return;
+
+      // This stops it from acting when the user's status updates for another reason such as
+      // spotify changing tunes or not, we don't care about thoes events we just care
+      // about their custom status
+      if (newStatus === oldStatus) return;
+
+      const user = await User.findOne({ discord_id: newPresence.user.id });
+      if (!user) return;
+
+      // Get their latest status in the database
+      const lastStatus = user.status_history[user.status_history.length - 1];
+
+      // If they have no status yet or if their latest status in the database doesn't
+      // match their current status then update the database
+      if (!lastStatus || lastStatus.value !== newStatus) {
+        logger.shaii.print(`Updated user status history for ${newPresence.user.id} '${newStatus}'`);
+        User.pushHistory("status_history", newPresence.user.id, newStatus);
+      }
+    });
+    this.bot.on("guildMemberUpdate", async (oldMember, newMember) => {
+      if (oldMember.user.username !== newMember.user.username) {
+        logger.shaii.print(`Updated username history for ${oldMember.id} '${newMember.user.username}'`);
+        User.pushHistory("username_history", oldMember.id, newMember.user.username);
+      }
+      if (oldMember.nickname !== newMember.nickname && newMember.nickname) {
+        logger.shaii.print(`Updated nickname history for ${oldMember.id} '${newMember.nickname}'`);
+        User.pushHistory("nickname_history", oldMember.id, newMember.nickname);
+      }
+    });
     this.bot.on("voiceStateUpdate", (oldState, newState) => {
       // If geoxor is in vc and tardoki kun joins kick him out
       if (
@@ -85,15 +160,6 @@ class Shaii {
     }
   }
 
-  private async onReady() {
-    logger.shaii.instantiated();
-    console.log(`Logged in as ${this.bot.user!.tag}!`);
-    logger.shaii.numServers(this.bot.guilds.cache.size);
-    this.updateActivity();
-    this.leaveRogueGuilds();
-    this.joinThreads();
-  }
-
   private updateActivity() {
     this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
   }
@@ -119,42 +185,6 @@ class Shaii {
     }
   }
 
-  private async onGuildMemberAdd(member: Discord.GuildMember) {
-    let user = await User.findOneOrCreate(member);
-    for (const roleId of user.roles) {
-      const role = member.guild.roles.cache.find((role) => role.id === roleId);
-      if (role) {
-        member.roles
-          .add(role)
-          .then(() => logger.shaii.print(`Added return role ${roleId} to ${member.user.username}`))
-          .catch(() => {});
-      }
-    }
-  }
-
-  private async onGuildMemberRemove(member: Discord.GuildMember | Discord.PartialGuildMember) {
-    if (member.id === SHAII_ID) return;
-    let user = await User.findOneOrCreate(member);
-    user.updateRoles(Array.from(member.roles.cache.keys()));
-  }
-
-  private onMessageUpdate(
-    oldMessage: Discord.Message | Discord.PartialMessage,
-    newMessage: Discord.Message | Discord.PartialMessage
-  ) {
-	logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
-	userMiddleware(newMessage, (newMessage) => {
-	  moderationMiddleware(newMessage, (newMessage) => {});
-	});
-  }
-
-  private onMessageDelete(message: Discord.Message | Discord.PartialMessage) {
-    if (message.guild.id === GEOXOR_GUILD_ID) {
-      logDelete(message, (message) => {});
-    }
-  }
-
-  // onMessageCreate handler
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
@@ -175,8 +205,9 @@ class Shaii {
         }
 
         commandMiddleware(message, async (message) => {
-          // Fetch the command
-          const command = this.commands.get(message.command);
+          const command =
+            this.commands.get(message.command) ||
+            this.commands.find((command) => command.aliases?.includes(message.command));
 
           const clearTyping = () => {
             if (processingMessage) {
@@ -230,7 +261,6 @@ class Shaii {
           }
 
           // Delete the processing message if it exists
-          // @ts-ignore
           clearTyping();
 
           // If the command returns void we just return

@@ -3,6 +3,8 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "play",
+  category: "MUSIC",
+  aliases: [],
   description: "Play a song",
   requiresProcessing: false,
   execute: async (message) => {

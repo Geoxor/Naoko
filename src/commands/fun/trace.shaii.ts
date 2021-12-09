@@ -4,6 +4,8 @@ import { anilistQuery, traceAnime } from "../../logic/logic.shaii";
 
 export default defineCommand({
   name: "trace",
+  category: "FUN",
+  aliases: [],
   description: "Attempts to find what anime a screenshot or GIF is from",
   requiresProcessing: true,
   execute: async (message) => {

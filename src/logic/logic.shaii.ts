@@ -18,6 +18,27 @@ const defaultImageOptions: Discord.ImageURLOptions = {
   size: 512,
 };
 
+export function timeSince(date: number) {
+  const seconds = ~~((Date.now() - date) / 1000);
+
+  let interval = seconds / 31536000;
+
+  if (interval > 1) return ~~interval + " y";
+  interval = seconds / 2592000;
+
+  if (interval > 1) return ~~interval + " mo";
+  interval = seconds / 86400;
+
+  if (interval > 1) return ~~interval + " d";
+  interval = seconds / 3600;
+
+  if (interval > 1) return ~~interval + " h";
+  interval = seconds / 60;
+
+  if (interval > 1) return ~~interval + " min";
+  return ~~seconds + " seconds";
+}
+
 /**
  * Gets the RGBA values of an image
  * @param buffer the buffer to get the values from
@@ -129,12 +150,15 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
   return fns.map((fn) => {
     const cmdName = fn.name.toLowerCase();
     logger.command.print(`Generated command ${cmdName}`);
-    return {
+    const command: ICommand = {
       name: cmdName,
-      description: `${cmdName} image processor`,
+      aliases: [],
+      category: "IMAGE_PROCESSORS",
+      description: `${cmdName} an image`,
       requiresProcessing: true,
       execute: imageProcess(fn),
     };
+    return command;
   });
 }
 

@@ -3,6 +3,8 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "uwufy",
+  category: "FUN",
+  aliases: [],
   description: "Transforms your sentence to uwu",
   requiresProcessing: false,
   execute: async (message) => {
