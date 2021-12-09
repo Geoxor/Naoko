@@ -14,7 +14,7 @@ import { IMessage } from "../types";
 export default function (message: Discord.Message, next: (message: IMessage) => any): void {
   if (message.content.lastIndexOf(config.prefix) !== 0) return;
   if (message.author.bot) return;
-  const { command, args } = new MessageParser(message.content);
+  const { command, args } = new MessageParser(message.cleanContent);
   const updatedMessage = message as IMessage;
   updatedMessage.command = command.toLowerCase();
   updatedMessage.args = args;
