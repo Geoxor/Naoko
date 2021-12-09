@@ -1,6 +1,6 @@
-name: Build on Push
+name: Build on Push & PRs
 
-on: [push, workflow_dispatch]
+on: [push, pull_request, workflow_dispatch]
 
 env:
   CARGO_TERM_COLOR: always
@@ -21,11 +21,11 @@ jobs:
      
   unit-test:
     runs-on: windows-latest
-    name: "Compile Typescript"
+    name: "Run unit tests"
     steps: 
       - name: 🛎 Checkout
         uses: actions/checkout@v2
       - name: 🛠 Install deps
         run: npm ci
-      - name: 🛠 Compile 
+      - name: 🛠 Run tests 
         run: npm run test
