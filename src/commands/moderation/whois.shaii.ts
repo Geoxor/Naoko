@@ -1,7 +1,7 @@
 import Discord, { Client, User } from "discord.js";
 import { version } from "../../../package.json";
-import { markdown, msToFullTime } from "../../logic/logic.shaii";
-import { Ban, Bonk, defineCommand, IMessage, Kick, Mute } from "../../types";
+import { markdown, msToFullTime, timeSince } from "../../logic/logic.shaii";
+import { defineCommand, IMessage, History, ActionHistory } from "../../types";
 import { User as UserDb } from "../../shaii/Database.shaii";
 
 export default defineCommand({
@@ -48,30 +48,51 @@ async function collectFields(message: IMessage, user: User): Promise<Discord.Emb
 
   const dbUser = await UserDb.findOne({ discord_id: user.id });
   if (dbUser) {
-    const banHistory = historyToField(dbUser.ban_history, message.client);
+    const banHistory = actionHistoryToField(dbUser.ban_history, message.client);
     if (banHistory) fields.push({ name: "Ban History", value: banHistory });
 
-    const bonkHistory = historyToField(dbUser.bonk_history, message.client);
+    const bonkHistory = actionHistoryToField(dbUser.bonk_history, message.client);
     if (bonkHistory) fields.push({ name: "Bonk History", value: bonkHistory });
 
-    const kickHistory = historyToField(dbUser.kick_history, message.client);
+    const kickHistory = actionHistoryToField(dbUser.kick_history, message.client);
     if (kickHistory) fields.push({ name: "Kick History", value: kickHistory });
 
-    const muteHistory = historyToField(dbUser.mute_history, message.client);
+    const muteHistory = actionHistoryToField(dbUser.mute_history, message.client);
     if (muteHistory) fields.push({ name: "Mute History", value: muteHistory });
+
+    const usernameHistory = historyToField(dbUser.username_history);
+    if (usernameHistory) fields.push({ name: "Username History", value: usernameHistory });
+
+    const nicknameHistory = historyToField(dbUser.nickname_history);
+    if (nicknameHistory) fields.push({ name: "Nickname History", value: nicknameHistory });
+
+    const statusHistory = historyToField(dbUser.status_history);
+    if (statusHistory) fields.push({ name: "Status History", value: statusHistory });
   }
 
   return fields;
 }
 
-function historyToField(history: (Kick | Bonk | Mute | Ban)[], client: Client): string | null {
+function actionHistoryToField(history: ActionHistory[], client: Client): string | null {
   if (history.length === 0) {
     return null;
   }
 
   const historyString = history.reduce((acc, action) => {
-    const actor = client.users.cache.get(`${action.casted_by}`)!.username || action.casted_by;
-    return `${acc}${action.reason} by ${actor}\n`;
+    const actor = client.users.cache.get(action.casted_by)!.username || action.casted_by;
+    return `${timeSince(action.timestamp)} ago - ${acc}${action.reason || "no reason given"} - by ${actor}\n`;
+  }, "");
+
+  return markdown(historyString);
+}
+
+function historyToField(history: History[]): string | null {
+  if (history.length === 0) {
+    return null;
+  }
+
+  const historyString = history.reduce((acc, action) => {
+    return `${timeSince(action.timestamp)} ago - ${action.value}`;
   }, "");
 
   return markdown(historyString);

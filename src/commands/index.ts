@@ -29,6 +29,7 @@ import fact from "./fun/funfact.shaii";
 // moderation commands
 import clear from "./moderation/clear.shaii";
 import kick from "./moderation/kick.shaii";
+import ban from "./moderation/ban.shaii";
 import whois from "./moderation/whois.shaii";
 
 // utility commands
@@ -80,6 +81,7 @@ export const getCommands = async () => {
     traceAnime,
     vote,
     kick,
+    ban,
     battle,
   ];
 

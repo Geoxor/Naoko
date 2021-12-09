@@ -36,10 +36,12 @@ class Shaii {
   public bot: Discord.Client;
   public commands: Discord.Collection<string, ICommand>;
   public geoxorGuild: Discord.Guild | undefined;
+  public version: string;
 
   constructor() {
     this.commands = new Discord.Collection();
     this.loadCommands();
+    this.version = require("../../package.json").version;
     this.bot = new Discord.Client({
       intents: [
         Intents.FLAGS.GUILDS,
@@ -142,14 +144,14 @@ class Shaii {
     oldMessage: Discord.Message | Discord.PartialMessage,
     newMessage: Discord.Message | Discord.PartialMessage
   ) {
-	logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
-	userMiddleware(newMessage, (newMessage) => {
-	  moderationMiddleware(newMessage, (newMessage) => {});
-	});
+    logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
+    userMiddleware(newMessage as Discord.Message, (newMessage) => {
+      moderationMiddleware(newMessage, (newMessage) => {});
+    });
   }
 
   private onMessageDelete(message: Discord.Message | Discord.PartialMessage) {
-    if (message.guild.id === GEOXOR_GUILD_ID) {
+    if (message.guild?.id === GEOXOR_GUILD_ID) {
       logDelete(message, (message) => {});
     }
   }

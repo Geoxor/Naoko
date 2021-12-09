@@ -18,6 +18,27 @@ const defaultImageOptions: Discord.ImageURLOptions = {
   size: 512,
 };
 
+export function timeSince(date: number) {
+  const seconds = ~~((Date.now() - date) / 1000);
+
+  let interval = seconds / 31536000;
+
+  if (interval > 1) return ~~interval + " years";
+  interval = seconds / 2592000;
+
+  if (interval > 1) return ~~interval + " months";
+  interval = seconds / 86400;
+
+  if (interval > 1) return ~~interval + " days";
+  interval = seconds / 3600;
+
+  if (interval > 1) return ~~interval + " hours";
+  interval = seconds / 60;
+
+  if (interval > 1) return ~~interval + " minutes";
+  return ~~seconds + " seconds";
+}
+
 /**
  * Gets the RGBA values of an image
  * @param buffer the buffer to get the values from

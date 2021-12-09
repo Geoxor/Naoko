@@ -12,31 +12,36 @@ export interface ImageProcessors {
   [key: string]: ImageProcessorFn;
 }
 
-export interface Kick {
+export interface History {
+  timestamp: number;
+  value: string;
+}
+
+export interface ActionHistory {
   timestamp: number;
   casted_by: string;
   reason: string;
 }
 
-export type Mute = Kick;
-export type Ban = Kick;
-export type Bonk = Kick;
-
 export interface IUser extends mongoose.Document, IUserFunctions {
   discord_id: String;
+
+  kick_history: ActionHistory[];
+  mute_history: ActionHistory[];
+  ban_history: ActionHistory[];
+  bonk_history: ActionHistory[];
+
+  status_history: History[];
+  username_history: History[];
+  nickname_history: History[];
+
   chat_xp: number;
   bonks: number;
-  kick_history: Kick[];
-  mute_history: Mute[];
   is_muted: Boolean;
   is_banned: Boolean;
-  ban_history: Ban[];
-  bonk_history: Bonk[];
   roles: string[];
   joined_at: number;
-  previous_usernames: string[];
   account_created_at: number;
-  previous_nicks: string[];
   inventory: IGameInventory;
   statistics: IGameStatistics;
 }
