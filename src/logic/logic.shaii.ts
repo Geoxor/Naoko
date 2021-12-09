@@ -23,19 +23,19 @@ export function timeSince(date: number) {
 
   let interval = seconds / 31536000;
 
-  if (interval > 1) return ~~interval + " years";
+  if (interval > 1) return ~~interval + " y";
   interval = seconds / 2592000;
 
-  if (interval > 1) return ~~interval + " months";
+  if (interval > 1) return ~~interval + " mo";
   interval = seconds / 86400;
 
-  if (interval > 1) return ~~interval + " days";
+  if (interval > 1) return ~~interval + " d";
   interval = seconds / 3600;
 
-  if (interval > 1) return ~~interval + " hours";
+  if (interval > 1) return ~~interval + " h";
   interval = seconds / 60;
 
-  if (interval > 1) return ~~interval + " minutes";
+  if (interval > 1) return ~~interval + " min";
   return ~~seconds + " seconds";
 }
 
