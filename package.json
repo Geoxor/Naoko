@@ -4,7 +4,7 @@
   "description": "Shaii is Geoxor's Discord Bot",
   "main": "./src/shaii.ts",
   "scripts": {
-    "test": "npm i && ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
+    "test": "ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
     "dev": "nodemon ./src/shaii.ts",
     "setup": "ts-node ./src/setup.shaii.ts",
     "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.shaii.ts",
