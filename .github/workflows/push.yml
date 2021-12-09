@@ -1,0 +1,31 @@
+name: Build on Push
+
+on: [push, workflow_dispatch]
+
+env:
+  CARGO_TERM_COLOR: always
+  APP_NAME: xornet_server
+  APP_NAME_PRETTY: Xornet Server
+  
+jobs:
+  compile:
+    runs-on: windows-latest
+    name: "Compile Typescript"
+    steps: 
+      - name: 🛎 Checkout
+        uses: actions/checkout@v2
+      - name: 🛠 Install deps
+        run: npm ci
+      - name: 🛠 Compile 
+        run: tsc
+     
+  unit-test:
+    runs-on: windows-latest
+    name: "Compile Typescript"
+    steps: 
+      - name: 🛎 Checkout
+        uses: actions/checkout@v2
+      - name: 🛠 Install deps
+        run: npm ci
+      - name: 🛠 Compile 
+        run: npm run test
