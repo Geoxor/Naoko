@@ -1,5 +1,3 @@
-// import { IBattle } from "../types";
-import logger from "./Logger.shaii";
 import mongoose from "mongoose";
 import config from "./Config.shaii";
 import { IBattleUserRewards, IRewards, IUser, ActionHistory, HistoryTypes } from "../types";

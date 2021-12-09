@@ -13,6 +13,7 @@ class Logger {
   protected color: string;
   private errorColor: "#F03A17";
   private errorEmoji: "👺";
+  public logHistory: string[] = [];
 
   constructor() {
     this.emoji = "🌸";
@@ -21,12 +22,25 @@ class Logger {
     this.errorColor = "#F03A17";
   }
 
+  protected pushToLogHistory(string: string) {
+    if (this.logHistory.length > 20) this.logHistory.shift();
+    this.logHistory.push(string);
+  }
+
   /**
    * Returns a the current time for the log to prefix
    * @author Geoxor
    */
+  public timeColored() {
+    return chalk.bold.bgWhite.black(this.time());
+  }
+
   public time() {
-    return chalk.bold.bgWhite.black(`[${new Date().toLocaleTimeString()}]`);
+    return new Date().toLocaleTimeString();
+  }
+
+  public getLogHistory() {
+    return this.logHistory.join("\n");
   }
 
   /**
@@ -35,7 +49,10 @@ class Logger {
    * @author Geoxor
    */
   public print(log: string): void {
-    console.log(chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.time()} ${this.emoji}  ${log}`));
+    this.pushToLogHistory(`${getCurrentMemoryHeap()}  [${this.time()}] ${this.emoji}  ${log}`);
+    console.log(
+      chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji}  ${log}`)
+    );
   }
 
   /**
@@ -44,8 +61,11 @@ class Logger {
    * @author Geoxor
    */
   public error(log: string): void {
+    this.pushToLogHistory(`${getCurrentMemoryHeap()}  [${this.time()}] ${this.errorEmoji}  ${log}`);
     console.log(
-      chalk.hex(this.errorColor)(`  ${getCurrentMemoryHeap()}  ${this.time()} ${this.errorEmoji}  ${log}`)
+      chalk.hex(this.errorColor)(
+        `  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`
+      )
     );
   }
 }
@@ -65,16 +85,17 @@ class ShaiiLogger extends Logger {
   public created = () => this.print("Shaii created");
   public inspiration = () =>
     console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
-  public generic = (string: string) => console.log(`  ${getCurrentMemoryHeap()}  ${this.time()} 🗻  ${string}`);
+  public generic = (string: string) =>
+    console.log(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🗻  ${string}`);
 
   /**
    * Sets a progress bar
    */
   public progress(name: string, tickCount: number) {
     return this.multiProgress.newBar(
-      `  ${getCurrentMemoryHeap()}  ${this.time()} 🧪 ${chalk.hex("#00B294")(name)}${chalk.hex("#00B294")(
-        "[:bar]"
-      )} :etas :percent `,
+      `  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🧪 ${chalk.hex("#00B294")(name)}${chalk.hex(
+        "#00B294"
+      )("[:bar]")} :etas :percent `,
       {
         complete: "#",
         incomplete: "~",

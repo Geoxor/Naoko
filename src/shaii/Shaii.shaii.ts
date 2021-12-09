@@ -1,4 +1,4 @@
-import Discord, { Guild, Intents, TextChannel } from "discord.js";
+import Discord, { Intents, TextChannel } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -21,7 +21,6 @@ import {
 import welcomeMessages from "../assets/welcome_messages.json";
 import { markdown, randomChoice } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
-import { setTimeout } from "timers/promises";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");

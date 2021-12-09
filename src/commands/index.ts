@@ -2,7 +2,6 @@
 // when they are hardcoded like this than
 // dynamically importing them with FS
 
-import { ICommand } from "../types";
 import { genCommands } from "../logic/logic.shaii";
 import { imageProcessors } from "../logic/imageProcessors.shaii";
 import logger from "../shaii/Logger.shaii";
@@ -36,6 +35,7 @@ import whois from "./moderation/whois.shaii";
 import help from "./utility/help.shaii";
 import ping from "./utility/ping.shaii";
 import avatar from "./utility/avatar.shaii";
+import logs from "./utility/logs.shaii";
 import env from "./utility/env.shaii";
 
 // music player commands
@@ -59,6 +59,7 @@ export const getCommands = async () => {
     stack,
     avatar,
     whois,
+    logs,
     tts,
     match,
     ping,
