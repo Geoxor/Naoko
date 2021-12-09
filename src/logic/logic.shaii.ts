@@ -152,6 +152,7 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
     logger.command.print(`Generated command ${cmdName}`);
     return {
       name: cmdName,
+      aliases: [],
       description: `${cmdName} image processor`,
       requiresProcessing: true,
       execute: imageProcess(fn),
