@@ -242,7 +242,7 @@ class Shaii {
             var suggestion: string;
             closestCommand.name === "" || closestCommand.ld > 3
               ? (suggestion = "")
-              : (suggestion = `\nDid you mean: **${config.prefix}${closestCommand.name}**`);
+              : (suggestion = `\nDid you mean: \`${config.prefix}${closestCommand.name}\``);
             return message
               .reply(`That command doesn't exist ${randomChoice(SLURS)}${suggestion}`)
               .catch(() => {});
