@@ -17,7 +17,15 @@ export async function musicMiddleware(
 ) {
   if (!message.guild) return "music doesn't work in DMs";
   if (!message.member) return "couldn't find you lol";
-  if (!message.member.voice.channel) return "You're not in a voice chat!";
+
+  // Try to get the vc the user is in or the one they mentioned
+  let voiceChannel = message.member.voice.channel || message.mentions.channels.first();
+
+  if (!voiceChannel) return "Join or mention a voice chat for me to join in";
+
+  if (voiceChannel!.type !== "GUILD_VOICE" && voiceChannel!.type !== "GUILD_STAGE_VOICE")
+    return "That is not a voice/stage channel";
+
   const player = MusicPlayerHandler.getMusicPlayer(message.guild);
-  return next(message.member.voice.channel, player);
+  return next(voiceChannel as VoiceChannel | StageChannel, player);
 }
