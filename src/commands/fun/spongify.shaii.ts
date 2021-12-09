@@ -11,6 +11,6 @@ export default defineCommand({
 	requiresProcessing: false,
 	execute: async (message) => {
 		if (message.args.length === 0) return `what do you want to SpOnGiFy ${randomChoice(SLURS)}`
-		return spongify(message.args.join(" "))
+		return spongify(message.args.join(" "), randomChoice([true, false]))
 	}
 })
