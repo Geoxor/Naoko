@@ -5,7 +5,7 @@ import { randomChoice } from "../../logic/logic.shaii";
 
 export default defineCommand({
 	name: "spongify",
-	"category": "FUN",
+	category: "FUN",
 	aliases: [],
 	description: "mAkEs YoU sPeAkInG lIkE ThAt",
 	requiresProcessing: false,
