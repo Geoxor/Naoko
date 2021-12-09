@@ -1,0 +1,7 @@
+{
+  "prefix": "~",
+  "musicDirectory": "<music_dir>",
+  "token": "<token>",
+  "chatLogChannel": "<log_channel_id>",
+  "mongo": "mongodb+srv://localhost:27017"
+}
