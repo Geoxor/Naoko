@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import logger from "../shaii/Logger.shaii";
 import config from "../shaii/Config.shaii";
-import { SHAII_ID } from "../constants";
+import { GEOXOR_GUILD_ID, SHAII_ID } from "../constants";
 import { markdown } from "../logic/logic.shaii";
 
 export function logEdit(
@@ -15,7 +15,7 @@ export function logEdit(
   if (oldMessage.channel.type == "DM") return;
   if (oldMessage.content == newMessage.content) return;
   if (oldMessage.author?.id === SHAII_ID) return;
-  if (oldMessage.guild?.id !== "385387666415550474") return;
+  if (oldMessage.guild?.id !== GEOXOR_GUILD_ID) return;
 
   const embed = new Discord.MessageEmbed()
     .setColor("#fff06e")

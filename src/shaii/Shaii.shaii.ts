@@ -17,6 +17,7 @@ import {
   SHAII_ID,
   SECRET_GUILD_ID,
   SLURS,
+  TARDOKI_ID,
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
 import { markdown, randomChoice } from "../logic/logic.shaii";
@@ -134,10 +135,10 @@ class Shaii {
     this.bot.on("voiceStateUpdate", (oldState, newState) => {
       // If geoxor is in vc and tardoki kun joins kick him out
       if (
-        newState.channel?.members.some((member) => member.id === "153274351561605120") &&
-        newState.channel?.members.some((member) => member.id === "858340143131787274")
+        newState.channel?.members.some((member) => member.id === GEOXOR_ID) &&
+        newState.channel?.members.some((member) => member.id === TARDOKI_ID)
       ) {
-        const tardoki = newState.channel?.members.get("858340143131787274");
+        const tardoki = newState.channel?.members.get(TARDOKI_ID);
         tardoki?.voice.disconnect();
       }
     });
