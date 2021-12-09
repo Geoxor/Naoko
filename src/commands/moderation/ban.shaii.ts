@@ -7,9 +7,10 @@ import Shaii from "../../shaii/Shaii.shaii";
 export default defineCommand({
   name: "ban",
   aliases: [],
+  category: "MODERATION",
   description: "bans a user",
   permissions: ["BAN_MEMBERS"],
-  requiresProcessing: false,
+  requiresProcessing: true,
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "please mention the user you wanna ban";

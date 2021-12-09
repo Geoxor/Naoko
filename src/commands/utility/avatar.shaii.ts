@@ -1,6 +1,7 @@
 import { defineCommand } from "../../types";
 export default defineCommand({
   name: "avatar",
+  category: "UTILITY",
   aliases: [],
   description: "Get the avatar of a user or yours",
   requiresProcessing: false,

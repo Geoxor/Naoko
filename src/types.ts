@@ -85,12 +85,36 @@ export type CommandExecute = (
   message: IMessage
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
+export type CommandCategories = "ECONOMY" | "FUN" | "IMAGE_PROCESSORS" | "MODERATION" | "MUSIC" | "UTILITY";
+
 export interface ICommand {
+  /**
+   * The handler associated with this command
+   */
   execute: CommandExecute;
+  /**
+   * The name of the command
+   */
   name: string;
+  /**
+   * The description of the command
+   */
   description: string;
+  /**
+   * The category type the command belongs to, e.g. "FUN" or "MODERATION"
+   */
+  category: CommandCategories;
+  /**
+   * Alternative ways to call this command
+   */
   aliases: string[];
+  /**
+   * Permissions the user needs to have to run this command
+   */
   permissions?: Discord.PermissionResolvable[];
+  /**
+   * This will send 'processing...' if set to true, (useful for commands that take long to complete asyncronous tasks)
+   */
   requiresProcessing?: boolean;
 }
 

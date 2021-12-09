@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "inventory",
+  category: "ECONOMY",
   aliases: ["inv"],
   description: "Shows the inventory of the user",
   requiresProcessing: false,

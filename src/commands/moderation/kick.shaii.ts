@@ -7,9 +7,10 @@ import Shaii from "../../shaii/Shaii.shaii";
 export default defineCommand({
   name: "kick",
   aliases: [],
+  category: "UTILITY",
   description: "Kicks a user",
   permissions: ["KICK_MEMBERS"],
-  requiresProcessing: false,
+  requiresProcessing: true,
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "please mention the user you wanna kick";

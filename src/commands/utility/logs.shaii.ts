@@ -5,6 +5,7 @@ import { markdown } from "../../logic/logic.shaii";
 export default defineCommand({
   name: "logs",
   aliases: [],
+  category: "UTILITY",
   permissions: ["ADMINISTRATOR"],
   description: "Shows latest console logs.",
   requiresProcessing: false,

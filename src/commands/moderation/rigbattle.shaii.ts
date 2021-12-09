@@ -5,6 +5,7 @@ import WaifuBattle from "../../shaii/WaifuBattle.shaii";
 import { defineCommand, IMessage } from "../../types";
 
 export default defineCommand({
+  category: "MODERATION",
   name: "rigbattle",
   aliases: [],
   description: "Battle with predefined waifu for testing purpose",

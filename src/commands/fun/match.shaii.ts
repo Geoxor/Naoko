@@ -4,6 +4,7 @@ import Discord from "discord.js";
 
 export default defineCommand({
   name: "match",
+  category: "FUN",
   aliases: [],
   description: "See how much you and another user match!",
   requiresProcessing: false,

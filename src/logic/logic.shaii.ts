@@ -150,13 +150,15 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
   return fns.map((fn) => {
     const cmdName = fn.name.toLowerCase();
     logger.command.print(`Generated command ${cmdName}`);
-    return {
+    const command: ICommand = {
       name: cmdName,
       aliases: [],
-      description: `${cmdName} image processor`,
+      category: "IMAGE_PROCESSORS",
+      description: `${cmdName} an image`,
       requiresProcessing: true,
       execute: imageProcess(fn),
     };
+    return command;
   });
 }
 

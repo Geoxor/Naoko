@@ -9,6 +9,7 @@ const startTime = Date.now();
 
 export default defineCommand({
   name: "environment",
+  category: "UTILITY",
   aliases: ["env"],
   description: "Show environment details",
   requiresProcessing: false,

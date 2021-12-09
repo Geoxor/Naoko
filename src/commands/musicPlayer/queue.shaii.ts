@@ -4,6 +4,7 @@ import { defineCommand } from "../../types";
 export default defineCommand({
   name: "queue",
   aliases: ["q"],
+  category: "MUSIC",
   description: "Shows you the current queue",
   requiresProcessing: false,
   execute: async (message) => {

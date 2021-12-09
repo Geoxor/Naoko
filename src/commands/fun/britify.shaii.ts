@@ -4,6 +4,7 @@ import { defineCommand } from "../../types";
 export default defineCommand({
   name: "britify",
   aliases: [],
+  category: "FUN",
   description: "Transforms your sentence to british",
   requiresProcessing: false,
   execute: async (message) => {
