@@ -81,7 +81,7 @@ class Shaii {
     this.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID) {
         (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
-          .send(`<@${member.id}> ${randomChoice(welcomeMessages)}`)
+          .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace("::GUILD_NAME", member.guild.name)}`)
           .then((m) => m.react("👋"));
       }
 
