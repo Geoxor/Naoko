@@ -32,8 +32,6 @@ si.getStaticData().then((info) => {
   systemInfo = info;
 });
 
-export const approvedGuilds: Discord.Snowflake[] = [GEOXOR_GUILD_ID, SECRET_GUILD_ID, "897185485313699891"];
-
 /**
  * Shaii multi purpose Discord bot
  * @author Geoxor, Cimok
