@@ -25,6 +25,7 @@ import britify from "./fun/britify.shaii";
 import match from "./fun/match.shaii";
 import fact from "./fun/funfact.shaii";
 import say from "./fun/say.shaii";
+import spongify from "./fun/spongify.shaii";
 
 // moderation commands
 import clear from "./moderation/clear.shaii";
@@ -87,7 +88,8 @@ export const getCommands = async () => {
     kick,
     ban,
     battle,
-    say
+    say,
+    spongify,
   ];
 
   if (true) {

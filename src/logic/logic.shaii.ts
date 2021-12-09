@@ -428,6 +428,29 @@ export function britify(sentence: string): string {
 }
 
 /**
+ * Spongify a sentence
+ * @param sentence the sentence to spongify
+ * @param capsOdd if letters to capitalize are the odd ones (by default: true)
+ * @author Qexat
+ */
+export function spongify(sentence: string, capsOdd: boolean = true): string {
+  var newSentence = "";
+  var lastNotSpaceChar;
+
+  capsOdd ? (newSentence += sentence[0].toUpperCase()) : (newSentence += sentence[0].toLowerCase());
+
+  // upper one character out of 2
+  for (let i = 1; i < sentence.length; i++) {
+    sentence[i - 1] === " " ? (lastNotSpaceChar = newSentence[i - 2]) : (lastNotSpaceChar = newSentence[i - 1]);
+    lastNotSpaceChar === lastNotSpaceChar.toUpperCase()
+      ? (newSentence += sentence[i].toLowerCase())
+      : (newSentence += sentence[i].toUpperCase());
+  }
+
+  return newSentence;
+}
+
+/**
  * Gets an image url from attachments > stickers > first emoji > mentioned user avatar > author avatar > default avatar
  * @param message the discord message to fetch from
  * @author Bluskript
