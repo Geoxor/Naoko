@@ -209,7 +209,7 @@ class Shaii {
           logger.command.executedCommand(0, "@mention", message.author.username, message.guild?.name || "dm");
 
           // Reply with this when they purely ping her with no question
-          if (!message.content.substr(`<@!${SHAII_ID}>`.length).trim())
+          if (!message.content.substring(`<@!${SHAII_ID}>`.length).trim())
             return message.reply("what tf do you want");
           return message.reply(randomChoice(answers));
         }
