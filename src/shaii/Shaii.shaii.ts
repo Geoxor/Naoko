@@ -190,6 +190,13 @@ class Shaii {
       moderationMiddleware(message, (message) => {
         if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
 
+        // For channels that have "images" in their name we simply force delete any messages that don't have that in there
+        if (
+          message.guild?.channels.cache.get(message.channel.id)?.name.includes("images") &&
+          message.attachments.size === 0
+        )
+          return message.delete();
+
         // Reply with a funny message if they mention her at the start of the message
         if (
           message.content.startsWith("<@!") &&
