@@ -121,6 +121,7 @@ schema.statics.pushHistory = async function (historyType: HistoryTypes, user_id:
   const user = await User.findOne({ discord_id: user_id });
   if (!user) return;
   user[historyType].push({ timestamp: Date.now(), value });
+  if (user[historyType].length > 50) user[historyType].shift();
   return user.save().catch((err: any) => console.log(err));
 };
 
