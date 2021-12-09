@@ -58,6 +58,16 @@ class Shaii {
     this.bot.on("messageUpdate", (oldMessage, newMessage) => this.onMessageUpdate(oldMessage, newMessage));
     this.bot.on("guildMemberRemove", (member) => this.onGuildMemberRemove(member));
     this.bot.on("guildMemberAdd", (member) => this.onGuildMemberAdd(member));
+    this.bot.on("guildMemberUpdate", async (oldMember, newMember) => {
+      if (oldMember.user.username !== newMember.user.username) {
+        logger.shaii.print(`Updated username history for ${oldMember.id}`);
+        User.pushHistory("username_history", oldMember.id, newMember.user.username);
+      }
+      if (oldMember.nickname !== newMember.nickname && newMember.nickname) {
+        logger.shaii.print(`Updated nickname history for ${oldMember.id}`);
+        User.pushHistory("nickname_history", oldMember.id, newMember.nickname);
+      }
+    });
     this.bot.on("voiceStateUpdate", (oldState, newState) => {
       // If geoxor is in vc and tardoki kun joins kick him out
       if (

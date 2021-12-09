@@ -78,7 +78,7 @@ function actionHistoryToField(history: ActionHistory[], client: Client): string 
 
   const historyString = history.reduce((acc, action) => {
     const actor = client.users.cache.get(action.casted_by)!.username || action.casted_by;
-    return `${timeSince(action.timestamp)} ago - ${acc}${action.reason || "no reason given"} - by ${actor}\n`;
+    return `${timeSince(action.timestamp)} ago - ${action.reason || "no reason given"} - by ${actor}\n${acc}`;
   }, "");
 
   return markdown(historyString);
@@ -88,7 +88,7 @@ function historyToField(history: History[]): string | undefined {
   if (history.length === 0) return;
 
   const historyString = history.reduce((acc, action) => {
-    return `${timeSince(action.timestamp)} ago - ${action.value}`;
+    return `${timeSince(action.timestamp)} ago - ${action.value}\n${acc}`;
   }, "");
 
   return markdown(historyString);

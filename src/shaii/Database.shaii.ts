@@ -2,7 +2,7 @@
 import logger from "./Logger.shaii";
 import mongoose from "mongoose";
 import config from "./Config.shaii";
-import { IBattleUserRewards, IRewards, IUser, ActionHistory } from "../types";
+import { IBattleUserRewards, IRewards, IUser, ActionHistory, HistoryTypes } from "../types";
 import Discord from "discord.js";
 mongoose.connect(config.mongo).then(() => console.log("connected"));
 const { Schema } = mongoose;
@@ -48,6 +48,7 @@ export interface IUserFunctions {
   kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
   ban(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
   updateRoles(roles: string[]): Promise<IUser>;
+  pushHistory(historyType: HistoryTypes, user_id: string, value: string): Promise<IUser>;
   findOneOrCreate(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<IUser & { _id: any }>;
 }
 schema.methods.updateRoles = function (roles: string[]) {
@@ -114,6 +115,13 @@ schema.statics.ban = async function (baner_id: string, banee_id: string, reason:
   banee.ban_history.push(ban);
 
   return banee.save().catch((err: any) => console.log(err));
+};
+
+schema.statics.pushHistory = async function (historyType: HistoryTypes, user_id: string, value: string) {
+  const user = await User.findOne({ discord_id: user_id });
+  if (!user) return;
+  user[historyType].push({ timestamp: Date.now(), value });
+  return user.save().catch((err: any) => console.log(err));
 };
 
 // @ts-ignore

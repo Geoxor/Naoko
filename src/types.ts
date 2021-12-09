@@ -17,6 +17,8 @@ export interface History {
   value: string;
 }
 
+export type HistoryTypes = "nickname_history" | "username_history" | "status_history";
+
 export interface ActionHistory {
   timestamp: number;
   casted_by: string;
