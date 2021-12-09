@@ -1,4 +1,4 @@
-import Discord, { Intents } from "discord.js";
+import Discord, { Guild, Intents, TextChannel } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -18,6 +18,7 @@ import {
   SECRET_GUILD_ID,
   SLURS,
 } from "../constants";
+import welcomeMessages from "../assets/welcome_messages.json";
 import { markdown, randomChoice } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 
@@ -157,6 +158,12 @@ class Shaii {
   }
 
   private async onGuildMemberAdd(member: Discord.GuildMember) {
+    if (member.guild.id === GEOXOR_GUILD_ID) {
+      (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
+        .send(`<@${member.id}> ${randomChoice(welcomeMessages)}`)
+        .then((m) => m.react("👋"));
+    }
+
     let user = await User.findOneOrCreate(member);
     for (const roleId of user.roles) {
       const role = member.guild.roles.cache.find((role) => role.id === roleId);
