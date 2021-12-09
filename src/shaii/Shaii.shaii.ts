@@ -11,9 +11,11 @@ import si from "systeminformation";
 import { userMiddleware } from "../middleware/userMiddleware.shaii";
 import { User } from "./Database.shaii";
 import {
+  APPROVED_GUILDS,
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
+  QBOT_DEV_GUILD_ID,
   SHAII_ID,
   SECRET_GUILD_ID,
   SLURS,
@@ -64,7 +66,7 @@ class Shaii {
     });
     this.bot.on("messageCreate", async (message) => this.onMessageCreate(message));
     this.bot.on("messageDelete", async (message) => {
-      if (message.guild?.id === GEOXOR_GUILD_ID) {
+      if (message.guild?.id in APPROVED_GUILDS) {
         logDelete(message, (message) => {});
       }
     });
@@ -80,7 +82,7 @@ class Shaii {
       user.updateRoles(Array.from(member.roles.cache.keys()));
     });
     this.bot.on("guildMemberAdd", async (member) => {
-      if (member.guild.id === GEOXOR_GUILD_ID) {
+      if (member.guild.id in APPROVED_GUILDS) {
         (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
           .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
           .then((m) => m.react("👋"));
@@ -180,7 +182,7 @@ class Shaii {
 
   private leaveRogueGuilds() {
     for (let guild of this.bot.guilds.cache.values()) {
-      if (guild.id !== GEOXOR_GUILD_ID && guild.id !== SECRET_GUILD_ID) {
+      if (guild.id ! in APPROVED_GUILDS) {
         guild.leave().then(() => logger.shaii.print(`Left guild ${guild.name}`));
       }
     }
