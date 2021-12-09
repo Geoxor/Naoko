@@ -10,7 +10,7 @@ export default defineCommand({
   requiresProcessing: false,
   execute: async (message) => {
     if (message.args.length === 0) return `what do you want to say ${randomChoice(SLURS)}`;
-	await message.delete();
+    await message.delete();
     return message.args.join(" ");
   },
 });
