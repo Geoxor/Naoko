@@ -1,10 +1,11 @@
+// @ts-ignore
 import badWords from "../assets/badWords.json";
 import goodWords from "../assets/goodWords.json";
 import normalize from "@taku.moe/pura";
 import { IMessage } from "../types";
 
-const badWordRegexs = badWords.map((word) => new RegExp(word, "gi"));
-const goodWordRegexs = goodWords.map((word) => new RegExp(word, "gi"));
+const badWordRegexs = badWords.map((word: string) => new RegExp(word, "gi"));
+const goodWordRegexs = goodWords.map((word: string) => new RegExp(word, "gi"));
 
 export function isBadWord(message: IMessage) {
   let normalized = normalize(message.content).replace(/\s/g, "");
