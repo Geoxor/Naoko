@@ -283,7 +283,10 @@ class Shaii {
               await message.channel.send(result);
             } catch (error: any) {
               if (error.code === 500) {
-                await message.reply("⚠️ when the upload speed");
+                const embed = new Discord.MessageEmbed()
+                  .setColor("#ffcc4d")
+                  .setDescription("⚠️ when the upload speed");
+                await message.reply({ embeds: [embed] });
               }
               else await message.reply(markdown(error)).catch(() => {});
             }
