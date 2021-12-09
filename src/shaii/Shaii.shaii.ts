@@ -66,7 +66,7 @@ class Shaii {
     });
     this.bot.on("messageCreate", async (message) => this.onMessageCreate(message));
     this.bot.on("messageDelete", async (message) => {
-      if (message.guild?.id === GEOXOR_GUILD_ID) {
+      if (message.guild?.id in APPROVED_GUILDS) {
         logDelete(message, (message) => {});
       }
     });
@@ -82,7 +82,7 @@ class Shaii {
       user.updateRoles(Array.from(member.roles.cache.keys()));
     });
     this.bot.on("guildMemberAdd", async (member) => {
-      if (member.guild.id === GEOXOR_GUILD_ID) {
+      if (member.guild.id in APPROVED_GUILDS) {
         (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
           .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
           .then((m) => m.react("👋"));
