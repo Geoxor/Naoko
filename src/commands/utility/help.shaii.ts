@@ -19,7 +19,11 @@ export default defineCommand({
 
       let categoryCommands = commands
         .map((command) => command[1])
-        .map((command) => `${command.name}: ${command.description}`)
+        .map((command) =>
+          command.aliases.length
+            ? `${command.name}: ${command.description} # [${command.aliases.join(", ")}]`
+            : `${command.name}: ${command.description}`
+        )
         .join("\n");
 
       helpString.push(`\n# ${category.replace(/_/g, " ")}\n`);
