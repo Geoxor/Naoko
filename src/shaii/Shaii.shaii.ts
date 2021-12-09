@@ -262,7 +262,6 @@ class Shaii {
           }
 
           // Delete the processing message if it exists
-          // @ts-ignore
           clearTyping();
 
           // If the command returns void we just return
