@@ -11,9 +11,11 @@ import si from "systeminformation";
 import { userMiddleware } from "../middleware/userMiddleware.shaii";
 import { User } from "./Database.shaii";
 import {
+  APPROVED_GUILDS,
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
+  QBOT_DEV_GUILD_ID,
   SHAII_ID,
   SECRET_GUILD_ID,
   SLURS,
@@ -28,6 +30,9 @@ si.getStaticData().then((info) => {
   logger.config.print("Environment info fetched");
   systemInfo = info;
 });
+
+export let approvedGuilds: Array<Discord.Snowflake>;
+approvedGuilds = [GEOXOR_GUILD_ID, SECRET_GUILD_ID, "897185485313699891"]
 
 /**
  * Shaii multi purpose Discord bot
@@ -179,7 +184,7 @@ class Shaii {
 
   private leaveRogueGuilds() {
     for (let guild of this.bot.guilds.cache.values()) {
-      if (guild.id !== GEOXOR_GUILD_ID && guild.id !== SECRET_GUILD_ID) {
+      if (guild.id ! in APPROVED_GUILDS) {
         guild.leave().then(() => logger.shaii.print(`Left guild ${guild.name}`));
       }
     }
