@@ -153,7 +153,7 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
     const command: ICommand = {
       name: cmdName,
       aliases: [],
-      usage: `${cmdName} <processor_name> <image | url | reply | user_id>`,
+      usage: `${cmdName} <image | url | reply | user_id>`,
       category: "IMAGE_PROCESSORS",
       description: `${cmdName} an image`,
       requiresProcessing: true,
