@@ -1,6 +1,6 @@
 {
   "name": "shaii",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Shaii is Geoxor's Discord Bot",
   "main": "./src/shaii.ts",
   "scripts": {
