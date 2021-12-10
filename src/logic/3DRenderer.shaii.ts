@@ -229,13 +229,13 @@ export class SceneProcessor {
   public async render() {
     const frameCount = 5 * this.fps;
     const renderedFrames: ImageData[] = [];
-    const bar = logger.shaii.progress("Rendering - ", frameCount);
+    const bar = logger.progress("Rendering - ", frameCount);
 
     for (let i = 0; i < frameCount; i++) {
       await this.update();
       this.renderer.render(this.scene, this.camera);
       renderedFrames.push((this.canvas.__ctx__ as CanvasRenderingContext2D).getImageData(0, 0, this.width, this.height));
-      logger.shaii.setProgressValue(bar, i / frameCount);
+      logger.setProgressValue(bar, i / frameCount);
     }
 
     return await encodeFramesToGif(

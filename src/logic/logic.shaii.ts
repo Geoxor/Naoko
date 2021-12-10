@@ -80,12 +80,12 @@ export async function encodeFramesToGif(
 ) {
   const gif = GIFEncoder();
   const palette = quantize(frames[0], 256);
-  const bar = logger.shaii.progress("Encoding  - ", frames.length);
+  const bar = logger.progress("Encoding  - ", frames.length);
   for (let i = 0; i < frames.length; i++) {
     const frame = frames[i];
     const idx = applyPalette(frame, palette);
     gif.writeFrame(idx, width, height, { transparent: true, delay, palette });
-    logger.shaii.setProgressValue(bar, i / frames.length);
+    logger.setProgressValue(bar, i / frames.length);
   }
 
   gif.finish();
@@ -149,7 +149,7 @@ export function imageProcess(process: ImageProcessorFn) {
 export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
   return fns.map((fn) => {
     const cmdName = fn.name.toLowerCase();
-    logger.command.print(`Generated command ${cmdName}`);
+    logger.print(`Generated command ${cmdName}`);
     const command: ICommand = {
       name: cmdName,
       aliases: [],

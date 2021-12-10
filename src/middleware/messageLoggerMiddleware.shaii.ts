@@ -33,7 +33,7 @@ export function logEdit(
   const logChannel = oldMessage.client.channels.cache.get(config.chatLogChannel) as Discord.TextChannel;
 
   logChannel.send({ embeds: [embed] }).catch(() => {});
-  logger.command.print(`Message edited at #${oldMessage.channel.name} by ${oldMessage.author?.username}`);
+  logger.print(`Message edited at #${oldMessage.channel.name} by ${oldMessage.author?.username}`);
 
   next(oldMessage, newMessage);
 }
@@ -63,7 +63,7 @@ export function logDelete(
   const logChannel = message.client.channels.cache.get(config.chatLogChannel) as Discord.TextChannel;
 
   logChannel.send({ embeds: [embed] }).catch(() => {});
-  logger.command.print(`Message deleted at #${message.channel.name} by ${message.author?.username}`);
+  logger.print(`Message deleted at #${message.channel.name} by ${message.author?.username}`);
 
   next(message);
 }

@@ -43,7 +43,7 @@ vscodeSettings["material-icon-theme.files.associations"]["shaii.json"] = "../../
 vscodeSettings["material-icon-theme.files.associations"]["shaii.ts"] = "../../icons/shaii";
 vscodeSettings["material-icon-theme.files.associations"]["*.shaii"] = "../../icons/shaii";
 vscodeSettings["material-icon-theme.files.associations"]["*.shaii.ts"] = "../../icons/shaii";
-vscodeSettings["material-icon-theme.files.associations"]["Logger.shaii.ts"] = "../../icons/shaii-logger";
+vscodeSettings["material-icon-theme.files.associations"]["logger.ts"] = "../../icons/shaii-logger";
 vscodeSettings["material-icon-theme.files.associations"]["Shaii.shaii.ts"] = "../../icons/shaii-main";
 
 vscodeSettings["material-icon-theme.folders.associations"] = {};

@@ -9,18 +9,14 @@ import MultiProgress from "multi-progress";
  * @author Geoxor
  */
 class Logger {
-  protected emoji: string;
-  protected color: string;
-  private errorColor: "#F03A17";
-  private errorEmoji: "👺";
+  private emoji: string = "🌸";
+  private color: string = "#FF90E0";
+  private errorColor: string = "#FF0";
+  private errorEmoji: string = "⚠";
   public logHistory: string[] = [];
+  public multiProgress: MultiProgress = new MultiProgress(process.stdout);
 
-  constructor() {
-    this.emoji = "🌸";
-    this.color = "#FF90E0";
-    this.errorEmoji = "👺";
-    this.errorColor = "#F03A17";
-  }
+  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${randomChoice(quotes)}\n`));
 
   protected pushToLogHistory(string: string) {
     if (this.logHistory.length > 20) this.logHistory.shift();
@@ -64,30 +60,13 @@ class Logger {
       chalk.hex(this.errorColor)(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`)
     );
   }
-}
-class ShaiiLogger extends Logger {
-  public multiProgress: MultiProgress;
-
-  constructor() {
-    super();
-    this.multiProgress = new MultiProgress(process.stdout);
-  }
-  public numServers = (numGuilds: number) => this.print(`Currently in ${numGuilds} servers`);
-  public login = () => this.print("Shaii logging in...");
-  public instantiated = () => this.print("Instantiated Discord client instance");
-  public creating = () => this.print("Creating new Shaii instance...");
-  public loadingCommands = () => this.print("Loading commands...");
-  public importedCommand = (command: string) => this.print(`┖ Imported command ${command}`);
-  public created = () => this.print("Shaii created");
-  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${randomChoice(quotes)}\n`));
-  public generic = (string: string) => console.log(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🗻  ${string}`);
 
   /**
    * Sets a progress bar
    */
   public progress(name: string, tickCount: number) {
     return this.multiProgress.newBar(
-      `  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🧪 ${chalk.hex("#00B294")(name)}${chalk.hex("#00B294")(
+      `  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🧪 ${chalk.hex(this.color)(name)}${chalk.hex(this.color)(
         "[:bar]"
       )} :etas :percent `,
       {
@@ -104,30 +83,5 @@ class ShaiiLogger extends Logger {
     bar.tick();
   }
 }
-class ConfigLogger extends Logger {
-  constructor() {
-    super();
-    this.emoji = "🧪";
-    this.color = "#00B294";
-  }
-  public loading = () => this.print("Loading config...");
-  public loaded = () => this.print("Config loaded");
-  public creating = () => this.print("Creating new config...");
-  public created = () => this.print("Created new shaii.json config");
-  public failedCreation = () => this.error("Failed to create shaii.json config");
-}
-class CommandLogger extends Logger {
-  constructor() {
-    super();
-    this.emoji = "🔮";
-    this.color = "#886CE4";
-  }
-  public executedCommand = (time: number, command: string, username: string, guild: string) =>
-    this.print(`${time}ms - Executed command: ${command} - User: ${username} - Guild: ${guild}`);
-}
 
-export default {
-  config: new ConfigLogger(),
-  shaii: new ShaiiLogger(),
-  command: new CommandLogger(),
-};
+export default new Logger();

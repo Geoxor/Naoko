@@ -14,7 +14,7 @@ export function loadWaifusFromRarity(rarity: IWaifuRarityName): IWaifu[] {
       name,
       image: waifu,
     } as IWaifu);
-    logger.shaii.generic(`Parsed ${chalk.hex("#FFCB6B")(rarity.toUpperCase())} waifu ${chalk.green(name)}`);
+    logger.print(`Parsed ${chalk.hex("#FFCB6B")(rarity.toUpperCase())} waifu ${chalk.green(name)}`);
   }
   return IWaifus;
 }

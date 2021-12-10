@@ -46,12 +46,12 @@ export async function transform(pipeline: string[], buffer: Buffer) {
   let fuckedBuffer = buffer;
 
   const functions = pipeline.map((name) => imageProcessors[name]).filter((processor) => !!processor);
-  const bar = logger.shaii.progress("Pipelines - ", functions.length);
+  const bar = logger.progress("Pipelines - ", functions.length);
   for (let i = 0; i < functions.length; i++) {
     const start = Date.now();
     const method = functions[i];
     fuckedBuffer = await method(fuckedBuffer);
-    logger.shaii.setProgressValue(bar, i / functions.length);
+    logger.setProgressValue(bar, i / functions.length);
 
     // This is to avoid exp thread blocking
     if (Date.now() - start > 10000) return fuckedBuffer;
@@ -79,7 +79,7 @@ export async function stack(name: string, buffer: Buffer, iterations: number = 6
   const bufferFrames: Buffer[] = [buffer];
   const renderedFrames: Uint8Array[] = [firstFrame];
 
-  const bar = logger.shaii.progress("Stacks - ", iterations);
+  const bar = logger.progress("Stacks - ", iterations);
 
   for (let i = 0; i < iterations; i++) {
     // Iterate through the frames one frame behind
@@ -92,7 +92,7 @@ export async function stack(name: string, buffer: Buffer, iterations: number = 6
     // of the first starting frame
     renderedFrames[i + 1] = await getRGBAUintArray(await Jimp.read(bufferFrames[i]));
 
-    logger.shaii.setProgressValue(bar, i / iterations);
+    logger.setProgressValue(bar, i / iterations);
   }
 
   return await encodeFramesToGif(renderedFrames, width, height, ~~(1000 / 60));

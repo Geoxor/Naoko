@@ -10,5 +10,5 @@ export default defineCommand({
   permissions: ["ADMINISTRATOR"],
   description: "Shows latest console logs.",
   requiresProcessing: false,
-  execute: async (message) => markdown(logger.shaii.getLogHistory().substring(0, 1990)),
+  execute: async (message) => markdown(logger.getLogHistory().substring(0, 1990)),
 });

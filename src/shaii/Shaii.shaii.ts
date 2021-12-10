@@ -26,9 +26,9 @@ import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 
 export let systemInfo: si.Systeminformation.StaticData;
-logger.config.print("Fetching environment information...");
+logger.print("Fetching environment information...");
 si.getStaticData().then((info) => {
-  logger.config.print("Environment info fetched");
+  logger.print("Environment info fetched");
   systemInfo = info;
 });
 
@@ -57,9 +57,9 @@ class Shaii {
       ],
     });
     this.bot.on("ready", () => {
-      logger.shaii.instantiated();
-      logger.shaii.print(`Logged in as ${this.bot.user!.tag}!`);
-      logger.shaii.numServers(this.bot.guilds.cache.size);
+      logger.print("Instantiated Discord client instance");
+      logger.print(`Logged in as ${this.bot.user!.tag}!`);
+      logger.print(`Currently in ${this.bot.guilds.cache.size} servers`);
       this.updateActivity();
       this.leaveRogueGuilds();
       this.joinThreads();
@@ -94,7 +94,7 @@ class Shaii {
         if (role) {
           member.roles
             .add(role)
-            .then(() => logger.shaii.print(`Added return role ${roleId} to ${member.user.username}`))
+            .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
             .catch(() => {});
         }
       }
@@ -120,17 +120,17 @@ class Shaii {
       // If they have no status yet or if their latest status in the database doesn't
       // match their current status then update the database
       if (!lastStatus || lastStatus.value !== newStatus) {
-        logger.shaii.print(`Updated user status history for ${newPresence.user.id} '${newStatus}'`);
+        logger.print(`Updated user status history for ${newPresence.user.id} '${newStatus}'`);
         User.pushHistory("status_history", newPresence.user.id, newStatus);
       }
     });
     this.bot.on("guildMemberUpdate", async (oldMember, newMember) => {
       if (oldMember.user.username !== newMember.user.username) {
-        logger.shaii.print(`Updated username history for ${oldMember.id} '${newMember.user.username}'`);
+        logger.print(`Updated username history for ${oldMember.id} '${newMember.user.username}'`);
         User.pushHistory("username_history", oldMember.id, newMember.user.username);
       }
       if (oldMember.nickname !== newMember.nickname && newMember.nickname) {
-        logger.shaii.print(`Updated nickname history for ${oldMember.id} '${newMember.nickname}'`);
+        logger.print(`Updated nickname history for ${oldMember.id} '${newMember.nickname}'`);
         User.pushHistory("nickname_history", oldMember.id, newMember.nickname);
       }
     });
@@ -138,7 +138,7 @@ class Shaii {
       thread.join();
     });
     this.bot.login(config.token);
-    logger.shaii.login();
+    logger.print("Shaii logging in...");
   }
 
   public getClosestCommand(searchString: string): ICommand | undefined {
@@ -166,11 +166,11 @@ class Shaii {
    * Loads all the command files from ./commands
    */
   private async loadCommands() {
-    logger.shaii.loadingCommands();
+    logger.print("Loading commands...");
 
     for (const command of await getCommands()) {
       this.commands.set(command.name, command);
-      logger.shaii.importedCommand(command.name);
+      logger.print(`┖ Imported command ${command.name}`);
     }
   }
 
@@ -183,10 +183,10 @@ class Shaii {
     for (let channel of channels) {
       if (channel.isThread()) {
         if (channel.ownerId === SHAII_ID) {
-          channel.delete().then(() => logger.shaii.print(`Deleted residual battle thread ${channel.id}`));
+          channel.delete().then(() => logger.print(`Deleted residual battle thread ${channel.id}`));
           continue;
         }
-        channel.join().then(() => logger.shaii.print(`Joined thread ${channel.id}`));
+        channel.join().then(() => logger.print(`Joined thread ${channel.id}`));
       }
     }
   }
@@ -194,7 +194,7 @@ class Shaii {
   private leaveRogueGuilds() {
     for (let guild of this.bot.guilds.cache.values()) {
       if (guild.id !== GEOXOR_GUILD_ID && guild.id !== TESTING_GUILD_ID && guild.id !== QBOT_DEV_GUILD_ID) {
-        guild.leave().then(() => logger.shaii.print(`Left guild ${guild.name}`));
+        guild.leave().then(() => logger.print(`Left guild ${guild.name}`));
       }
     }
   }
@@ -217,7 +217,9 @@ class Shaii {
           message.mentions.members?.first()?.id === SHAII_ID &&
           message.type !== "REPLY"
         ) {
-          logger.command.executedCommand(0, "@mention", message.author.username, message.guild?.name || "dm");
+          logger.print(
+            `0ms - Executed command: @mention - User: ${message.author.username} - Guild: ${message.guild?.name || "dm"}`
+          );
 
           // Reply with this when they purely ping her with no question
           if (!message.content.substring(`<@!${SHAII_ID}>`.length).trim()) return message.reply("what tf do you want");
@@ -272,11 +274,10 @@ class Shaii {
             let timeStart = Date.now();
             var result = await command.execute(message);
             let timeEnd = Date.now();
-            logger.command.executedCommand(
-              timeEnd - timeStart,
-              command.name,
-              message.author.username,
-              message.guild?.name || "dm"
+            logger.print(
+              `${timeEnd - timeStart}ms - Executed command: ${command.name} - User: ${message.author.username} - Guild: ${
+                message.guild?.name || "dm"
+              }`
             );
           } catch (error: any) {
             clearTyping();

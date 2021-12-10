@@ -1,4 +1,4 @@
-import Logger from "../shaii/Logger.shaii";
+import logger from "../shaii/Logger.shaii";
 import { isFreeNitro } from "../moderation/isFreeNitro.shaii";
 import { isBadWord } from "../moderation/isBadWord.shaii";
 import { IMessage } from "../types";
@@ -23,7 +23,7 @@ export default async function (message: IMessage, next: (message: IMessage) => a
       const isFailed = checkFn(message);
       if (isFailed) {
         await message.delete();
-        return Logger.command.error(`${idxString} Check ${checkFn.name} failed for ${message.author.username}`);
+        return logger.error(`${idxString} Check ${checkFn.name} failed for ${message.author.username}`);
       }
     }
     return next(message);

@@ -27,10 +27,10 @@ console.log(
 );
 
 // Say inspirational anime quote
-logger.shaii.inspiration();
+logger.inspiration();
 
 // Create shaii
-logger.shaii.creating();
+logger.print("Creating new Shaii instance...");
 import "./shaii/Shaii.shaii";
 import "./shaii/Database.shaii";
-logger.shaii.created();
+logger.print("Shaii created");
