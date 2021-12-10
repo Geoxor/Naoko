@@ -23,6 +23,7 @@ import {
 import welcomeMessages from "../assets/welcome_messages.json";
 import { markdown, randomChoice } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
+import levenshtein from "js-levenshtein";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.config.print("Fetching environment information...");
@@ -227,8 +228,25 @@ class Shaii {
           };
 
           // If it doesn't exist we respond
-          if (!command)
-            return message.reply(`That command doesn't exist ${randomChoice(SLURS)}`).catch(() => {});
+          if (!command) {
+            let closestCommand = {
+              name: "",
+              ld: 4, // ld: levenshtein distance
+            };
+            for (const [command_name] of this.commands.entries()) {
+              const currentCommandLD = levenshtein(command_name, message.command);
+
+              if (currentCommandLD < closestCommand.ld)
+                (closestCommand.name = command_name), (closestCommand.ld = currentCommandLD);
+            }
+            let suggestion: string;
+            closestCommand.name === "" || closestCommand.ld > 3
+              ? (suggestion = "")
+              : (suggestion = `\nDid you mean: \`${config.prefix}${closestCommand.name}\``);
+            return message
+              .reply(`That command doesn't exist ${randomChoice(SLURS)}${suggestion}`)
+              .catch(() => {});
+          }
 
           // Notify the user their shit's processing
           if (command.requiresProcessing) {
