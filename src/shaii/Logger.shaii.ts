@@ -1,6 +1,6 @@
 import quotes from "../assets/quotes.json";
 import chalk from "chalk";
-import { getCurrentMemoryHeap } from "../logic/logic.shaii";
+import { getCurrentMemoryHeap, randomChoice } from "../logic/logic.shaii";
 import MultiProgress from "multi-progress";
 
 /**
@@ -79,7 +79,7 @@ class ShaiiLogger extends Logger {
   public loadingCommands = () => this.print("Loading commands...");
   public importedCommand = (command: string) => this.print(`┖ Imported command ${command}`);
   public created = () => this.print("Shaii created");
-  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
+  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${randomChoice(quotes)}\n`));
   public generic = (string: string) => console.log(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🗻  ${string}`);
 
   /**
