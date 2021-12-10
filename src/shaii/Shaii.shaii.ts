@@ -234,12 +234,12 @@ class Shaii {
               ld: 4, // ld: levenshtein distance
             };
             for (const [command_name] of this.commands.entries()) {
-              var currentCommandLD = levenshtein(command_name, message.command);
+              const currentCommandLD = levenshtein(command_name, message.command);
 
               if (currentCommandLD < closestCommand.ld)
                 (closestCommand.name = command_name), (closestCommand.ld = currentCommandLD);
             }
-            var suggestion: string;
+            let suggestion: string;
             closestCommand.name === "" || closestCommand.ld > 3
               ? (suggestion = "")
               : (suggestion = `\nDid you mean: \`${config.prefix}${closestCommand.name}\``);
