@@ -7,7 +7,7 @@ export default defineCommand({
   description: "Get the avatar of a user or yours",
   requiresProcessing: false,
   execute: (message) => {
-    const otherUser = message.mentions.users.first() || message.guild?.members.cache.get(message.args[0])?.user;
+    const otherUser = message.mentions.users.first() || message.client.users.cache.get(message.args[0]) || message.author;
     const link = (otherUser ? otherUser.avatarURL() : message.author.avatarURL()) || message.author.defaultAvatarURL;
     return link + "?size=2048";
   },
