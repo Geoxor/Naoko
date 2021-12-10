@@ -8,7 +8,7 @@ import { GEOXOR_GUILD_ID, SECRET_GUILD_ID, QBOT_DEV_GUILD_ID } from "../constant
 
 const checks = [isFreeNitro, isBadWord, isMuted, isIP];
 
-export default function (message: IMessage, next: (message: IMessage) => any): void {
+export default async function (message: IMessage, next: (message: IMessage) => any): Promise<void> {
   try {
     if (message.author.bot) return next(message);
     if (
@@ -22,7 +22,7 @@ export default function (message: IMessage, next: (message: IMessage) => any): v
       const idxString = `[${i + 1}/${checks.length}]`;
       const isFailed = checkFn(message);
       if (isFailed) {
-        message.delete();
+        await message.delete();
         return Logger.command.error(`${idxString} Check ${checkFn.name} failed for ${message.author.username}`);
       }
     }

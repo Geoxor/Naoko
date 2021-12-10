@@ -134,9 +134,9 @@ export async function parseBufferFromMessage(message: IMessage): Promise<Buffer>
 export function imageProcess(process: ImageProcessorFn) {
   return async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
     const buffer = await parseBufferFromMessage(message);
-    const resultbuffer = await process(buffer, message.args.join(" "));
-    const mimetype = await fileType(resultbuffer);
-    const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
+    const resultBuffer = await process(buffer, message.args.join(" "));
+    const mimetype = await fileType(resultBuffer);
+    const attachment = new Discord.MessageAttachment(resultBuffer, `shit.${mimetype.ext}`);
     return { files: [attachment] };
   };
 }

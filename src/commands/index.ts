@@ -37,6 +37,7 @@ import whois from "./moderation/whois.shaii";
 import help from "./utility/help.shaii";
 import ping from "./utility/ping.shaii";
 import avatar from "./utility/avatar.shaii";
+import uptime from "./utility/uptime.shaii";
 import logs from "./utility/logs.shaii";
 import env from "./utility/env.shaii";
 
@@ -52,10 +53,12 @@ import nowPlaying from "./musicPlayer/nowPlaying.shaii";
 import transform from "./imageProcessors/transform.shaii";
 import stack from "./imageProcessors/stack.shaii";
 import vote from "./fun/vote.shaii";
+import { commands3D } from "../logic/3DRenderer.shaii";
 
 export const getCommands = async () => {
   let commands = [
     ...genCommands(Object.values(imageProcessors)),
+    ...genCommands(Object.values(commands3D)),
     nowPlaying,
     transform,
     stack,
@@ -73,6 +76,7 @@ export const getCommands = async () => {
     queue,
     shuffle,
     skip,
+    uptime,
     britify,
     play,
     anime,
@@ -91,12 +95,6 @@ export const getCommands = async () => {
     say,
     spongify,
   ];
-
-  if (true) {
-    logger.config.print("3D Capabilities acknowledged, loading 3D commands...");
-    const { commands3D } = await import("../logic/3DRenderer.shaii");
-    genCommands(Object.values(commands3D)).forEach((command) => commands.push(command));
-  }
 
   return commands;
 };

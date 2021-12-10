@@ -5,6 +5,7 @@ import { Readable } from "stream";
 export default defineCommand({
   name: "help",
   category: "UTILITY",
+  usage: "help",
   aliases: ["h"],
   description: "The command you just did",
   requiresProcessing: false,

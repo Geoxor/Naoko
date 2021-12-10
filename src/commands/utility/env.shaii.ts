@@ -11,6 +11,7 @@ export default defineCommand({
   name: "environment",
   category: "UTILITY",
   aliases: ["env"],
+  usage: "env",
   description: "Show environment details",
   requiresProcessing: false,
   execute: (message) => {
