@@ -70,12 +70,8 @@ export default class MusicPlayer {
    * @returns
    */
   private async resizeCover(cover: Buffer): Promise<Buffer> {
-    return new Promise((resolve) => {
-      Jimp.read(cover, async (err, image) => {
-        image.resize(Jimp.AUTO, 512);
-        resolve(await image.getBufferAsync("image/png"));
-      });
-    });
+    const image = await Jimp.read(cover);
+    return image.resize(Jimp.AUTO, 300).getBufferAsync("image/jpeg");
   }
 
   /**
