@@ -36,7 +36,7 @@ export function timeSince(date: number) {
   interval = seconds / 60;
 
   if (interval > 1) return ~~interval + " min";
-  return ~~seconds + " seconds";
+  return ~~seconds + " s";
 }
 
 /**
