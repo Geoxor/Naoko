@@ -1,8 +1,3 @@
 {
-  "recommendations": [
-    "pkief.material-icon-theme",
-    "esbenp.prettier-vscode",
-    "prisma.prisma",
-    "mikestead.dotenv"
-  ]
+  "recommendations": ["pkief.material-icon-theme", "esbenp.prettier-vscode", "prisma.prisma", "mikestead.dotenv"]
 }
