@@ -154,9 +154,7 @@ export default class WaifuBattle {
    * @author N1kO23, Geoxor
    */
   public getParticipantsString() {
-    const sortedArray = Object.values(this.participants).sort(
-      (a, b) => b.totalDamageDealt - a.totalDamageDealt
-    );
+    const sortedArray = Object.values(this.participants).sort((a, b) => b.totalDamageDealt - a.totalDamageDealt);
     return sortedArray
       .map((user) => `<@${user.userId}> - 🩸 DMG ${user.totalDamageDealt} - ⚔️ Attacks ${user.totalAttacks}`)
       .join("\n");
@@ -237,9 +235,7 @@ export default class WaifuBattle {
     if (this.waifu.isDead) {
       await Promise.all([
         this.thread!.send({
-          content: `Battle ended, here's your rewards - deleting thread in ${
-            this.AFTERMATH_TIME / 1000
-          } seconds`,
+          content: `Battle ended, here's your rewards - deleting thread in ${this.AFTERMATH_TIME / 1000} seconds`,
           embeds: [this.createRewardEmbed()],
         }),
         this.thread!.setName(`✅ Victory`),
@@ -248,9 +244,7 @@ export default class WaifuBattle {
     } else {
       await Promise.all([
         this.thread!.send({
-          content: `Battle ended, no one killed the waifu - deleting thread in ${
-            this.AFTERMATH_TIME / 1000
-          } seconds`,
+          content: `Battle ended, no one killed the waifu - deleting thread in ${this.AFTERMATH_TIME / 1000} seconds`,
           embeds: [this.createDefeatEmbed()],
         }),
         this.thread!.setName(`❌ Defeat`),

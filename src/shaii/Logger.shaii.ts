@@ -50,9 +50,7 @@ class Logger {
    */
   public print(log: string): void {
     this.pushToLogHistory(`${getCurrentMemoryHeap()}  [${this.time()}] ${this.emoji}  ${log}`);
-    console.log(
-      chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji}  ${log}`)
-    );
+    console.log(chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji}  ${log}`));
   }
 
   /**
@@ -63,9 +61,7 @@ class Logger {
   public error(log: string): void {
     this.pushToLogHistory(`${getCurrentMemoryHeap()}  [${this.time()}] ${this.errorEmoji}  ${log}`);
     console.log(
-      chalk.hex(this.errorColor)(
-        `  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`
-      )
+      chalk.hex(this.errorColor)(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`)
     );
   }
 }
@@ -83,19 +79,17 @@ class ShaiiLogger extends Logger {
   public loadingCommands = () => this.print("Loading commands...");
   public importedCommand = (command: string) => this.print(`┖ Imported command ${command}`);
   public created = () => this.print("Shaii created");
-  public inspiration = () =>
-    console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
-  public generic = (string: string) =>
-    console.log(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🗻  ${string}`);
+  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${quotes[~~(Math.random() * quotes.length - 1)]}\n`));
+  public generic = (string: string) => console.log(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🗻  ${string}`);
 
   /**
    * Sets a progress bar
    */
   public progress(name: string, tickCount: number) {
     return this.multiProgress.newBar(
-      `  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🧪 ${chalk.hex("#00B294")(name)}${chalk.hex(
-        "#00B294"
-      )("[:bar]")} :etas :percent `,
+      `  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🧪 ${chalk.hex("#00B294")(name)}${chalk.hex("#00B294")(
+        "[:bar]"
+      )} :etas :percent `,
       {
         complete: "#",
         incomplete: "~",

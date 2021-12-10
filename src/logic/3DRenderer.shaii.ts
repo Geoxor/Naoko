@@ -172,6 +172,18 @@ export const commands3D = {
     });
     return scene.render();
   },
+
+  async geoxor(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: Math.random() / 3 },
+      camera: { z: 1.5 },
+      shading: true,
+      geometry: cache.objects.geoxor,
+      texture,
+    });
+
+    return scene.render();
+  },
 };
 
 export class SceneProcessor {
@@ -222,9 +234,7 @@ export class SceneProcessor {
     for (let i = 0; i < frameCount; i++) {
       await this.update();
       this.renderer.render(this.scene, this.camera);
-      renderedFrames.push(
-        (this.canvas.__ctx__ as CanvasRenderingContext2D).getImageData(0, 0, this.width, this.height)
-      );
+      renderedFrames.push((this.canvas.__ctx__ as CanvasRenderingContext2D).getImageData(0, 0, this.width, this.height));
       logger.shaii.setProgressValue(bar, i / frameCount);
     }
 

@@ -27,9 +27,7 @@ describe("⚡ Morse Encoder (encodeMorse)", () => {
     const morseCode = encodeMorse("*@(h98(@nf928ndjkniu241i24");
     chai
       .expect(morseCode)
-      .to.equal(
-        ".... ----. ---.. -. ..-. ----. ..--- ---.. -. -.. .--- -.- -. .. ..- ..--- ....- .---- .. ..--- ....-"
-      );
+      .to.equal(".... ----. ---.. -. ..-. ----. ..--- ---.. -. -.. .--- -.- -. .. ..- ..--- ....- .---- .. ..--- ....-");
   });
 
   it("can decode morse with text in between", async () => {

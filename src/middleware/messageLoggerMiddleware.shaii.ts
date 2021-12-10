@@ -7,10 +7,7 @@ import { markdown } from "../logic/logic.shaii";
 export function logEdit(
   oldMessage: Discord.Message | Discord.PartialMessage,
   newMessage: Discord.Message | Discord.PartialMessage,
-  next: (
-    oldMessage: Discord.Message | Discord.PartialMessage,
-    newMessage: Discord.Message | Discord.PartialMessage
-  ) => any
+  next: (oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) => any
 ): void {
   if (oldMessage.channel.type == "DM") return;
   if (oldMessage.content == newMessage.content) return;
@@ -20,10 +17,7 @@ export function logEdit(
   const embed = new Discord.MessageEmbed()
     .setColor("#fff06e")
     .setTitle(`Message edited in #${oldMessage.channel.name}`)
-    .setAuthor(
-      oldMessage.author!.username,
-      oldMessage.author?.avatarURL() || oldMessage.author?.defaultAvatarURL
-    )
+    .setAuthor(oldMessage.author!.username, oldMessage.author?.avatarURL() || oldMessage.author?.defaultAvatarURL)
     .setThumbnail(`${oldMessage.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${oldMessage.author?.id}>` },
