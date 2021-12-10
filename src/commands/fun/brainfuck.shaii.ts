@@ -14,11 +14,11 @@ export default defineCommand({
   execute: async (message) => {
     if (message.args.length === 0) return `what to you want to translate ${randomChoice(SLURS)}`;
     const response: string = textToBrainfuck(message.args.join(" "));
-	if (response.length > 2000) {
-		return {
-			content: "bro the result is too big gonna put it in a file",
-			files: [{ name: "shit.bf", attachment: Readable.from(response) }],
-		};
-	} else return response;
+    if (response.length > 2000) {
+      return {
+        content: "bro the result is too big gonna put it in a file",
+        files: [{ name: "shit.bf", attachment: Readable.from(response) }],
+      };
+    } else return response;
   },
 });
