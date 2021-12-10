@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import config from "./Config.shaii";
 import { IBattleUserRewards, IRewards, IUser, ActionHistory, HistoryTypes } from "../types";
 import Discord from "discord.js";
-mongoose.connect(config.mongo).then(() => console.log("connected"));
+import logger from "./Logger.shaii";
+mongoose.connect(config.mongo).then(() => logger.config.print("MongoDB Connected"));
 const { Schema } = mongoose;
 
 const DB_NUMBER = { type: "Number", default: 0 };
@@ -81,11 +82,7 @@ schema.statics.findOneOrCreate = async function (member: Discord.GuildMember | D
   return user;
 };
 
-schema.statics.kick = async function (
-  kicker_id: string,
-  kickee_id: string,
-  reason: string = "no reason given"
-) {
+schema.statics.kick = async function (kicker_id: string, kickee_id: string, reason: string = "no reason given") {
   const kickee = await User.findOne({ discord_id: kickee_id });
   if (!kickee) return;
 

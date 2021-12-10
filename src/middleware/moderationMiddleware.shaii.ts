@@ -4,7 +4,7 @@ import { isBadWord } from "../moderation/isBadWord.shaii";
 import { IMessage } from "../types";
 import { isMuted } from "../moderation/isMuted.shaii";
 import { isIP } from "../moderation/isIP.shaii";
-import { GEOXOR_GUILD_ID, SECRET_GUILD_ID, QBOT_DEV_GUILD_ID } from "../constants";
+import { GEOXOR_GUILD_ID, TESTING_GUILD_ID, QBOT_DEV_GUILD_ID } from "../constants";
 
 const checks = [isFreeNitro, isBadWord, isMuted, isIP];
 
@@ -13,7 +13,7 @@ export default async function (message: IMessage, next: (message: IMessage) => a
     if (message.author.bot) return next(message);
     if (
       message.guild?.id !== GEOXOR_GUILD_ID &&
-      message.guild?.id !== SECRET_GUILD_ID &&
+      message.guild?.id !== TESTING_GUILD_ID &&
       message.guild?.id !== QBOT_DEV_GUILD_ID
     )
       return;

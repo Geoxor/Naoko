@@ -16,7 +16,7 @@ import {
   GEOXOR_ID,
   QBOT_DEV_GUILD_ID,
   SHAII_ID,
-  SECRET_GUILD_ID,
+  TESTING_GUILD_ID,
   SLURS,
   TARDOKI_ID,
 } from "../constants";
@@ -58,7 +58,7 @@ class Shaii {
     });
     this.bot.on("ready", () => {
       logger.shaii.instantiated();
-      console.log(`Logged in as ${this.bot.user!.tag}!`);
+      logger.shaii.print(`Logged in as ${this.bot.user!.tag}!`);
       logger.shaii.numServers(this.bot.guilds.cache.size);
       this.updateActivity();
       this.leaveRogueGuilds();
@@ -193,7 +193,7 @@ class Shaii {
 
   private leaveRogueGuilds() {
     for (let guild of this.bot.guilds.cache.values()) {
-      if (guild.id !== GEOXOR_GUILD_ID && guild.id !== SECRET_GUILD_ID && guild.id !== QBOT_DEV_GUILD_ID) {
+      if (guild.id !== GEOXOR_GUILD_ID && guild.id !== TESTING_GUILD_ID && guild.id !== QBOT_DEV_GUILD_ID) {
         guild.leave().then(() => logger.shaii.print(`Left guild ${guild.name}`));
       }
     }
