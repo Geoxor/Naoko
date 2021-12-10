@@ -4,6 +4,7 @@ import { defineCommand } from "../../types";
 export default defineCommand({
   name: "play",
   category: "MUSIC",
+  usage: "play",
   aliases: [],
   description: "Play a song",
   requiresProcessing: false,

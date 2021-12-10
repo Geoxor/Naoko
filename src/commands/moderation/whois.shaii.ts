@@ -8,6 +8,7 @@ export default defineCommand({
   name: "whois",
   category: "MODERATION",
   aliases: ["who"],
+  usage: "whois <@user | user_id)>",
   description: "Get information about a user",
   requiresProcessing: false,
   execute: async (message) => {

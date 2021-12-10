@@ -5,6 +5,7 @@ export default defineCommand({
   name: "uwufy",
   category: "FUN",
   aliases: [],
+  usage: "uwufy <sentence>",
   description: "Transforms your sentence to uwu",
   requiresProcessing: false,
   execute: async (message) => {

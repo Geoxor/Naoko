@@ -6,6 +6,7 @@ export default defineCommand({
   name: "trace",
   category: "FUN",
   aliases: [],
+  usage: "trace <image_url>",
   description: "Attempts to find what anime a screenshot or GIF is from",
   requiresProcessing: true,
   execute: async (message) => {

@@ -4,6 +4,7 @@ import { defineCommand } from "../../types";
 export default defineCommand({
   name: "decode",
   category: "FUN",
+  usage: "decode <sentence>",
   aliases: [],
   description: "Decodes morse code",
   requiresProcessing: false,

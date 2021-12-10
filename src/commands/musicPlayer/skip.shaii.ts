@@ -4,6 +4,7 @@ import { defineCommand } from "../../types";
 export default defineCommand({
   category: "MUSIC",
   name: "skip",
+  usage: "skip",
   aliases: ["next"],
   description: "Skips to the next song in the queue",
   requiresProcessing: false,

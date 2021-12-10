@@ -141,25 +141,25 @@ class Shaii {
     logger.shaii.login();
   }
 
-  public getClosestCommandName(searchString: string) {
-    let closestCommand = {
-      name: "",
+  public getClosestCommand(searchString: string): ICommand | undefined {
+    let closest: { command: ICommand | undefined; distance: number } = {
+      command: undefined,
       distance: 4, // ld: levenshtein distance
     };
-    for (const [commandName] of this.commands.entries()) {
-      const currentCommandDistance = levenshtein(commandName, searchString);
+    for (const [name, command] of this.commands.entries()) {
+      const currentCommandDistance = levenshtein(name, searchString);
 
-      if (currentCommandDistance < closestCommand.distance) {
-        closestCommand.name = commandName;
-        closestCommand.distance = currentCommandDistance;
+      if (currentCommandDistance < closest.distance) {
+        closest.command = command;
+        closest.distance = currentCommandDistance;
       }
     }
 
-    if (closestCommand.name === "" || closestCommand.distance > 3) {
+    if (!closest.command || closest.distance > 3) {
       return;
     }
 
-    return closestCommand.name;
+    return closest.command;
   }
 
   /**
@@ -240,12 +240,12 @@ class Shaii {
           // If it doesn't exist we respond
           if (!command) {
             const commandDoesntExistString = `That command doesn't exist ${randomChoice(SLURS)}`;
-            const closestCommandName = this.getClosestCommandName(message.command);
+            const closestCommand = this.getClosestCommand(message.command);
 
-            if (closestCommandName)
+            if (closestCommand)
               return message
                 .reply(
-                  `${commandDoesntExistString}\nthere's this however? ${highlight(config.prefix + closestCommandName)}`
+                  `${commandDoesntExistString}\nthere's this however ${highlight(config.prefix + closestCommand.usage)}`
                 )
                 .catch(() => {});
 

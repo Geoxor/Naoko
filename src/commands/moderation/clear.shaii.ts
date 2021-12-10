@@ -5,6 +5,7 @@ export default defineCommand({
   name: "clear",
   category: "MODERATION",
   aliases: ["cls"],
+  usage: "clear <amount>",
   description: "Bulk delete messages up to 100",
   permissions: ["MANAGE_MESSAGES"],
   requiresProcessing: false,

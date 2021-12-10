@@ -5,6 +5,7 @@ import { anilistSearch } from "../../logic/logic.shaii";
 export default defineCommand({
   name: "anime",
   category: "FUN",
+  usage: "anime <search_string>",
   aliases: [],
   description: "Looks up an anime on Anilist",
   requiresProcessing: true,
@@ -19,9 +20,7 @@ export default defineCommand({
         .setDescription(animeMeta.description.replace(/<br>/g, ""));
       if (animeMeta.bannerImage) embed.setImage(animeMeta.bannerImage);
       if (animeMeta.externalLinks[0]?.url)
-        embed.setTitle(
-          `${animeMeta.title.romaji}\n${animeMeta.title.native}\n${animeMeta.externalLinks[0]?.url}`
-        );
+        embed.setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}\n${animeMeta.externalLinks[0]?.url}`);
       else embed.setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}`);
       return { embeds: [embed] };
     } catch (error: any) {

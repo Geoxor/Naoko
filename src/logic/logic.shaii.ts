@@ -153,6 +153,7 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
     const command: ICommand = {
       name: cmdName,
       aliases: [],
+      usage: `${cmdName} <processor_name> <image | url | reply | user_id>`,
       category: "IMAGE_PROCESSORS",
       description: `${cmdName} an image`,
       requiresProcessing: true,
@@ -330,7 +331,6 @@ export function randomDickSize(): number {
  * @returns
  */
 export const markdown = (string: string | undefined): string => `\`\`\`${string}\`\`\``;
-
 
 /**
  * Wraps a string in `<string>`
@@ -512,8 +512,7 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
     return arg;
   }
 
-  if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:"))
-    return getMostRelevantImageURL(message); // this is a hack...
+  if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:")) return getMostRelevantImageURL(message); // this is a hack...
 
   const user = await message.client.users.fetch(arg);
   return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL;

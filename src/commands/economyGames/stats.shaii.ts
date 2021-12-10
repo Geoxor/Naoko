@@ -4,6 +4,7 @@ import { defineCommand, IMessage } from "../../types";
 
 export default defineCommand({
   name: "stats",
+  usage: "stats",
   category: "ECONOMY",
   aliases: [],
   description: "Shows the statistics of the user",

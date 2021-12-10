@@ -5,6 +5,7 @@ export default defineCommand({
   name: "inventory",
   category: "ECONOMY",
   aliases: ["inv"],
+  usage: "inv",
   description: "Shows the inventory of the user",
   requiresProcessing: false,
   execute: async (message) => {

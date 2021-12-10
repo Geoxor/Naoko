@@ -7,6 +7,7 @@ import Shaii from "../../shaii/Shaii.shaii";
 export default defineCommand({
   name: "kick",
   aliases: [],
+  usage: "kick <@user> <reason>",
   category: "UTILITY",
   description: "Kicks a user",
   permissions: ["KICK_MEMBERS"],
@@ -24,9 +25,7 @@ export default defineCommand({
     await targetUser.kick(reason);
 
     // Keep track of the kick
-    await User.kick(message.author.id, targetUser.id, reason).catch(() =>
-      console.log("kick database update failed")
-    );
+    await User.kick(message.author.id, targetUser.id, reason).catch(() => console.log("kick database update failed"));
 
     // Create the result embed
     const embed = new Discord.MessageEmbed()
@@ -41,9 +40,7 @@ export default defineCommand({
 
     targetUser
       .send({ embeds: [embed] })
-      .catch(() =>
-        message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`)
-      );
+      .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`));
 
     // Get fucked
     return { embeds: [embed] };

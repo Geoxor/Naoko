@@ -8,6 +8,7 @@ export default defineCommand({
   name: "ban",
   aliases: [],
   category: "MODERATION",
+  usage: "ban <@user> <reason>",
   description: "bans a user",
   permissions: ["BAN_MEMBERS"],
   requiresProcessing: true,
@@ -26,9 +27,7 @@ export default defineCommand({
     });
 
     // Keep track of the ban
-    await User.ban(message.author.id, targetUser.id, reason).catch(() =>
-      console.log("ban database update failed")
-    );
+    await User.ban(message.author.id, targetUser.id, reason).catch(() => console.log("ban database update failed"));
 
     // Create the result embed
     const embed = new Discord.MessageEmbed()
@@ -43,9 +42,7 @@ export default defineCommand({
 
     targetUser
       .send({ embeds: [embed] })
-      .catch(() =>
-        message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`)
-      );
+      .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`));
 
     return { embeds: [embed] };
   },

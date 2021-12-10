@@ -6,6 +6,7 @@ import { Readable } from "stream";
 export default defineCommand({
   name: "dicksize",
   category: "FUN",
+  usage: "dicksize ?<@user | user_id>",
   aliases: [],
   description: "Tell's you your dicksize or battle against someone else's dicksize!",
   requiresProcessing: false,

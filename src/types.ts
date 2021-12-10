@@ -101,6 +101,10 @@ export interface ICommand {
    */
   description: string;
   /**
+   * The syntactic way the command should be used as
+   */
+  usage: string;
+  /**
    * The category type the command belongs to, e.g. "FUN" or "MODERATION"
    */
   category: CommandCategories;

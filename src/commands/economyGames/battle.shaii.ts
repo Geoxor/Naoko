@@ -8,6 +8,7 @@ export default defineCommand({
   name: "battle",
   category: "ECONOMY",
   aliases: [],
+  usage: "battle",
   description: "Battle a random waifu with your friends for rewards!",
   requiresProcessing: false,
   execute: async (message) => {

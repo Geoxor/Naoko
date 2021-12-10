@@ -5,6 +5,7 @@ import { randomChoice } from "../../logic/logic.shaii";
 export default defineCommand({
   name: "say",
   category: "FUN",
+  usage: "say <sentence>",
   aliases: [],
   description: "Say your stupid message",
   requiresProcessing: false,

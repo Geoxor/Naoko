@@ -6,6 +6,7 @@ import Discord from "discord.js";
 export default defineCommand({
   name: "funfact",
   category: "FUN",
+  usage: "funfact",
   aliases: [],
   description: "Random fun fact",
   requiresProcessing: false,

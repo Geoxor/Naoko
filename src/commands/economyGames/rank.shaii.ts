@@ -5,8 +5,7 @@ import Logger from "../../shaii/Logger.shaii";
 import { defineCommand } from "../../types";
 
 // Level formula
-let formula = (level: number) =>
-  1.3654321 * (((level - 10) * (level - 9)) / 2) ** 1.25 + 460 * (level - 10) + 2545;
+let formula = (level: number) => 1.3654321 * (((level - 10) * (level - 9)) / 2) ** 1.25 + 460 * (level - 10) + 2545;
 const levels = [90, 215, 370, 555, 775, 1035, 1335, 1685, 2085, 2545];
 
 // Calculate levels 10-300
@@ -34,6 +33,7 @@ let getXPForCurrentLevel = (xp: number) => {
 export default defineCommand({
   name: "rank",
   aliases: [],
+  usage: "rank",
   category: "ECONOMY",
   description: "View your rank",
   requiresProcessing: false,

@@ -6,6 +6,7 @@ export default defineCommand({
   name: "tts",
   category: "FUN",
   aliases: [],
+  usage: "tts <sentence>",
   description: "Turn a string into text to speech",
   requiresProcessing: false,
   execute: async (message) => {

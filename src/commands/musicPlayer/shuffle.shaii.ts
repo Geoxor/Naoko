@@ -2,9 +2,10 @@ import { musicMiddleware } from "../../middleware/musicMiddleware.shaii";
 import { defineCommand } from "../../types";
 
 export default defineCommand({
-  category: "MUSIC",
   name: "shuffle",
+  category: "MUSIC",
   aliases: [],
+  usage: "shuffle",
   description: "Shuffles the queue",
   requiresProcessing: false,
   execute: async (message) => {

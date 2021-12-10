@@ -8,6 +8,7 @@ import fileType from "file-type";
 export default defineCommand({
   name: "transform",
   aliases: ["tf"],
+  usage: "transform <...processor_names> <image | url | reply | user_id>",
   category: "IMAGE_PROCESSORS",
   description: "Transform an image with a pipeline",
   requiresProcessing: true,

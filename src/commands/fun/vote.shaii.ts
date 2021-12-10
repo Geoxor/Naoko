@@ -10,6 +10,7 @@ export default defineCommand({
   name: "vote",
   category: "FUN",
   aliases: [],
+  usage: "vote <topic>",
   description: "Creates a vote",
   requiresProcessing: false,
   execute: async (message) => {
@@ -20,10 +21,7 @@ export default defineCommand({
     const embed = new Discord.MessageEmbed()
       .setColor("#ff00b6")
       .setTitle(voteContext)
-      .setAuthor(
-        `${message.author.username} asks...`,
-        message.author.avatarURL() || message.author.defaultAvatarURL
-      )
+      .setAuthor(`${message.author.username} asks...`, message.author.avatarURL() || message.author.defaultAvatarURL)
       .setFooter(`Vote with the reactions bellow, results in ${VOTE_TIME / 1000} seconds`);
 
     try {
@@ -45,8 +43,7 @@ export default defineCommand({
       if (downvotes && upvotes) {
         const winner = downvotes.count > upvotes.count ? downvotes : upvotes;
 
-        if (downvotes.count + upvotes.count === 2)
-          return vote.reply("Vote cancelled since no one decided to vote");
+        if (downvotes.count + upvotes.count === 2) return vote.reply("Vote cancelled since no one decided to vote");
         if (downvotes.count === upvotes.count) return vote.reply("Votes tied so neither of them won");
 
         return vote.reply(`The majority voted ${winner.emoji} with ${winner.count - 1} votes`);
