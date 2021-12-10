@@ -26,6 +26,7 @@ import match from "./fun/match.shaii";
 import fact from "./fun/funfact.shaii";
 import say from "./fun/say.shaii";
 import spongify from "./fun/spongify.shaii";
+import brainfuck from "./fun/brainfuck.shaii";
 
 // moderation commands
 import clear from "./moderation/clear.shaii";
@@ -94,6 +95,7 @@ export const getCommands = async () => {
     battle,
     say,
     spongify,
+    brainfuck,
   ];
 
   return commands;
