@@ -65,13 +65,13 @@ export default class MusicPlayer {
   }
 
   /**
-   * Resizes a cover art to 512px for sending to Discord
+   * Resizes a cover art for sending to Discord
    * @param cover the cover to resize
    * @returns
    */
-  private async resizeCover(cover: Buffer): Promise<Buffer> {
+  private async resizeCover(cover: Buffer, size: number = 300): Promise<Buffer> {
     const image = await Jimp.read(cover);
-    return image.resize(Jimp.AUTO, 300).getBufferAsync("image/jpeg");
+    return image.resize(Jimp.AUTO, size).getBufferAsync("image/jpeg");
   }
 
   /**
@@ -165,7 +165,7 @@ export default class MusicPlayer {
    * Creates an embed to send for the currently playing tune
    * @author Geoxor
    */
-  public async createNowPlayingEmbed() {
+  public async createNowPlayingEmbed(mini: boolean = false) {
     // If there is nothing playing return
     if (!this.nowPlayingFile) return "nothing is playing currently";
 
@@ -180,15 +180,17 @@ export default class MusicPlayer {
     const { artist, title, album, date } = metadata.common;
 
     // Prepare an embed to send to the user
-    const embed = new Discord.MessageEmbed()
-      .addFields(
-        { inline: true, name: "Title", value: title || "Unknown" },
-        { inline: true, name: "Album", value: album || "Unknown" },
-        { inline: true, name: "Date", value: date || "Unknown" },
-        { inline: true, name: "Codec", value: codec || "Unknown" },
-        { inline: true, name: "Samplerate", value: `${sampleRate}Hz` || "Unknown" }
-      )
-      .setImage("attachment://cover.png");
+    const embed = new Discord.MessageEmbed().addField("Codec", codec || "Unknown", true);
+
+    // Add fields if the embed is a mini one or not
+    mini
+      ? embed.setThumbnail("attachment://cover.png")
+      : embed
+          .setImage("attachment://cover.png")
+          .addField("Title", title || "Unknown", true)
+          .addField("Album", album || "Unknown", true)
+          .addField("Samplerate", `${sampleRate}Hz` || "Unknown", true)
+          .addField("Date", date || "Unknown", true);
 
     // Add these if they exist
     artist && title ? embed.setTitle(`${artist} - ${title}`) : embed.setTitle(this.nowPlayingFile);
@@ -200,7 +202,7 @@ export default class MusicPlayer {
     const coverFormat = metadata.common.picture?.[0].format;
     if (coverBuffer && coverFormat) {
       const coverColor = (await getColors(coverBuffer, coverFormat))[0].hex();
-      const resizedCoverBuffer = await this.resizeCover(coverBuffer);
+      const resizedCoverBuffer = await this.resizeCover(coverBuffer, mini ? 128 : 300);
       const coverAttachment = new Discord.MessageAttachment(resizedCoverBuffer, "cover.png");
       embed.setColor(coverColor as Discord.HexColorString);
       return { embeds: [embed], files: [coverAttachment] };
