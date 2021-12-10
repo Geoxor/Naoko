@@ -10,7 +10,7 @@ import { version } from "../package.json";
 import logger from "./shaii/Logger.shaii";
 
 // Print log
-console.log(
+logger.error(
   chalk.hex("#FF33A7")(`              
           -%#-          
          *@@@@*         

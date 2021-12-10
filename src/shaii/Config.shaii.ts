@@ -1,3 +1,5 @@
+import logger from "./Logger.shaii";
+
 interface IConfig {
   prefix: string;
   musicDirectory: string;
@@ -12,7 +14,7 @@ class Config {
     try {
       var configJSON = require("../config.shaii.json");
     } catch (error) {
-      console.log("you don't have a config set, please fill in your config.shaii.json");
+      logger.error("you don't have a config set, please fill in your config.shaii.json");
     }
 
     this.config = configJSON;

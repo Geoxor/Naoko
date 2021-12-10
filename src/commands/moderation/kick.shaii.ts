@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 import Discord from "discord.js";
 import { SHAII_LOGO } from "../../constants";
 import Shaii from "../../shaii/Shaii.shaii";
+import logger from "../../shaii/Logger.shaii";
 
 export default defineCommand({
   name: "kick",
@@ -25,7 +26,7 @@ export default defineCommand({
     await targetUser.kick(reason);
 
     // Keep track of the kick
-    await User.kick(message.author.id, targetUser.id, reason).catch(() => console.log("kick database update failed"));
+    await User.kick(message.author.id, targetUser.id, reason).catch(() => logger.error("kick database update failed"));
 
     // Create the result embed
     const embed = new Discord.MessageEmbed()

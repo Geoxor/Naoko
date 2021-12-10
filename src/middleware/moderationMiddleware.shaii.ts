@@ -28,7 +28,7 @@ export default async function (message: IMessage, next: (message: IMessage) => a
     }
     return next(message);
   } catch (error) {
-    console.log(error);
+    logger.error(error as string);
     return;
   }
 }

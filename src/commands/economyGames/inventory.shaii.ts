@@ -1,6 +1,6 @@
 import InventoryManager from "../../shaii/InventoryManager.shaii";
 import { defineCommand } from "../../types";
-
+import logger from "../../shaii/Logger.shaii";
 export default defineCommand({
   name: "inventory",
   category: "ECONOMY",
@@ -13,7 +13,7 @@ export default defineCommand({
       const embed = await InventoryManager.getInventory(message.author);
       return { embeds: [embed] };
     } catch (error: any) {
-      console.log(error);
+      logger.error(error as string);
       return "You don't have an inventory";
     }
   },

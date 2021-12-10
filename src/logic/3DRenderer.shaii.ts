@@ -344,7 +344,7 @@ export class GeometryScene extends SceneProcessor {
    * Updates the scene for the next tick
    */
   protected async update() {
-    if (!this.sceneObject) return console.log("returning");
+    if (!this.sceneObject) return logger.error("returning");
     this.sceneObject.rotation.x += this.rotation.x ?? 0.05;
     this.sceneObject.rotation.y += this.rotation.y ?? 0.05;
     this.sceneObject.rotation.z += this.rotation.z ?? 0.0;

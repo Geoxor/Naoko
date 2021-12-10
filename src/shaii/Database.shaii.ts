@@ -94,7 +94,7 @@ schema.statics.kick = async function (kicker_id: string, kickee_id: string, reas
 
   kickee.kick_history.push(kick);
 
-  return kickee.save().catch((err: any) => console.log(err));
+  return kickee.save().catch((err: any) => logger.error(err));
 };
 
 schema.statics.ban = async function (baner_id: string, banee_id: string, reason: string = "no reason given") {
@@ -109,7 +109,7 @@ schema.statics.ban = async function (baner_id: string, banee_id: string, reason:
 
   banee.ban_history.push(ban);
 
-  return banee.save().catch((err: any) => console.log(err));
+  return banee.save().catch((err: any) => logger.error(err));
 };
 
 schema.statics.pushHistory = async function (historyType: HistoryTypes, user_id: string, value: string) {
@@ -117,7 +117,7 @@ schema.statics.pushHistory = async function (historyType: HistoryTypes, user_id:
   if (!user) return;
   user[historyType].push({ timestamp: Date.now(), value });
   if (user[historyType].length > 50) user[historyType].shift();
-  return user.save().catch((err: any) => console.log(err));
+  return user.save().catch((err: any) => logger.error(err));
 };
 
 // @ts-ignore

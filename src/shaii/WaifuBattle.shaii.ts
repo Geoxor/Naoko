@@ -2,6 +2,7 @@ import Waifu from "./Waifu.shaii";
 import Discord from "discord.js";
 import { calcDamage, calcParticipated } from "../logic/logic.shaii";
 import { User } from "./Database.shaii";
+import logger from "./Logger.shaii";
 
 /**
  * This manages a waifu battle, randomly picking enemy waifus,
@@ -114,7 +115,7 @@ export default class WaifuBattle {
 
         // Rare and above waifu can dodge attacks
         // if (Math.random() < 0.9 && relativeFrequency >= 5 ) this.waifu.dealDamage(damage);
-        if (this.waifu.isDead) await this.endBattle().catch((error) => console.log(error));
+        if (this.waifu.isDead) await this.endBattle().catch((error) => logger.error(error));
       }
     });
   }
@@ -255,7 +256,7 @@ export default class WaifuBattle {
       try {
         this.channel.name === "shaii" ? await this.thread!.setArchived(true) : await this.thread?.delete();
       } catch (error: any) {
-        console.log(error);
+        logger.error(error);
       }
     }, this.AFTERMATH_TIME);
   }

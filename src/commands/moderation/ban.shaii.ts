@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 import Discord from "discord.js";
 import { SHAII_LOGO } from "../../constants";
 import Shaii from "../../shaii/Shaii.shaii";
+import logger from "../../shaii/Logger.shaii";
 
 export default defineCommand({
   name: "ban",
@@ -27,7 +28,7 @@ export default defineCommand({
     });
 
     // Keep track of the ban
-    await User.ban(message.author.id, targetUser.id, reason).catch(() => console.log("ban database update failed"));
+    await User.ban(message.author.id, targetUser.id, reason).catch(() => logger.error("ban database update failed"));
 
     // Create the result embed
     const embed = new Discord.MessageEmbed()
