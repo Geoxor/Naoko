@@ -21,7 +21,7 @@ import {
   TARDOKI_ID,
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
-import { markdown, randomChoice } from "../logic/logic.shaii";
+import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 
@@ -134,21 +134,32 @@ class Shaii {
         User.pushHistory("nickname_history", oldMember.id, newMember.nickname);
       }
     });
-    this.bot.on("voiceStateUpdate", (oldState, newState) => {
-      // If geoxor is in vc and tardoki kun joins kick him out
-      if (
-        newState.channel?.members.some((member) => member.id === GEOXOR_ID) &&
-        newState.channel?.members.some((member) => member.id === TARDOKI_ID)
-      ) {
-        const tardoki = newState.channel?.members.get(TARDOKI_ID);
-        tardoki?.voice.disconnect();
-      }
-    });
     this.bot.on("threadCreate", (thread) => {
       thread.join();
     });
     this.bot.login(config.token);
     logger.shaii.login();
+  }
+
+  public getClosestCommandName(searchString: string) {
+    let closestCommand = {
+      name: "",
+      distance: 4, // ld: levenshtein distance
+    };
+    for (const [commandName] of this.commands.entries()) {
+      const currentCommandDistance = levenshtein(commandName, searchString);
+
+      if (currentCommandDistance < closestCommand.distance) {
+        closestCommand.name = commandName;
+        closestCommand.distance = currentCommandDistance;
+      }
+    }
+
+    if (closestCommand.name === "" || closestCommand.distance > 3) {
+      return;
+    }
+
+    return closestCommand.name;
   }
 
   /**
@@ -209,8 +220,7 @@ class Shaii {
           logger.command.executedCommand(0, "@mention", message.author.username, message.guild?.name || "dm");
 
           // Reply with this when they purely ping her with no question
-          if (!message.content.substring(`<@!${SHAII_ID}>`.length).trim())
-            return message.reply("what tf do you want");
+          if (!message.content.substring(`<@!${SHAII_ID}>`.length).trim()) return message.reply("what tf do you want");
           return message.reply(randomChoice(answers));
         }
 
@@ -229,23 +239,17 @@ class Shaii {
 
           // If it doesn't exist we respond
           if (!command) {
-            let closestCommand = {
-              name: "",
-              ld: 4, // ld: levenshtein distance
-            };
-            for (const [command_name] of this.commands.entries()) {
-              const currentCommandLD = levenshtein(command_name, message.command);
+            const commandDoesntExistString = `That command doesn't exist ${randomChoice(SLURS)}`;
+            const closestCommandName = this.getClosestCommandName(message.command);
 
-              if (currentCommandLD < closestCommand.ld)
-                (closestCommand.name = command_name), (closestCommand.ld = currentCommandLD);
-            }
-            let suggestion: string;
-            closestCommand.name === "" || closestCommand.ld > 3
-              ? (suggestion = "")
-              : (suggestion = `\nDid you mean: \`${config.prefix}${closestCommand.name}\``);
-            return message
-              .reply(`That command doesn't exist ${randomChoice(SLURS)}${suggestion}`)
-              .catch(() => {});
+            if (closestCommandName)
+              return message
+                .reply(
+                  `${commandDoesntExistString}\nthere's this however? ${highlight(config.prefix + closestCommandName)}`
+                )
+                .catch(() => {});
+
+            return message.reply(`${commandDoesntExistString}`).catch(() => {});
           }
 
           // Notify the user their shit's processing
@@ -301,10 +305,8 @@ class Shaii {
               await message.channel.send(result);
             } catch (error: any) {
               if (error.code === 500) {
-                const embed = new Discord.MessageEmbed()
-                  .setColor("#ffcc4d")
-                  .setDescription("⚠️ when the upload speed");
-                await message.reply({ embeds: [embed] });
+                const embed = new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed");
+                await message.reply({ embeds: [embed] }).catch(() => {});
               } else await message.reply(markdown(error)).catch(() => {});
             }
           }
