@@ -11,7 +11,7 @@ export default defineCommand({
   execute: async (message) => {
     return musicMiddleware(message, async (channel, player) => {
       player.skip();
-      return "Skipped";
+      return await player.createNowPlayingEmbed(true);
     });
   },
 });
