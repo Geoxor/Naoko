@@ -398,7 +398,7 @@ export function calcParticipated(participatedDamage: number, totalHp: number, pl
  * @param {string} sentence the sentence to uwu-ify
  * @author azur1s
  */
-export function uwufy(sentence: string): string {
+export function textToUwufy(sentence: string): string {
   return sentence
     .replace(/(?:r|l)/g, "w")
     .replace(/(?:R|L)/g, "W")
@@ -419,7 +419,7 @@ export function uwufy(sentence: string): string {
  * @param sentence the sentence to britishize
  * @author Geoxor & MaidMarija
  */
-export function britify(sentence: string): string {
+export function textToBritify(sentence: string): string {
   // first delete any disgusting american dialect (IMPORTANT, NEEDS IMPROVEMENT)
   sentence = sentence.replace(/mom/g, "mum");
 
@@ -441,7 +441,7 @@ export function britify(sentence: string): string {
  * @param capsOdd if letters to capitalize are the odd ones (by default: true)
  * @author Qexat
  */
-export function spongify(sentence: string, capsOdd: boolean = true): string {
+export function textToSpongify(sentence: string, capsOdd: boolean = true): string {
   var newSentence = "";
   var lastNotSpaceChar;
 
@@ -456,6 +456,60 @@ export function spongify(sentence: string, capsOdd: boolean = true): string {
   }
 
   return newSentence;
+}
+
+/**
+ * Brainfuck a sentence
+ * @param sentence the sentence to brainfuck
+ * @author Qexat // based (copied tbh lol) on HelgeFox's work <https://github.com/helgeh/brainfuck-text>
+ */
+export function textToBrainfuck(sentence: string): string {
+  function closest(num: number, arr: number[]): number {
+    const arr2: number[] = arr.map((n: number) => Math.abs(num - n));
+    const min: number = Math.min.apply(null, arr2);
+    return arr[arr2.indexOf(min)];
+  }
+
+  function buildBaseTable(arr: number[]): string {
+    const out = { value: "", append: (txt: string) => (out.value += txt) };
+    out.append("+".repeat(10));
+    out.append("[");
+    arr.forEach((cc: number) => {
+      out.append(">");
+      out.append("+".repeat(cc / 10));
+    });
+    out.append("<".repeat(arr.length));
+    out.append("-");
+
+    out.append("]");
+    return out.value;
+  }
+
+  const output = { value: "", append: (txt: string) => (output.value += txt) };
+
+  const charArray: number[] = sentence.split("").map((c) => c.charCodeAt(0));
+  const baseTable: number[] = charArray
+    .map((c: number) => Math.round(c / 10) * 10)
+    .filter((i: number, p: number, s: number[]) => s.indexOf(i) === p);
+
+  output.append(buildBaseTable(baseTable));
+
+  let pos: number = -1;
+  for (let i = 0; i < charArray.length; i++) {
+    const bestNum: number = closest(charArray[i], baseTable);
+    const bestPos: number = baseTable.indexOf(bestNum);
+
+    const moveChar: string = pos < bestPos ? ">" : "<";
+    output.append(moveChar.repeat(Math.abs(pos - bestPos)));
+    pos = bestPos;
+
+    const opChar: string = baseTable[pos] < charArray[i] ? "+" : "-";
+    output.append(opChar.repeat(Math.abs(baseTable[pos] - charArray[i])));
+    output.append(".");
+    baseTable[pos] = charArray[i];
+  }
+
+  return output.value;
 }
 
 /**

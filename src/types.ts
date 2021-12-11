@@ -7,6 +7,11 @@ export type Coords = {
   y?: number;
   z?: number;
 };
+export type TextProcessorFn = (sentence: string, ...args: any) => Promise<string>;
+export interface TextProcessors {
+  [key: string]: TextProcessorFn;
+}
+
 export type ImageProcessorFn = (buffer: Buffer, ...args: any) => Promise<Buffer>;
 export interface ImageProcessors {
   [key: string]: ImageProcessorFn;
@@ -85,7 +90,14 @@ export type CommandExecute = (
   message: IMessage
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
-export type CommandCategories = "ECONOMY" | "FUN" | "IMAGE_PROCESSORS" | "MODERATION" | "MUSIC" | "UTILITY";
+export type CommandCategories =
+  | "ECONOMY"
+  | "FUN"
+  | "IMAGE_PROCESSORS"
+  | "TEXT_PROCESSORS"
+  | "MODERATION"
+  | "MUSIC"
+  | "UTILITY";
 
 export interface ICommand {
   /**
