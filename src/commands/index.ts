@@ -20,13 +20,16 @@ import dicksize from "./fun/dicksize.shaii";
 import tts from "./fun/tts.shaii";
 import mors from "./fun/mors.shaii";
 import traceAnime from "./fun/trace.shaii";
-import uwuify from "./fun/uwufy.shaii";
-import britify from "./fun/britify.shaii";
 import match from "./fun/match.shaii";
 import fact from "./fun/funfact.shaii";
 import say from "./fun/say.shaii";
-import spongify from "./fun/spongify.shaii";
-import brainfuck from "./fun/brainfuck.shaii";
+
+// text processing
+import textify from "./textProcessors/textify.shaii";
+import brainfuck from "./textProcessors/brainfuck.shaii";
+import britify from "./textProcessors/britify.shaii";
+import spongify from "./textProcessors/spongify.shaii";
+import uwuify from "./textProcessors/uwufy.shaii";
 
 // moderation commands
 import clear from "./moderation/clear.shaii";
@@ -96,6 +99,7 @@ export const getCommands = async () => {
     say,
     spongify,
     brainfuck,
+    textify,
   ];
 
   return commands;

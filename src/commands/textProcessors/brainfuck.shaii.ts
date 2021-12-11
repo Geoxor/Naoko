@@ -6,7 +6,7 @@ import { Readable } from "stream";
 
 export default defineCommand({
   name: "brainfuck",
-  category: "FUN",
+  category: "TEXT_PROCESSORS",
   usage: "brainfuck <sentence>",
   aliases: [],
   description: "Translates your sentence to brainfuck esoteric language",
