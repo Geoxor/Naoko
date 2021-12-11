@@ -14,13 +14,14 @@ export default defineCommand({
     // can be IMPROVED
     let pipeline: string[] = [];
     let userSentence: string[] = [];
-    let isPrecArgCommand: boolean = true;
+    let isArgCommand: boolean = true;
     message.args.forEach((arg) => {
-      isPrecArgCommand
+      isArgCommand
         ? ["brainfuck", "britify", "spongify", "uwufy"].includes(arg)
           ? pipeline.push(arg)
-          : (isPrecArgCommand = false)
+          : (isArgCommand = false, userSentence.push(arg))
         : userSentence.push(arg);
+        console.log(arg);
       if (pipeline.length > 10) return "pipeline can't be longer than 10 iterators";
     });
     const sentence = userSentence.join(" ");

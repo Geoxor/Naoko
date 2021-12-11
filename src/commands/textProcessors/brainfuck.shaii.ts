@@ -19,6 +19,7 @@ export default defineCommand({
         content: "bro the result is too big gonna put it in a file",
         files: [{ name: "shit.bf", attachment: Readable.from(response) }],
       };
-    } else return response;
+    }
+    return response;
   },
 });

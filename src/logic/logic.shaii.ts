@@ -474,7 +474,7 @@ export function textToBrainfuck(sentence: string): string {
     const out = { value: "", append: (txt: string) => (out.value += txt) };
     out.append("+".repeat(10));
     out.append("[");
-    arr.forEach(function (cc: number) {
+    arr.forEach((cc: number) => {
       out.append(">");
       out.append("+".repeat(cc / 10));
     });
@@ -495,19 +495,19 @@ export function textToBrainfuck(sentence: string): string {
   output.append(buildBaseTable(baseTable));
 
   let pos: number = -1;
-  charArray.forEach(function (charCode: number) {
-    const bestNum: number = closest(charCode, baseTable);
+  for (let i = 0; i < charArray.length; i++) {
+    const bestNum: number = closest(charArray[i], baseTable);
     const bestPos: number = baseTable.indexOf(bestNum);
 
     const moveChar: string = pos < bestPos ? ">" : "<";
     output.append(moveChar.repeat(Math.abs(pos - bestPos)));
     pos = bestPos;
 
-    const opChar: string = baseTable[pos] < charCode ? "+" : "-";
-    output.append(opChar.repeat(Math.abs(baseTable[pos] - charCode)));
+    const opChar: string = baseTable[pos] < charArray[i] ? "+" : "-";
+    output.append(opChar.repeat(Math.abs(baseTable[pos] - charArray[i])));
     output.append(".");
-    baseTable[pos] = charCode;
-  });
+    baseTable[pos] = charArray[i];
+  }
 
   return output.value;
 }
