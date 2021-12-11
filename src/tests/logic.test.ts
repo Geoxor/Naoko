@@ -4,7 +4,7 @@ import { it } from "mocha";
 import {
   encodeMorse,
   decodeMorse,
-  uwufy,
+  textToUwufy,
   getWaifuNameFromFileName,
   calcSpread,
   isValidHttpUrl,
@@ -36,28 +36,28 @@ describe("⚡ Morse Encoder (encodeMorse)", () => {
   });
 });
 
-describe("⚡ UwU-ifier (uwufy)", () => {
+describe("⚡ UwU-ifier (textToUwufy)", () => {
   it("can encode a normal string", async () => {
-    const uwu = uwufy("hello world, i wanna become uwu uwuwuuw");
+    const uwu = textToUwufy("hello world, i wanna become uwu uwuwuuw");
     chai.expect(uwu).to.contain("hewwo");
     chai.expect(uwu).to.contain("wowwd");
     chai.expect(uwu).to.contain("wannya");
   });
 
   it("can preserve capitalizations", async () => {
-    const uwu = uwufy("HELLO WORLD, I WANNA BECOME UWU UWUWUUW");
+    const uwu = textToUwufy("HELLO WORLD, I WANNA BECOME UWU UWUWUUW");
     chai.expect(uwu).to.contain("HEWWO");
     chai.expect(uwu).to.contain("WOWWD");
     chai.expect(uwu).to.contain("WANNYA");
   });
 
   it("can preserve symbols", async () => {
-    const uwu = uwufy("&!*@#&");
+    const uwu = textToUwufy("&!*@#&");
     chai.expect(uwu).to.contain("&!*@#&");
   });
 
   it("can preserve numbers", async () => {
-    const uwu = uwufy("hewwo 125812985 owo");
+    const uwu = textToUwufy("hewwo 125812985 owo");
     chai.expect(uwu).to.contain("125812985");
   });
 });
