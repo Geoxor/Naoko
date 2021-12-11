@@ -19,9 +19,8 @@ export default defineCommand({
       isArgCommand
         ? ["brainfuck", "britify", "spongify", "uwufy"].includes(arg)
           ? pipeline.push(arg)
-          : (isArgCommand = false, userSentence.push(arg))
+          : ((isArgCommand = false), userSentence.push(arg))
         : userSentence.push(arg);
-        console.log(arg);
       if (pipeline.length > 10) return "pipeline can't be longer than 10 iterators";
     });
     const sentence = userSentence.join(" ");
