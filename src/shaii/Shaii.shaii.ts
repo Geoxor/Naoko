@@ -1,4 +1,4 @@
-import Discord, { Intents, TextChannel } from "discord.js";
+import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -20,6 +20,7 @@ import {
   TESTING_GUILD_ID,
   SLURS,
   TARDOKI_ID,
+  MUTED_ROLE_ID,
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
@@ -77,6 +78,7 @@ class Shaii {
         moderationMiddleware(newMessage, (newMessage) => {});
       });
     });
+    this.bot.on("messageReactionAdd", async (messageReaction, user) => this.onMessageReactionAdd(messageReaction, user));
     this.bot.on("guildMemberRemove", async (member) => {
       if (member.id === SHAII_ID) return;
       let user = await User.findOneOrCreate(member);
@@ -330,6 +332,20 @@ class Shaii {
           }
         });
       });
+    });
+  }
+
+  public onMessageReactionAdd(
+    messageReaction: MessageReaction | PartialMessageReaction,
+    user: Discord.User | Discord.PartialUser
+  ) {
+    const messageReactionGuild = this.bot.guilds.cache.get(messageReaction.message.guild?.id || "");
+    if (!messageReactionGuild) return;
+    messageReactionGuild.members.fetch().then((data) => {
+      if (data.get(user.id)?.roles.cache.has(MUTED_ROLE_ID)) {
+        messageReaction.remove();
+      }
+      return;
     });
   }
 }
