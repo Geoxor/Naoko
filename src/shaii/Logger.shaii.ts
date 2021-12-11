@@ -66,9 +66,9 @@ class Logger {
    */
   public progress(name: string, tickCount: number) {
     return this.multiProgress.newBar(
-      `  ${getCurrentMemoryHeap()}  ${this.timeColored()} 🧪 ${chalk.hex(this.color)(name)}${chalk.hex(this.color)(
-        "[:bar]"
-      )} :etas :percent `,
+      `  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji} ${chalk.hex(this.color)(name)}${chalk.hex(
+        this.color
+      )("[:bar]")} :etas :percent `,
       {
         complete: "#",
         incomplete: "~",
