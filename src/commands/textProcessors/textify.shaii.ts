@@ -11,6 +11,7 @@ export default defineCommand({
   description: "Transform a sentence with a pipeline",
   requiresProcessing: true,
   execute: async (message) => {
+    // can be IMPROVED
     let pipeline: string[] = [];
     let userSentence: string[] = [];
     let isPrecArgCommand: boolean = true;

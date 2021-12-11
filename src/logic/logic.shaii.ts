@@ -464,17 +464,17 @@ export function textToSpongify(sentence: string, capsOdd: boolean = true): strin
  * @author Qexat // based (copied tbh lol) on HelgeFox's work <https://github.com/helgeh/brainfuck-text>
  */
 export function textToBrainfuck(sentence: string): string {
-  function closest(num: number, arr: number[]) {
-    var arr2 = arr.map((n) => Math.abs(num - n));
-    var min = Math.min.apply(null, arr2);
+  function closest(num: number, arr: number[]): number {
+    const arr2: number[] = arr.map((n: number) => Math.abs(num - n));
+    const min: number = Math.min.apply(null, arr2);
     return arr[arr2.indexOf(min)];
   }
 
-  function buildBaseTable(arr: number[]) {
-    var out = { value: "", append: (txt: string) => (out.value += txt) };
+  function buildBaseTable(arr: number[]): string {
+    const out = { value: "", append: (txt: string) => (out.value += txt) };
     out.append("+".repeat(10));
     out.append("[");
-    arr.forEach(function (cc) {
+    arr.forEach(function (cc: number) {
       out.append(">");
       out.append("+".repeat(cc / 10));
     });
@@ -485,23 +485,25 @@ export function textToBrainfuck(sentence: string): string {
     return out.value;
   }
 
-  var output = { value: "", append: (txt: string) => (output.value += txt) };
+  const output = { value: "", append: (txt: string) => (output.value += txt) };
 
-  var charArray = sentence.split("").map((c) => c.charCodeAt(0));
-  var baseTable = charArray.map((c) => Math.round(c / 10) * 10).filter((i, p, s) => s.indexOf(i) === p);
+  const charArray: number[] = sentence.split("").map((c) => c.charCodeAt(0));
+  const baseTable: number[] = charArray
+    .map((c: number) => Math.round(c / 10) * 10)
+    .filter((i: number, p: number, s: number[]) => s.indexOf(i) === p);
 
   output.append(buildBaseTable(baseTable));
 
-  var pos = -1;
-  charArray.forEach(function (charCode) {
-    var bestNum = closest(charCode, baseTable);
-    var bestPos = baseTable.indexOf(bestNum);
+  let pos: number = -1;
+  charArray.forEach(function (charCode: number) {
+    const bestNum: number = closest(charCode, baseTable);
+    const bestPos: number = baseTable.indexOf(bestNum);
 
-    var moveChar = pos < bestPos ? ">" : "<";
+    const moveChar: string = pos < bestPos ? ">" : "<";
     output.append(moveChar.repeat(Math.abs(pos - bestPos)));
     pos = bestPos;
 
-    var opChar = baseTable[pos] < charCode ? "+" : "-";
+    const opChar: string = baseTable[pos] < charCode ? "+" : "-";
     output.append(opChar.repeat(Math.abs(baseTable[pos] - charCode)));
     output.append(".");
     baseTable[pos] = charCode;
