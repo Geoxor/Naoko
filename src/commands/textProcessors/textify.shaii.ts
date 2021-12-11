@@ -21,7 +21,6 @@ export default defineCommand({
           ? pipeline.push(arg)
           : ((isArgCommand = false), userSentence.push(arg))
         : userSentence.push(arg);
-        console.log(arg);
       if (pipeline.length === 0) return "pipeline can't be empty";
       if (pipeline.length > 10) return "pipeline can't be longer than 10 iterators";
     });
