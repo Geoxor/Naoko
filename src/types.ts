@@ -2,6 +2,7 @@ import Discord from "discord.js";
 import mongoose from "mongoose";
 import { Mongoose, Types, Document } from "mongoose";
 import { IUserFunctions } from "./shaii/Database.shaii";
+import { COMMAND_CATEGORIES_RAW } from "./constants";
 export type Coords = {
   x?: number;
   y?: number;
@@ -90,14 +91,7 @@ export type CommandExecute = (
   message: IMessage
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
-export type CommandCategories =
-  | "ECONOMY"
-  | "FUN"
-  | "IMAGE_PROCESSORS"
-  | "TEXT_PROCESSORS"
-  | "MODERATION"
-  | "MUSIC"
-  | "UTILITY";
+export type CommandCategories = typeof COMMAND_CATEGORIES_RAW[number];
 
 export interface ICommand {
   /**
