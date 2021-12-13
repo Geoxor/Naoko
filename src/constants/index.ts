@@ -1,4 +1,5 @@
 import { EmojiIdentifierResolvable } from "discord.js";
+import { IWaifuRarityName } from "src/types";
 export const SHAII_ID = "870496144881492069";
 export const GEOXOR_GUILD_ID = "385387666415550474";
 export const TESTING_GUILD_ID = "911762334538670160";
@@ -33,6 +34,8 @@ export const WINDOWS_LOGO = "https://cdn.discordapp.com/attachments/816028632269
 export const LINUX_LOGO = "https://cdn.discordapp.com/attachments/816028632269979668/878984391936847882/LINUX-LOGO.png";
 export const SHAII_LOGO = "https://cdn.discordapp.com/avatars/870496144881492069/0d0f5a8cd8ad5e0e0a5eec0d40d2e2a5.webp";
 
+export const HISTORY_TYPES = ["nickname_history", "username_history", "status_history"] as const;
+
 export const COMMAND_CATEGORIES: {categoryName: string, categoryEmoji: EmojiIdentifierResolvable}[] = [
 	{
 		categoryName: "ECONOMY",
@@ -65,3 +68,35 @@ export const COMMAND_CATEGORIES: {categoryName: string, categoryEmoji: EmojiIden
 ];
 
 export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {return category.categoryName});
+
+export const IWAIFU_RARITIES: {name: string, color: string, emoji: EmojiIdentifierResolvable}[] = [
+	{
+		name: "common",
+		color: "#8F93A2",
+		emoji: '👺',
+	},
+	{
+		name: "uncommon",
+		color: "#BDDE86",
+		emoji: '🐉',
+	},
+	{
+		name: "rare",
+		color: "#C792EA",
+		emoji: '🔮',
+	},
+	{
+		name: "legendary",
+		color: "#FFCB6B",
+		emoji: '🌟',
+	},
+	{
+		name: "mythical",
+		color: "#F07178",
+		emoji: '⚜️',
+	},
+];
+
+export const IWAIFU_RARITIES_NAME = IWAIFU_RARITIES.map((rarity) => {return rarity.name});
+export const IWAIFU_RARITIES_COLOR = IWAIFU_RARITIES.map((rarity) => {return rarity.color});
+export const IWAIFU_RARITIES_EMOJI = IWAIFU_RARITIES.map((rarity) => {return rarity.emoji});

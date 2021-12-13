@@ -1,8 +1,14 @@
-import Discord from "discord.js";
+import Discord, { MessageEmbed } from "discord.js";
 import mongoose from "mongoose";
 import { Mongoose, Types, Document } from "mongoose";
 import { IUserFunctions } from "./shaii/Database.shaii";
-import { COMMAND_CATEGORIES_RAW } from "./constants";
+import {
+  COMMAND_CATEGORIES_RAW,
+  IWAIFU_RARITIES_NAME,
+  IWAIFU_RARITIES_COLOR,
+  IWAIFU_RARITIES_EMOJI,
+  HISTORY_TYPES
+} from "./constants";
 export type Coords = {
   x?: number;
   y?: number;
@@ -23,7 +29,7 @@ export interface History {
   value: string;
 }
 
-export type HistoryTypes = "nickname_history" | "username_history" | "status_history";
+export type HistoryTypes = typeof HISTORY_TYPES[number];
 
 export interface ActionHistory {
   timestamp: number;
@@ -130,6 +136,22 @@ export interface ICommand {
 
 export const defineCommand = (cmd: ICommand): ICommand => cmd;
 
+export interface CommandInput {
+  type: void; // actually, it should be: text | link | sticker | image | video | sound | file | embed | error
+  contents: string | File | MessageEmbed;
+  command: ICommand;
+  nextCommand?: CommandInput;
+  message: Discord.Message;
+}
+
+export interface CommandOutput {
+  type: void; // actually, it should be: text | link | sticker | image | video | sound | file | embed | error
+  contents: string | File | MessageEmbed;
+  command: ICommand;
+  nextCommand?: CommandInput;
+  message: Discord.Message;
+}
+
 export interface IAnime {
   anilist: number;
   filename: string;
@@ -189,9 +211,9 @@ export interface IBattle extends IRewards {
   totalDamageDealt: number;
 }
 
-export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
-export type IWaifuRarityColor = "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | "#F07178";
-export type IWaifuRarityEmoji = "👺" | "🐉" | "🔮" | "🌟" | "⚜️";
+export type IWaifuRarityName = typeof IWAIFU_RARITIES_NAME[number];
+export type IWaifuRarityColor = typeof IWAIFU_RARITIES_COLOR[number];
+export type IWaifuRarityEmoji = typeof IWAIFU_RARITIES_EMOJI[number];
 
 export interface GeometrySceneOptions {
   texture: Buffer;
