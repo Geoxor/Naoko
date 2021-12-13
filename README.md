@@ -5,7 +5,6 @@
 ## Important note
 
 ❌ The original repository of this fork **has been deleted**.  
-⚠️ Timon's repository is NOT the original but of the first fork of this latter.  
 👉 However, I will keep it updated unless [Geoxor](https://github.com/Geoxor), the original author, tells me not to.
 
 
