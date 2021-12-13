@@ -71,54 +71,41 @@ export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {
   return category.categoryName;
 });
 
-export const IWAIFU_RARITIES: { name: string; color: string; emoji: EmojiIdentifierResolvable }[] = [
-  {
-    name: "common",
-    color: "#8F93A2",
-    emoji: "👺",
-  },
-  {
-    name: "uncommon",
-    color: "#BDDE86",
-    emoji: "🐉",
-  },
-  {
-    name: "rare",
-    color: "#C792EA",
-    emoji: "🔮",
-  },
-  {
-    name: "legendary",
-    color: "#FFCB6B",
-    emoji: "🌟",
-  },
-  {
-    name: "mythical",
-    color: "#F07178",
-    emoji: "⚜️",
-  },
+export const IWAIFU_RARITIES: Map<string, string>[] = [
+  new Map<string, string>([
+    ["name", "common"],
+    ["color", "#8F93A2"],
+    ["emoji", "👺"]
+  ]),
+  new Map<string, string>([
+    ["name", "uncommon"],
+    ["color", "#BDDE86"],
+    ["emoji", "🐉"]
+  ]),
+  new Map<string, string>([
+    ["name", "rare"],
+    ["color", "#C792EA"],
+    ["emoji", "🔮"]
+  ]),
+  new Map<string, string>([
+    ["name", "legendary"],
+    ["color", "#FFCB6B"],
+    ["emoji", "🌟"]
+  ]),
+  new Map<string, string>([
+    ["name", "mythical"],
+    ["color", "#F07178"],
+    ["emoji", "⚜️"]
+  ]),
 ];
 
-// this is pretty cringe
-let tmpName: string[] = [];
-Object.values(IWAIFU_RARITIES).forEach((rarity) => {
-  tmpName.push(rarity.name);
-});
 
-let tmpColor: string[] = [];
-Object.values(IWAIFU_RARITIES).forEach((rarity) => {
-  tmpColor.push(rarity.color);
-});
+const x = [];
 
-let tmpEmoji: EmojiIdentifierResolvable[] = [];
-Object.values(IWAIFU_RARITIES).forEach((rarity) => {
-  tmpEmoji.push(rarity.emoji);
-});
-
-function tuple<T extends string>(arr: T[]): T[] {
-  return arr;
+const tuple = <T extends string[]>(...args: T) => args;
+for (let i = 0; i < IWAIFU_RARITIES.length; i++) {
+	x.push([...IWAIFU_RARITIES][i].get("name") as string);
 }
 
-export const IWAIFU_RARITIES_NAME = tuple([...tmpName]);
-export const IWAIFU_RARITIES_COLOR = [...tmpColor] as const;
-export const IWAIFU_RARITIES_EMOJI = [...tmpEmoji] as const;
+export const IWAIFU_RARITIES_NAME = [...x] as const;
+

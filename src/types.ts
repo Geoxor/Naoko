@@ -5,7 +5,8 @@ import { IUserFunctions } from "./shaii/Database.shaii";
 import {
   COMMAND_CATEGORIES_RAW,
   HISTORY_TYPES,
-  IWAIFU_RARITIES
+  IWAIFU_RARITIES,
+  IWAIFU_RARITIES_NAME
 } from "./constants";
 export type Coords = {
   x?: number;
@@ -201,8 +202,8 @@ export interface IBattle extends IRewards {
   totalDamageDealt: number;
 }
 
-export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
-// export type IWaifuRarityName = typeof IWAIFU_RARITIES.map((e: typeof IWAIFU_RARITIES[number]) => e.name);
+//export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
+export type IWaifuRarityName = typeof IWAIFU_RARITIES_NAME[number];
 export type IWaifuRarityColor = "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | "#F07178";
 export type IWaifuRarityEmoji = "👺" | "🐉" | "🔮" | "🌟" | "⚜️";
 
