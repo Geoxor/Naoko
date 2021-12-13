@@ -203,7 +203,11 @@ export interface IBattle extends IRewards {
   totalDamageDealt: number;
 }
 
-export type IWaifuRarityName = typeof IWAIFU_RARITIES_NAME[number];
+//export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
+export interface IWaifuRarityName
+  extends Array<{
+    [index: typeof IWAIFU_RARITIES_NAME[number]]: number;
+  }> {}
 export type IWaifuRarityColor = typeof IWAIFU_RARITIES_COLOR[number];
 export type IWaifuRarityEmoji = typeof IWAIFU_RARITIES_EMOJI[number];
 

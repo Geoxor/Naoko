@@ -115,6 +115,10 @@ Object.values(IWAIFU_RARITIES).forEach((rarity) => {
   tmpEmoji.push(rarity.emoji);
 });
 
-export const IWAIFU_RARITIES_NAME = [...tmpName] as const;
+function tuple<T extends string>(arr: T[]): T[] {
+  return arr;
+}
+
+export const IWAIFU_RARITIES_NAME = tuple([...tmpName]);
 export const IWAIFU_RARITIES_COLOR = [...tmpColor] as const;
 export const IWAIFU_RARITIES_EMOJI = [...tmpEmoji] as const;
