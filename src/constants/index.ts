@@ -36,67 +36,75 @@ export const SHAII_LOGO = "https://cdn.discordapp.com/avatars/870496144881492069
 
 export const HISTORY_TYPES = ["nickname_history", "username_history", "status_history"] as const;
 
-export const COMMAND_CATEGORIES: {categoryName: string, categoryEmoji: EmojiIdentifierResolvable}[] = [
-	{
-		categoryName: "ECONOMY",
-		categoryEmoji: '💰'
-	},
-	{
-		categoryName: "FUN",
-		categoryEmoji: '😆'
-	},
-	{
-		categoryName: "IMAGE_PROCESSORS",
-		categoryEmoji: '🖼️'
-	},
-	{
-		categoryName: "MODERATION",
-		categoryEmoji: '🔨'
-	},
-	{
-		categoryName: "MUSIC",
-		categoryEmoji: '🎵'
-	},
-	{
-		categoryName: "TEXT_PROCESSORS",
-		categoryEmoji: '📝'
-	},
-	{
-		categoryName: "UTILITY",
-		categoryEmoji: '🔧'
-	},
+export const COMMAND_CATEGORIES: { categoryName: string; categoryEmoji: EmojiIdentifierResolvable }[] = [
+  {
+    categoryName: "ECONOMY",
+    categoryEmoji: "💰",
+  },
+  {
+    categoryName: "FUN",
+    categoryEmoji: "😆",
+  },
+  {
+    categoryName: "IMAGE_PROCESSORS",
+    categoryEmoji: "🖼️",
+  },
+  {
+    categoryName: "MODERATION",
+    categoryEmoji: "🔨",
+  },
+  {
+    categoryName: "MUSIC",
+    categoryEmoji: "🎵",
+  },
+  {
+    categoryName: "TEXT_PROCESSORS",
+    categoryEmoji: "📝",
+  },
+  {
+    categoryName: "UTILITY",
+    categoryEmoji: "🔧",
+  },
 ];
 
-export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {return category.categoryName});
+export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {
+  return category.categoryName;
+});
 
-export const IWAIFU_RARITIES: {name: string, color: string, emoji: EmojiIdentifierResolvable}[] = [
-	{
-		name: "common",
-		color: "#8F93A2",
-		emoji: '👺',
-	},
-	{
-		name: "uncommon",
-		color: "#BDDE86",
-		emoji: '🐉',
-	},
-	{
-		name: "rare",
-		color: "#C792EA",
-		emoji: '🔮',
-	},
-	{
-		name: "legendary",
-		color: "#FFCB6B",
-		emoji: '🌟',
-	},
-	{
-		name: "mythical",
-		color: "#F07178",
-		emoji: '⚜️',
-	},
+export const IWAIFU_RARITIES: { name: string; color: string; emoji: EmojiIdentifierResolvable }[] = [
+  {
+    name: "common",
+    color: "#8F93A2",
+    emoji: "👺",
+  },
+  {
+    name: "uncommon",
+    color: "#BDDE86",
+    emoji: "🐉",
+  },
+  {
+    name: "rare",
+    color: "#C792EA",
+    emoji: "🔮",
+  },
+  {
+    name: "legendary",
+    color: "#FFCB6B",
+    emoji: "🌟",
+  },
+  {
+    name: "mythical",
+    color: "#F07178",
+    emoji: "⚜️",
+  },
 ];
 
-export const IWAIFU_RARITIES_NAME = IWAIFU_RARITIES.map((rarity) => {return rarity.name});
-export const IWAIFU_RARITIES_COLOR = IWAIFU_RARITIES.map((rarity) => {return rarity.color});
-export const IWAIFU_RARITIES_EMOJI = IWAIFU_RARITIES.map((rarity) => {return rarity.emoji});
+export const IWAIFU_RARITIES_NAME = IWAIFU_RARITIES.map((rarity) => {
+  return rarity.name;
+});
+export const IWAIFU_RARITIES_COLOR = IWAIFU_RARITIES.map((rarity) => {
+  return rarity.color;
+});
+export const IWAIFU_RARITIES_EMOJI = IWAIFU_RARITIES.map((rarity) => {
+  return rarity.emoji;
+});

@@ -7,7 +7,7 @@ import {
   IWAIFU_RARITIES_NAME,
   IWAIFU_RARITIES_COLOR,
   IWAIFU_RARITIES_EMOJI,
-  HISTORY_TYPES
+  HISTORY_TYPES,
 } from "./constants";
 export type Coords = {
   x?: number;
