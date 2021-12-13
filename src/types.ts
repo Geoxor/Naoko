@@ -4,10 +4,8 @@ import { Mongoose, Types, Document } from "mongoose";
 import { IUserFunctions } from "./shaii/Database.shaii";
 import {
   COMMAND_CATEGORIES_RAW,
-  IWAIFU_RARITIES_COLOR,
-  IWAIFU_RARITIES_EMOJI,
   HISTORY_TYPES,
-  IWAIFU_RARITIES_NAME,
+  IWAIFU_RARITIES
 } from "./constants";
 export type Coords = {
   x?: number;
@@ -203,13 +201,10 @@ export interface IBattle extends IRewards {
   totalDamageDealt: number;
 }
 
-//export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
-export interface IWaifuRarityName
-  extends Array<{
-    [index: typeof IWAIFU_RARITIES_NAME[number]]: number;
-  }> {}
-export type IWaifuRarityColor = typeof IWAIFU_RARITIES_COLOR[number];
-export type IWaifuRarityEmoji = typeof IWAIFU_RARITIES_EMOJI[number];
+export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
+// export type IWaifuRarityName = typeof IWAIFU_RARITIES.map((e: typeof IWAIFU_RARITIES[number]) => e.name);
+export type IWaifuRarityColor = "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | "#F07178";
+export type IWaifuRarityEmoji = "👺" | "🐉" | "🔮" | "🌟" | "⚜️";
 
 export interface GeometrySceneOptions {
   texture: Buffer;
