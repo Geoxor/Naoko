@@ -4,7 +4,6 @@ import { Mongoose, Types, Document } from "mongoose";
 import { IUserFunctions } from "./shaii/Database.shaii";
 import {
   COMMAND_CATEGORIES_RAW,
-  IWAIFU_RARITIES_NAME,
   IWAIFU_RARITIES_COLOR,
   IWAIFU_RARITIES_EMOJI,
   HISTORY_TYPES,
@@ -211,7 +210,7 @@ export interface IBattle extends IRewards {
   totalDamageDealt: number;
 }
 
-export type IWaifuRarityName = typeof IWAIFU_RARITIES_NAME[number];
+export type IWaifuRarityName = 'common' | 'uncommon' | 'rare' | 'legendary' | 'mythical';
 export type IWaifuRarityColor = typeof IWAIFU_RARITIES_COLOR[number];
 export type IWaifuRarityEmoji = typeof IWAIFU_RARITIES_EMOJI[number];
 

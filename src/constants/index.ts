@@ -99,9 +99,6 @@ export const IWAIFU_RARITIES: { name: string; color: string; emoji: EmojiIdentif
   },
 ];
 
-export const IWAIFU_RARITIES_NAME = IWAIFU_RARITIES.map((rarity) => {
-  return rarity.name;
-});
 export const IWAIFU_RARITIES_COLOR = IWAIFU_RARITIES.map((rarity) => {
   return rarity.color;
 });
