@@ -7,6 +7,7 @@ import {
   IWAIFU_RARITIES_COLOR,
   IWAIFU_RARITIES_EMOJI,
   HISTORY_TYPES,
+  IWAIFU_RARITIES_NAME,
 } from "./constants";
 export type Coords = {
   x?: number;
@@ -135,19 +136,11 @@ export interface ICommand {
 
 export const defineCommand = (cmd: ICommand): ICommand => cmd;
 
-export interface CommandInput {
-  type: void; // actually, it should be: text | link | sticker | image | video | sound | file | embed | error
+export interface CommandIO {
+  type: void; // actually, it should be: IOText | IOLink | IOSticker | IOImage | IOVideo | IOSound | IOFile | IOEmbed | IOError
   contents: string | File | MessageEmbed;
   command: ICommand;
-  nextCommand?: CommandInput;
-  message: Discord.Message;
-}
-
-export interface CommandOutput {
-  type: void; // actually, it should be: text | link | sticker | image | video | sound | file | embed | error
-  contents: string | File | MessageEmbed;
-  command: ICommand;
-  nextCommand?: CommandInput;
+  nextCommand?: CommandIO;
   message: Discord.Message;
 }
 
@@ -210,7 +203,7 @@ export interface IBattle extends IRewards {
   totalDamageDealt: number;
 }
 
-export type IWaifuRarityName = 'common' | 'uncommon' | 'rare' | 'legendary' | 'mythical';
+export type IWaifuRarityName = typeof IWAIFU_RARITIES_NAME[number];
 export type IWaifuRarityColor = typeof IWAIFU_RARITIES_COLOR[number];
 export type IWaifuRarityEmoji = typeof IWAIFU_RARITIES_EMOJI[number];
 

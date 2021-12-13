@@ -99,9 +99,22 @@ export const IWAIFU_RARITIES: { name: string; color: string; emoji: EmojiIdentif
   },
 ];
 
-export const IWAIFU_RARITIES_COLOR = IWAIFU_RARITIES.map((rarity) => {
-  return rarity.color;
+// this is pretty cringe
+let tmpName: string[] = [];
+Object.values(IWAIFU_RARITIES).forEach((rarity) => {
+  tmpName.push(rarity.name);
 });
-export const IWAIFU_RARITIES_EMOJI = IWAIFU_RARITIES.map((rarity) => {
-  return rarity.emoji;
+
+let tmpColor: string[] = [];
+Object.values(IWAIFU_RARITIES).forEach((rarity) => {
+  tmpColor.push(rarity.color);
 });
+
+let tmpEmoji: EmojiIdentifierResolvable[] = [];
+Object.values(IWAIFU_RARITIES).forEach((rarity) => {
+  tmpEmoji.push(rarity.emoji);
+});
+
+export const IWAIFU_RARITIES_NAME = [...tmpName] as const;
+export const IWAIFU_RARITIES_COLOR = [...tmpColor] as const;
+export const IWAIFU_RARITIES_EMOJI = [...tmpEmoji] as const;
