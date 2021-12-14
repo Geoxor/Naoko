@@ -24,7 +24,7 @@ export async function textify(pipeline: string[], sentence: string) {
   for (let i = 0; i < functions.length; i++) {
     const start = Date.now();
     const method = functions[i];
-    fuckedSentence = await method(fuckedSentence);
+    fuckedSentence = await method(fuckedSentence.substring(0, 1999));
     logger.setProgressValue(bar, i / functions.length);
 
     // This is to avoid exp thread blocking
