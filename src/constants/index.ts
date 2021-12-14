@@ -75,37 +75,35 @@ export const IWAIFU_RARITIES: Map<string, string>[] = [
   new Map<string, string>([
     ["name", "common"],
     ["color", "#8F93A2"],
-    ["emoji", "👺"]
+    ["emoji", "👺"],
   ]),
   new Map<string, string>([
     ["name", "uncommon"],
     ["color", "#BDDE86"],
-    ["emoji", "🐉"]
+    ["emoji", "🐉"],
   ]),
   new Map<string, string>([
     ["name", "rare"],
     ["color", "#C792EA"],
-    ["emoji", "🔮"]
+    ["emoji", "🔮"],
   ]),
   new Map<string, string>([
     ["name", "legendary"],
     ["color", "#FFCB6B"],
-    ["emoji", "🌟"]
+    ["emoji", "🌟"],
   ]),
   new Map<string, string>([
     ["name", "mythical"],
     ["color", "#F07178"],
-    ["emoji", "⚜️"]
+    ["emoji", "⚜️"],
   ]),
 ];
-
 
 const x = [];
 
 const tuple = <T extends string[]>(...args: T) => args;
 for (let i = 0; i < IWAIFU_RARITIES.length; i++) {
-	x.push([...IWAIFU_RARITIES][i].get("name") as string);
+  x.push([...IWAIFU_RARITIES][i].get("name") as string);
 }
 
 export const IWAIFU_RARITIES_NAME = [...x] as const;
-

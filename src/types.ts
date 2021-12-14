@@ -2,12 +2,7 @@ import Discord, { MessageEmbed } from "discord.js";
 import mongoose from "mongoose";
 import { Mongoose, Types, Document } from "mongoose";
 import { IUserFunctions } from "./shaii/Database.shaii";
-import {
-  COMMAND_CATEGORIES_RAW,
-  HISTORY_TYPES,
-  IWAIFU_RARITIES,
-  IWAIFU_RARITIES_NAME
-} from "./constants";
+import { COMMAND_CATEGORIES_RAW, HISTORY_TYPES, IWAIFU_RARITIES, IWAIFU_RARITIES_NAME } from "./constants";
 export type Coords = {
   x?: number;
   y?: number;
