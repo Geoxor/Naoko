@@ -8,10 +8,14 @@ import { getCommands } from "../commands";
 import config from "./Config.shaii";
 import { version } from "../../package.json";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import si from "systeminformation";
 import { userMiddleware, hasGhostsRole, giveGhostsRole } from "../middleware/userMiddleware.shaii";
 =======
 import si, { mem } from "systeminformation";
+=======
+import si from "systeminformation";
+>>>>>>> af61cfc (removing autoimport)
 import { userMiddleware } from "../middleware/userMiddleware.shaii";
 >>>>>>> 7474ddf (ghost role to newcomers + prettify)
 import { User } from "./Database.shaii";
