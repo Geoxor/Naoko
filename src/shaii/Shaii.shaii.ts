@@ -7,7 +7,7 @@ import logger from "./Logger.shaii";
 import { getCommands } from "../commands";
 import config from "./Config.shaii";
 import { version } from "../../package.json";
-import si, { mem } from "systeminformation";
+import si from "systeminformation";
 import { userMiddleware } from "../middleware/userMiddleware.shaii";
 import { User } from "./Database.shaii";
 import {
