@@ -8,7 +8,7 @@ import { getCommands } from "../commands";
 import config from "./Config.shaii";
 import { version } from "../../package.json";
 import si from "systeminformation";
-import { userMiddleware } from "../middleware/userMiddleware.shaii";
+import { userMiddleware, hasGhostsRole, giveGhostsRole } from "../middleware/userMiddleware.shaii";
 import { User } from "./Database.shaii";
 import {
   GEOXOR_GENERAL_CHANNEL_ID,
@@ -86,9 +86,11 @@ class Shaii {
     });
     this.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID || member.guild.id === QBOT_DEV_GUILD_ID) {
-        member.roles.add(GHOSTS_ROLE_ID).catch((error) => {
-          logger.error(error as string);
-        });
+        if (!hasGhostsRole(member)) {
+          giveGhostsRole(member).catch((error) => {
+            logger.error(error as string);
+          });
+        }
         (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
           .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
           .then((m) => m.react("👋"));
