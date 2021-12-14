@@ -7,13 +7,14 @@ import logger from "./Logger.shaii";
 import { getCommands } from "../commands";
 import config from "./Config.shaii";
 import { version } from "../../package.json";
-import si from "systeminformation";
+import si, { mem } from "systeminformation";
 import { userMiddleware } from "../middleware/userMiddleware.shaii";
 import { User } from "./Database.shaii";
 import {
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
+  GHOSTS_ROLE_ID,
   QBOT_DEV_GUILD_ID,
   SHAII_ID,
   TESTING_GUILD_ID,
@@ -83,6 +84,9 @@ class Shaii {
     });
     this.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID || member.guild.id === QBOT_DEV_GUILD_ID) {
+        member.roles.add(GHOSTS_ROLE_ID).catch((error) => {
+          logger.error(error as string);
+        });
         (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
           .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
           .then((m) => m.react("👋"));
@@ -162,6 +166,10 @@ class Shaii {
     return closest.command;
   }
 
+  public hasGhostRole(member: Discord.GuildMember): boolean {
+    return member.roles.cache.has("736285344659669003");
+  }
+
   /**
    * Loads all the command files from ./commands
    */
@@ -203,6 +211,15 @@ class Shaii {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
         if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
+
+        // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
+        if (message.member) {
+          if (!this.hasGhostRole(message.member)) {
+            message.member.roles.add(GHOSTS_ROLE_ID).catch((error) => {
+              logger.error(error as string);
+            });
+          }
+        }
 
         // For channels that have "images" in their name we simply force delete any messages that don't have that in there
         if (
