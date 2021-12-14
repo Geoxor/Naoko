@@ -2,12 +2,6 @@
 
 ![image](https://cdn.discordapp.com/attachments/550913067517607946/914330045663825951/unknown.png)
 
-## Important note
-
-❌ The original repository of this fork **has been deleted**.  
-👉 However, I will keep it updated unless [Geoxor](https://github.com/Geoxor), the original author, tells me not to.
-
-
 ## Installation
 
 1. Get a discord bot token
