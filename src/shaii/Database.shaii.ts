@@ -3,7 +3,7 @@ import config from "./Config.shaii";
 import { IBattleUserRewards, IRewards, IUser, ActionHistory, HistoryTypes } from "../types";
 import Discord from "discord.js";
 import logger from "./Logger.shaii";
-mongoose.connect(config.mongo).then(() => logger.print("MongoDB Connected"));
+mongoose.connect(config.mongo).then(() => logger.print("MongoDB Connected")).catch((err: any) => console.error("MongoDB Connection Error:", err));
 const { Schema } = mongoose;
 
 const DB_NUMBER = { type: "Number", default: 0 };
