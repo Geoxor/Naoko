@@ -1,4 +1,4 @@
-import Discord, { Intents, TextChannel } from "discord.js";
+import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -8,17 +8,19 @@ import { getCommands } from "../commands";
 import config from "./Config.shaii";
 import { version } from "../../package.json";
 import si from "systeminformation";
-import { userMiddleware } from "../middleware/userMiddleware.shaii";
+import { userMiddleware, hasGhostsRole, giveGhostsRole } from "../middleware/userMiddleware.shaii";
 import { User } from "./Database.shaii";
 import {
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
+  GHOSTS_ROLE_ID,
   QBOT_DEV_GUILD_ID,
   SHAII_ID,
   TESTING_GUILD_ID,
   SLURS,
   TARDOKI_ID,
+  MUTED_ROLE_ID,
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
@@ -76,6 +78,7 @@ class Shaii {
         moderationMiddleware(newMessage, (newMessage) => {});
       });
     });
+    this.bot.on("messageReactionAdd", async (messageReaction, user) => this.onMessageReactionAdd(messageReaction, user));
     this.bot.on("guildMemberRemove", async (member) => {
       if (member.id === SHAII_ID) return;
       let user = await User.findOneOrCreate(member);
@@ -83,6 +86,11 @@ class Shaii {
     });
     this.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID || member.guild.id === QBOT_DEV_GUILD_ID) {
+        if (!hasGhostsRole(member)) {
+          giveGhostsRole(member).catch((error) => {
+            logger.error(error as string);
+          });
+        }
         (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
           .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
           .then((m) => m.react("👋"));
@@ -162,6 +170,10 @@ class Shaii {
     return closest.command;
   }
 
+  public hasGhostRole(member: Discord.GuildMember): boolean {
+    return member.roles.cache.has("736285344659669003");
+  }
+
   /**
    * Loads all the command files from ./commands
    */
@@ -206,6 +218,15 @@ class Shaii {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
         if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
+
+        // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
+        if (message.member) {
+          if (!this.hasGhostRole(message.member)) {
+            message.member.roles.add(GHOSTS_ROLE_ID).catch((error) => {
+              logger.error(error as string);
+            });
+          }
+        }
 
         // For channels that have "images" in their name we simply force delete any messages that don't have that in there
         if (
@@ -316,6 +337,20 @@ class Shaii {
           }
         });
       });
+    });
+  }
+
+  public onMessageReactionAdd(
+    messageReaction: MessageReaction | PartialMessageReaction,
+    user: Discord.User | Discord.PartialUser
+  ) {
+    const messageReactionGuild = this.bot.guilds.cache.get(messageReaction.message.guild?.id || "");
+    if (!messageReactionGuild) return;
+    messageReactionGuild.members.fetch().then((data) => {
+      if (data.get(user.id)?.roles.cache.has(MUTED_ROLE_ID)) {
+        messageReaction.remove();
+      }
+      return;
     });
   }
 }

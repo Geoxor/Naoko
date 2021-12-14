@@ -1,3 +1,5 @@
+import { EmojiIdentifierResolvable } from "discord.js";
+import { IWaifuRarityName } from "src/types";
 export const SHAII_ID = "870496144881492069";
 export const GEOXOR_GUILD_ID = "385387666415550474";
 export const TESTING_GUILD_ID = "911762334538670160";
@@ -8,6 +10,7 @@ export const UPVOTE_EMOJI_ID = "834402501397577729";
 export const GEOXOR_ID = "153274351561605120";
 export const TARDOKI_ID = "858340143131787274";
 export const MUTED_ROLE_ID = "737011597217628231";
+export const GHOSTS_ROLE_ID = "736285344659669003";
 export const VOTE_TIME = 30000;
 
 export const SLURS = [
@@ -30,3 +33,77 @@ export const INVENTORY_ICON = "https://cdn.discordapp.com/attachments/8063005973
 export const WINDOWS_LOGO = "https://cdn.discordapp.com/attachments/816028632269979668/878984332025397258/windows.png";
 export const LINUX_LOGO = "https://cdn.discordapp.com/attachments/816028632269979668/878984391936847882/LINUX-LOGO.png";
 export const SHAII_LOGO = "https://cdn.discordapp.com/avatars/870496144881492069/0d0f5a8cd8ad5e0e0a5eec0d40d2e2a5.webp";
+
+export const HISTORY_TYPES = ["nickname_history", "username_history", "status_history"] as const;
+
+export const COMMAND_CATEGORIES: { categoryName: string; categoryEmoji: EmojiIdentifierResolvable }[] = [
+  {
+    categoryName: "ECONOMY",
+    categoryEmoji: "💰",
+  },
+  {
+    categoryName: "FUN",
+    categoryEmoji: "😆",
+  },
+  {
+    categoryName: "IMAGE_PROCESSORS",
+    categoryEmoji: "🖼️",
+  },
+  {
+    categoryName: "MODERATION",
+    categoryEmoji: "🔨",
+  },
+  {
+    categoryName: "MUSIC",
+    categoryEmoji: "🎵",
+  },
+  {
+    categoryName: "TEXT_PROCESSORS",
+    categoryEmoji: "📝",
+  },
+  {
+    categoryName: "UTILITY",
+    categoryEmoji: "🔧",
+  },
+];
+
+export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {
+  return category.categoryName;
+});
+
+export const IWAIFU_RARITIES: Map<string, string>[] = [
+  new Map<string, string>([
+    ["name", "common"],
+    ["color", "#8F93A2"],
+    ["emoji", "👺"],
+  ]),
+  new Map<string, string>([
+    ["name", "uncommon"],
+    ["color", "#BDDE86"],
+    ["emoji", "🐉"],
+  ]),
+  new Map<string, string>([
+    ["name", "rare"],
+    ["color", "#C792EA"],
+    ["emoji", "🔮"],
+  ]),
+  new Map<string, string>([
+    ["name", "legendary"],
+    ["color", "#FFCB6B"],
+    ["emoji", "🌟"],
+  ]),
+  new Map<string, string>([
+    ["name", "mythical"],
+    ["color", "#F07178"],
+    ["emoji", "⚜️"],
+  ]),
+];
+
+const x = [];
+
+const tuple = <T extends string[]>(...args: T) => args;
+for (let i = 0; i < IWAIFU_RARITIES.length; i++) {
+  x.push([...IWAIFU_RARITIES][i].get("name") as string);
+}
+
+export const IWAIFU_RARITIES_NAME = [...x] as const;
