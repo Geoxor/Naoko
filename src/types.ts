@@ -202,8 +202,8 @@ export interface IBattle extends IRewards {
   totalDamageDealt: number;
 }
 
-//export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
-export type IWaifuRarityName = typeof IWAIFU_RARITIES_NAME[number];
+export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
+//export type IWaifuRarityName = typeof IWAIFU_RARITIES_NAME[number];
 export type IWaifuRarityColor = "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | "#F07178";
 export type IWaifuRarityEmoji = "👺" | "🐉" | "🔮" | "🌟" | "⚜️";
 
