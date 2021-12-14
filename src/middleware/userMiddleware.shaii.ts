@@ -10,7 +10,7 @@ export async function userMiddleware(message: Discord.Message, next: (message: I
     (message as IMessage).databaseUser = databaseUser;
     if (!hasGhostsRole(message.member)) {
       giveGhostsRole(message.member).catch((error) => {
-        logger.error(error as string);
+        logger.error(error.requestData as string);
       });
     }
     next(message as IMessage);
