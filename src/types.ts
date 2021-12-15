@@ -1,8 +1,7 @@
-import Discord, { MessageEmbed } from "discord.js";
+import Discord from "discord.js";
 import mongoose from "mongoose";
 import { Mongoose, Types, Document } from "mongoose";
 import { IUserFunctions } from "./shaii/Database.shaii";
-import { COMMAND_CATEGORIES_RAW, HISTORY_TYPES, IWAIFU_RARITIES, IWAIFU_RARITIES_NAME } from "./constants";
 export type Coords = {
   x?: number;
   y?: number;
@@ -23,7 +22,7 @@ export interface History {
   value: string;
 }
 
-export type HistoryTypes = typeof HISTORY_TYPES[number];
+export type HistoryTypes = "nickname_history" | "username_history" | "status_history";
 
 export interface ActionHistory {
   timestamp: number;
@@ -91,7 +90,14 @@ export type CommandExecute = (
   message: IMessage
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
 
-export type CommandCategories = typeof COMMAND_CATEGORIES_RAW[number];
+export type CommandCategories =
+  | "ECONOMY"
+  | "FUN"
+  | "IMAGE_PROCESSORS"
+  | "TEXT_PROCESSORS"
+  | "MODERATION"
+  | "MUSIC"
+  | "UTILITY";
 
 export interface ICommand {
   /**
@@ -121,7 +127,7 @@ export interface ICommand {
   /**
    * Permissions the user needs to have to run this command
    */
-  permissions?: Discord.PermissionResolvable[];
+  permissions?: Discord.PermissionString[];
   /**
    * This will send 'processing...' if set to true, (useful for commands that take long to complete asyncronous tasks)
    */
@@ -129,14 +135,6 @@ export interface ICommand {
 }
 
 export const defineCommand = (cmd: ICommand): ICommand => cmd;
-
-export interface CommandIO {
-  type: void; // actually, it should be: IOText | IOLink | IOSticker | IOImage | IOVideo | IOSound | IOFile | IOEmbed | IOError
-  contents: string | File | MessageEmbed;
-  command: ICommand;
-  nextCommand?: CommandIO;
-  message: Discord.Message;
-}
 
 export interface IAnime {
   anilist: number;
@@ -198,7 +196,6 @@ export interface IBattle extends IRewards {
 }
 
 export type IWaifuRarityName = "common" | "uncommon" | "rare" | "legendary" | "mythical";
-//export type IWaifuRarityName = typeof IWAIFU_RARITIES_NAME[number];
 export type IWaifuRarityColor = "#8F93A2" | "#BDDE86" | "#C792EA" | "#FFCB6B" | "#F07178";
 export type IWaifuRarityEmoji = "👺" | "🐉" | "🔮" | "🌟" | "⚜️";
 
