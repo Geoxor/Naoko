@@ -3,11 +3,11 @@ import { defineCommand } from "../../types";
 import { COMMAND_CATEGORIES } from "src/constants";
 
 const selectOptions: MessageSelectOptionData[] = COMMAND_CATEGORIES
-  .map(([label, emoji]) => ({
-    label,
-    value: label.toLowerCase(),
-    description: `All ${label.toLowerCase().split('_').join(' ')} commands.`,
-    emoji,
+  .map(({ categoryName, categoryEmoji }) => ({
+    label: categoryName,
+    value: categoryName.toLowerCase(),
+    description: `All ${categoryName.toLowerCase().split('_').join(' ')} commands.`,
+    emoji: categoryEmoji,
     default: false,
   }));
 
