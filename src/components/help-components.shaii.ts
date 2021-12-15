@@ -1,11 +1,11 @@
 import { SelectMenuInteraction, MessageEmbed, Permissions, PermissionString } from 'discord.js';
 import { randomChoice } from "src/logic/logic.shaii";
-import { COMMAND_CATEGORIES, SLURS } from "src/constants";
+import { COMMAND_CATEGORIES_RAW, SLURS } from "src/constants";
 import shaii from "../shaii/Shaii.shaii";
 
 export function executeHelpComponents(interaction: SelectMenuInteraction): void {
   const categoryMap: Map<string, MessageEmbed> = new Map(
-    COMMAND_CATEGORIES.map(([label]) => [
+    COMMAND_CATEGORIES_RAW.map((label) => [
       label.toLowerCase(),
       new MessageEmbed({
         title: `All ${label} commands:`,
@@ -22,13 +22,13 @@ export function executeHelpComponents(interaction: SelectMenuInteraction): void 
   const helpEmbed = categoryMap.get(interaction.values[0]);
 
   if (helpEmbed) {
-    if (interaction.user.id !== interaction.message.components[0].components[0].customId) {
+    if (interaction.user.id !== interaction!.message.components[0].components[0].custom_id) {
       interaction.reply({
         content: `This ain't your help message you ${randomChoice(SLURS)}`,
         ephemeral: true,
-    });
+      });
     } else {
-      return interaction.update({ embeds: [helpEmbed] });
+      interaction.update({ embeds: [helpEmbed] });
     }
   }
 }
