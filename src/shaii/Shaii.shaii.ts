@@ -195,7 +195,10 @@ class Shaii {
     for (let channel of channels) {
       if (channel.isThread()) {
         if (channel.ownerId === SHAII_ID) {
-          channel.delete().then(() => logger.print(`Deleted residual battle thread ${channel.id}`));
+          channel
+            .delete()
+            .then(() => logger.print(`Deleted residual battle thread ${channel.id}`))
+            .catch(() => {});
           continue;
         }
         channel.join().then(() => logger.print(`Joined thread ${channel.id}`));
@@ -230,7 +233,7 @@ class Shaii {
           message.guild?.channels.cache.get(message.channel.id)?.name.includes("images") &&
           message.attachments.size === 0
         )
-          return message.delete();
+          return message.delete().catch(() => {});
 
         // Reply with a funny message if they mention her at the start of the message
         if (
@@ -254,7 +257,7 @@ class Shaii {
 
           const clearTyping = () => {
             if (processingMessage) {
-              processingMessage.delete();
+              processingMessage.delete().catch(() => {});
               // @ts-ignore
               clearInterval(typingInterval);
             }
