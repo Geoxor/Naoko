@@ -65,7 +65,7 @@ export const COMMAND_CATEGORIES: { categoryName: string; categoryEmoji: EmojiIde
     categoryName: "UTILITY",
     categoryEmoji: "🔧",
   },
-];
+] as const;
 
 export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {
   return category.categoryName;
