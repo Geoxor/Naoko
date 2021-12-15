@@ -8,13 +8,12 @@ import { getCommands } from "../commands";
 import config from "./Config.shaii";
 import { version } from "../../package.json";
 import si from "systeminformation";
-import { userMiddleware, hasGhostsRole, giveGhostsRole } from "../middleware/userMiddleware.shaii";
+import { userMiddleware } from "../middleware/userMiddleware.shaii";
 import { User } from "./Database.shaii";
 import {
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
-  GHOSTS_ROLE_ID,
   QBOT_DEV_GUILD_ID,
   SHAII_ID,
   TESTING_GUILD_ID,
@@ -26,6 +25,7 @@ import welcomeMessages from "../assets/welcome_messages.json";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
+import { executeHelpComponents } from "src/components/help-components.shaii";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
@@ -86,11 +86,6 @@ class Shaii {
     });
     this.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID || member.guild.id === QBOT_DEV_GUILD_ID) {
-        if (!hasGhostsRole(member)) {
-          giveGhostsRole(member).catch((error) => {
-            logger.error(error as string);
-          });
-        }
         (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
           .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
           .then((m) => m.react("👋"));
@@ -145,6 +140,7 @@ class Shaii {
     this.bot.on("threadCreate", (thread) => {
       thread.join();
     });
+    this.bot.on('interactionCreate', this.onInteractionCreate);
     this.bot.login(config.token);
     logger.print("Shaii logging in...");
   }
@@ -170,10 +166,6 @@ class Shaii {
     return closest.command;
   }
 
-  public hasGhostRole(member: Discord.GuildMember): boolean {
-    return member.roles.cache.has("736285344659669003");
-  }
-
   /**
    * Loads all the command files from ./commands
    */
@@ -195,10 +187,7 @@ class Shaii {
     for (let channel of channels) {
       if (channel.isThread()) {
         if (channel.ownerId === SHAII_ID) {
-          channel
-            .delete()
-            .then(() => logger.print(`Deleted residual battle thread ${channel.id}`))
-            .catch(() => {});
+          channel.delete().then(() => logger.print(`Deleted residual battle thread ${channel.id}`));
           continue;
         }
         channel.join().then(() => logger.print(`Joined thread ${channel.id}`));
@@ -214,26 +203,23 @@ class Shaii {
     }
   }
 
+  private onInteractionCreate(interaction: Discord.Interaction): void {
+    if (interaction !== null && interaction instanceof Discord.SelectMenuInteraction) {
+      executeHelpComponents(interaction as Discord.SelectMenuInteraction);
+    }
+  }
+
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
         if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
-
-        // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
-        if (message.member) {
-          if (!this.hasGhostRole(message.member)) {
-            message.member.roles.add(GHOSTS_ROLE_ID).catch((error) => {
-              logger.error(error as string);
-            });
-          }
-        }
 
         // For channels that have "images" in their name we simply force delete any messages that don't have that in there
         if (
           message.guild?.channels.cache.get(message.channel.id)?.name.includes("images") &&
           message.attachments.size === 0
         )
-          return message.delete().catch(() => {});
+          return message.delete();
 
         // Reply with a funny message if they mention her at the start of the message
         if (
@@ -257,7 +243,7 @@ class Shaii {
 
           const clearTyping = () => {
             if (processingMessage) {
-              processingMessage.delete().catch(() => {});
+              processingMessage.delete();
               // @ts-ignore
               clearInterval(typingInterval);
             }
