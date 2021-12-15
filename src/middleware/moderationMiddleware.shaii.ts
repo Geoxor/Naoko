@@ -4,9 +4,10 @@ import { isBadWord } from "../moderation/isBadWord.shaii";
 import { IMessage } from "../types";
 import { isMuted } from "../moderation/isMuted.shaii";
 import { isIP } from "../moderation/isIP.shaii";
+import { isDiscordInvite } from "../moderation/isDiscordInvite";
 import { GEOXOR_GUILD_ID, TESTING_GUILD_ID, QBOT_DEV_GUILD_ID } from "../constants";
 
-const checks = [isFreeNitro, isBadWord, isMuted, isIP];
+const checks = [isFreeNitro, isBadWord, isDiscordInvite, isMuted, isIP];
 
 export default async function (message: IMessage, next: (message: IMessage) => any): Promise<void> {
   try {
