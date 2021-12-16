@@ -103,7 +103,9 @@ class Shaii {
           member.roles
             .add(role)
             .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
-            .catch(() => {});
+            .catch((error) => {
+              logger.error(error as string);
+            });
         }
       }
     });
