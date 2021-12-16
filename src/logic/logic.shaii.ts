@@ -4,7 +4,7 @@ import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage, IWaifu, IWaifuRarity } from "../types";
-import Discord from "discord.js";
+import Discord, { MessageMentions } from "discord.js";
 import { speak } from "windows-tts";
 import logger from "../shaii/Logger.shaii";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
@@ -673,4 +673,18 @@ export async function getLastAttachmentInChannel(message: IMessage) {
     .filter((m) => m.attachments.size > 0)
     .first();
   return lastMessage?.attachments.first()?.attachment;
+}
+
+/**
+ * Remove any mention in the message
+ * @param messageContent content of the message to clean
+ * @returns content of the message cleaned of any mention
+ * @author Qexat
+ */
+export function removeMentions(messageContent: string): string {
+  return messageContent
+    .replace(MessageMentions.CHANNELS_PATTERN, "")
+    .replace(MessageMentions.EVERYONE_PATTERN, "")
+    .replace(MessageMentions.ROLES_PATTERN, "")
+    .replace(MessageMentions.USERS_PATTERN, "");
 }
