@@ -26,7 +26,7 @@ export default defineCommand({
     const embed = new Discord.MessageEmbed()
       .setAuthor(`Shaii v${version}`, SHAII_LOGO)
       .setColor("#FF00B6")
-      .setThumbnail(platform === "win32" ? WINDOWS_LOGO : LINUX_LOGO)
+      .setThumbnail(platform === "win32" || platform === "win64" ? WINDOWS_LOGO : LINUX_LOGO)
       .addFields(
         { name: "OS", value: `${distro} ${release}` },
         { name: "CPU", value: `x${cores} ${cpuManufacturer} ${brand}` },
