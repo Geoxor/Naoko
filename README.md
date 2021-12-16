@@ -1,6 +1,6 @@
 # 🌸 Shaii General Purpose Bot
 
-![image](https://shaii-cdn.qexat.com/readme-header.png)
+![image](https://cdn.shaii.moe/git/readme-header.png)
 
 ## Installation
 
