@@ -11,9 +11,20 @@ export default defineCommand({
   description: "Tell's you your dicksize or battle against someone else's dicksize!",
   requiresProcessing: false,
   execute: async (message) => {
-    if (message.mentions.members && message.mentions.members.size !== 0) {
+    if (
+      message.mentions.members &&
+      message.mentions.members.size !== 0 &&
+      message.author !== message.mentions.members.first()?.user
+    ) {
       const dicksize = randomDickSize();
       const enemyDicksize = randomDickSize();
+      let resultLastLine: string;
+
+      if (dicksize !== enemyDicksize) {
+        resultLastLine = `winner: ${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}`;
+      } else {
+        resultLastLine = `it's a draw!`;
+      }
 
       if (dicksize + enemyDicksize > 1900) {
         return {
@@ -22,7 +33,7 @@ export default defineCommand({
             `${message.author}: ${dicksize}cm\n` +
             `${message.mentions.members.first()}: ${enemyDicksize}cm` +
             `diff: ${Math.abs(dicksize - enemyDicksize)}cm` +
-            `winner: ${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}`,
+            `${resultLastLine}`,
           files: [
             {
               name: "battle.txt",
@@ -38,7 +49,7 @@ export default defineCommand({
         8${"=".repeat(dicksize)}D ${dicksize}cm ${message.author}
         8${"=".repeat(enemyDicksize)}D ${enemyDicksize}cm ${message.mentions.members.first()}
         diff: ${Math.abs(dicksize - enemyDicksize)}cm
-        winner: ${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}
+        ${resultLastLine}
       `;
     } else {
       const dicksize = randomDickSize();
