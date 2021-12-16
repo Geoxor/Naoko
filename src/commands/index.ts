@@ -37,6 +37,7 @@ import clear from "./moderation/clear.shaii";
 import kick from "./moderation/kick.shaii";
 import ban from "./moderation/ban.shaii";
 import whois from "./moderation/whois.shaii";
+import mute from "./moderation/mute.shaii";
 
 // utility commands
 import help from "./utility/help.shaii";
@@ -101,6 +102,7 @@ export const getCommands = async () => {
     spongify,
     brainfuck,
     textify,
+    mute,
   ];
 
   return commands;

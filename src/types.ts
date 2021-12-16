@@ -28,6 +28,7 @@ export type HistoryTypes = typeof HISTORY_TYPES[number];
 export interface ActionHistory {
   timestamp: number;
   casted_by: string;
+  duration?: string;
   reason: string;
 }
 

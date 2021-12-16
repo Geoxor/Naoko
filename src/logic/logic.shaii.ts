@@ -39,6 +39,29 @@ export function timeSince(date: number) {
   return ~~seconds + " s";
 }
 
+export function durationToMilliseconds(duration: string): string {
+  const [digits, abbr] = duration.match(/\d{1,3}|\D/g) as string[];
+  switch (abbr) {
+    case "s" || "S":
+      return (parseInt(digits) * 1000).toString();
+    case "m" || "M":
+      return (parseInt(digits) * 60 * 1000).toString();
+    case "h" || "H":
+      return (parseInt(digits) * 3600 * 1000).toString();
+    case "d" || "D":
+      return (parseInt(digits) * 86400 * 1000).toString();
+    case "w" || "W":
+      return (parseInt(digits) * 604800 * 1000).toString();
+    case "t" || "T": // t stands for month since m is already taken for minutes
+      return (parseInt(digits) * 2592000 * 1000).toString();
+    case "y" || "Y":
+      return (parseInt(digits) * 31536000 * 1000).toString();
+    default:
+      logger.error("Invalid duration");
+      return "";
+  }
+}
+
 /**
  * Gets the RGBA values of an image
  * @param buffer the buffer to get the values from

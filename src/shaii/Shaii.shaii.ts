@@ -232,13 +232,13 @@ class Shaii {
 
         // I'm tired of seeing people doing !rank unsuccessfully so we tell them it doesn't work anymore
         if (message.cleanContent == "!rank") {
-		  try {
-			return message.reply(
-            	"The bot that used to manage the XP system has been discontinued.\nWe are currently working on implementing a new one to this bot. Stay tuned!"
-          	);
-		  } catch (error) {
-			  logger.error(error as string);
-		  }
+          try {
+            return message.reply(
+              "The bot that used to manage the XP system has been discontinued.\nWe are currently working on implementing a new one to this bot. Stay tuned!"
+            );
+          } catch (error) {
+            logger.error(error as string);
+          }
         }
 
         // For channels that have "images" in their name we simply force delete any messages that don't have that in there
