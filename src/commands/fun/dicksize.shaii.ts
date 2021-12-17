@@ -8,7 +8,7 @@ export default defineCommand({
   category: "FUN",
   usage: "dicksize ?<@user | user_id>",
   aliases: [],
-  description: "Tell's you your dicksize or battle against someone else's dicksize!",
+  description: "Tells you your dicksize or battle against someone else's dicksize!",
   requiresProcessing: false,
   execute: async (message) => {
     if (
@@ -21,9 +21,9 @@ export default defineCommand({
       let resultLastLine: string;
 
       if (dicksize !== enemyDicksize) {
-        resultLastLine = `winner: ${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}`;
+        resultLastLine = `Winner: ${dicksize > enemyDicksize ? message.author : message.mentions.members.first()}`;
       } else {
-        resultLastLine = `it's a draw!`;
+        resultLastLine = `It's a draw!`;
       }
 
       if (dicksize + enemyDicksize > 1900) {

@@ -115,7 +115,7 @@ export default class MusicPlayer {
    * @author Geoxor
    */
   public changeVolume(volume: number = 1) {
-    if (!this.nowPlayingStream) return "there's nothing playing currently";
+    if (!this.nowPlayingStream) return "There's nothing playing currently";
     this.nowPlayingStream.volume?.setVolume(volume);
   }
 
@@ -167,7 +167,7 @@ export default class MusicPlayer {
    */
   public async createNowPlayingEmbed(mini: boolean = false) {
     // If there is nothing playing return
-    if (!this.nowPlayingFile) return "nothing is playing currently";
+    if (!this.nowPlayingFile) return "Nothing is playing currently";
 
     // Get information about the song
     const metadata = await this.getMetadata(this.nowPlayingFile);

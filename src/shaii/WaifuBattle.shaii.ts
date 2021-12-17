@@ -41,7 +41,7 @@ export default class WaifuBattle {
    * @author Geoxor, Cimok
    */
   public getWaifu(): Discord.MessageOptions {
-    return { content: "type !attack to kill her!", files: [this.waifu.attachment], embeds: [this.waifu.ui] };
+    return { content: "Type !attack to kill her!", files: [this.waifu.attachment], embeds: [this.waifu.ui] };
   }
 
   /**

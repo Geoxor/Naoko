@@ -451,7 +451,7 @@ export function textToBritify(sentence: string): string {
   sentence = sentence.replace(/what/g, "wot");
 
   // personally "what the fuck mate" sounds better than "what the fuck cunt"
-  sentence = sentence.replace(/man|bud(dy)?|bro/g, "mate");
+  sentence = sentence.replace(/man|bud(dy)?|bro|fam/g, "mate");
 
   // we don't use t (sometimes) nor the -ing suffix
   sentence = sentence.replace(/(?<!\s|k|x|')t+(?!(\w*')|h|ch|ion)|(?<=\win)g/g, "'");

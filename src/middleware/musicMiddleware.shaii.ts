@@ -15,8 +15,8 @@ export async function musicMiddleware(
   message: IMessage,
   next: (channel: VoiceChannel | StageChannel, player: MusicPlayer) => Promise<MessageOptions | string>
 ) {
-  if (!message.guild) return "music doesn't work in DMs";
-  if (!message.member) return "couldn't find you lol";
+  if (!message.guild) return "Music doesn't work in DMs";
+  if (!message.member) return "Couldn't find you lol";
 
   // Try to get the vc the user is in or the one they mentioned
   let voiceChannel = message.member.voice.channel || message.mentions.channels.first();

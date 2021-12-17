@@ -216,10 +216,10 @@ export class SceneProcessor {
 
   /**
    * Updates the scene to the new positions
-   * @author Geoxor, Bluskript
+   * @author Geoxor, Bluskript, Bustean
    */
   protected async update() {
-    throw new Error("update must be implemented");
+    throw new Error("Update must be implemented");
   }
 
   /**
@@ -344,7 +344,7 @@ export class GeometryScene extends SceneProcessor {
    * Updates the scene for the next tick
    */
   protected async update() {
-    if (!this.sceneObject) return logger.error("returning");
+    if (!this.sceneObject) return logger.error("Returning");
     this.sceneObject.rotation.x += this.rotation.x ?? 0.05;
     this.sceneObject.rotation.y += this.rotation.y ?? 0.05;
     this.sceneObject.rotation.z += this.rotation.z ?? 0.0;

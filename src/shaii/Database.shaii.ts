@@ -91,7 +91,7 @@ schema.statics.mute = async function (
   muter_id: string,
   mutee_id: string,
   duration: string,
-  reason: string = "no reason given"
+  reason: string = "No reason given"
 ) {
   const mutee = await User.findOne({ discord_id: mutee_id });
   if (!mutee) return;
@@ -108,14 +108,14 @@ schema.statics.mute = async function (
   return mutee.save().catch((err: any) => logger.error(err));
 };
 
-schema.statics.unmute = async function (unmuter_id: string, unmutee_id: string, reason: string = "no reason given") {
+schema.statics.unmute = async function (unmuter_id: string, unmutee_id: string, reason: string = "No reason given") {
   const unmutee = await User.findOne({ discord_id: unmutee_id });
   if (!unmutee) return;
 
   return unmutee.save().catch((err: any) => logger.error(err));
 };
 
-schema.statics.kick = async function (kicker_id: string, kickee_id: string, reason: string = "no reason given") {
+schema.statics.kick = async function (kicker_id: string, kickee_id: string, reason: string = "No reason given") {
   const kickee = await User.findOne({ discord_id: kickee_id });
   if (!kickee) return;
 
@@ -130,7 +130,7 @@ schema.statics.kick = async function (kicker_id: string, kickee_id: string, reas
   return kickee.save().catch((err: any) => logger.error(err));
 };
 
-schema.statics.ban = async function (baner_id: string, banee_id: string, reason: string = "no reason given") {
+schema.statics.ban = async function (baner_id: string, banee_id: string, reason: string = "No reason given") {
   const banee = await User.findOne({ discord_id: banee_id });
   if (!banee) return;
 

@@ -17,7 +17,7 @@ logger.print(
         -@@%%@@-        
   :====:-@@@@@@=:====:  
 *@@@@@@@@*+##@#+@@@@@@@*
- #@@@#@%##%.++=#%@*@@@#  by Geoxor 🌸        v${version}
+ #@@@#@%##%.++=#%@*@@@#  by Geoxor & Friends v${version}
   -*@@%***-  :%@@@@@*-   .▄▄ ·   ▄  .▄  ▄▄▄· ▪   ▪  
      :#@@%+-%+****:      ▐█ ▀.  ██▪ ▐█ ▐█ ▀█ ██  ██ 
     -@@@@%@-@@%@@@@-     ▄▀▀▀█▄ ██▀ ▐█ ▄█▀▀█ ▐█· ▐█·
@@ -30,7 +30,5 @@ logger.print(
 logger.inspiration();
 
 // Create shaii
-logger.print("Creating new Shaii instance...");
 import "./shaii/Shaii.shaii";
 import "./shaii/Database.shaii";
-logger.print("Shaii created");

@@ -23,7 +23,7 @@ export default defineCommand({
   requiresProcessing: true,
   execute: async (message) => {
     const processorFunctionName = message.args[0];
-    if (!processorFunctionName) return "please enter a name of an image processor function";
+    if (!processorFunctionName) return "Please enter the name of an image processor function";
     const buffer = await parseBufferFromMessage(message);
     const preProccessed = await preProcessBuffer(buffer);
     const resultbuffer = await stack(processorFunctionName, preProccessed, stacks[processorFunctionName]);

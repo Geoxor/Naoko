@@ -9,7 +9,7 @@ export default defineCommand({
   description: "Transforms your sentence to british",
   requiresProcessing: false,
   execute: async (message) => {
-    if (message.args.length === 0) return "tell me what u want in bri'ish cunt";
+    if (message.args.length === 0) return "Tell me whad u wan' in bri'ish cunt";
     return textToBritify(message.args.join(" "));
   },
 });

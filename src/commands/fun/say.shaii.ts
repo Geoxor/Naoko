@@ -10,7 +10,7 @@ export default defineCommand({
   description: "Say your stupid message",
   requiresProcessing: false,
   execute: async (message) => {
-    if (message.args.length === 0) return `what do you want to say ${randomChoice(SLURS)}`;
+    if (message.args.length === 0) return `What do you want to say ${randomChoice(SLURS)}`;
     message.delete().catch(() => {});
     return message.args.join(" ");
   },

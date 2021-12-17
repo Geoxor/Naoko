@@ -38,7 +38,7 @@ describe("⚡ Morse Encoder (encodeMorse)", () => {
 
 describe("⚡ UwU-ifier (textToUwufy)", () => {
   it("can encode a normal string", async () => {
-    const uwu = textToUwufy("hello world, i wanna become uwu uwuwuuw");
+    const uwu = textToUwufy("hello world, wanna to become uwu uwuwuuw");
     chai.expect(uwu).to.contain("hewwo");
     chai.expect(uwu).to.contain("wowwd");
     chai.expect(uwu).to.contain("wannya");
