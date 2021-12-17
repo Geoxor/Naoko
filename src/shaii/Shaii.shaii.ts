@@ -35,6 +35,15 @@ si.getStaticData().then((info) => {
   systemInfo = info;
 });
 
+// To avoid testing at each command
+let is3DAcceleration: boolean;
+try {
+	new WebGLRenderer();
+	is3DAcceleration = true;
+} catch {
+	is3DAcceleration = false;
+}
+
 /**
  * Shaii multi purpose Discord bot
  * @author Geoxor, Cimok
@@ -325,9 +334,7 @@ class Shaii {
             clearTyping();
 
             // This is pretty cringe
-            try {
-              new WebGLRenderer();
-            } catch {
+            if (!is3DAcceleration) {
               return message.reply(
                 "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server shes running on"
               );

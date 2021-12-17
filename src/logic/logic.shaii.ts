@@ -12,6 +12,7 @@ import fileType from "file-type";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
 import Jimp from "jimp";
+const replaceLast = require("replace-last");
 
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
@@ -548,7 +549,7 @@ export function getMostRelevantImageURL(message: Discord.Message) {
     message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
     message.author.displayAvatarURL(defaultImageOptions) ||
     message.author.defaultAvatarURL
-  );
+  ).replace(".webp", ".png");
 }
 
 /**
@@ -579,20 +580,20 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
   // If theres a reply
   if (message.reference) {
     const reference = await message.fetchReference();
-    return getMostRelevantImageURL(reference);
+    return replaceLast(getMostRelevantImageURL(reference), ".webp", ".png");
   }
 
   if (isValidHttpUrl(arg)) {
     if (arg.startsWith("https://tenor") && !arg.endsWith(".gif")) {
       return arg + ".gif";
     }
-    return arg;
+    return replaceLast(arg, ".webp", ".png");
   }
 
   if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:")) return getMostRelevantImageURL(message); // this is a hack...
 
   const user = await message.client.users.fetch(arg);
-  return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL;
+  return replaceLast(user.displayAvatarURL(defaultImageOptions), ".webp", ".png") || user.defaultAvatarURL;
 }
 
 /**
