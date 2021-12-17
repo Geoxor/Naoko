@@ -2,6 +2,7 @@ import config from "../shaii/Config.shaii";
 import Discord from "discord.js";
 import MessageParser from "../shaii/MessageParser.shaii";
 import { IMessage } from "../types";
+import { removeMentions } from "../logic/logic.shaii";
 
 /**
  * Returns the function if the message doesn't meet requirements
@@ -14,7 +15,7 @@ import { IMessage } from "../types";
 export default function (message: Discord.Message, next: (message: IMessage) => any): void {
   if (message.content.lastIndexOf(config.prefix) !== 0) return;
   if (message.author.bot) return;
-  const { command, args } = new MessageParser(message.cleanContent);
+  const { command, args } = new MessageParser(removeMentions(message.content));
   const updatedMessage = message as IMessage;
   updatedMessage.command = command.toLowerCase();
   updatedMessage.args = args;

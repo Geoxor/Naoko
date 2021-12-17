@@ -23,9 +23,10 @@ import {
   MUTED_ROLE_ID,
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
-import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
+import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
+import { WebGLRenderer } from "three";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
@@ -33,6 +34,15 @@ si.getStaticData().then((info) => {
   logger.print("Environment info fetched");
   systemInfo = info;
 });
+
+// To avoid testing at each command
+let is3DAcceleration: boolean;
+try {
+	new WebGLRenderer();
+	is3DAcceleration = true;
+} catch {
+	is3DAcceleration = false;
+}
 
 /**
  * Shaii multi purpose Discord bot
@@ -86,25 +96,31 @@ class Shaii {
     });
     this.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID || member.guild.id === QBOT_DEV_GUILD_ID) {
-        if (!hasGhostsRole(member)) {
-          giveGhostsRole(member).catch((error) => {
-            logger.error(error as string);
+        if (!hasGhostsRole(member) && member.guild.id === GEOXOR_GUILD_ID) {
+          giveGhostsRole(member).catch(() => {
+            logger.error("Couldn't give Ghosts role to the member.");
           });
         }
-        (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
-          .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
-          .then((m) => m.react("👋"));
+        try {
+          (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
+            .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
+            .then((m) => m.react("👋"));
+        } catch {
+          logger.error(`The channel <#${GEOXOR_GENERAL_CHANNEL_ID}> doesn't exist`);
+        }
       }
 
       let user = await User.findOneOrCreate(member);
       for (const roleId of user.roles) {
         const role = member.guild.roles.cache.find((role) => role.id === roleId);
-        if (role) {
-          member.roles
-            .add(role)
-            .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
-            .catch(() => {});
-        }
+          if (role) {
+            member.roles
+              .add(role)
+              .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
+              .catch((error) => {
+                logger.error(error as string);
+              });
+          }
       }
     });
     this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
@@ -220,7 +236,7 @@ class Shaii {
         if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
 
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
-        if (message.member) {
+        if (message.member && message.guild?.id === GEOXOR_GUILD_ID) {
           if (!this.hasGhostRole(message.member)) {
             message.member.roles.add(GHOSTS_ROLE_ID).catch((error) => {
               logger.error(error as string);
@@ -229,14 +245,14 @@ class Shaii {
         }
 
         // I'm tired of seeing people doing !rank unsuccessfully so we tell them it doesn't work anymore
-        if (message.cleanContent == "!rank") {
-		  try {
-			return message.reply(
-            	"The bot that used to manage the XP system has been discontinued.\nWe are currently working on implementing a new one to this bot. Stay tuned!"
-          	);
-		  } catch (error) {
-			  logger.error(error as string);
-		  }
+        if (removeMentions(message.content) == "!rank") {
+          try {
+            return message.reply(
+              "The bot that used to manage the XP system has been discontinued.\nWe are currently working on implementing a new one to this bot. Stay tuned!"
+            );
+          } catch (error) {
+            logger.error(error as string);
+          }
         }
 
         // For channels that have "images" in their name we simply force delete any messages that don't have that in there
@@ -318,7 +334,7 @@ class Shaii {
             clearTyping();
 
             // This is pretty cringe
-            if (error == "TypeError: Cannot read property 'getUniformLocation' of null") {
+            if (!is3DAcceleration) {
               return message.reply(
                 "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server shes running on"
               );

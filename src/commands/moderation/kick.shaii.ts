@@ -19,7 +19,6 @@ export default defineCommand({
     if (targetUser.id === message.author.id) return "you can't kick urself";
     if (targetUser.permissions.has("ADMINISTRATOR")) return "you can't kick other admins";
 
-    message.args.shift(); // remove the mention
     const reason = message.args.join(" ");
 
     // Kick him

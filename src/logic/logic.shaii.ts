@@ -4,7 +4,7 @@ import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage, IWaifu, IWaifuRarity } from "../types";
-import Discord from "discord.js";
+import Discord, { MessageMentions } from "discord.js";
 import { speak } from "windows-tts";
 import logger from "../shaii/Logger.shaii";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
@@ -12,6 +12,7 @@ import fileType from "file-type";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
 import Jimp from "jimp";
+const replaceLast = require("replace-last");
 
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
@@ -37,6 +38,29 @@ export function timeSince(date: number) {
 
   if (interval > 1) return ~~interval + " min";
   return ~~seconds + " s";
+}
+
+export function durationToMilliseconds(duration: string): string {
+  const [digits, abbr] = duration.match(/\d{1,3}|\D/g) as string[];
+  switch (abbr) {
+    case "s" || "S":
+      return (parseInt(digits) * 1000).toString();
+    case "m" || "M":
+      return (parseInt(digits) * 60 * 1000).toString();
+    case "h" || "H":
+      return (parseInt(digits) * 3600 * 1000).toString();
+    case "d" || "D":
+      return (parseInt(digits) * 86400 * 1000).toString();
+    case "w" || "W":
+      return (parseInt(digits) * 604800 * 1000).toString();
+    case "t" || "T": // t stands for month since m is already taken for minutes
+      return (parseInt(digits) * 2592000 * 1000).toString();
+    case "y" || "Y":
+      return (parseInt(digits) * 31536000 * 1000).toString();
+    default:
+      logger.error("Invalid duration");
+      return "";
+  }
 }
 
 /**
@@ -556,20 +580,20 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
   // If theres a reply
   if (message.reference) {
     const reference = await message.fetchReference();
-    return getMostRelevantImageURL(reference);
+    return replaceLast(getMostRelevantImageURL(reference), ".webp", ".png");
   }
 
   if (isValidHttpUrl(arg)) {
     if (arg.startsWith("https://tenor") && !arg.endsWith(".gif")) {
       return arg + ".gif";
     }
-    return arg;
+    return replaceLast(arg, ".webp", ".png");
   }
 
   if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:")) return getMostRelevantImageURL(message); // this is a hack...
 
   const user = await message.client.users.fetch(arg);
-  return user.displayAvatarURL(defaultImageOptions) || user.defaultAvatarURL;
+  return replaceLast(user.displayAvatarURL(defaultImageOptions), ".webp", ".png") || user.defaultAvatarURL;
 }
 
 /**
@@ -650,4 +674,18 @@ export async function getLastAttachmentInChannel(message: IMessage) {
     .filter((m) => m.attachments.size > 0)
     .first();
   return lastMessage?.attachments.first()?.attachment;
+}
+
+/**
+ * Remove any mention in the message
+ * @param messageContent content of the message to clean
+ * @returns content of the message cleaned of any mention
+ * @author Qexat
+ */
+export function removeMentions(messageContent: string): string {
+  return messageContent
+    .replace(MessageMentions.CHANNELS_PATTERN, "")
+    .replace(MessageMentions.EVERYONE_PATTERN, "")
+    .replace(MessageMentions.ROLES_PATTERN, "")
+    .replace(MessageMentions.USERS_PATTERN, "");
 }

@@ -47,6 +47,8 @@ const schema = new Schema<IUser>({
 
 export interface IUserFunctions {
   addBattleRewards(rewards: IBattleUserRewards): Promise<IUser>;
+  mute(muter_id: string, mutee_id: string, length: string, reason?: string): Promise<IUser>;
+  unmute(unmuter_id: string, unmutee_id: string, reason?: string): Promise<IUser>;
   kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
   ban(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
   updateRoles(roles: string[]): Promise<IUser>;
@@ -83,6 +85,34 @@ schema.statics.findOneOrCreate = async function (member: Discord.GuildMember | D
     user = await new User(userData).save();
   }
   return user;
+};
+
+schema.statics.mute = async function (
+  muter_id: string,
+  mutee_id: string,
+  duration: string,
+  reason: string = "no reason given"
+) {
+  const mutee = await User.findOne({ discord_id: mutee_id });
+  if (!mutee) return;
+
+  const mute: ActionHistory = {
+    timestamp: Date.now(),
+    casted_by: muter_id,
+    duration,
+    reason,
+  };
+
+  mutee.mute_history.push(mute);
+
+  return mutee.save().catch((err: any) => logger.error(err));
+};
+
+schema.statics.unmute = async function (unmuter_id: string, unmutee_id: string, reason: string = "no reason given") {
+  const unmutee = await User.findOne({ discord_id: unmutee_id });
+  if (!unmutee) return;
+
+  return unmutee.save().catch((err: any) => logger.error(err));
 };
 
 schema.statics.kick = async function (kicker_id: string, kickee_id: string, reason: string = "no reason given") {
