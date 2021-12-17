@@ -15,9 +15,9 @@ export default defineCommand({
   requiresProcessing: true,
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
-    if (!targetUser) return "please mention the user you wanna kick";
-    if (targetUser.id === message.author.id) return "you can't kick urself";
-    if (targetUser.permissions.has("ADMINISTRATOR")) return "you can't kick other admins";
+    if (!targetUser) return "Please mention the user you want to kick";
+    if (targetUser.id === message.author.id) return "You can't kick yourself";
+    if (targetUser.permissions.has("ADMINISTRATOR")) return "You can't kick other admins";
 
     const reason = message.args.join(" ");
 
@@ -25,7 +25,7 @@ export default defineCommand({
     await targetUser.kick(reason);
 
     // Keep track of the kick
-    await User.kick(message.author.id, targetUser.id, reason).catch(() => logger.error("kick database update failed"));
+    await User.kick(message.author.id, targetUser.id, reason).catch(() => logger.error("Kick database update failed"));
 
     // Create the result embed
     const embed = new Discord.MessageEmbed()
@@ -34,7 +34,7 @@ export default defineCommand({
       .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
       .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
       .setTimestamp()
-      .addField("Reason", reason || "no reason given", true)
+      .addField("Reason", reason || "No reason given", true)
       .setFooter(Shaii.version, SHAII_LOGO)
       .setColor("#FF4500");
 

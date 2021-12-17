@@ -14,7 +14,7 @@ class Config {
     try {
       var configJSON = require("../config.shaii.json");
     } catch (error) {
-      logger.error("you don't have a config set, please fill in your config.shaii.json");
+      logger.error("You don't have a config set, please fill in your config.shaii.json");
     }
 
     this.config = configJSON;

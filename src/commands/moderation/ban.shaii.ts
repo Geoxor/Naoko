@@ -10,14 +10,14 @@ export default defineCommand({
   aliases: [],
   category: "MODERATION",
   usage: "ban <@user> <reason>",
-  description: "bans a user",
+  description: "Bans a user",
   permissions: ["BAN_MEMBERS"],
   requiresProcessing: true,
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
-    if (!targetUser) return "please mention the user you wanna ban";
-    if (targetUser.id === message.author.id) return "you can't ban urself";
-    if (targetUser.permissions.has("ADMINISTRATOR")) return "you can't ban other admins";
+    if (!targetUser) return "Please mention the user you want to ban";
+    if (targetUser.id === message.author.id) return "You can't ban yourself";
+    if (targetUser.permissions.has("ADMINISTRATOR")) return "You can't ban other admins";
 
     const reason = message.args.join(" ");
 
@@ -27,7 +27,7 @@ export default defineCommand({
     });
 
     // Keep track of the ban
-    await User.ban(message.author.id, targetUser.id, reason).catch(() => logger.error("ban database update failed"));
+    await User.ban(message.author.id, targetUser.id, reason).catch(() => logger.error("Ban database update failed"));
 
     // Create the result embed
     const embed = new Discord.MessageEmbed()
@@ -36,7 +36,7 @@ export default defineCommand({
       .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
       .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
       .setTimestamp()
-      .addField("Reason", reason || "no reason given", true)
+      .addField("Reason", reason || "No reason given", true)
       .setFooter(Shaii.version, SHAII_LOGO)
       .setColor("#FF0000");
 

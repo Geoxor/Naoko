@@ -21,10 +21,10 @@ export default defineCommand({
           ? pipeline.push(arg)
           : ((isArgCommand = false), userSentence.push(arg))
         : userSentence.push(arg);
-      if (pipeline.length === 0) return "pipeline can't be empty";
-      if (pipeline.length > 10) return "pipeline can't be longer than 10 iterators";
+      if (pipeline.length === 0) return "Pipeline can't be empty";
+      if (pipeline.length > 10) return "Pipeline can't be longer than 10 iterators";
     });
-    if (userSentence.length === 0) return `what do you want to textify ${randomChoice(SLURS)}`;
+    if (userSentence.length === 0) return `What do you want to textify ${randomChoice(SLURS)}`;
     const sentence = userSentence.join(" ");
     if (sentence.length > 2000) return `wtf your sentence is too big ${randomChoice(SLURS)}`;
     return textify(pipeline, sentence);

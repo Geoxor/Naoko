@@ -298,7 +298,7 @@ class Shaii {
             if (closestCommand)
               return message
                 .reply(
-                  `${commandDoesntExistString}\nthere's this however ${highlight(config.prefix + closestCommand.usage)}`
+                  `${commandDoesntExistString}\nThere's this however ${highlight(config.prefix + closestCommand.usage)}`
                 )
                 .catch(() => {});
 
@@ -336,7 +336,7 @@ class Shaii {
             // This is pretty cringe
             if (!is3DAcceleration) {
               return message.reply(
-                "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server shes running on"
+                "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server she's running on"
               );
             }
 

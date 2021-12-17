@@ -8,10 +8,10 @@ export default defineCommand({
   category: "TEXT_PROCESSORS",
   usage: "spongify <sentence>",
   aliases: [],
-  description: "mAkEs YoU sPeAkInG lIkE ThAt",
+  description: "mAkEs YoU sPeAk lIkE ThIs",
   requiresProcessing: false,
   execute: async (message) => {
-    if (message.args.length === 0) return `what do you want to SpOnGiFy ${randomChoice(SLURS)}`;
+    if (message.args.length === 0) return `What do you want to SpOnGiFy ${randomChoice(SLURS)}`;
     return textToSpongify(message.args.join(" "), randomChoice([true, false]));
   },
 });

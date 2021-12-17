@@ -10,7 +10,7 @@ export default defineCommand({
   description: "See how much you and another user match!",
   requiresProcessing: false,
   execute: (message) => {
-    if (!message.mentions.members?.size) return "Tag the person you wanna match with!";
+    if (!message.mentions.members?.size) return "Tag the person you want to match with!";
 
     let matcher: Discord.User;
     let matchee: Discord.User;

@@ -12,11 +12,11 @@ export default defineCommand({
   description: "Translates your sentence to brainfuck esoteric language",
   requiresProcessing: false,
   execute: async (message) => {
-    if (message.args.length === 0) return `what to you want to translate ${randomChoice(SLURS)}`;
+    if (message.args.length === 0) return `What to you want to translate ${randomChoice(SLURS)}`;
     const response: string = textToBrainfuck(message.args.join(" "));
     if (response.length > 2000) {
       return {
-        content: "bro the result is too big gonna put it in a file",
+        content: "Bro the result is too big gonna put it in a file",
         files: [{ name: "shit.bf", attachment: Readable.from(response) }],
       };
     }

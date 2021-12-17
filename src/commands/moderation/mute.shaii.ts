@@ -12,25 +12,25 @@ export default defineCommand({
   aliases: [],
   category: "MODERATION",
   usage: "mute <@user> <duration> <reason>",
-  description: "mute an user",
+  description: "Mute a user",
   permissions: ["MANAGE_ROLES"],
   requiresProcessing: true,
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
-    if (!targetUser) return "please mention the user you wanna mute";
-    if (targetUser.id === message.author.id) return "you can't mute urself";
-    if (targetUser.permissions.has("ADMINISTRATOR")) return "you can't mute other admins";
-    if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "this user is already muted";
+    if (!targetUser) return "Please mention the user you want to mute";
+    if (targetUser.id === message.author.id) return "You can't mute yourself";
+    if (targetUser.permissions.has("ADMINISTRATOR")) return "You can't mute other admins";
+    if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
     let duration = message.args[0];
-    if (duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m) === null) return "you must specify a valid duration";
-    const reason = message.args.slice(1).join(" ") || "no reason given";
+    if (duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m) === null) return "You must specify a valid duration";
+    const reason = message.args.slice(1).join(" ") || "No reason given";
 
     let msDuration = durationToMilliseconds(duration);
     if (msDuration === "") return `${duration} is not a valid duration`;
     if (parseInt(msDuration) > 1209600000) {
       (duration = "14d"), (msDuration = "1209600000");
-      logger.error("duration entered is too big: it has been brought to 14 days");
+      logger.error("Duration entered is too big: it has been brought to 14 days");
     }
 
     // Get rekt
@@ -38,13 +38,13 @@ export default defineCommand({
 
     // Keep track of the mute
     await User.mute(message.author.id, targetUser.id, duration, reason).catch(() =>
-      logger.error("mute database update failed")
+      logger.error("Mute database update failed")
     );
 
     // Send the embed
     sendMuteEmbed(message, targetUser, duration, reason);
 
-    await setTimeout(async () => {
+    setTimeout(async () => {
       if (!targetUser.roles.cache.has(MUTED_ROLE_ID)) return;
       try {
         await targetUser.roles.remove(MUTED_ROLE_ID);
@@ -90,7 +90,7 @@ export function sendUnmuteEmbed(
     .setDescription(`<@${targetUser.user.id}>, you have been unmuted.`)
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
     .setTimestamp()
-    .addField("Reason", reason || "no reason given", true)
+    .addField("Reason", reason || "No reason given", true)
     .setFooter(Shaii.version, SHAII_LOGO)
     .setColor("#00FF00");
 
