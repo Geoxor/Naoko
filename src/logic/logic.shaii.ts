@@ -172,7 +172,7 @@ export function imageProcess(process: ImageProcessorFn) {
  */
 export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
   return fns.map((fn) => {
-    const cmdName = fn.name.toLowerCase();
+    const cmdName = capitalizeFirstLetter(fn.name.toLowerCase());
     logger.print(`Generated command ${cmdName}`);
     const command: ICommand = {
       name: cmdName,
