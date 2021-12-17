@@ -19,7 +19,7 @@ export default defineCommand({
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "please mention the user you wanna unmute";
     if (targetUser.id === message.author.id) return "you can't unmute urself";
-	if (!targetUser.roles.cache.has(MUTED_ROLE_ID)) return "this user is not muted";
+    if (!targetUser.roles.cache.has(MUTED_ROLE_ID)) return "this user is not muted";
 
     const reason = message.args.join(" ");
 
@@ -29,7 +29,7 @@ export default defineCommand({
     // Keep track of the unmute
     await User.unmute(message.author.id, targetUser.id, reason).catch(() => logger.error("unmute database update failed"));
 
-	logger.print(reason);
+    logger.print(reason);
     // Send the embed
     sendUnmuteEmbed(message, targetUser, reason);
   },

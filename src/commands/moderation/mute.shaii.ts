@@ -20,7 +20,7 @@ export default defineCommand({
     if (!targetUser) return "please mention the user you wanna mute";
     if (targetUser.id === message.author.id) return "you can't mute urself";
     if (targetUser.permissions.has("ADMINISTRATOR")) return "you can't mute other admins";
-	if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "this user is already muted";
+    if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "this user is already muted";
 
     let duration = message.args[0];
     if (duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m) === null) return "you must specify a valid duration";
@@ -28,10 +28,10 @@ export default defineCommand({
 
     let msDuration = durationToMilliseconds(duration);
     if (msDuration === "") return `${duration} is not a valid duration`;
-	if (parseInt(msDuration) > 1209600000) {
-		duration = "14d", msDuration = "1209600000";
-		logger.error("duration entered is too big: it has been brought to 14 days");
-	}
+    if (parseInt(msDuration) > 1209600000) {
+      (duration = "14d"), (msDuration = "1209600000");
+      logger.error("duration entered is too big: it has been brought to 14 days");
+    }
 
     // Get rekt
     await targetUser.roles.add(MUTED_ROLE_ID);
@@ -45,6 +45,7 @@ export default defineCommand({
     sendMuteEmbed(message, targetUser, duration, reason);
 
     await setTimeout(async () => {
+      if (!targetUser.roles.cache.has(MUTED_ROLE_ID)) return;
       try {
         await targetUser.roles.remove(MUTED_ROLE_ID);
         return sendUnmuteEmbed(message, targetUser);

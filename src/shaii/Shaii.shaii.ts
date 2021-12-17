@@ -92,22 +92,26 @@ class Shaii {
             logger.error("Couldn't give Ghosts role to the member.");
           });
         }
-        (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
-          .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
-          .then((m) => m.react("👋"));
+        try {
+          (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
+            .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
+            .then((m) => m.react("👋"));
+        } catch {
+          logger.error(`The channel <#${GEOXOR_GENERAL_CHANNEL_ID}> doesn't exist`);
+        }
       }
 
       let user = await User.findOneOrCreate(member);
       for (const roleId of user.roles) {
         const role = member.guild.roles.cache.find((role) => role.id === roleId);
-        if (role) {
-          member.roles
-            .add(role)
-            .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
-            .catch((error) => {
-              logger.error(error as string);
-            });
-        }
+          if (role) {
+            member.roles
+              .add(role)
+              .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
+              .catch((error) => {
+                logger.error(error as string);
+              });
+          }
       }
     });
     this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {

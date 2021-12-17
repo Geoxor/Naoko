@@ -104,7 +104,7 @@ export const getCommands = async () => {
     brainfuck,
     textify,
     mute,
-	unmute,
+    unmute,
   ];
 
   return commands;
