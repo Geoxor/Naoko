@@ -5,6 +5,7 @@ import { ImageProcessors } from "../types";
 import petPetGif from "pet-pet-gif";
 import { getRGBAUintArray, encodeFramesToGif, bipolarRandom } from "./logic.shaii";
 import logger from "../shaii/Logger.shaii";
+import { commands3D } from "./3DRenderer.shaii";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -44,8 +45,9 @@ export const imageProcessors: ImageProcessors = {
  */
 export async function transform(pipeline: string[], buffer: Buffer) {
   let fuckedBuffer = buffer;
+  const allImageProcessors: ImageProcessors = { ...imageProcessors, ...commands3D }
 
-  const functions = pipeline.map((name) => imageProcessors[name]).filter((processor) => !!processor);
+  const functions = pipeline.map((name) => allImageProcessors[name]).filter((processor) => !!processor);
   const bar = logger.progress("Pipelines - ", functions.length);
   for (let i = 0; i < functions.length; i++) {
     const start = Date.now();
