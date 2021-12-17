@@ -549,7 +549,7 @@ export function getMostRelevantImageURL(message: Discord.Message) {
     message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
     message.author.displayAvatarURL(defaultImageOptions) ||
     message.author.defaultAvatarURL
-  ).replace(".webp", ".png");
+  );
 }
 
 /**
