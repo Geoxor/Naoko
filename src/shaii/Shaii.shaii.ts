@@ -35,7 +35,6 @@ import { highlight, markdown, randomChoice, removeMentions } from "../logic/logi
 import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 import { WebGLRenderer } from "three";
-import { sep } from "path/posix";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
