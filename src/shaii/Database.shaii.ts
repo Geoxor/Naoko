@@ -147,13 +147,13 @@ schema.statics.ban = async function (baner_id: string, banee_id: string, reason:
 };
 
 schema.statics.unban = async function (unbanner_id: string, unbannee_id: string, reason: string = "No reason given") {
-	const unbannee = await User.findOne({ discord_id: unbannee_id });
-	if (!unbannee) return;
+  const unbannee = await User.findOne({ discord_id: unbannee_id });
+  if (!unbannee) return;
 
-	unbannee.is_banned = false;
+  unbannee.is_banned = false;
 
-	return unbannee.save().catch((err: any) => logger.error(err));
-}
+  return unbannee.save().catch((err: any) => logger.error(err));
+};
 
 schema.statics.pushHistory = async function (historyType: HistoryTypes, user_id: string, value: string) {
   const user = await User.findOne({ discord_id: user_id });

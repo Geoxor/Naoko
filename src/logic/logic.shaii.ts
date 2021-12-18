@@ -699,19 +699,26 @@ export function removeMentions(messageContent: string): string {
  * @author Qexat
  */
 export function nickEmojifier(member: Discord.GuildMember | null, emoji: EmojiIdentifierResolvable): boolean {
-	if (member) {
-		const currentNickname = member.nickname || member.displayName;
-		// !(x1 && x2 && x3) <=> !x1 || !x2 || !x3
-		if (!(currentNickname.startsWith(emoji.valueOf()[0])) && !(currentNickname[0] in rolesEmojiList) && member.user.id !== member.guild.ownerId) {
-			member.setNickname(`${emoji} ${currentNickname}`.slice(0, 31)).then(() => {
-				return true
-			}).catch((error) => {
-				logger.error(`${error}`);
-			});
-		}
-		return false;
-	} else {
-		logger.error("Cannot emojify this member's nickname.");
-		return false;
-	}
+  if (member) {
+    const currentNickname = member.nickname || member.displayName;
+    // !(x1 && x2 && x3) <=> !x1 || !x2 || !x3
+    if (
+      !currentNickname.startsWith(emoji.valueOf()[0]) &&
+      !(currentNickname[0] in rolesEmojiList) &&
+      member.user.id !== member.guild.ownerId
+    ) {
+      member
+        .setNickname(`${emoji} ${currentNickname}`.slice(0, 31))
+        .then(() => {
+          return true;
+        })
+        .catch((error) => {
+          logger.error(`${error}`);
+        });
+    }
+    return false;
+  } else {
+    logger.error("Cannot emojify this member's nickname.");
+    return false;
+  }
 }

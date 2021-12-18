@@ -240,7 +240,7 @@ class Shaii {
 
   private nickEmojiAdd(member: Discord.GuildMember) {
     member.roles.cache.forEach((role) => {
-	  if (role === member.guild.roles.everyone) return
+      if (role === member.guild.roles.everyone) return;
       let isEmojiSet: boolean = false;
       switch (role.id) {
         case GEOBOTS_ROLE_ID:
@@ -264,9 +264,9 @@ class Shaii {
         default:
           logger.print(`The role '${role.name}' is not linked to any emoji.`);
       }
-      if (isEmojiSet) return
+      if (isEmojiSet) return;
     });
-	return
+    return;
   }
 
   private onMessageCreate(message: Discord.Message) {
@@ -356,7 +356,7 @@ class Shaii {
           if (command.permissions) {
             for (const perm of command.permissions) {
               if (!message.member?.permissions.has(perm)) {
-				if (command.requiresProcessing) clearTyping();
+                if (command.requiresProcessing) clearTyping();
                 return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => {});
               }
             }
@@ -377,7 +377,7 @@ class Shaii {
 
             // This is pretty cringe
             if (!is3DAcceleration) {
-			  if (command.requiresProcessing) clearTyping();
+              if (command.requiresProcessing) clearTyping();
               return message.reply(
                 "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server she's running on"
               );

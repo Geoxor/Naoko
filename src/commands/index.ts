@@ -106,7 +106,7 @@ export const getCommands = async () => {
     textify,
     mute,
     unmute,
-	unban,
+    unban,
   ];
 
   return commands;
