@@ -1,7 +1,8 @@
 import { EmojiIdentifierResolvable } from "discord.js";
-import { IWaifuRarityName } from "src/types";
+import { EmojiList } from "../types";
 export const SHAII_ID = "870496144881492069";
-export const GEOXOR_GUILD_ID = "385387666415550474";
+// export const GEOXOR_GUILD_ID = "385387666415550474";
+export const GEOXOR_GUILD_ID = "897185485313699891";
 export const TESTING_GUILD_ID = "911762334538670160";
 export const QBOT_DEV_GUILD_ID = "897185485313699891";
 export const GEOXOR_GENERAL_CHANNEL_ID = "845328432715923487";
@@ -9,8 +10,15 @@ export const DOWNVOTE_EMOJI_ID = "823666555123662888";
 export const UPVOTE_EMOJI_ID = "834402501397577729";
 export const GEOXOR_ID = "153274351561605120";
 export const TARDOKI_ID = "858340143131787274";
+export const SVRGE_ID = "148295829810053120";
+export const MORPHEUS_ID = "439424425780183040"; // secret person...
 export const MUTED_ROLE_ID = "737011597217628231";
 export const GHOSTS_ROLE_ID = "736285344659669003";
+export const BOWTIES_ROLE_ID = "430707067863433216";
+export const BOOSTERS_ROLE_ID = "585863871630409738";
+export const DONATORS_ROLE_ID = "386486672021258251";
+export const EARLIES_ROLE_ID = "846853376959971418";
+export const GEOBOTS_ROLE_ID = "720006137151488121";
 export const VOTE_TIME = 30000;
 
 export const SLURS = [
@@ -73,39 +81,11 @@ export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {
   return category.categoryName;
 });
 
-export const IWAIFU_RARITIES: Map<string, string>[] = [
-  new Map<string, string>([
-    ["name", "common"],
-    ["color", "#8F93A2"],
-    ["emoji", "👺"],
-  ]),
-  new Map<string, string>([
-    ["name", "uncommon"],
-    ["color", "#BDDE86"],
-    ["emoji", "🐉"],
-  ]),
-  new Map<string, string>([
-    ["name", "rare"],
-    ["color", "#C792EA"],
-    ["emoji", "🔮"],
-  ]),
-  new Map<string, string>([
-    ["name", "legendary"],
-    ["color", "#FFCB6B"],
-    ["emoji", "🌟"],
-  ]),
-  new Map<string, string>([
-    ["name", "mythical"],
-    ["color", "#F07178"],
-    ["emoji", "⚜️"],
-  ]),
-];
-
-const x = [];
-
-const tuple = <T extends string[]>(...args: T) => args;
-for (let i = 0; i < IWAIFU_RARITIES.length; i++) {
-  x.push([...IWAIFU_RARITIES][i].get("name") as string);
-}
-
-export const IWAIFU_RARITIES_NAME = [...x] as const;
+export const rolesEmojiList: EmojiList = {
+  GHOSTS: "👻️",
+  DONATORS: "💸️",
+  BOWTIES: "🎀️",
+  BOOSTERS: "✨️",
+  EARLIES: "🔮️",
+  GEOBOTS: "🤖️",
+};
