@@ -12,7 +12,6 @@ import fileType from "file-type";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
 import Jimp from "jimp";
-import { rolesEmojiList } from "../constants";
 const replaceLast = require("replace-last");
 
 const defaultImageOptions: Discord.ImageURLOptions = {
@@ -689,36 +688,4 @@ export function removeMentions(messageContent: string): string {
     .replace(MessageMentions.EVERYONE_PATTERN, "")
     .replace(MessageMentions.ROLES_PATTERN, "")
     .replace(MessageMentions.USERS_PATTERN, "");
-}
-
-/**
- * Adds an emoji before the nickname of the member if it has not
- * @param member the member to add an emoji to their nickname
- * @param emoji the emoji to add
- * @returns true if the operation is a success, false otherwise
- * @author Qexat
- */
-export function nickEmojifier(member: Discord.GuildMember | null, emoji: EmojiIdentifierResolvable): boolean {
-  if (member) {
-    const currentNickname = member.nickname || member.displayName;
-    // !(x1 && x2 && x3) <=> !x1 || !x2 || !x3
-    if (
-      !currentNickname.startsWith(emoji.valueOf()[0]) &&
-      !(currentNickname[0] in rolesEmojiList) &&
-      member.user.id !== member.guild.ownerId
-    ) {
-      member
-        .setNickname(`${emoji} ${currentNickname}`.slice(0, 31))
-        .then(() => {
-          return true;
-        })
-        .catch((error) => {
-          logger.error(`${error}`);
-        });
-    }
-    return false;
-  } else {
-    logger.error("Cannot emojify this member's nickname.");
-    return false;
-  }
 }

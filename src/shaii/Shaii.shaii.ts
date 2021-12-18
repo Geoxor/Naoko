@@ -1,8 +1,14 @@
-import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
+import Discord, {
+  EmojiIdentifierResolvable,
+  Intents,
+  MessageReaction,
+  PartialMessageReaction,
+  TextChannel,
+} from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
-import { ICommand } from "../types";
+import { GeoxorGuildRole, ICommand } from "../types";
 import logger from "./Logger.shaii";
 import { getCommands } from "../commands";
 import config from "./Config.shaii";
@@ -23,15 +29,9 @@ import {
   MUTED_ROLE_ID,
   SVRGE_ID,
   MORPHEUS_ID,
-  rolesEmojiList,
-  BOOSTERS_ROLE_ID,
-  BOWTIES_ROLE_ID,
-  DONATORS_ROLE_ID,
-  EARLIES_ROLE_ID,
-  GEOBOTS_ROLE_ID,
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
-import { highlight, markdown, randomChoice, removeMentions, nickEmojifier } from "../logic/logic.shaii";
+import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 import { WebGLRenderer } from "three";
@@ -61,6 +61,7 @@ class Shaii {
   public commands: Discord.Collection<string, ICommand>;
   public geoxorGuild: Discord.Guild | undefined;
   public version: string;
+  public geoxorRoleList: GeoxorGuildRole[] | undefined;
 
   constructor() {
     this.commands = new Discord.Collection();
@@ -75,6 +76,14 @@ class Shaii {
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
+    });
+    this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
+    this.geoxorRoleList = (this.geoxorGuild || this.bot.guilds.cache.get(QBOT_DEV_GUILD_ID))?.roles.cache.map((role) => {
+      return {
+        name: role.name.replace(/^[a-zA-Z]+$/g, ""),
+        emoji: role.name.replace(/^(?![a-zA-Z]+)$/g, ""),
+        id: role.id,
+      };
     });
     this.bot.on("ready", () => {
       logger.print("Instantiated Discord client instance");
@@ -238,35 +247,39 @@ class Shaii {
     }
   }
 
-  private nickEmojiAdd(member: Discord.GuildMember) {
-    member.roles.cache.forEach((role) => {
-      if (role === member.guild.roles.everyone) return;
-      let isEmojiSet: boolean = false;
-      switch (role.id) {
-        case GEOBOTS_ROLE_ID:
-          isEmojiSet = nickEmojifier(member, rolesEmojiList.GEOBOTS);
-          break;
-        case EARLIES_ROLE_ID:
-          isEmojiSet = nickEmojifier(member, rolesEmojiList.EARLIES);
-          break;
-        case BOOSTERS_ROLE_ID:
-          isEmojiSet = nickEmojifier(member, rolesEmojiList.BOOSTERS);
-          break;
-        case BOWTIES_ROLE_ID:
-          isEmojiSet = nickEmojifier(member, rolesEmojiList.BOWTIES);
-          break;
-        case DONATORS_ROLE_ID:
-          isEmojiSet = nickEmojifier(member, rolesEmojiList.DONATORS);
-          break;
-        case GHOSTS_ROLE_ID:
-          isEmojiSet = nickEmojifier(member, rolesEmojiList.GHOSTS);
-          break;
-        default:
-          logger.print(`The role '${role.name}' is not linked to any emoji.`);
+  /**
+   * Adds an emoji before the nickname of the member if it has not
+   * @param member the member to add an emoji to their nickname
+   * @param emoji the emoji to add
+   * @returns true if the operation is a success, false otherwise
+   * @author Qexat
+   */
+  public nickEmojifier(member: Discord.GuildMember | null, emoji?: EmojiIdentifierResolvable): boolean {
+    if (member && emoji && this.geoxorRoleList) {
+      const currentNickname = member.nickname || member.displayName;
+      if (
+        !currentNickname.startsWith(emoji.valueOf()[0]) &&
+        !(currentNickname[0] in this.geoxorRoleList) &&
+        member.user.id !== member.guild.ownerId
+      ) {
+        member.setNickname(`${emoji} ${currentNickname}`.slice(0, 31)).catch((error) => {
+          logger.error(`${error}`);
+        });
       }
-      if (isEmojiSet) return;
+      return false;
+    } else {
+      logger.error("Cannot emojify this member's nickname.");
+      return false;
+    }
+  }
+
+  private nickEmojiAdd(member: Discord.GuildMember) {
+    member.roles.cache.forEach((memberRole) => {
+      if (memberRole.hoist)
+        this.geoxorRoleList?.forEach((guildRole) => {
+          if (memberRole.name === guildRole.name && this.nickEmojifier(member, guildRole.emoji)) return;
+        });
     });
-    return;
   }
 
   private onMessageCreate(message: Discord.Message) {

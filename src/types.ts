@@ -214,6 +214,8 @@ export interface GeometrySceneOptions {
   fps?: number;
 }
 
-export interface EmojiList {
-  [index: string]: EmojiIdentifierResolvable;
+export interface GeoxorGuildRole {
+  name: string;
+  id: string;
+  emoji: EmojiIdentifierResolvable;
 }
