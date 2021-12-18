@@ -21,9 +21,17 @@ import {
   SLURS,
   TARDOKI_ID,
   MUTED_ROLE_ID,
+  SVRGE_ID,
+  MORPHEUS_ID,
+  rolesEmojiList,
+  BOOSTERS_ROLE_ID,
+  BOWTIES_ROLE_ID,
+  DONATORS_ROLE_ID,
+  EARLIES_ROLE_ID,
+  GEOBOTS_ROLE_ID,
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
-import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
+import { highlight, markdown, randomChoice, removeMentions, nickEmojifier } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 import { WebGLRenderer } from "three";
@@ -38,10 +46,10 @@ si.getStaticData().then((info) => {
 // To avoid testing at each command
 let is3DAcceleration: boolean;
 try {
-	new WebGLRenderer();
-	is3DAcceleration = true;
+  new WebGLRenderer();
+  is3DAcceleration = true;
 } catch {
-	is3DAcceleration = false;
+  is3DAcceleration = false;
 }
 
 /**
@@ -113,14 +121,14 @@ class Shaii {
       let user = await User.findOneOrCreate(member);
       for (const roleId of user.roles) {
         const role = member.guild.roles.cache.find((role) => role.id === roleId);
-          if (role) {
-            member.roles
-              .add(role)
-              .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
-              .catch((error) => {
-                logger.error(error as string);
-              });
-          }
+        if (role) {
+          member.roles
+            .add(role)
+            .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
+            .catch((error) => {
+              logger.error(error as string);
+            });
+        }
       }
     });
     this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
@@ -230,18 +238,51 @@ class Shaii {
     }
   }
 
+  private nickEmojiAdd(member: Discord.GuildMember) {
+    member.roles.cache.forEach((role) => {
+	  if (role === member.guild.roles.everyone) return
+      let isEmojiSet: boolean = false;
+      switch (role.id) {
+        case GEOBOTS_ROLE_ID:
+          isEmojiSet = nickEmojifier(member, rolesEmojiList.GEOBOTS);
+          break;
+        case EARLIES_ROLE_ID:
+          isEmojiSet = nickEmojifier(member, rolesEmojiList.EARLIES);
+          break;
+        case BOOSTERS_ROLE_ID:
+          isEmojiSet = nickEmojifier(member, rolesEmojiList.BOOSTERS);
+          break;
+        case BOWTIES_ROLE_ID:
+          isEmojiSet = nickEmojifier(member, rolesEmojiList.BOWTIES);
+          break;
+        case DONATORS_ROLE_ID:
+          isEmojiSet = nickEmojifier(member, rolesEmojiList.DONATORS);
+          break;
+        case GHOSTS_ROLE_ID:
+          isEmojiSet = nickEmojifier(member, rolesEmojiList.GHOSTS);
+          break;
+        default:
+          logger.print(`The role '${role.name}' is not linked to any emoji.`);
+      }
+      if (isEmojiSet) return
+    });
+	return
+  }
+
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
-        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
+        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && !(message.author.id in [GEOXOR_ID, SVRGE_ID, MORPHEUS_ID]))
+          return;
 
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
         if (message.member && message.guild?.id === GEOXOR_GUILD_ID) {
           if (!this.hasGhostRole(message.member)) {
-            message.member.roles.add(GHOSTS_ROLE_ID).catch((error) => {
-              logger.error(error as string);
+            message.member.roles.add(GHOSTS_ROLE_ID).catch(() => {
+              logger.error("This role does not exist in the server.");
             });
           }
+          this.nickEmojiAdd(message.member);
         }
 
         // I'm tired of seeing people doing !rank unsuccessfully so we tell them it doesn't work anymore
@@ -315,6 +356,7 @@ class Shaii {
           if (command.permissions) {
             for (const perm of command.permissions) {
               if (!message.member?.permissions.has(perm)) {
+				if (command.requiresProcessing) clearTyping();
                 return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => {});
               }
             }
@@ -335,6 +377,7 @@ class Shaii {
 
             // This is pretty cringe
             if (!is3DAcceleration) {
+			  if (command.requiresProcessing) clearTyping();
               return message.reply(
                 "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server she's running on"
               );
