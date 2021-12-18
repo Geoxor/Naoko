@@ -35,6 +35,7 @@ import { highlight, markdown, randomChoice, removeMentions } from "../logic/logi
 import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 import { WebGLRenderer } from "three";
+import { sep } from "path/posix";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
@@ -51,6 +52,8 @@ try {
 } catch {
   is3DAcceleration = false;
 }
+
+const emojiRegExp: RegExp = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
 
 /**
  * Shaii multi purpose Discord bot
@@ -77,14 +80,6 @@ class Shaii {
         Intents.FLAGS.GUILD_VOICE_STATES,
       ],
     });
-    this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
-    this.geoxorRoleList = (this.geoxorGuild || this.bot.guilds.cache.get(QBOT_DEV_GUILD_ID))?.roles.cache.map((role) => {
-      return {
-        name: role.name.replace(/^[a-zA-Z]+$/g, ""),
-        emoji: role.name.replace(/^(?![a-zA-Z]+)$/g, ""),
-        id: role.id,
-      };
-    });
     this.bot.on("ready", () => {
       logger.print("Instantiated Discord client instance");
       logger.print(`Logged in as ${this.bot.user!.tag}!`);
@@ -92,6 +87,20 @@ class Shaii {
       this.updateActivity();
       this.leaveRogueGuilds();
       this.joinThreads();
+      this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
+      this.geoxorRoleList = (this.geoxorGuild || this.bot.guilds.cache.get(QBOT_DEV_GUILD_ID))?.roles.cache.map((role) => {
+        return {
+          name: role.name
+            .replace(
+              emojiRegExp,
+              ""
+            )
+            .trim(),
+          emoji: role.name.replace(/(\w\S+)/g, "").trim(),
+          id: role.id,
+        };
+      });
+      this.geoxorRoleList?.shift();
     });
     this.bot.on("messageCreate", async (message) => this.onMessageCreate(message));
     this.bot.on("messageDelete", async (message) => {
@@ -254,15 +263,14 @@ class Shaii {
    * @returns true if the operation is a success, false otherwise
    * @author Qexat
    */
-  public nickEmojifier(member: Discord.GuildMember | null, emoji?: EmojiIdentifierResolvable): boolean {
-    if (member && emoji && this.geoxorRoleList) {
+  public nickEmojifier(member: Discord.GuildMember | null, role?: GeoxorGuildRole): boolean {
+    if (member && role && this.geoxorRoleList) {
       const currentNickname = member.nickname || member.displayName;
       if (
-        !currentNickname.startsWith(emoji.valueOf()[0]) &&
-        !(currentNickname[0] in this.geoxorRoleList) &&
+        !currentNickname.startsWith(role.emoji as string) &&
         member.user.id !== member.guild.ownerId
       ) {
-        member.setNickname(`${emoji} ${currentNickname}`.slice(0, 31)).catch((error) => {
+        member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31)).catch((error) => {
           logger.error(`${error}`);
         });
       }
@@ -277,7 +285,7 @@ class Shaii {
     member.roles.cache.forEach((memberRole) => {
       if (memberRole.hoist)
         this.geoxorRoleList?.forEach((guildRole) => {
-          if (memberRole.name === guildRole.name && this.nickEmojifier(member, guildRole.emoji)) return;
+          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && !this.nickEmojifier(member, guildRole)) return;
         });
     });
   }
@@ -289,7 +297,7 @@ class Shaii {
           return;
 
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
-        if (message.member && message.guild?.id === GEOXOR_GUILD_ID) {
+        if (message.member && (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID)) {
           if (!this.hasGhostRole(message.member)) {
             message.member.roles.add(GHOSTS_ROLE_ID).catch(() => {
               logger.error("This role does not exist in the server.");
