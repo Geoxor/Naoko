@@ -1,6 +1,4 @@
 import { EmojiIdentifierResolvable } from "discord.js";
-import geoxorRoleList from "../shaii/Shaii.shaii";
-export const grl = geoxorRoleList;
 
 export const SHAII_ID = "870496144881492069";
 export const GEOXOR_GUILD_ID = "385387666415550474";
