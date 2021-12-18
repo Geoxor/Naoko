@@ -1,6 +1,6 @@
 # 🌸 Shaii General Purpose Bot
 
-![image](https://cdn.discordapp.com/attachments/550913067517607946/914330045663825951/unknown.png)
+![image](https://cdn.discordapp.com/attachments/920806500828606474/921561305100451911/unknown.png)
 
 ## Installation
 
