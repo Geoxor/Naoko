@@ -51,6 +51,7 @@ export interface IUserFunctions {
   unmute(unmuter_id: string, unmutee_id: string, reason?: string): Promise<IUser>;
   kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
   ban(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
+  unban(unbanner_id: string, unbannee_id: string, reason?: string): Promise<IUser>;
   updateRoles(roles: string[]): Promise<IUser>;
   pushHistory(historyType: HistoryTypes, user_id: string, value: string): Promise<IUser>;
   findOneOrCreate(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<IUser & { _id: any }>;
@@ -144,6 +145,15 @@ schema.statics.ban = async function (baner_id: string, banee_id: string, reason:
 
   return banee.save().catch((err: any) => logger.error(err));
 };
+
+schema.statics.unban = async function (unbanner_id: string, unbannee_id: string, reason: string = "No reason given") {
+	const unbannee = await User.findOne({ discord_id: unbannee_id });
+	if (!unbannee) return;
+
+	unbannee.is_banned = false;
+
+	return unbannee.save().catch((err: any) => logger.error(err));
+}
 
 schema.statics.pushHistory = async function (historyType: HistoryTypes, user_id: string, value: string) {
   const user = await User.findOne({ discord_id: user_id });
