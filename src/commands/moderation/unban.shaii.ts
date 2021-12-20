@@ -22,12 +22,6 @@ export default defineCommand({
     message.args.shift(); // remove the user ID
     const reason = message.args.join(" ");
 
-    // Get unfucked
-    await message.guild?.members.unban(targetUser.id, reason);
-
-    // Keep track of the unban
-    await User.unban(message.author.id, targetUser.id, reason).catch(() => logger.error("Unban database update failed"));
-
     // Create the result embed
     const embed = new Discord.MessageEmbed()
       .setTitle(`Unban - ${targetUser.tag}`)
@@ -42,6 +36,12 @@ export default defineCommand({
     targetUser
       .send({ embeds: [embed] })
       .catch(() => message.reply(`I couldn't DM ${targetUser.username} the embed, probably has DMs disabled`));
+
+    // Get unfucked
+    await message.guild?.members.unban(targetUser.id, reason);
+
+    // Keep track of the unban
+    await User.unban(message.author.id, targetUser.id, reason).catch(() => logger.error("Unban database update failed"));
 
     return { embeds: [embed] };
   },
