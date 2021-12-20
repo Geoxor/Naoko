@@ -255,6 +255,14 @@ class Shaii {
     }
   }
 
+  public doesNicknameStartWithEmoji(nickname: string, member: Discord.GuildMember): boolean {
+	if (!this.geoxorRoleList) return true;
+	for (let i = 0; i < this.geoxorRoleList.length; i++) {
+		if (nickname !== nickname.replace((this.geoxorRoleList[i].emoji as string)[0], "")) return true;
+	}
+	return false;
+  }
+
   /**
    * Adds an emoji before the nickname of the member if it has not
    * @param member the member to add an emoji to their nickname
@@ -266,12 +274,15 @@ class Shaii {
     if (member && role && this.geoxorRoleList) {
       const currentNickname = member.nickname || member.displayName;
       if (
-        !currentNickname.startsWith(role.emoji as string) &&
+        !this.doesNicknameStartWithEmoji(currentNickname, member) &&
         member.user.id !== member.guild.ownerId
       ) {
-        member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31)).catch((error) => {
-          logger.error(`${error}`);
-        });
+        try {
+			member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31));
+			return true;
+		} catch (error) {
+			logger.error(error as string);
+		}
       }
       return false;
     } else {
@@ -281,12 +292,17 @@ class Shaii {
   }
 
   private nickEmojiAdd(member: Discord.GuildMember) {
+	if (!this.geoxorRoleList) return;
+	let memberRoles: Discord.Role[] = []
     member.roles.cache.forEach((memberRole) => {
-      if (memberRole.hoist)
-        this.geoxorRoleList?.forEach((guildRole) => {
-          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && !this.nickEmojifier(member, guildRole)) return;
-        });
+      memberRoles.push(memberRole);
     });
+	for (let i = 0; i < memberRoles.length; i++) {
+		if (memberRoles[i].hoist)
+			for (let j = 0; j < this.geoxorRoleList.length; j++) {
+				if (memberRoles[i].name.replace(emojiRegExp, "").trim() === this.geoxorRoleList[j].name && this.nickEmojifier(member, this.geoxorRoleList[j])) return;
+			}
+	}
   }
 
   private onMessageCreate(message: Discord.Message) {
