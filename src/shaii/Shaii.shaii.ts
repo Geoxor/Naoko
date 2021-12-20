@@ -298,7 +298,7 @@ class Shaii {
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
-        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && !([GEOXOR_ID, SVRGE_ID, MORPHEUS_ID].includes(message.author.id)))
+        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && !(message.author.id in [GEOXOR_ID, SVRGE_ID, MORPHEUS_ID]))
           return;
 
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
