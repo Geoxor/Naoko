@@ -1,4 +1,10 @@
-import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
+import Discord, {
+  EmojiIdentifierResolvable,
+  Intents,
+  MessageReaction,
+  PartialMessageReaction,
+  TextChannel,
+} from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -244,6 +250,14 @@ class Shaii {
     }
   }
 
+  public doesNicknameStartWithEmoji(nickname: string, member: Discord.GuildMember): boolean {
+    if (!this.geoxorRoleList) return true;
+    for (let i = 0; i < this.geoxorRoleList.length; i++) {
+      if (nickname !== nickname.replace((this.geoxorRoleList[i].emoji as string)[0], "")) return true;
+    }
+    return false;
+  }
+
   /**
    * Adds an emoji before the nickname of the member if it has not
    * @param member the member to add an emoji to their nickname
@@ -254,10 +268,13 @@ class Shaii {
   public nickEmojifier(member: Discord.GuildMember | null, role?: GeoxorGuildRole): boolean {
     if (member && role && this.geoxorRoleList) {
       const currentNickname = member.nickname || member.displayName;
-      if (!currentNickname.startsWith(role.emoji as string) && member.user.id !== member.guild.ownerId) {
-        member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31)).catch((error) => {
-          logger.error(`${error}`);
-        });
+      if (!this.doesNicknameStartWithEmoji(currentNickname, member) && member.user.id !== member.guild.ownerId) {
+        try {
+          member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31));
+          return true;
+        } catch (error) {
+          logger.error(error as string);
+        }
       }
       return false;
     } else {
@@ -266,12 +283,12 @@ class Shaii {
     }
   }
 
-  // This shit is broken
   private nickEmojiAdd(member: Discord.GuildMember) {
+    if (!this.geoxorRoleList) return;
     member.roles.cache.forEach((memberRole) => {
       if (memberRole.hoist)
-        return this.geoxorRoleList?.forEach((guildRole) => {
-          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && !this.nickEmojifier(member, guildRole))
+        this.geoxorRoleList?.forEach((guildRole) => {
+          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && this.nickEmojifier(member, guildRole))
             return;
         });
     });
@@ -280,7 +297,7 @@ class Shaii {
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
-        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && !(message.author.id in [GEOXOR_ID, SVRGE_ID, MORPHEUS_ID]))
+        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && !([GEOXOR_ID, SVRGE_ID, MORPHEUS_ID].includes(message.author.id)))
           return;
 
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
@@ -290,7 +307,7 @@ class Shaii {
               logger.error("This role does not exist in the server.");
             });
           }
-          // this.nickEmojiAdd(message.member);
+          this.nickEmojiAdd(message.member);
         }
 
         // I'm tired of seeing people doing !rank unsuccessfully so we tell them it doesn't work anymore
