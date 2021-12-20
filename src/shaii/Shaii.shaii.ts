@@ -273,6 +273,7 @@ class Shaii {
     }
   }
 
+  // This shit is broken
   private nickEmojiAdd(member: Discord.GuildMember) {
     member.roles.cache.forEach((memberRole) => {
       if (memberRole.hoist)
@@ -296,7 +297,7 @@ class Shaii {
               logger.error("This role does not exist in the server.");
             });
           }
-          this.nickEmojiAdd(message.member);
+          // this.nickEmojiAdd(message.member);
         }
 
         // I'm tired of seeing people doing !rank unsuccessfully so we tell them it doesn't work anymore
