@@ -7,7 +7,7 @@
 1. Get a discord bot token
 2. Install bloatware
 ```
-sudo apt install -y build-tools libxi-dev libxext-dev libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev
+sudo apt install -y build-essential libxi-dev libxext-dev libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev
 ```
 3. Configure your `config.shaii.json` in `src`
 4. `npm i` to install dependencies
