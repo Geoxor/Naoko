@@ -1,10 +1,4 @@
-import Discord, {
-  EmojiIdentifierResolvable,
-  Intents,
-  MessageReaction,
-  PartialMessageReaction,
-  TextChannel,
-} from "discord.js";
+import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -25,7 +19,6 @@ import {
   SHAII_ID,
   TESTING_GUILD_ID,
   SLURS,
-  TARDOKI_ID,
   MUTED_ROLE_ID,
   SVRGE_ID,
   MORPHEUS_ID,
@@ -284,6 +277,7 @@ class Shaii {
     }
   }
 
+  // This shit is broken
   private nickEmojiAdd(member: Discord.GuildMember) {
     if (!this.geoxorRoleList) return;
     member.roles.cache.forEach((memberRole) => {
@@ -308,7 +302,7 @@ class Shaii {
               logger.error("This role does not exist in the server.");
             });
           }
-          this.nickEmojiAdd(message.member);
+          // this.nickEmojiAdd(message.member);
         }
 
         // I'm tired of seeing people doing !rank unsuccessfully so we tell them it doesn't work anymore
