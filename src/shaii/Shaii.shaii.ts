@@ -52,7 +52,8 @@ try {
   is3DAcceleration = false;
 }
 
-const emojiRegExp: RegExp = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+const emojiRegExp: RegExp =
+  /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
 
 /**
  * Shaii multi purpose Discord bot
@@ -89,12 +90,7 @@ class Shaii {
       this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
       this.geoxorRoleList = (this.geoxorGuild || this.bot.guilds.cache.get(QBOT_DEV_GUILD_ID))?.roles.cache.map((role) => {
         return {
-          name: role.name
-            .replace(
-              emojiRegExp,
-              ""
-            )
-            .trim(),
+          name: role.name.replace(emojiRegExp, "").trim(),
           emoji: role.name.replace(/(\w\S+)/g, "").trim(),
           id: role.id,
         };
@@ -265,10 +261,7 @@ class Shaii {
   public nickEmojifier(member: Discord.GuildMember | null, role?: GeoxorGuildRole): boolean {
     if (member && role && this.geoxorRoleList) {
       const currentNickname = member.nickname || member.displayName;
-      if (
-        !currentNickname.startsWith(role.emoji as string) &&
-        member.user.id !== member.guild.ownerId
-      ) {
+      if (!currentNickname.startsWith(role.emoji as string) && member.user.id !== member.guild.ownerId) {
         member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31)).catch((error) => {
           logger.error(`${error}`);
         });
@@ -283,8 +276,9 @@ class Shaii {
   private nickEmojiAdd(member: Discord.GuildMember) {
     member.roles.cache.forEach((memberRole) => {
       if (memberRole.hoist)
-        this.geoxorRoleList?.forEach((guildRole) => {
-          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && !this.nickEmojifier(member, guildRole)) return;
+        return this.geoxorRoleList?.forEach((guildRole) => {
+          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && !this.nickEmojifier(member, guildRole))
+            return;
         });
     });
   }
