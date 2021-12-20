@@ -21,14 +21,6 @@ export default defineCommand({
 
     const reason = message.args.join(" ");
 
-    // Get fucked
-    await targetUser.ban({
-      reason,
-    });
-
-    // Keep track of the ban
-    await User.ban(message.author.id, targetUser.id, reason).catch(() => logger.error("Ban database update failed"));
-
     // Create the result embed
     const embed = new Discord.MessageEmbed()
       .setTitle(`Ban - ${targetUser.user.tag}`)
@@ -43,6 +35,14 @@ export default defineCommand({
     targetUser
       .send({ embeds: [embed] })
       .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`));
+
+    // Get fucked
+    await targetUser.ban({
+      reason,
+    });
+
+    // Keep track of the ban
+    await User.ban(message.author.id, targetUser.id, reason).catch(() => logger.error("Ban database update failed"));
 
     return { embeds: [embed] };
   },
