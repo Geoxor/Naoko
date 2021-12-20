@@ -52,7 +52,8 @@ try {
   is3DAcceleration = false;
 }
 
-const emojiRegExp: RegExp = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+const emojiRegExp: RegExp =
+  /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
 
 /**
  * Shaii multi purpose Discord bot
@@ -89,12 +90,7 @@ class Shaii {
       this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
       this.geoxorRoleList = (this.geoxorGuild || this.bot.guilds.cache.get(QBOT_DEV_GUILD_ID))?.roles.cache.map((role) => {
         return {
-          name: role.name
-            .replace(
-              emojiRegExp,
-              ""
-            )
-            .trim(),
+          name: role.name.replace(emojiRegExp, "").trim(),
           emoji: role.name.replace(/(\w\S+)/g, "").trim(),
           id: role.id,
         };
@@ -256,11 +252,11 @@ class Shaii {
   }
 
   public doesNicknameStartWithEmoji(nickname: string, member: Discord.GuildMember): boolean {
-	if (!this.geoxorRoleList) return true;
-	for (let i = 0; i < this.geoxorRoleList.length; i++) {
-		if (nickname !== nickname.replace((this.geoxorRoleList[i].emoji as string)[0], "")) return true;
-	}
-	return false;
+    if (!this.geoxorRoleList) return true;
+    for (let i = 0; i < this.geoxorRoleList.length; i++) {
+      if (nickname !== nickname.replace((this.geoxorRoleList[i].emoji as string)[0], "")) return true;
+    }
+    return false;
   }
 
   /**
@@ -273,16 +269,13 @@ class Shaii {
   public nickEmojifier(member: Discord.GuildMember | null, role?: GeoxorGuildRole): boolean {
     if (member && role && this.geoxorRoleList) {
       const currentNickname = member.nickname || member.displayName;
-      if (
-        !this.doesNicknameStartWithEmoji(currentNickname, member) &&
-        member.user.id !== member.guild.ownerId
-      ) {
+      if (!this.doesNicknameStartWithEmoji(currentNickname, member) && member.user.id !== member.guild.ownerId) {
         try {
-			member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31));
-			return true;
-		} catch (error) {
-			logger.error(error as string);
-		}
+          member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31));
+          return true;
+        } catch (error) {
+          logger.error(error as string);
+        }
       }
       return false;
     } else {
@@ -292,17 +285,21 @@ class Shaii {
   }
 
   private nickEmojiAdd(member: Discord.GuildMember) {
-	if (!this.geoxorRoleList) return;
-	let memberRoles: Discord.Role[] = []
+    if (!this.geoxorRoleList) return;
+    let memberRoles: Discord.Role[] = [];
     member.roles.cache.forEach((memberRole) => {
       memberRoles.push(memberRole);
     });
-	for (let i = 0; i < memberRoles.length; i++) {
-		if (memberRoles[i].hoist)
-			for (let j = 0; j < this.geoxorRoleList.length; j++) {
-				if (memberRoles[i].name.replace(emojiRegExp, "").trim() === this.geoxorRoleList[j].name && this.nickEmojifier(member, this.geoxorRoleList[j])) return;
-			}
-	}
+    for (let i = 0; i < memberRoles.length; i++) {
+      if (memberRoles[i].hoist)
+        for (let j = 0; j < this.geoxorRoleList.length; j++) {
+          if (
+            memberRoles[i].name.replace(emojiRegExp, "").trim() === this.geoxorRoleList[j].name &&
+            this.nickEmojifier(member, this.geoxorRoleList[j])
+          )
+            return;
+        }
+    }
   }
 
   private onMessageCreate(message: Discord.Message) {
