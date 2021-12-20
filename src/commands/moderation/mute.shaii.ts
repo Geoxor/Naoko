@@ -23,7 +23,7 @@ export default defineCommand({
     if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
     let duration = message.args[0];
-    if (duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m) === null) return "You must specify a valid duration";
+    if (!duration || !duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) return "You must specify a valid duration";
     const reason = message.args.slice(1).join(" ") || "No reason given";
 
     let msDuration = durationToMilliseconds(duration);
