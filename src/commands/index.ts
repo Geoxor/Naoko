@@ -36,6 +36,7 @@ import uwuify from "./textProcessors/uwufy.shaii";
 import clear from "./moderation/clear.shaii";
 import kick from "./moderation/kick.shaii";
 import ban from "./moderation/ban.shaii";
+import unban from "./moderation/unban.shaii";
 import whois from "./moderation/whois.shaii";
 import mute from "./moderation/mute.shaii";
 import unmute from "./moderation/unmute.shaii";
@@ -105,6 +106,7 @@ export const getCommands = async () => {
     textify,
     mute,
     unmute,
+    unban,
   ];
 
   return commands;

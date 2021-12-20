@@ -45,7 +45,7 @@ export const imageProcessors: ImageProcessors = {
  */
 export async function transform(pipeline: string[], buffer: Buffer) {
   let fuckedBuffer = buffer;
-  const allImageProcessors: ImageProcessors = { ...imageProcessors, ...commands3D }
+  const allImageProcessors: ImageProcessors = { ...imageProcessors, ...commands3D };
 
   const functions = pipeline.map((name) => allImageProcessors[name]).filter((processor) => !!processor);
   const bar = logger.progress("Pipelines - ", functions.length);

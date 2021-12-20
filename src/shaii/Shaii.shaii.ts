@@ -1,8 +1,14 @@
-import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
+import Discord, {
+  EmojiIdentifierResolvable,
+  Intents,
+  MessageReaction,
+  PartialMessageReaction,
+  TextChannel,
+} from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
-import { ICommand } from "../types";
+import { GeoxorGuildRole, ICommand } from "../types";
 import logger from "./Logger.shaii";
 import { getCommands } from "../commands";
 import config from "./Config.shaii";
@@ -21,6 +27,8 @@ import {
   SLURS,
   TARDOKI_ID,
   MUTED_ROLE_ID,
+  SVRGE_ID,
+  MORPHEUS_ID,
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
 import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
@@ -38,11 +46,13 @@ si.getStaticData().then((info) => {
 // To avoid testing at each command
 let is3DAcceleration: boolean;
 try {
-	new WebGLRenderer();
-	is3DAcceleration = true;
+  new WebGLRenderer();
+  is3DAcceleration = true;
 } catch {
-	is3DAcceleration = false;
+  is3DAcceleration = false;
 }
+
+const emojiRegExp: RegExp = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
 
 /**
  * Shaii multi purpose Discord bot
@@ -53,6 +63,7 @@ class Shaii {
   public commands: Discord.Collection<string, ICommand>;
   public geoxorGuild: Discord.Guild | undefined;
   public version: string;
+  public geoxorRoleList: GeoxorGuildRole[] | undefined;
 
   constructor() {
     this.commands = new Discord.Collection();
@@ -75,6 +86,20 @@ class Shaii {
       this.updateActivity();
       this.leaveRogueGuilds();
       this.joinThreads();
+      this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
+      this.geoxorRoleList = (this.geoxorGuild || this.bot.guilds.cache.get(QBOT_DEV_GUILD_ID))?.roles.cache.map((role) => {
+        return {
+          name: role.name
+            .replace(
+              emojiRegExp,
+              ""
+            )
+            .trim(),
+          emoji: role.name.replace(/(\w\S+)/g, "").trim(),
+          id: role.id,
+        };
+      });
+      this.geoxorRoleList?.shift();
     });
     this.bot.on("messageCreate", async (message) => this.onMessageCreate(message));
     this.bot.on("messageDelete", async (message) => {
@@ -113,14 +138,14 @@ class Shaii {
       let user = await User.findOneOrCreate(member);
       for (const roleId of user.roles) {
         const role = member.guild.roles.cache.find((role) => role.id === roleId);
-          if (role) {
-            member.roles
-              .add(role)
-              .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
-              .catch((error) => {
-                logger.error(error as string);
-              });
-          }
+        if (role) {
+          member.roles
+            .add(role)
+            .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
+            .catch((error) => {
+              logger.error(error as string);
+            });
+        }
       }
     });
     this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
@@ -230,18 +255,54 @@ class Shaii {
     }
   }
 
+  /**
+   * Adds an emoji before the nickname of the member if it has not
+   * @param member the member to add an emoji to their nickname
+   * @param emoji the emoji to add
+   * @returns true if the operation is a success, false otherwise
+   * @author Qexat
+   */
+  public nickEmojifier(member: Discord.GuildMember | null, role?: GeoxorGuildRole): boolean {
+    if (member && role && this.geoxorRoleList) {
+      const currentNickname = member.nickname || member.displayName;
+      if (
+        !currentNickname.startsWith(role.emoji as string) &&
+        member.user.id !== member.guild.ownerId
+      ) {
+        member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31)).catch((error) => {
+          logger.error(`${error}`);
+        });
+      }
+      return false;
+    } else {
+      logger.error("Cannot emojify this member's nickname.");
+      return false;
+    }
+  }
+
+  private nickEmojiAdd(member: Discord.GuildMember) {
+    member.roles.cache.forEach((memberRole) => {
+      if (memberRole.hoist)
+        this.geoxorRoleList?.forEach((guildRole) => {
+          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && !this.nickEmojifier(member, guildRole)) return;
+        });
+    });
+  }
+
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
-        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && message.author.id !== GEOXOR_ID) return;
+        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && !(message.author.id in [GEOXOR_ID, SVRGE_ID, MORPHEUS_ID]))
+          return;
 
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
-        if (message.member && message.guild?.id === GEOXOR_GUILD_ID) {
+        if (message.member && (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID)) {
           if (!this.hasGhostRole(message.member)) {
-            message.member.roles.add(GHOSTS_ROLE_ID).catch((error) => {
-              logger.error(error as string);
+            message.member.roles.add(GHOSTS_ROLE_ID).catch(() => {
+              logger.error("This role does not exist in the server.");
             });
           }
+          this.nickEmojiAdd(message.member);
         }
 
         // I'm tired of seeing people doing !rank unsuccessfully so we tell them it doesn't work anymore
@@ -315,6 +376,7 @@ class Shaii {
           if (command.permissions) {
             for (const perm of command.permissions) {
               if (!message.member?.permissions.has(perm)) {
+                if (command.requiresProcessing) clearTyping();
                 return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => {});
               }
             }
@@ -335,6 +397,7 @@ class Shaii {
 
             // This is pretty cringe
             if (!is3DAcceleration) {
+              if (command.requiresProcessing) clearTyping();
               return message.reply(
                 "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server she's running on"
               );

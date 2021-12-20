@@ -3,8 +3,8 @@ import path from "path";
 import axios from "axios";
 import morseCodeTable from "../assets/morseCodeTable.json";
 import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
-import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage, IWaifu, IWaifuRarity } from "../types";
-import Discord, { MessageMentions } from "discord.js";
+import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
+import Discord, { EmojiIdentifierResolvable, MessageMentions } from "discord.js";
 import { speak } from "windows-tts";
 import logger from "../shaii/Logger.shaii";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
