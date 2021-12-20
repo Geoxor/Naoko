@@ -1,10 +1,4 @@
-import Discord, {
-  EmojiIdentifierResolvable,
-  Intents,
-  MessageReaction,
-  PartialMessageReaction,
-  TextChannel,
-} from "discord.js";
+import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -25,7 +19,6 @@ import {
   SHAII_ID,
   TESTING_GUILD_ID,
   SLURS,
-  TARDOKI_ID,
   MUTED_ROLE_ID,
   SVRGE_ID,
   MORPHEUS_ID,
