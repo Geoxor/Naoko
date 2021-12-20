@@ -42,15 +42,6 @@ si.getStaticData().then((info) => {
   systemInfo = info;
 });
 
-// To avoid testing at each command
-let is3DAcceleration: boolean;
-try {
-  new WebGLRenderer();
-  is3DAcceleration = true;
-} catch {
-  is3DAcceleration = false;
-}
-
 const emojiRegExp: RegExp =
   /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
 
@@ -297,7 +288,10 @@ class Shaii {
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
-        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && !([GEOXOR_ID, SVRGE_ID, MORPHEUS_ID].includes(message.author.id)))
+        if (
+          message.channel.id === GEOXOR_GENERAL_CHANNEL_ID &&
+          ![GEOXOR_ID, SVRGE_ID, MORPHEUS_ID].includes(message.author.id)
+        )
           return;
 
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
@@ -399,15 +393,6 @@ class Shaii {
             );
           } catch (error: any) {
             clearTyping();
-
-            // This is pretty cringe
-            if (!is3DAcceleration) {
-              if (command.requiresProcessing) clearTyping();
-              return message.reply(
-                "Shaii is currently running on a Server that does not have 3D acceleration, therefore she can't process this command, you can do `~env` to view the information of the current server she's running on"
-              );
-            }
-
             await message.reply(markdown(error)).catch(() => {});
           }
 
