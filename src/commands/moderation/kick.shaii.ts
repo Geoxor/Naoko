@@ -21,12 +21,6 @@ export default defineCommand({
 
     const reason = message.args.join(" ");
 
-    // Kick him
-    await targetUser.kick(reason);
-
-    // Keep track of the kick
-    await User.kick(message.author.id, targetUser.id, reason).catch(() => logger.error("Kick database update failed"));
-
     // Create the result embed
     const embed = new Discord.MessageEmbed()
       .setTitle(`Kick - ${targetUser.user.tag}`)
@@ -41,6 +35,12 @@ export default defineCommand({
     targetUser
       .send({ embeds: [embed] })
       .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`));
+
+    // Kick him
+    await targetUser.kick(reason);
+
+    // Keep track of the kick
+    await User.kick(message.author.id, targetUser.id, reason).catch(() => logger.error("Kick database update failed"));
 
     // Get fucked
     return { embeds: [embed] };
