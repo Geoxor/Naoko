@@ -286,20 +286,13 @@ class Shaii {
 
   private nickEmojiAdd(member: Discord.GuildMember) {
     if (!this.geoxorRoleList) return;
-    let memberRoles: Discord.Role[] = [];
     member.roles.cache.forEach((memberRole) => {
-      memberRoles.push(memberRole);
-    });
-    for (let i = 0; i < memberRoles.length; i++) {
-      if (memberRoles[i].hoist)
-        for (let j = 0; j < this.geoxorRoleList.length; j++) {
-          if (
-            memberRoles[i].name.replace(emojiRegExp, "").trim() === this.geoxorRoleList[j].name &&
-            this.nickEmojifier(member, this.geoxorRoleList[j])
-          )
+      if (memberRole.hoist)
+        this.geoxorRoleList?.forEach((guildRole) => {
+          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && this.nickEmojifier(member, guildRole))
             return;
-        }
-    }
+        });
+    });
   }
 
   private onMessageCreate(message: Discord.Message) {
