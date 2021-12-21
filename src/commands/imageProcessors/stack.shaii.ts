@@ -12,6 +12,7 @@ const stacks: {
   [key: string]: number;
 } = {
   wasted: 90,
+  fuckyou: 90,
 };
 
 export default defineCommand({
