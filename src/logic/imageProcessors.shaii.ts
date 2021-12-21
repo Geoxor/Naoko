@@ -200,7 +200,7 @@ export async function fuckyou(texture: Buffer) {
   let fuckyou = fuckyouImage.clone();
   let image = await Jimp.read(texture);
   // Stretch the fuckyou template to match the image
-  fuckyou = fuckyou.resize(Jimp.AUTO, image.bitmap.height / 12);
+  fuckyou = fuckyou.resize(Jimp.AUTO, image.bitmap.height / 4);
   // Composite the fuckyou in the center of the image
 
   const centerX = image.bitmap.width / 2 - fuckyou.bitmap.width / 2;
