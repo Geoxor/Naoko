@@ -12,10 +12,12 @@ let trolleyImage: Jimp;
 let bobbyImage: Jimp;
 let wastedImage: Jimp;
 let vignetteImage: Jimp;
+let fuckyouImage: Jimp;
 Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
 Jimp.read("./src/assets/images/bobbyTemplate.png").then(async (image) => (bobbyImage = image));
 Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
 Jimp.read("./src/assets/images/vignette.png").then(async (image) => (vignetteImage = image));
+Jimp.read("./src/assets/images/fuckyou.png").then(async (image) => (fuckyouImage = image));
 
 export const imageProcessors: ImageProcessors = {
   autocrop,
@@ -23,6 +25,7 @@ export const imageProcessors: ImageProcessors = {
   trolley,
   invert,
   fisheye,
+  fuckyou,
   squish,
   grayscale,
   wasted,
@@ -185,6 +188,29 @@ export async function wasted(texture: Buffer) {
   const randomPositionX = centerX - offsetX;
   const randomPositionY = bipolarRandom() * centerY;
   const composite = image.grayscale().composite(wasted, randomPositionX, randomPositionY);
+  return composite.getBufferAsync("image/png");
+}
+
+/**
+ * Creates a fuckyou image with a given image buffer
+ * @param texture the texture to process
+ * @author Geoxor
+ */
+export async function fuckyou(texture: Buffer) {
+  let fuckyou = fuckyouImage.clone();
+  let image = await Jimp.read(texture);
+  // Stretch the fuckyou template to match the image
+  fuckyou = fuckyou.resize(Jimp.AUTO, image.bitmap.height / 12);
+  // Composite the fuckyou in the center of the image
+
+  const centerX = image.bitmap.width / 2 - fuckyou.bitmap.width / 2;
+  const centerY = image.bitmap.height / 2;
+
+  const offsetX = centerX * bipolarRandom();
+
+  const randomPositionX = centerX - offsetX;
+  const randomPositionY = bipolarRandom() * centerY;
+  const composite = image.grayscale().composite(fuckyou, randomPositionX, randomPositionY);
   return composite.getBufferAsync("image/png");
 }
 
