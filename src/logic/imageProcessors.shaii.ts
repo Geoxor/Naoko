@@ -11,11 +11,11 @@ import { commands3D } from "./3DRenderer.shaii";
 let trolleyImage: Jimp;
 let bobbyImage: Jimp;
 let wastedImage: Jimp;
-let gonImage: Jimp;
+let vignetteImage: Jimp;
 Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
 Jimp.read("./src/assets/images/bobbyTemplate.png").then(async (image) => (bobbyImage = image));
 Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
-Jimp.read("./src/assets/images/gon.png").then(async (image) => (gonImage = image));
+Jimp.read("./src/assets/images/vignette.png").then(async (image) => (vignetteImage = image));
 
 export const imageProcessors: ImageProcessors = {
   autocrop,
@@ -26,7 +26,7 @@ export const imageProcessors: ImageProcessors = {
   squish,
   grayscale,
   wasted,
-  gon,
+  vignette,
   deepfry,
   pat,
   haah,
@@ -189,25 +189,25 @@ export async function wasted(texture: Buffer) {
 }
 
 /**
- * Creates a gon image with a given image buffer
+ * Creates a vignette image with a given image buffer
  * @param texture the texture to process
  * @author Geoxor
  */
-export async function gon(texture: Buffer) {
-  let gon = gonImage.clone();
+export async function vignette(texture: Buffer) {
+  let vignette = vignetteImage.clone();
   let image = await Jimp.read(texture);
-  // Stretch the gon template to match the image
-  gon = gon.resize(Jimp.AUTO, image.bitmap.height);
-  // Composite the gon in the center of the image
+  // Stretch the vignette template to match the image
+  vignette = vignette.resize(Jimp.AUTO, image.bitmap.height);
+  // Composite the vignette in the center of the image
 
-  const centerX = image.bitmap.width / 2 - gon.bitmap.width / 2;
+  const centerX = image.bitmap.width / 2 - vignette.bitmap.width / 2;
   const centerY = image.bitmap.height / 2;
 
   const offsetX = centerX * bipolarRandom();
 
   const randomPositionX = centerX - offsetX;
   const randomPositionY = bipolarRandom() * centerY;
-  const composite = image.grayscale().composite(gon, randomPositionX, randomPositionY);
+  const composite = image.grayscale().composite(vignette, randomPositionX, randomPositionY);
   return composite.getBufferAsync("image/png");
 }
 
