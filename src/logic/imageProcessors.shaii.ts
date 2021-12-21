@@ -197,17 +197,9 @@ export async function vignette(texture: Buffer) {
   let vignette = vignetteImage.clone();
   let image = await Jimp.read(texture);
   // Stretch the vignette template to match the image
-  vignette = vignette.resize(Jimp.AUTO, image.bitmap.height);
+  vignette = vignette.resize(image.bitmap.width, image.bitmap.height);
   // Composite the vignette in the center of the image
-
-  const centerX = image.bitmap.width / 2 - vignette.bitmap.width / 2;
-  const centerY = image.bitmap.height / 2;
-
-  const offsetX = centerX * bipolarRandom();
-
-  const randomPositionX = centerX - offsetX;
-  const randomPositionY = bipolarRandom() * centerY;
-  const composite = image.grayscale().composite(vignette, randomPositionX, randomPositionY);
+  const composite = image.grayscale().composite(vignette, 0, 0);
   return composite.getBufferAsync("image/png");
 }
 
