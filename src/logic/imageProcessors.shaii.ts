@@ -204,7 +204,7 @@ export async function fuckyou(texture: Buffer) {
   // Composite the fuckyou in the center of the image
 
   const centerX = image.bitmap.width / 2;
-  const centerY = image.bitmap.height / 2 - image.bitmap.height / 4;
+  const centerY = image.bitmap.height / 2 + image.bitmap.height / 4;
 
   const offsetX = centerX * bipolarRandom();
 
