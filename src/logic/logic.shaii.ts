@@ -107,12 +107,7 @@ export async function encodeFramesToGif(
   const bar = logger.progress("Encoding  - ", frames.length);
   for (let i = 0; i < frames.length; i++) {
     const frame = frames[i];
-
-    // Single pallete iteration
-    // const idx = applyPalette(frame, palette);
-    // Regen pallete every frame
-    const idx = applyPalette(frame, quantize(frame, 256));
-
+    const idx = applyPalette(frame, palette);
     gif.writeFrame(idx, width, height, { transparent: true, delay, palette });
     logger.setProgressValue(bar, i / frames.length);
   }
