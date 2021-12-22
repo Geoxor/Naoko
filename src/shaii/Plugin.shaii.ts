@@ -7,23 +7,40 @@ export type DiscordEventHandler<K extends keyof Discord.ClientEvents> = (
 export type PluginIdentifier = `@${string}/${string}`;
 export type PluginTimers = { [key: string]: NodeJS.Timeout | NodeJS.Timer };
 export type PluginEvents = { [key in keyof Discord.ClientEvents]?: DiscordEventHandler<key> };
+export enum PluginStates {
+  Disabled,
+  Enabled,
+}
 
+/**
+ * Plugins are runtime-loadable type-safe flexable components that have access to all of the bot's events
+ * including `timers` which automatically get cleared on hot reloads so you don't have to manage
+ * memory
+ */
 export class Plugin implements IPluginDefinition {
   public name: PluginIdentifier;
   public timers?: PluginTimers;
   public events?: PluginEvents;
+  public state: PluginStates;
 
   constructor(def: IPluginDefinition) {
-    (this.timers = def.timers), (this.name = def.name);
-    this.events = def.events;
+    (this.timers = def.timers), (this.name = def.name), (this.events = def.events);
+
+    this.state = def.state || def.startupState || PluginStates.Enabled;
 
     console.log(`  Loaded plugin ${this.name}`);
   }
 
   public send<K extends keyof Discord.ClientEvents>(event: K, data: Discord.ClientEvents[K]) {
+    if (this.state === PluginStates.Disabled) return;
+
     // TODO: Something is wrong here and it gets passed in in an array im not sure why
     // @ts-ignore
     this.events![event]!(data[0]);
+  }
+
+  public toggleState() {
+    this.state === PluginStates.Enabled ? (this.state = PluginStates.Disabled) : (this.state = PluginStates.Enabled);
   }
 }
 
@@ -36,6 +53,16 @@ export interface IPluginDefinition {
    * "@qexat/bad-word-filter"
    */
   name: PluginIdentifier;
+  /**
+   * If the plugin is on, this can change during runtime
+   * @default PluginStates.Enabled
+   */
+  state?: PluginStates;
+  /**
+   * The default stay this plugin will be in when it gets loaded, false or true
+   * @default PluginStates.Enabled
+   */
+  startupState?: PluginStates;
   /**
    * Any internal timers the plugin has
    *
