@@ -18,7 +18,7 @@ export default defineCommand({
       .setAuthor(`Shaii v${version}`, SHAII_LOGO)
       .setThumbnail(PLUGIN_ICON)
       .setColor("#FF00B6")
-      .addFields({ inline: true, name: "Plugins", value: Shaii.plugins.map((plugin) => plugin.name).join("\n") })
+      .addFields({ inline: true, name: "Plugins", value: Shaii.plugins.map((plugin) => `🔌 ${plugin.name}`).join("\n") })
       .addFields({ inline: true, name: "Version", value: Shaii.plugins.map((plugin) => plugin.version).join("\n") });
 
     return { embeds: [embed] };

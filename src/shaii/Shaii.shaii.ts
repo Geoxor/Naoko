@@ -213,7 +213,12 @@ class Shaii {
   private async loadCommands() {
     logger.print("Loading commands...");
 
-    for (const command of await getCommands()) {
+    const commandSources = [
+      ...(await getCommands()),
+      ...this.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin),
+    ] as ICommand[];
+
+    for (const command of commandSources) {
       this.commands.set(command.name, command);
       logger.print(`┖ Imported command ${command.name}`);
     }

@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import { defineCommand, ICommand } from "src/types";
 
 // Add more types as the project grows
 export const DISCORD_EVENTS: (keyof Discord.ClientEvents)[] = ["messageCreate"];
@@ -25,23 +26,29 @@ export class Plugin implements IPluginDefinition {
   public name: PluginIdentifier;
   public timers?: PluginTimers;
   public events?: PluginEvents;
+  public command?: ICommand;
   public state: PluginStates;
   public version: PluginVersion;
 
   constructor(def: IPluginDefinition) {
-    (this.timers = def.timers), (this.name = def.name), (this.version = def.version), (this.events = def.events);
+    (this.timers = def.timers),
+      (this.name = def.name),
+      (this.command = def.command),
+      (this.version = def.version),
+      (this.events = def.events);
 
     this.state = def.state || def.startupState || PluginStates.Enabled;
-
     console.log(`  Loaded plugin ${this.name}`);
   }
 
   public send<K extends keyof Discord.ClientEvents>(event: K, data: Discord.ClientEvents[K]) {
     if (this.state === PluginStates.Disabled) return;
 
-    // TODO: Something is wrong here and it gets passed in in an array im not sure why
-    // @ts-ignore
-    this.events![event]!(data[0]);
+    if (this.events) {
+      // TODO: Something is wrong here and it gets passed in in an array im not sure why
+      // @ts-ignore
+      this.events![event]!(data[0]);
+    }
   }
 
   public toggleState() {
@@ -82,6 +89,10 @@ export interface IPluginDefinition {
    * Listen to discord events such as "messageCreate" through here
    */
   events?: PluginEvents;
+  /**
+   * If your plugin is a command you can define with this
+   */
+  command?: ICommand;
 }
 
 /**
