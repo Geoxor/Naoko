@@ -1,10 +1,4 @@
-import Discord, {
-  EmojiIdentifierResolvable,
-  Intents,
-  MessageReaction,
-  PartialMessageReaction,
-  TextChannel,
-} from "discord.js";
+import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -33,7 +27,7 @@ import welcomeMessages from "../assets/welcome_messages.json";
 import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
-import { WebGLRenderer } from "three";
+import fs from "fs";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
@@ -41,6 +35,17 @@ si.getStaticData().then((info) => {
   logger.print("Environment info fetched");
   systemInfo = info;
 });
+
+/**
+ * Plugins are very specific niece tasks the bot can do so they are defined
+ * here so we dont clutter the main codebase with shit
+ */
+export type Plugin = (message: Discord.Message) => Promise<void>;
+
+const plugins: Plugin[] = fs
+  .readdirSync("./plugins")
+  .filter((file) => file.endsWith(".ts"))
+  .map((file) => require(file).default);
 
 const emojiRegExp: RegExp =
   /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
@@ -55,6 +60,7 @@ class Shaii {
   public geoxorGuild: Discord.Guild | undefined;
   public version: string;
   public geoxorRoleList: GeoxorGuildRole[] | undefined;
+  public plugins: Plugin[] = plugins;
 
   constructor() {
     this.commands = new Discord.Collection();
@@ -87,7 +93,10 @@ class Shaii {
       });
       this.geoxorRoleList?.shift();
     });
-    this.bot.on("messageCreate", async (message) => this.onMessageCreate(message));
+    this.bot.on("messageCreate", async (message) => {
+      for (const plugin of this.plugins) plugin(message);
+      this.onMessageCreate(message);
+    });
     this.bot.on("messageDelete", async (message) => {
       if (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID) {
         logDelete(message, (message) => {});
