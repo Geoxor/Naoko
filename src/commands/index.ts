@@ -44,7 +44,7 @@ import unmute from "./moderation/unmute.shaii";
 // utility commands
 import help from "./utility/help.shaii";
 import ping from "./utility/ping.shaii";
-import avatar from "./utility/avatar.shaii";
+import plugins from "./utility/plugins.shaii";
 import uptime from "./utility/uptime.shaii";
 import logs from "./utility/logs.shaii";
 import env from "./utility/env.shaii";
@@ -70,11 +70,11 @@ export const getCommands = async () => {
     nowPlaying,
     transform,
     stack,
-    avatar,
     whois,
     logs,
     tts,
     match,
+    plugins,
     ping,
     inventory,
     stats,

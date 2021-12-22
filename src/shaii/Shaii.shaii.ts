@@ -1,10 +1,4 @@
-import Discord, {
-  EmojiIdentifierResolvable,
-  Intents,
-  MessageReaction,
-  PartialMessageReaction,
-  TextChannel,
-} from "discord.js";
+import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
@@ -33,7 +27,9 @@ import welcomeMessages from "../assets/welcome_messages.json";
 import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
 import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
-import { WebGLRenderer } from "three";
+import fs from "fs";
+import path from "path";
+import { DISCORD_EVENTS, Plugin } from "../shaii/Plugin.shaii";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
@@ -50,26 +46,33 @@ const emojiRegExp: RegExp =
  * @author Geoxor, Cimok
  */
 class Shaii {
-  public bot: Discord.Client;
-  public commands: Discord.Collection<string, ICommand>;
+  public commands: Discord.Collection<string, ICommand> = new Discord.Collection();
   public geoxorGuild: Discord.Guild | undefined;
-  public version: string;
+  public version: string = require("../../package.json").version;
   public geoxorRoleList: GeoxorGuildRole[] | undefined;
-
+  public plugins: Plugin[] = fs
+    .readdirSync("./src/plugins")
+    .filter((file) => file.endsWith(".ts"))
+    .map((file) => require(path.join("../plugins/" + file)).default);
+  public bot: Discord.Client = new Discord.Client({
+    intents: [
+      Intents.FLAGS.GUILDS,
+      Intents.FLAGS.GUILD_PRESENCES,
+      Intents.FLAGS.GUILD_MEMBERS,
+      Intents.FLAGS.GUILD_MESSAGES,
+      Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+      Intents.FLAGS.GUILD_VOICE_STATES,
+    ],
+  });
   constructor() {
-    this.commands = new Discord.Collection();
+    console.log(this.plugins);
     this.loadCommands();
-    this.version = require("../../package.json").version;
-    this.bot = new Discord.Client({
-      intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_PRESENCES,
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.GUILD_VOICE_STATES,
-      ],
-    });
+    for (const event of DISCORD_EVENTS) {
+      this.bot.on(event as string, (data) => {
+        this.plugins.forEach((plugin) => plugin.send(event, [data]));
+      });
+    }
+
     this.bot.on("ready", () => {
       logger.print("Instantiated Discord client instance");
       logger.print(`Logged in as ${this.bot.user!.tag}!`);
@@ -87,7 +90,10 @@ class Shaii {
       });
       this.geoxorRoleList?.shift();
     });
-    this.bot.on("messageCreate", async (message) => this.onMessageCreate(message));
+    this.bot.on("messageCreate", async (message) => {
+      // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
+      this.onMessageCreate(message);
+    });
     this.bot.on("messageDelete", async (message) => {
       if (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID) {
         logDelete(message, (message) => {});
@@ -207,7 +213,12 @@ class Shaii {
   private async loadCommands() {
     logger.print("Loading commands...");
 
-    for (const command of await getCommands()) {
+    const commandSources = [
+      ...(await getCommands()),
+      ...this.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin),
+    ] as ICommand[];
+
+    for (const command of commandSources) {
       this.commands.set(command.name, command);
       logger.print(`┖ Imported command ${command.name}`);
     }
