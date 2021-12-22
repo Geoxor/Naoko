@@ -1,8 +1,6 @@
 import fs from "fs";
 import path from "path";
 import axios from "axios";
-import morseCodeTable from "../assets/morseCodeTable.json";
-import morseCodeTableReverse from "../assets/morseCodeTableReverse.json";
 import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
 import Discord, { EmojiIdentifierResolvable, MessageMentions } from "discord.js";
 import { speak } from "windows-tts";
@@ -286,30 +284,6 @@ export function randomChoice<T>(l: Array<T>): T {
  */
 export function getShipName(matcher: string, matchee: string) {
   return matcher.substring(0, matcher.length >> 1) + matchee.substring(matchee.length >> 1);
-}
-
-/**
- * Encodes an alphanumerical string to Morse code
- * @param {string} string an alphanumerical string to encode
- * @author Geoxor
- */
-export function encodeMorse(string: string): string {
-  const strippedString = string.toLowerCase().replace(/[^a-z0-9\s]/g, "");
-  const characterArray = strippedString.split("");
-  const morseCharacters = characterArray.map((a: string) => (morseCodeTable as any)[a]);
-  return morseCharacters.join(" ").replace("/ / /", "/");
-}
-
-/**
- * Decodes Morse code to an alphanumerical string
- * @param {string} string a Morse code string
- * @author Dave69
- */
-export function decodeMorse(string: string): string {
-  const strippedString = string.replace(/[a-zA-Z0-9]/g, "");
-  const characterArray = strippedString.split(" ");
-  const morseCharacters = characterArray.map((a: string) => (morseCodeTableReverse as any)[a]);
-  return morseCharacters.join("");
 }
 
 /**

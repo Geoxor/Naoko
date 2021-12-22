@@ -16,10 +16,8 @@ import rigbattle from "./moderation/rigbattle.shaii";
 
 // fun commands
 import anime from "./fun/anime.shaii";
-import decode from "./fun/decode.shaii";
 import dicksize from "./fun/dicksize.shaii";
 import tts from "./fun/tts.shaii";
-import mors from "./fun/mors.shaii";
 import traceAnime from "./fun/trace.shaii";
 import match from "./fun/match.shaii";
 import fact from "./fun/funfact.shaii";
@@ -89,11 +87,9 @@ export const getCommands = async () => {
     play,
     anime,
     clear,
-    decode,
     rigbattle,
     dicksize,
     help,
-    mors,
     traceAnime,
     uwuify,
     vote,

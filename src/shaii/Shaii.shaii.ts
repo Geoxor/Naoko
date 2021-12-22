@@ -213,11 +213,30 @@ class Shaii {
   private async loadCommands() {
     logger.print("Loading commands...");
 
-    const commandSources = [
-      ...(await getCommands()),
-      ...this.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin),
-    ] as ICommand[];
+    // Get commands from built-in commands
+    const commandSources = await getCommands();
 
+    // Get commands from plugins
+    const pluginCommands = this.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin) as (
+      | ICommand
+      | ICommand[]
+    )[];
+
+    // Iterate through each plugin
+    for (let i = 0; i < pluginCommands.length; i++) {
+      const command = pluginCommands[i];
+
+      // If theres multiple commands in 1 plugin add each
+      if (command instanceof Array) {
+        command.forEach((command) => commandSources.push(command));
+        continue;
+      }
+
+      // Else add the single command
+      commandSources.push(command);
+    }
+
+    // Register the commands
     for (const command of commandSources) {
       this.commands.set(command.name, command);
       logger.print(`┖ Imported command ${command.name}`);
