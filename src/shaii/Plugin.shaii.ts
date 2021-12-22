@@ -10,6 +10,7 @@ export type DiscordEventHandler<K extends keyof Discord.ClientEvents> = (
 export type PluginIdentifier = `@${string}/${string}`;
 export type PluginTimers = { [key: string]: NodeJS.Timeout | NodeJS.Timer };
 export type PluginEvents = { [key in keyof Discord.ClientEvents]?: DiscordEventHandler<key> };
+export type PluginVersion = `v${string}`;
 export enum PluginStates {
   Disabled,
   Enabled,
@@ -25,9 +26,10 @@ export class Plugin implements IPluginDefinition {
   public timers?: PluginTimers;
   public events?: PluginEvents;
   public state: PluginStates;
+  public version: PluginVersion;
 
   constructor(def: IPluginDefinition) {
-    (this.timers = def.timers), (this.name = def.name), (this.events = def.events);
+    (this.timers = def.timers), (this.name = def.name), (this.version = def.version), (this.events = def.events);
 
     this.state = def.state || def.startupState || PluginStates.Enabled;
 
@@ -56,6 +58,10 @@ export interface IPluginDefinition {
    * "@qexat/bad-word-filter"
    */
   name: PluginIdentifier;
+  /**
+   * The plugin's version
+   */
+  version: PluginVersion;
   /**
    * If the plugin is on, this can change during runtime
    * @default PluginStates.Enabled
