@@ -1,5 +1,8 @@
 import Discord from "discord.js";
 
+// Add more types as the project grows
+export const DISCORD_EVENTS: (keyof Discord.ClientEvents)[] = ["messageCreate"];
+
 export type DiscordEventHandler<K extends keyof Discord.ClientEvents> = (
   ...args: Discord.ClientEvents[K]
 ) => Discord.Awaitable<void>;

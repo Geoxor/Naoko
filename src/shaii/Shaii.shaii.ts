@@ -29,7 +29,7 @@ import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 import fs from "fs";
 import path from "path";
-import { Plugin } from "src/shaii/Plugin.shaii";
+import { DISCORD_EVENTS, Plugin } from "../shaii/Plugin.shaii";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
@@ -67,6 +67,12 @@ class Shaii {
   constructor() {
     console.log(this.plugins);
     this.loadCommands();
+    for (const event of DISCORD_EVENTS) {
+      this.bot.on(event as string, (data) => {
+        this.plugins.forEach((plugin) => plugin.send(event, [data]));
+      });
+    }
+
     this.bot.on("ready", () => {
       logger.print("Instantiated Discord client instance");
       logger.print(`Logged in as ${this.bot.user!.tag}!`);
@@ -86,7 +92,6 @@ class Shaii {
     });
     this.bot.on("messageCreate", async (message) => {
       // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
-      this.plugins.forEach((plugin) => plugin.send("messageCreate", [message]));
       this.onMessageCreate(message);
     });
     this.bot.on("messageDelete", async (message) => {
