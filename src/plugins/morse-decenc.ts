@@ -1,5 +1,6 @@
 import { defineCommand } from "../types";
 import { definePlugin } from "../shaii/Plugin.shaii";
+import { objectFlip } from "../logic/logic.shaii";
 
 const MORSE_CODE_TABLE = {
   a: ".-",
@@ -39,12 +40,6 @@ const MORSE_CODE_TABLE = {
   "9": "----.",
   "0": "-----",
   " ": "/",
-};
-
-const objectFlip = <T extends { [key: string]: string }>(obj: T): { [key: string]: string } => {
-  const ret: { [key: string]: string } = {};
-  Object.keys(obj).forEach((key) => (ret[obj[key]] = key));
-  return ret;
 };
 
 /**

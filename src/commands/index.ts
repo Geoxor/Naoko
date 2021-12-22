@@ -20,7 +20,6 @@ import dicksize from "./fun/dicksize.shaii";
 import tts from "./fun/tts.shaii";
 import traceAnime from "./fun/trace.shaii";
 import match from "./fun/match.shaii";
-import fact from "./fun/funfact.shaii";
 import say from "./fun/say.shaii";
 
 // text processing
@@ -77,7 +76,6 @@ export const getCommands = async () => {
     inventory,
     stats,
     volume,
-    fact,
     env,
     queue,
     shuffle,

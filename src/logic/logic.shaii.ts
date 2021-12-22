@@ -663,3 +663,13 @@ export function removeMentions(messageContent: string): string {
     .replace(MessageMentions.ROLES_PATTERN, "")
     .replace(MessageMentions.USERS_PATTERN, "");
 }
+
+/**
+ * Swaps keys with values
+ * @author Geoxor
+ */
+export const objectFlip = <T extends { [key: string]: string }>(obj: T): { [key: string]: string } => {
+  const ret: { [key: string]: string } = {};
+  Object.keys(obj).forEach((key) => (ret[obj[key]] = key));
+  return ret;
+};
