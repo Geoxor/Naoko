@@ -271,7 +271,7 @@ class Shaii {
     }
   }
 
-  public doesNicknameStartWithEmoji(nickname: string, member: Discord.GuildMember): boolean {
+  public doesNicknameStartWithEmoji(nickname: string): boolean {
     if (!this.geoxorRoleList) return true;
     for (let i = 0; i < this.geoxorRoleList.length; i++) {
       if (nickname !== nickname.replace((this.geoxorRoleList[i].emoji as string)[0], "")) return true;
@@ -289,7 +289,7 @@ class Shaii {
   public nickEmojifier(member: Discord.GuildMember | null, role?: GeoxorGuildRole): boolean {
     if (member && role && this.geoxorRoleList) {
       const currentNickname = member.nickname || member.displayName;
-      if (!this.doesNicknameStartWithEmoji(currentNickname, member) && member.user.id !== member.guild.ownerId) {
+      if (!this.doesNicknameStartWithEmoji(currentNickname) && member.user.id !== member.guild.ownerId) {
         try {
           member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31));
           return true;
