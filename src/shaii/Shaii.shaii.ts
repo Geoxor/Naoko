@@ -25,7 +25,6 @@ import {
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
 import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
-import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 import fs from "fs";
 import path from "path";
@@ -342,19 +341,6 @@ class Shaii {
           return message.delete().catch(() => {});
 
         // Reply with a funny message if they mention her at the start of the message
-        if (
-          message.content.startsWith("<@!") &&
-          message.mentions.members?.first()?.id === SHAII_ID &&
-          message.type !== "REPLY"
-        ) {
-          logger.print(
-            `0ms - Executed command: @mention - User: ${message.author.username} - Guild: ${message.guild?.name || "dm"}`
-          );
-
-          // Reply with this when they purely ping her with no question
-          if (!message.content.substring(`<@!${SHAII_ID}>`.length).trim()) return message.reply("what tf do you want");
-          return message.reply(randomChoice(answers));
-        }
 
         commandMiddleware(message, async (message) => {
           const command =
