@@ -43,7 +43,7 @@ si.getStaticData().then((info) => {
 export type Plugin = (message: Discord.Message) => Promise<void>;
 
 const plugins: Plugin[] = fs
-  .readdirSync("./plugins")
+  .readdirSync("./src/plugins")
   .filter((file) => file.endsWith(".ts"))
   .map((file) => require(file).default);
 
