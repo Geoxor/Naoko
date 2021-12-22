@@ -4,7 +4,7 @@ import { SHAII_LOGO } from "../../constants";
 import Shaii from "../../shaii/Shaii.shaii";
 import { version } from "../../../package.json";
 
-const PLUGIN_ICON = "https://cdn.discordapp.com/attachments/911762334979084368/923233176145518633/unknown.png";
+const PLUGIN_ICON = "https://cdn.discordapp.com/attachments/911762334979084368/923234119553519636/unknown.png";
 
 export default defineCommand({
   name: "plugins",
@@ -13,7 +13,7 @@ export default defineCommand({
   usage: "plugins",
   description: "See loaded plugins",
   requiresProcessing: false,
-  execute: (message) => {
+  execute: () => {
     const embed = new Discord.MessageEmbed()
       .setAuthor(`Shaii v${version}`, SHAII_LOGO)
       .setThumbnail(PLUGIN_ICON)
