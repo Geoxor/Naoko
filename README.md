@@ -1,12 +1,12 @@
 # 🌸 Shaii General Purpose Bot
 
-## 🔌 Plugins
-
-Defines a plugin for shaii to load
+## ⚡ Plugins
 
 Plugins are runtime-loadable type-safe flexable components that have access to all of the bot's events
 including `timers` which automatically get cleared on hot reloads so you don't have to manage
 memory
+
+### Example
 
 Let's say you wanna make a plugin that when someone pings shaii she automatically
 replies to them with a random answer from an array of strings:
