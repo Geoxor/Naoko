@@ -95,7 +95,7 @@ class Shaii {
       this.geoxorRoleList?.shift();
     });
     this.bot.on("messageCreate", async (message) => {
-      for (const plugin of this.plugins) plugin(message);
+      this.plugins.forEach((plugin) => plugin(message));
       this.onMessageCreate(message);
     });
     this.bot.on("messageDelete", async (message) => {
