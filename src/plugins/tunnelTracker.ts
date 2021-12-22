@@ -6,6 +6,6 @@ export default function (message: Message) {
     message.channel.id === "923126477610962964" &&
     message.attachments.size !== 0
   ) {
-    return message.channel.setName(`tunnel (${message.channel.name.replace(/[^0-9\.]+/g, "")})`);
+    return message.channel.setName(`tunnel (${message.channel.name.replace(/[0-9\.]+/g, "")})`);
   }
 }
