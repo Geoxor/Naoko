@@ -45,7 +45,7 @@ export type Plugin = (message: Discord.Message) => Promise<void>;
 const plugins: Plugin[] = fs
   .readdirSync("./src/plugins")
   .filter((file) => file.endsWith(".ts"))
-  .map((file) => require(file).default);
+  .map((file) => require("./src/plugins" + file).default);
 
 const emojiRegExp: RegExp =
   /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
