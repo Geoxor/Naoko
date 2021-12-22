@@ -29,6 +29,7 @@ import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 import fs from "fs";
 import path from "path";
+import { Plugin } from "src/shaii/Plugin.shaii";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
@@ -36,12 +37,6 @@ si.getStaticData().then((info) => {
   logger.print("Environment info fetched");
   systemInfo = info;
 });
-
-/**
- * Plugins are very specific niece tasks the bot can do so they are defined
- * here so we dont clutter the main codebase with shit
- */
-export type Plugin = (message: Discord.Message) => Promise<void>;
 
 const plugins: Plugin[] = fs
   .readdirSync("./src/plugins")
@@ -95,7 +90,8 @@ class Shaii {
       this.geoxorRoleList?.shift();
     });
     this.bot.on("messageCreate", async (message) => {
-      this.plugins.forEach((plugin) => plugin(message));
+      // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
+      this.plugins.forEach((plugin) => plugin.send("messageCreate", [message]));
       this.onMessageCreate(message);
     });
     this.bot.on("messageDelete", async (message) => {
