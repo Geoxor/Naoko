@@ -2,8 +2,6 @@ require("ts-mocha");
 import chai from "chai";
 import { it } from "mocha";
 import {
-  encodeMorse,
-  decodeMorse,
   textToUwufy,
   getWaifuNameFromFileName,
   calcSpread,
@@ -11,30 +9,6 @@ import {
   capitalizeFirstLetter,
   msToTime,
 } from "../logic/logic.shaii";
-
-describe("⚡ Morse Encoder (encodeMorse)", () => {
-  it("can encode a normal string", async () => {
-    const morseCode = encodeMorse("hello world");
-    chai.expect(morseCode).to.equal(".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
-  });
-
-  it("can encode capital letters", async () => {
-    const morseCode = encodeMorse("HeLLo WoRLd");
-    chai.expect(morseCode).to.equal(".... . .-.. .-.. --- / .-- --- .-. .-.. -..");
-  });
-
-  it("can handle random characters", async () => {
-    const morseCode = encodeMorse("*@(h98(@nf928ndjkniu241i24");
-    chai
-      .expect(morseCode)
-      .to.equal(".... ----. ---.. -. ..-. ----. ..--- ---.. -. -.. .--- -.- -. .. ..- ..--- ....- .---- .. ..--- ....-");
-  });
-
-  it("can decode morse with text in between", async () => {
-    const morseCode = decodeMorse(".... . .-.. .-.. --- world");
-    chai.expect(morseCode).to.equal("hello");
-  });
-});
 
 describe("⚡ UwU-ifier (textToUwufy)", () => {
   it("can encode a normal string", async () => {

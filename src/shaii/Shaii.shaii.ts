@@ -25,7 +25,6 @@ import {
 } from "../constants";
 import welcomeMessages from "../assets/welcome_messages.json";
 import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
-import answers from "../assets/answers.json";
 import levenshtein from "js-levenshtein";
 import fs from "fs";
 import path from "path";
@@ -213,11 +212,30 @@ class Shaii {
   private async loadCommands() {
     logger.print("Loading commands...");
 
-    const commandSources = [
-      ...(await getCommands()),
-      ...this.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin),
-    ] as ICommand[];
+    // Get commands from built-in commands
+    const commandSources = await getCommands();
 
+    // Get commands from plugins
+    const pluginCommands = this.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin) as (
+      | ICommand
+      | ICommand[]
+    )[];
+
+    // Iterate through each plugin
+    for (let i = 0; i < pluginCommands.length; i++) {
+      const command = pluginCommands[i];
+
+      // If theres multiple commands in 1 plugin add each
+      if (command instanceof Array) {
+        command.forEach((command) => commandSources.push(command));
+        continue;
+      }
+
+      // Else add the single command
+      commandSources.push(command);
+    }
+
+    // Register the commands
     for (const command of commandSources) {
       this.commands.set(command.name, command);
       logger.print(`┖ Imported command ${command.name}`);
@@ -252,7 +270,7 @@ class Shaii {
     }
   }
 
-  public doesNicknameStartWithEmoji(nickname: string, member: Discord.GuildMember): boolean {
+  public doesNicknameStartWithEmoji(nickname: string): boolean {
     if (!this.geoxorRoleList) return true;
     for (let i = 0; i < this.geoxorRoleList.length; i++) {
       if (nickname !== nickname.replace((this.geoxorRoleList[i].emoji as string)[0], "")) return true;
@@ -270,7 +288,7 @@ class Shaii {
   public nickEmojifier(member: Discord.GuildMember | null, role?: GeoxorGuildRole): boolean {
     if (member && role && this.geoxorRoleList) {
       const currentNickname = member.nickname || member.displayName;
-      if (!this.doesNicknameStartWithEmoji(currentNickname, member) && member.user.id !== member.guild.ownerId) {
+      if (!this.doesNicknameStartWithEmoji(currentNickname) && member.user.id !== member.guild.ownerId) {
         try {
           member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31));
           return true;
@@ -323,19 +341,6 @@ class Shaii {
           return message.delete().catch(() => {});
 
         // Reply with a funny message if they mention her at the start of the message
-        if (
-          message.content.startsWith("<@!") &&
-          message.mentions.members?.first()?.id === SHAII_ID &&
-          message.type !== "REPLY"
-        ) {
-          logger.print(
-            `0ms - Executed command: @mention - User: ${message.author.username} - Guild: ${message.guild?.name || "dm"}`
-          );
-
-          // Reply with this when they purely ping her with no question
-          if (!message.content.substring(`<@!${SHAII_ID}>`.length).trim()) return message.reply("what tf do you want");
-          return message.reply(randomChoice(answers));
-        }
 
         commandMiddleware(message, async (message) => {
           const command =

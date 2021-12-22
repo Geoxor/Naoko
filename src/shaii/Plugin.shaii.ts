@@ -26,7 +26,7 @@ export class Plugin implements IPluginDefinition {
   public name: PluginIdentifier;
   public timers?: PluginTimers;
   public events?: PluginEvents;
-  public command?: ICommand;
+  public command?: ICommand | ICommand[];
   public state: PluginStates;
   public version: PluginVersion;
 
@@ -92,7 +92,7 @@ export interface IPluginDefinition {
   /**
    * If your plugin is a command you can define with this
    */
-  command?: ICommand;
+  command?: ICommand | ICommand[];
 }
 
 /**
