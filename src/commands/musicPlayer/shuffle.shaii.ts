@@ -7,7 +7,7 @@ export default defineCommand({
   aliases: [],
   usage: "shuffle",
   description: "Shuffles the queue",
-  requiresProcessing: false,
+
   execute: async (message) => {
     return musicMiddleware(message, async (channel, player) => {
       player.shuffle();

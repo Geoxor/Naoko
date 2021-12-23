@@ -8,7 +8,7 @@ export default defineCommand({
   category: "ECONOMY",
   aliases: [],
   description: "Shows the statistics of the user",
-  requiresProcessing: false,
+
   execute: async (message) => {
     try {
       const embed = await InventoryManager.getStatistics(message.author);

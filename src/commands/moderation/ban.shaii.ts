@@ -12,7 +12,7 @@ export default defineCommand({
   usage: "ban <@user> <reason>",
   description: "Bans a user",
   permissions: ["BAN_MEMBERS"],
-  requiresProcessing: false,
+
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to ban";

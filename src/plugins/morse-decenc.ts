@@ -68,7 +68,7 @@ export function decodeMorse(string: string): string {
 
 export default definePlugin({
   name: "@geoxor/morse-decenc",
-  version: "v1.0.0",
+  version: "1.0.0",
   command: [
     defineCommand({
       name: "morse-encode",
@@ -76,7 +76,7 @@ export default definePlugin({
       usage: "morse-encode <sentence>",
       aliases: [],
       description: "Encodes a string to morse code",
-      requiresProcessing: false,
+
       execute: async (message) => {
         // Reply if no args
         if (message.args.length === 0) return "Give me a string to encode!";
@@ -92,7 +92,7 @@ export default definePlugin({
       usage: "morse-decode <sentence>",
       aliases: [],
       description: "Decodes morse code",
-      requiresProcessing: false,
+
       execute: async (message) => {
         // Reply if no args
         if (message.args.length === 0) return "Give me a string to decode!";

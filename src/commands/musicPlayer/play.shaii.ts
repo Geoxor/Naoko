@@ -7,7 +7,7 @@ export default defineCommand({
   usage: "play",
   aliases: [],
   description: "Play a song",
-  requiresProcessing: false,
+
   execute: async (message) => {
     return musicMiddleware(message, async (channel, player) => {
       await player.start(channel);

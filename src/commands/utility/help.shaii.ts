@@ -8,7 +8,7 @@ export default defineCommand({
   usage: "help",
   aliases: ["h"],
   description: "The command you just did",
-  requiresProcessing: false,
+
   execute: () => {
     const helpString = [];
 

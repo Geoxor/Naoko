@@ -10,7 +10,7 @@ export default defineCommand({
   aliases: [],
   usage: "Battle",
   description: "Battle a random waifu with your friends for rewards!",
-  requiresProcessing: false,
+
   execute: async (message) => {
     if (!(message.channel instanceof Discord.TextChannel)) return "Can't start battles in here!";
     const { chosenWaifu, chosenRarity } = chooseWaifu();

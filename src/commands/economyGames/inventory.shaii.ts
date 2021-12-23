@@ -7,7 +7,7 @@ export default defineCommand({
   aliases: ["inv"],
   usage: "inv",
   description: "Shows the inventory of the user",
-  requiresProcessing: false,
+
   execute: async (message) => {
     try {
       const embed = await InventoryManager.getInventory(message.author);

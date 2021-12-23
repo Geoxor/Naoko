@@ -36,7 +36,7 @@ export default defineCommand({
   usage: "rank",
   category: "ECONOMY",
   description: "View your rank",
-  requiresProcessing: false,
+
   execute: async (message) => {
     // @ts-ignore
     const { xp } = message.databaseUser;

@@ -11,7 +11,7 @@ export type DiscordEventHandler<K extends keyof Discord.ClientEvents> = (
 export type PluginIdentifier = `@${string}/${string}`;
 export type PluginTimers = { [key: string]: NodeJS.Timeout | NodeJS.Timer };
 export type PluginEvents = { [key in keyof Discord.ClientEvents]?: DiscordEventHandler<key> };
-export type PluginVersion = `v${string}`;
+export type PluginVersion = `${string}.${string}.${string}`;
 export enum PluginStates {
   Disabled,
   Enabled,

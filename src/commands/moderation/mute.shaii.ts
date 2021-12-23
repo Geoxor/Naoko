@@ -14,7 +14,7 @@ export default defineCommand({
   usage: "mute <@user> <duration> <reason>",
   description: "Mute a user",
   permissions: ["MANAGE_ROLES"],
-  requiresProcessing: false,
+
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to mute";

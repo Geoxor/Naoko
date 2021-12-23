@@ -7,7 +7,7 @@ export default defineCommand({
   usage: "ping",
   aliases: [],
   description: "Get api latency.",
-  requiresProcessing: false,
+
   execute: async (message) => {
     try {
       const timestampMessage = await message.channel.send("🏓 Getting ping...");

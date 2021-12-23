@@ -6,14 +6,14 @@ import facts from "./fun-facts/facts.json";
 
 export default definePlugin({
   name: "@azur1s/fun-fact",
-  version: "v1.0.0",
+  version: "1.0.0",
   command: defineCommand({
     name: "funfact",
     category: "FUN",
     usage: "funfact",
     aliases: [],
     description: "Random fun fact",
-    requiresProcessing: false,
+
     execute: (message) => {
       const embed = new Discord.MessageEmbed()
         .setColor("#d2185e")

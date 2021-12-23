@@ -2,7 +2,7 @@ import { definePlugin } from "../shaii/Plugin.shaii";
 
 export default definePlugin({
   name: "@geoxor/tunnel-tracker",
-  version: "v1.0.0",
+  version: "1.0.0",
   events: {
     messageCreate: (message) => {
       if (

@@ -8,7 +8,7 @@ export default defineCommand({
   usage: "match <@user | user_id> ?<@user | user_id>",
   aliases: [],
   description: "See how much you and another user match!",
-  requiresProcessing: false,
+
   execute: (message) => {
     if (!message.mentions.members?.size) return "Tag the person you want to match with!";
 

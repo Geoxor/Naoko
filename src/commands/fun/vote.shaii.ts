@@ -12,7 +12,7 @@ export default defineCommand({
   aliases: [],
   usage: "vote <topic>",
   description: "Creates a vote",
-  requiresProcessing: false,
+
   execute: async (message) => {
     const voteContext = message.args.join(" ").trim();
 

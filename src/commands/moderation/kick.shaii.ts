@@ -12,7 +12,7 @@ export default defineCommand({
   category: "UTILITY",
   description: "Kicks a user",
   permissions: ["KICK_MEMBERS"],
-  requiresProcessing: false,
+
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to kick";

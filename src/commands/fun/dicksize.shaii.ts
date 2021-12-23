@@ -9,7 +9,7 @@ export default defineCommand({
   usage: "dicksize ?<@user | user_id>",
   aliases: [],
   description: "Tells you your dicksize or battle against someone else's dicksize!",
-  requiresProcessing: false,
+
   execute: async (message) => {
     if (
       message.mentions.members &&

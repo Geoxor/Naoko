@@ -13,7 +13,7 @@ export default defineCommand({
   aliases: ["env"],
   usage: "env",
   description: "Show environment details",
-  requiresProcessing: false,
+
   execute: (message) => {
     // Leave these in here because systeminfo takes 10 hours to fetch data
     // and putting these out there will cause it to be undefined

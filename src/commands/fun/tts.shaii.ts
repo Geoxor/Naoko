@@ -8,7 +8,7 @@ export default defineCommand({
   aliases: [],
   usage: "tts <sentence>",
   description: "Turn a string into text to speech",
-  requiresProcessing: false,
+
   execute: async (message) => {
     const attachment = new Discord.MessageAttachment(
       await tts(message.args.join(" ")),

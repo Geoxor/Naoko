@@ -5,7 +5,7 @@ import answers from "./mention-replies/answers.json";
 
 export default definePlugin({
   name: "@geoxor/mention-replies",
-  version: "v1.0.0",
+  version: "1.0.0",
   events: {
     messageCreate: (message) => {
       if (

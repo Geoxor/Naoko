@@ -10,7 +10,7 @@ export default defineCommand({
   usage: "brainfuck <sentence>",
   aliases: [],
   description: "Translates your sentence to brainfuck esoteric language",
-  requiresProcessing: false,
+
   execute: async (message) => {
     if (message.args.length === 0) return `What to you want to translate ${randomChoice(SLURS)}`;
     const response: string = textToBrainfuck(message.args.join(" "));

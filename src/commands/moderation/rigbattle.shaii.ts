@@ -10,7 +10,7 @@ export default defineCommand({
   aliases: [],
   usage: "rigbattle <waifu_name>",
   description: "Battle with predefined waifu for testing purpose",
-  requiresProcessing: false,
+
   permissions: ["ADMINISTRATOR"],
   execute: async (message) => {
     if (!(message.channel instanceof Discord.TextChannel)) return "Can't start battles in here!";
