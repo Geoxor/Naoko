@@ -1,14 +1,12 @@
+import Discord from "discord.js";
 import { getShipName } from "../../logic/logic.shaii";
 import { defineCommand } from "../../types";
-import Discord from "discord.js";
 
 export default defineCommand({
   name: "match",
   category: "FUN",
   usage: "match <@user | user_id> ?<@user | user_id>",
-
   description: "See how much you and another user match!",
-
   execute: (message) => {
     if (!message.mentions.members?.size) return "Tag the person you want to match with!";
 

@@ -1,7 +1,7 @@
-import { defineCommand } from "../types";
-import { definePlugin } from "../shaii/Plugin.shaii";
 import Discord from "discord.js";
 import { randomChoice } from "../logic/logic.shaii";
+import { definePlugin } from "../shaii/Plugin.shaii";
+import { defineCommand } from "../types";
 import facts from "./fun-facts/facts.json";
 
 export default definePlugin({

@@ -1,18 +1,16 @@
-import { User } from "../../shaii/Database.shaii";
-import { defineCommand } from "../../types";
 import Discord from "discord.js";
 import { SHAII_LOGO } from "../../constants";
-import Shaii from "../../shaii/Shaii.shaii";
+import { User } from "../../shaii/Database.shaii";
 import logger from "../../shaii/Logger.shaii";
+import Shaii from "../../shaii/Shaii.shaii";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "kick",
-
   usage: "kick <@user> <reason>",
   category: "UTILITY",
   description: "Kicks a user",
   permissions: ["KICK_MEMBERS"],
-
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to kick";

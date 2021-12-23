@@ -1,7 +1,7 @@
 // @ts-ignore
+import normalize from "@taku.moe/pura";
 import badWords from "../assets/badWords.json";
 import goodWords from "../assets/goodWords.json";
-import normalize from "@taku.moe/pura";
 import { IMessage } from "../types";
 
 const badWordRegexs = badWords.map((word: string) => new RegExp(word, "gi"));

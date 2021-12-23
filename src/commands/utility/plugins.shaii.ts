@@ -1,9 +1,8 @@
 import Discord from "discord.js";
-import { defineCommand } from "../../types";
+import { version } from "../../../package.json";
 import { SHAII_LOGO } from "../../constants";
 import Shaii from "../../shaii/Shaii.shaii";
-import { version } from "../../../package.json";
-import { highlight } from "../../logic/logic.shaii";
+import { defineCommand } from "../../types";
 
 const PLUGIN_ICON = "https://cdn.discordapp.com/attachments/911762334979084368/923234119553519636/unknown.png";
 

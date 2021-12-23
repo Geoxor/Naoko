@@ -1,8 +1,8 @@
 import Discord from "discord.js";
-import logger from "../shaii/Logger.shaii";
-import config from "../shaii/Config.shaii";
 import { GEOXOR_GUILD_ID, SHAII_ID } from "../constants";
 import { markdown } from "../logic/logic.shaii";
+import config from "../shaii/Config.shaii";
+import logger from "../shaii/Logger.shaii";
 
 export function logEdit(
   oldMessage: Discord.Message | Discord.PartialMessage,

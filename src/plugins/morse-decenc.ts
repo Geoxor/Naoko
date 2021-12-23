@@ -1,6 +1,6 @@
-import { defineCommand } from "../types";
-import { definePlugin } from "../shaii/Plugin.shaii";
 import { objectFlip } from "../logic/logic.shaii";
+import { definePlugin } from "../shaii/Plugin.shaii";
+import { defineCommand } from "../types";
 
 const MORSE_CODE_TABLE = {
   a: ".-",

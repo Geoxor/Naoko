@@ -1,34 +1,34 @@
 import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
-import commandMiddleware from "../middleware/commandMiddleware.shaii";
-import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
-import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
-import { GeoxorGuildRole, ICommand } from "../types";
-import logger from "./Logger.shaii";
-import { getCommands } from "../commands";
-import config from "./Config.shaii";
-import { version } from "../../package.json";
+import fs from "fs";
+import levenshtein from "js-levenshtein";
+import path from "path";
 import si from "systeminformation";
-import { userMiddleware, hasGhostsRole, giveGhostsRole } from "../middleware/userMiddleware.shaii";
-import { User } from "./Database.shaii";
+import { version } from "../../package.json";
+import welcomeMessages from "../assets/welcome_messages.json";
+import { getCommands } from "../commands";
 import {
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
   GHOSTS_ROLE_ID,
+  MORPHEUS_ID,
+  MUTED_ROLE_ID,
   QBOT_DEV_GUILD_ID,
   SHAII_ID,
-  TESTING_GUILD_ID,
   SLURS,
-  MUTED_ROLE_ID,
   SVRGE_ID,
-  MORPHEUS_ID,
+  TESTING_GUILD_ID,
 } from "../constants";
-import welcomeMessages from "../assets/welcome_messages.json";
-import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
-import levenshtein from "js-levenshtein";
-import fs from "fs";
-import path from "path";
+import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
+import commandMiddleware from "../middleware/commandMiddleware.shaii";
+import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
+import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
+import { giveGhostsRole, hasGhostsRole, userMiddleware } from "../middleware/userMiddleware.shaii";
 import { DISCORD_EVENTS, Plugin } from "../shaii/Plugin.shaii";
+import { GeoxorGuildRole, ICommand } from "../types";
+import config from "./Config.shaii";
+import { User } from "./Database.shaii";
+import logger from "./Logger.shaii";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");

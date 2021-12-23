@@ -1,16 +1,15 @@
-import * as THREE from "three";
-// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
-import { NodeCanvasElement, createCanvas } from "node-canvas-webgl";
-import Jimp from "jimp";
-import logger from "../shaii/Logger.shaii";
-import { GifUtil, GifFrame } from "gifwrap";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
-import { Coords, GeometrySceneOptions } from "../types";
-import { getRGBAUintArray, encodeFramesToGif } from "./logic.shaii";
-
+import { GifFrame, GifUtil } from "gifwrap";
+import Jimp from "jimp";
+// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
+import { createCanvas, NodeCanvasElement } from "node-canvas-webgl";
+import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json";
 import cache from "../shaii/Cache.shaii";
+import logger from "../shaii/Logger.shaii";
+import { Coords, GeometrySceneOptions } from "../types";
+import { encodeFramesToGif, getRGBAUintArray } from "./logic.shaii";
 
 export const commands3D = {
   async prism(texture: Buffer) {

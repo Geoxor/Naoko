@@ -1,6 +1,6 @@
+import { Readable } from "stream";
 import shaii from "../../shaii/Shaii.shaii";
 import { defineCommand } from "../../types";
-import { Readable } from "stream";
 
 export default defineCommand({
   name: "help",
@@ -8,7 +8,6 @@ export default defineCommand({
   usage: "help",
   aliases: ["h"],
   description: "The command you just did",
-
   execute: () => {
     const helpString = [];
 

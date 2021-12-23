@@ -1,7 +1,5 @@
 // https://www.youtube.com/watch?v=iik25wqIuFo
 
-import { DiscordAPIError, TextChannel } from "discord.js";
-import Logger from "../../shaii/Logger.shaii";
 import { defineCommand } from "../../types";
 
 // Level formula
@@ -32,11 +30,9 @@ let getXPForCurrentLevel = (xp: number) => {
 
 export default defineCommand({
   name: "rank",
-
   usage: "rank",
   category: "ECONOMY",
   description: "View your rank",
-
   execute: async (message) => {
     // @ts-ignore
     const { xp } = message.databaseUser;

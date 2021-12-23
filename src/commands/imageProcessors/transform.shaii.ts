@@ -1,9 +1,9 @@
-import { defineCommand } from "../../types";
 import Discord from "discord.js";
-import { parseBufferFromMessage } from "../../logic/logic.shaii";
-import { transform } from "../../logic/imageProcessors.shaii";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
+import { transform } from "../../logic/imageProcessors.shaii";
+import { parseBufferFromMessage } from "../../logic/logic.shaii";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "transform",

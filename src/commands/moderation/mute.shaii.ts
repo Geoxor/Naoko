@@ -1,20 +1,17 @@
-import { User } from "../../shaii/Database.shaii";
-import { defineCommand, IMessage } from "../../types";
 import Discord, { MessageEmbed } from "discord.js";
-import { SHAII_LOGO } from "../../constants";
-import Shaii from "../../shaii/Shaii.shaii";
-import logger from "../../shaii/Logger.shaii";
-import { MUTED_ROLE_ID } from "../../constants";
+import { MUTED_ROLE_ID, SHAII_LOGO } from "../../constants";
 import { durationToMilliseconds } from "../../logic/logic.shaii";
+import { User } from "../../shaii/Database.shaii";
+import logger from "../../shaii/Logger.shaii";
+import Shaii from "../../shaii/Shaii.shaii";
+import { defineCommand, IMessage } from "../../types";
 
 export default defineCommand({
   name: "mute",
-
   category: "MODERATION",
   usage: "mute <@user> <duration> <reason>",
   description: "Mute a user",
   permissions: ["MANAGE_ROLES"],
-
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to mute";

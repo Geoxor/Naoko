@@ -6,8 +6,6 @@ export default defineCommand({
   name: "uptime",
   category: "UTILITY",
   usage: "uptime",
-
   description: "Get api latency.",
-
   execute: async () => msToFullTime(Shaii.bot.uptime || 0),
 });

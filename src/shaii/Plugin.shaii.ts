@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { defineCommand, ICommand } from "src/types";
+import { ICommand } from "src/types";
 
 // Add more types as the project grows
 export const DISCORD_EVENTS: (keyof Discord.ClientEvents)[] = ["messageCreate"];

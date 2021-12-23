@@ -1,7 +1,7 @@
-import quotes from "../assets/quotes.json";
 import chalk from "chalk";
-import { getCurrentMemoryHeap, randomChoice } from "../logic/logic.shaii";
 import MultiProgress from "multi-progress";
+import quotes from "../assets/quotes.json";
+import { getCurrentMemoryHeap, randomChoice } from "../logic/logic.shaii";
 
 /**
  * Main logging wrapper that creates beautiful colors and emojis

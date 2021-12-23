@@ -1,9 +1,9 @@
-import { defineCommand } from "../../types";
 import Discord from "discord.js";
-import { systemInfo } from "../../shaii/Shaii.shaii";
 import { version } from "../../../package.json";
-import { msToTime } from "../../logic/logic.shaii";
 import { LINUX_LOGO, SHAII_LOGO, WINDOWS_LOGO } from "../../constants";
+import { msToTime } from "../../logic/logic.shaii";
+import { systemInfo } from "../../shaii/Shaii.shaii";
+import { defineCommand } from "../../types";
 
 const startTime = Date.now();
 

@@ -1,11 +1,10 @@
 import Jimp from "jimp";
-import { ImageProcessors } from "../types";
-
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import petPetGif from "pet-pet-gif";
-import { getRGBAUintArray, encodeFramesToGif, bipolarRandom } from "./logic.shaii";
 import logger from "../shaii/Logger.shaii";
+import { ImageProcessors } from "../types";
 import { commands3D } from "./3DRenderer.shaii";
+import { bipolarRandom, encodeFramesToGif, getRGBAUintArray } from "./logic.shaii";
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;

@@ -1,7 +1,7 @@
 import Discord, { GuildMember } from "discord.js";
 import { GEOXOR_GUILD_ID, GHOSTS_ROLE_ID } from "../constants";
-import logger from "../shaii/Logger.shaii";
 import { User } from "../shaii/Database.shaii";
+import logger from "../shaii/Logger.shaii";
 import { IMessage } from "../types";
 
 export async function userMiddleware(message: Discord.Message, next: (message: IMessage) => any): Promise<void> {

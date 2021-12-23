@@ -1,24 +1,24 @@
 import {
-  AudioPlayerStatus,
-  AudioPlayerState,
   AudioPlayer,
-  entersState,
-  createAudioPlayer,
-  joinVoiceChannel,
-  VoiceConnectionStatus,
-  NoSubscriberBehavior,
-  createAudioResource,
+  AudioPlayerState,
+  AudioPlayerStatus,
   AudioResource,
+  createAudioPlayer,
+  createAudioResource,
+  entersState,
+  joinVoiceChannel,
+  NoSubscriberBehavior,
   VoiceConnectionState,
+  VoiceConnectionStatus,
 } from "@discordjs/voice";
 import Discord from "discord.js";
+import fs from "fs";
+import getColors from "get-image-colors";
+import Jimp from "jimp";
+import * as mm from "music-metadata";
 import { walkDirectory } from "../logic/logic.shaii";
 import config from "./Config.shaii";
 import logger from "./Logger.shaii";
-import getColors from "get-image-colors";
-import * as mm from "music-metadata";
-import fs from "fs";
-import Jimp from "jimp";
 
 /**
  * The MusicPlayer class responsible for handling connection and audio playback in a voice channel

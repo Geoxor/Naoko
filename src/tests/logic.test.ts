@@ -2,12 +2,12 @@ require("ts-mocha");
 import chai from "chai";
 import { it } from "mocha";
 import {
-  textToUwufy,
-  getWaifuNameFromFileName,
   calcSpread,
-  isValidHttpUrl,
   capitalizeFirstLetter,
+  getWaifuNameFromFileName,
+  isValidHttpUrl,
   msToTime,
+  textToUwufy,
 } from "../logic/logic.shaii";
 
 describe("⚡ UwU-ifier (textToUwufy)", () => {

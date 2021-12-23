@@ -1,6 +1,5 @@
-import { TextProcessors } from "../types";
-
 import logger from "../shaii/Logger.shaii";
+import { TextProcessors } from "../types";
 import { textToBrainfuck, textToBritify, textToSpongify, textToUwufy } from "./logic.shaii";
 
 export const textProcessors: TextProcessors = {
