@@ -102,7 +102,7 @@ export interface IPluginDefinition {
  * including `timers` which automatically get cleared on hot reloads so you don't have to manage
  * memory
  *
- * @see https://github.com/Geoxor/Shaii#Plugins
+ * @see https://github.com/Geoxor/Shaii#-plugins
  *
  * Let's say you wanna make a plugin that when someone pings shaii she automatically
  * replies to them with a random answer from an array of strings:
