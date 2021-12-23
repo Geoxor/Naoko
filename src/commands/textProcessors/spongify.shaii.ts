@@ -7,7 +7,7 @@ export default defineCommand({
   name: "spongify",
   category: "TEXT_PROCESSORS",
   usage: "spongify <sentence>",
-  aliases: [],
+
   description: "mAkEs YoU sPeAk lIkE ThIs",
 
   execute: async (message) => {

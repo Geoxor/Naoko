@@ -5,7 +5,7 @@ export default defineCommand({
   name: "play",
   category: "MUSIC",
   usage: "play",
-  aliases: [],
+
   description: "Play a song",
 
   execute: async (message) => {

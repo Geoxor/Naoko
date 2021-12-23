@@ -32,7 +32,7 @@ let getXPForCurrentLevel = (xp: number) => {
 
 export default defineCommand({
   name: "rank",
-  aliases: [],
+
   usage: "rank",
   category: "ECONOMY",
   description: "View your rank",

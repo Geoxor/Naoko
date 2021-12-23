@@ -6,7 +6,7 @@ import { sendUnmuteEmbed } from "./mute.shaii";
 
 export default defineCommand({
   name: "unmute",
-  aliases: [],
+
   category: "MODERATION",
   usage: "unmute <@user> [reason]",
   description: "Unmute a user",

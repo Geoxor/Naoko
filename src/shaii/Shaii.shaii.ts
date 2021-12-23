@@ -345,7 +345,7 @@ class Shaii {
         commandMiddleware(message, async (message) => {
           const command =
             this.commands.get(message.command) ||
-            this.commands.find((command) => command.aliases?.includes(message.command));
+            this.commands.find((command) => command.aliases.includes(message.command));
 
           const clearTyping = () => {
             if (processingMessage) {

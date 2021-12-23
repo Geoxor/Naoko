@@ -7,7 +7,7 @@ export default definePlugin({
   command: defineCommand({
     name: "avatar",
     category: "UTILITY",
-    aliases: [],
+
     usage: "avatar <@user | user_id>",
     description: "Get the avatar of a user or yours",
 

@@ -9,7 +9,7 @@ import { durationToMilliseconds } from "../../logic/logic.shaii";
 
 export default defineCommand({
   name: "mute",
-  aliases: [],
+
   category: "MODERATION",
   usage: "mute <@user> <duration> <reason>",
   description: "Mute a user",

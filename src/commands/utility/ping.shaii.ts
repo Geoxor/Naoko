@@ -5,7 +5,7 @@ export default defineCommand({
   name: "ping",
   category: "UTILITY",
   usage: "ping",
-  aliases: [],
+
   description: "Get api latency.",
 
   execute: async (message) => {

@@ -7,7 +7,7 @@ import { defineCommand, IMessage } from "../../types";
 export default defineCommand({
   name: "battle",
   category: "ECONOMY",
-  aliases: [],
+
   usage: "Battle",
   description: "Battle a random waifu with your friends for rewards!",
 

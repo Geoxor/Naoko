@@ -9,7 +9,7 @@ const filter = (reaction: Discord.MessageReaction, user: Discord.User) => {
 export default defineCommand({
   name: "vote",
   category: "FUN",
-  aliases: [],
+
   usage: "vote <topic>",
   description: "Creates a vote",
 

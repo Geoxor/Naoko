@@ -7,7 +7,7 @@ import logger from "../../shaii/Logger.shaii";
 
 export default defineCommand({
   name: "unban",
-  aliases: [],
+
   category: "MODERATION",
   usage: "unban <user_id> <reason>",
   description: "Unbans a user",

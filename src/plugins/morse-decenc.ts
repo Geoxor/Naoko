@@ -74,7 +74,7 @@ export default definePlugin({
       name: "morse-encode",
       category: "FUN",
       usage: "morse-encode <sentence>",
-      aliases: [],
+
       description: "Encodes a string to morse code",
 
       execute: async (message) => {
@@ -90,7 +90,7 @@ export default definePlugin({
       name: "morse-decode",
       category: "FUN",
       usage: "morse-decode <sentence>",
-      aliases: [],
+
       description: "Decodes morse code",
 
       execute: async (message) => {

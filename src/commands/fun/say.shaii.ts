@@ -6,7 +6,7 @@ export default defineCommand({
   name: "say",
   category: "FUN",
   usage: "say <sentence>",
-  aliases: [],
+
   description: "Say your stupid message",
 
   execute: async (message) => {

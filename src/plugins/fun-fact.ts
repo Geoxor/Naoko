@@ -11,7 +11,7 @@ export default definePlugin({
     name: "funfact",
     category: "FUN",
     usage: "funfact",
-    aliases: [],
+
     description: "Random fun fact",
 
     execute: (message) => {

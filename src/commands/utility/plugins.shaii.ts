@@ -13,7 +13,6 @@ export default defineCommand({
   aliases: ["plug"],
   usage: "plugins",
   description: "See loaded plugins",
-
   execute: () => {
     const embed = new Discord.MessageEmbed()
       .setAuthor(`Shaii v${version}`, SHAII_LOGO)

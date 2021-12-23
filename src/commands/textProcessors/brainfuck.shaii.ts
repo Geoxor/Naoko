@@ -8,7 +8,7 @@ export default defineCommand({
   name: "brainfuck",
   category: "TEXT_PROCESSORS",
   usage: "brainfuck <sentence>",
-  aliases: [],
+
   description: "Translates your sentence to brainfuck esoteric language",
 
   execute: async (message) => {

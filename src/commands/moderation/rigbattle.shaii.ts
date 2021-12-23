@@ -7,7 +7,7 @@ import { defineCommand, IMessage } from "../../types";
 export default defineCommand({
   category: "MODERATION",
   name: "rigbattle",
-  aliases: [],
+
   usage: "rigbattle <waifu_name>",
   description: "Battle with predefined waifu for testing purpose",
 

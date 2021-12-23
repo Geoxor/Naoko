@@ -6,7 +6,7 @@ export default defineCommand({
   name: "stats",
   usage: "stats",
   category: "ECONOMY",
-  aliases: [],
+
   description: "Shows the statistics of the user",
 
   execute: async (message) => {

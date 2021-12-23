@@ -7,7 +7,7 @@ import logger from "../../shaii/Logger.shaii";
 
 export default defineCommand({
   name: "ban",
-  aliases: [],
+
   category: "MODERATION",
   usage: "ban <@user> <reason>",
   description: "Bans a user",

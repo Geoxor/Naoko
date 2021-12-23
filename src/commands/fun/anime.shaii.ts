@@ -6,7 +6,7 @@ export default defineCommand({
   name: "anime",
   category: "FUN",
   usage: "anime <search_string>",
-  aliases: [],
+
   description: "Looks up an anime on Anilist",
   requiresProcessing: true,
   execute: async (message) => {

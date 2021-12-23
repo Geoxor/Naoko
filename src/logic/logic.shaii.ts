@@ -174,7 +174,7 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
     logger.print(`Generated command ${cmdName}`);
     const command: ICommand = {
       name: cmdName,
-      aliases: [],
+
       usage: `${cmdName} <image | url | reply | user_id>`,
       category: "IMAGE_PROCESSORS",
       description: `${cmdName} an image`,

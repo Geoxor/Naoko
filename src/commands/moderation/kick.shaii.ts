@@ -7,7 +7,7 @@ import logger from "../../shaii/Logger.shaii";
 
 export default defineCommand({
   name: "kick",
-  aliases: [],
+
   usage: "kick <@user> <reason>",
   category: "UTILITY",
   description: "Kicks a user",

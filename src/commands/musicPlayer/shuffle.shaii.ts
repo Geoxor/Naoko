@@ -4,7 +4,7 @@ import { defineCommand } from "../../types";
 export default defineCommand({
   name: "shuffle",
   category: "MUSIC",
-  aliases: [],
+
   usage: "shuffle",
   description: "Shuffles the queue",
 

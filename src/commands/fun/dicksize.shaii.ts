@@ -7,7 +7,7 @@ export default defineCommand({
   name: "dicksize",
   category: "FUN",
   usage: "dicksize ?<@user | user_id>",
-  aliases: [],
+
   description: "Tells you your dicksize or battle against someone else's dicksize!",
 
   execute: async (message) => {

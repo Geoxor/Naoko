@@ -20,7 +20,7 @@ export default defineCommand({
   name: "stack",
   category: "IMAGE_PROCESSORS",
   usage: `stack <processor_name> <image | url | reply | user_id>`,
-  aliases: [],
+
   description: "Stack an image processor and make a gif out of it",
   requiresProcessing: true,
   execute: async (message) => {

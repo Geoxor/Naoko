@@ -5,7 +5,7 @@ import { randomChoice } from "../../logic/logic.shaii";
 
 export default defineCommand({
   name: "textify",
-  aliases: [],
+
   usage: "textify <...processor_names> <text>",
   category: "TEXT_PROCESSORS",
   description: "Transform a sentence with a pipeline",

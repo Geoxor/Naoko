@@ -4,7 +4,7 @@ import { defineCommand } from "../../types";
 export default defineCommand({
   name: "uwufy",
   category: "TEXT_PROCESSORS",
-  aliases: [],
+
   usage: "uwufy <sentence>",
   description: "Transforms your sentence to uwu",
 

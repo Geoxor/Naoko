@@ -94,7 +94,7 @@ export type CommandExecute = (
 
 export type CommandCategories = typeof COMMAND_CATEGORIES_RAW[number];
 
-export interface ICommand {
+export interface CommandDefinition {
   /**
    * The handler associated with this command
    */
@@ -118,7 +118,7 @@ export interface ICommand {
   /**
    * Alternative ways to call this command
    */
-  aliases: string[];
+  aliases?: string[];
   /**
    * Permissions the user needs to have to run this command
    */
@@ -129,7 +129,14 @@ export interface ICommand {
   requiresProcessing?: boolean;
 }
 
-export const defineCommand = (cmd: ICommand): ICommand => cmd;
+export interface ICommand extends CommandDefinition {
+  aliases: string[];
+}
+
+export const defineCommand = (definition: CommandDefinition): ICommand => {
+  definition.aliases ??= [];
+  return definition as ICommand;
+};
 
 export interface CommandIO {
   type: void; // actually, it should be: IOText | IOLink | IOSticker | IOImage | IOVideo | IOSound | IOFile | IOEmbed | IOError
