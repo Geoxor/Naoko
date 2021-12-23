@@ -12,7 +12,7 @@ export default defineCommand({
   usage: "unban <user_id> <reason>",
   description: "Unbans a user",
   permissions: ["BAN_MEMBERS"],
-  requiresProcessing: true,
+  requiresProcessing: false,
   execute: async (message) => {
     if (message.args.length === 0) return "Please enter the ID of the user you want to unban";
     const targetUser = await Shaii.bot.users.fetch(message.args[0]);
