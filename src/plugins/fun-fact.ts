@@ -11,9 +11,7 @@ export default definePlugin({
     name: "funfact",
     category: "FUN",
     usage: "funfact",
-
     description: "Random fun fact",
-
     execute: (message) => {
       const embed = new Discord.MessageEmbed()
         .setColor("#d2185e")

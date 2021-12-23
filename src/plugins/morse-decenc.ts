@@ -74,9 +74,7 @@ export default definePlugin({
       name: "morse-encode",
       category: "FUN",
       usage: "morse-encode <sentence>",
-
       description: "Encodes a string to morse code",
-
       execute: async (message) => {
         // Reply if no args
         if (message.args.length === 0) return "Give me a string to encode!";

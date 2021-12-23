@@ -270,50 +270,6 @@ class Shaii {
     }
   }
 
-  public doesNicknameStartWithEmoji(nickname: string): boolean {
-    if (!this.geoxorRoleList) return true;
-    for (let i = 0; i < this.geoxorRoleList.length; i++) {
-      if (nickname !== nickname.replace((this.geoxorRoleList[i].emoji as string)[0], "")) return true;
-    }
-    return false;
-  }
-
-  /**
-   * Adds an emoji before the nickname of the member if it has not
-   * @param member the member to add an emoji to their nickname
-   * @param emoji the emoji to add
-   * @returns true if the operation is a success, false otherwise
-   * @author Qexat
-   */
-  public nickEmojifier(member: Discord.GuildMember | null, role?: GeoxorGuildRole): boolean {
-    if (member && role && this.geoxorRoleList) {
-      const currentNickname = member.nickname || member.displayName;
-      if (!this.doesNicknameStartWithEmoji(currentNickname) && member.user.id !== member.guild.ownerId) {
-        try {
-          member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31));
-          return true;
-        } catch (error) {
-          logger.error(error as string);
-        }
-      }
-      return false;
-    } else {
-      logger.error("Cannot emojify this member's nickname.");
-      return false;
-    }
-  }
-
-  private nickEmojiAdd(member: Discord.GuildMember) {
-    if (!this.geoxorRoleList) return;
-    member.roles.cache.forEach((memberRole) => {
-      if (memberRole.hoist)
-        this.geoxorRoleList?.forEach((guildRole) => {
-          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && this.nickEmojifier(member, guildRole))
-            return;
-        });
-    });
-  }
-
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
@@ -330,7 +286,6 @@ class Shaii {
               logger.error("This role does not exist in the server.");
             });
           }
-          this.nickEmojiAdd(message.member);
         }
 
         // For channels that have "images" in their name we simply force delete any messages that don't have that in there
