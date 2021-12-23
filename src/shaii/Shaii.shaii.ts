@@ -1,4 +1,4 @@
-import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
+import Discord, { Intents, MessageReaction, TextChannel } from "discord.js";
 import fs from "fs";
 import levenshtein from "js-levenshtein";
 import path from "path";
@@ -17,7 +17,6 @@ import {
   SHAII_ID,
   SLURS,
   SVRGE_ID,
-  TESTING_GUILD_ID,
 } from "../constants";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
@@ -77,7 +76,6 @@ class Shaii {
       logger.print(`Logged in as ${this.bot.user!.tag}!`);
       logger.print(`Currently in ${this.bot.guilds.cache.size} servers`);
       this.updateActivity();
-      this.leaveRogueGuilds();
       this.joinThreads();
       this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
       this.geoxorRoleList = (this.geoxorGuild || this.bot.guilds.cache.get(QBOT_DEV_GUILD_ID))?.roles.cache.map((role) => {
@@ -262,14 +260,6 @@ class Shaii {
     }
   }
 
-  private leaveRogueGuilds() {
-    for (let guild of this.bot.guilds.cache.values()) {
-      if (guild.id !== GEOXOR_GUILD_ID && guild.id !== TESTING_GUILD_ID && guild.id !== QBOT_DEV_GUILD_ID) {
-        guild.leave().then(() => logger.print(`Left guild ${guild.name}`));
-      }
-    }
-  }
-
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
@@ -352,7 +342,6 @@ class Shaii {
               }`
             );
           } catch (error: any) {
-            clearTyping();
             await message.reply(markdown(error)).catch(() => {});
           }
 
@@ -363,18 +352,16 @@ class Shaii {
           if (!result) return;
 
           // Send the result
-          try {
-            await message.reply(result);
-          } catch (error: any) {
-            try {
-              await message.channel.send(result);
-            } catch (error: any) {
-              if (error.code === 500) {
-                const embed = new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed");
-                await message.reply({ embeds: [embed] }).catch(() => {});
-              } else await message.reply(markdown(error)).catch(() => {});
-            }
-          }
+          message
+            .reply(result)
+            .catch(() => message.channel.send(result!))
+            .catch((error) =>
+              error.code === 500
+                ? message.reply({
+                    embeds: [new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
+                  })
+                : message.reply(markdown(error))
+            );
         });
       });
     });

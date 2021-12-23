@@ -88,9 +88,7 @@ export default definePlugin({
       name: "morse-decode",
       category: "FUN",
       usage: "morse-decode <sentence>",
-
       description: "Decodes morse code",
-
       execute: async (message) => {
         // Reply if no args
         if (message.args.length === 0) return "Give me a string to decode!";
