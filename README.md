@@ -2,7 +2,7 @@
 <img align="left" src="https://media.discordapp.net/attachments/550913067517607946/634231448928387072/OC_Shaii_CHIBICHARM2.png?width=200&height=236">
 
 ## ⚡ Plugins
-Plugins are runtime-loadable type-safe flexable components that have access to all of the bot's events
+Plugins are runtime-loadable type-safe flexible components that have access to all of the bot's events
 including `timers` which automatically get cleared on hot reloads so you don't have to manage
 memory
 
