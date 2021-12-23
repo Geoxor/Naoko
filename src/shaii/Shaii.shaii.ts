@@ -1,4 +1,4 @@
-import Discord, { Intents, MessageReaction, TextChannel } from "discord.js";
+import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import fs from "fs";
 import levenshtein from "js-levenshtein";
 import path from "path";
