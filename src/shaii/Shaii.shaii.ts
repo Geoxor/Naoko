@@ -11,9 +11,10 @@ import {
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
   GHOSTS_ROLE_ID,
-  MORPHEUS_ID,
   MUTED_ROLE_ID,
+  N1KO_ID,
   QBOT_DEV_GUILD_ID,
+  QEXAT_ID,
   SHAII_ID,
   SLURS,
   SVRGE_ID,
@@ -265,7 +266,7 @@ class Shaii {
       moderationMiddleware(message, (message) => {
         if (
           message.channel.id === GEOXOR_GENERAL_CHANNEL_ID &&
-          ![GEOXOR_ID, SVRGE_ID, MORPHEUS_ID].includes(message.author.id)
+          ![GEOXOR_ID, SVRGE_ID, QEXAT_ID, N1KO_ID].includes(message.author.id)
         )
           return;
 
