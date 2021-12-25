@@ -11,6 +11,7 @@ import {
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
   GHOSTS_ROLE_ID,
+  MORPHEUS_ID,
   MUTED_ROLE_ID,
   QBOT_DEV_GUILD_ID,
   SHAII_ID,
@@ -262,7 +263,11 @@ class Shaii {
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
-        if (message.channel.id === GEOXOR_GENERAL_CHANNEL_ID && ![GEOXOR_ID, SVRGE_ID].includes(message.author.id)) return;
+        if (
+          message.channel.id === GEOXOR_GENERAL_CHANNEL_ID &&
+          ![GEOXOR_ID, SVRGE_ID, MORPHEUS_ID].includes(message.author.id)
+        )
+          return;
 
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
         if (message.member && (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID)) {
