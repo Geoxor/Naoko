@@ -14,12 +14,11 @@ export default defineCommand({
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to unmute";
     if (targetUser.id === message.author.id) return "You can't unmute yourself";
-    if (!targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is not muted";
 
     const reason = message.args.join(" ");
 
     // Unget rekt
-    await targetUser.roles.remove(MUTED_ROLE_ID);
+    await targetUser.timeout(0 && Date.now(), reason);
 
     // Keep track of the unmute
     await User.unmute(message.author.id, targetUser.id, reason).catch(() => logger.error("Unmute database update failed"));
