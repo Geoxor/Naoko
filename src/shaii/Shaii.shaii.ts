@@ -25,7 +25,7 @@ import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii"
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import { giveGhostsRole, hasGhostsRole, userMiddleware } from "../middleware/userMiddleware.shaii";
 import { DISCORD_EVENTS, Plugin } from "../shaii/Plugin.shaii";
-import { GeoxorGuildRole, ICommand } from "../types";
+import { ICommand } from "../types";
 import config from "./Config.shaii";
 import { User } from "./Database.shaii";
 import logger from "./Logger.shaii";
@@ -48,7 +48,6 @@ class Shaii {
   public commands: Discord.Collection<string, ICommand> = new Discord.Collection();
   public geoxorGuild: Discord.Guild | undefined;
   public version: string = require("../../package.json").version;
-  public geoxorRoleList: GeoxorGuildRole[] | undefined;
   public plugins: Plugin[] = fs
     .readdirSync("./src/plugins")
     .filter((file) => file.endsWith(".ts"))
@@ -79,14 +78,6 @@ class Shaii {
       this.updateActivity();
       this.joinThreads();
       this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
-      this.geoxorRoleList = (this.geoxorGuild || this.bot.guilds.cache.get(QBOT_DEV_GUILD_ID))?.roles.cache.map((role) => {
-        return {
-          name: role.name.replace(emojiRegExp, "").trim(),
-          emoji: role.name.replace(/(\w\S+)/g, "").trim(),
-          id: role.id,
-        };
-      });
-      this.geoxorRoleList?.shift();
     });
     this.bot.on("messageCreate", async (message) => {
       // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
