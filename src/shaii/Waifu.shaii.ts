@@ -1,8 +1,8 @@
 import Discord from "discord.js";
 import fs from "fs";
-import { IRewards, IWaifuRarity, IWaifu, IWaifuRarityName, IWaifuRarityEmoji } from "../types";
-import { calcDefense } from "../logic/logic.shaii";
 import { SHAII_LOGO } from "../constants";
+import { calcDefense } from "../logic/logic.shaii";
+import { IRewards, IWaifu, IWaifuRarity, IWaifuRarityEmoji, IWaifuRarityName } from "../types";
 
 /**
  * Per guild waifu fights that people initiate with a command

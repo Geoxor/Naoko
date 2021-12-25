@@ -1,6 +1,6 @@
-import { defineCommand } from "../../types";
 import Discord from "discord.js";
 import { DOWNVOTE_EMOJI_ID, UPVOTE_EMOJI_ID, VOTE_TIME } from "../../constants";
+import { defineCommand } from "../../types";
 
 const filter = (reaction: Discord.MessageReaction, user: Discord.User) => {
   return reaction.emoji.id === DOWNVOTE_EMOJI_ID || reaction.emoji.id === UPVOTE_EMOJI_ID;
@@ -9,10 +9,8 @@ const filter = (reaction: Discord.MessageReaction, user: Discord.User) => {
 export default defineCommand({
   name: "vote",
   category: "FUN",
-  aliases: [],
   usage: "vote <topic>",
   description: "Creates a vote",
-  requiresProcessing: false,
   execute: async (message) => {
     const voteContext = message.args.join(" ").trim();
 

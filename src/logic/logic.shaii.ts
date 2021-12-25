@@ -1,15 +1,15 @@
-import fs from "fs";
-import path from "path";
 import axios from "axios";
-import { IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
-import Discord, { EmojiIdentifierResolvable, MessageMentions } from "discord.js";
-import { speak } from "windows-tts";
-import logger from "../shaii/Logger.shaii";
+import Discord, { MessageMentions } from "discord.js";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
+import fs from "fs";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
-import { GIFEncoder, quantize, applyPalette } from "gifenc";
+import { applyPalette, GIFEncoder, quantize } from "gifenc";
 import Jimp from "jimp";
+import path from "path";
+import { speak } from "windows-tts";
+import logger from "../shaii/Logger.shaii";
+import { defineCommand, IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
 const replaceLast = require("replace-last");
 
 const defaultImageOptions: Discord.ImageURLOptions = {
@@ -172,15 +172,14 @@ export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
   return fns.map((fn) => {
     const cmdName = fn.name.toLowerCase();
     logger.print(`Generated command ${cmdName}`);
-    const command: ICommand = {
+    const command = defineCommand({
       name: cmdName,
-      aliases: [],
       usage: `${cmdName} <image | url | reply | user_id>`,
       category: "IMAGE_PROCESSORS",
       description: `${cmdName} an image`,
       requiresProcessing: true,
       execute: imageProcess(fn),
-    };
+    });
     return command;
   });
 }

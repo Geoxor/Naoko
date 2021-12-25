@@ -1,7 +1,7 @@
-import { User } from "./Database.shaii";
 import Discord from "discord.js";
 import { INVENTORY_ICON } from "../constants";
 import { markdown } from "../logic/logic.shaii";
+import { User } from "./Database.shaii";
 
 export default class InventoryManager {
   static async getInventory(user: Discord.User): Promise<Discord.MessageEmbed> {

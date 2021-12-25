@@ -1,18 +1,16 @@
-import { User } from "../../shaii/Database.shaii";
-import { defineCommand } from "../../types";
 import Discord from "discord.js";
 import { SHAII_LOGO } from "../../constants";
-import Shaii from "../../shaii/Shaii.shaii";
+import { User } from "../../shaii/Database.shaii";
 import logger from "../../shaii/Logger.shaii";
+import Shaii from "../../shaii/Shaii.shaii";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "unban",
-  aliases: [],
   category: "MODERATION",
   usage: "unban <user_id> <reason>",
   description: "Unbans a user",
   permissions: ["BAN_MEMBERS"],
-  requiresProcessing: false,
   execute: async (message) => {
     if (message.args.length === 0) return "Please enter the ID of the user you want to unban";
     const targetUser = await Shaii.bot.users.fetch(message.args[0]);

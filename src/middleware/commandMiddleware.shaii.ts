@@ -1,8 +1,8 @@
-import config from "../shaii/Config.shaii";
 import Discord from "discord.js";
+import { removeMentions } from "../logic/logic.shaii";
+import config from "../shaii/Config.shaii";
 import MessageParser from "../shaii/MessageParser.shaii";
 import { IMessage } from "../types";
-import { removeMentions } from "../logic/logic.shaii";
 
 /**
  * Returns the function if the message doesn't meet requirements

@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { defineCommand, ICommand } from "src/types";
+import { ICommand } from "src/types";
 
 // Add more types as the project grows
 export const DISCORD_EVENTS: (keyof Discord.ClientEvents)[] = ["messageCreate"];
@@ -11,7 +11,7 @@ export type DiscordEventHandler<K extends keyof Discord.ClientEvents> = (
 export type PluginIdentifier = `@${string}/${string}`;
 export type PluginTimers = { [key: string]: NodeJS.Timeout | NodeJS.Timer };
 export type PluginEvents = { [key in keyof Discord.ClientEvents]?: DiscordEventHandler<key> };
-export type PluginVersion = `v${string}`;
+export type PluginVersion = `${string}.${string}.${string}`;
 export enum PluginStates {
   Disabled,
   Enabled,
@@ -102,7 +102,7 @@ export interface IPluginDefinition {
  * including `timers` which automatically get cleared on hot reloads so you don't have to manage
  * memory
  *
- * @see https://github.com/Geoxor/Shaii#Plugins
+ * @see https://github.com/Geoxor/Shaii#-plugins
  *
  * Let's say you wanna make a plugin that when someone pings shaii she automatically
  * replies to them with a random answer from an array of strings:

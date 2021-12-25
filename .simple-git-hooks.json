@@ -1,3 +1,0 @@
-{
-  "pre-push": "npm run prettify"
-}

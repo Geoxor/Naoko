@@ -1,8 +1,8 @@
-import Waifu from "./Waifu.shaii";
 import Discord from "discord.js";
 import { calcDamage, calcParticipated } from "../logic/logic.shaii";
 import { User } from "./Database.shaii";
 import logger from "./Logger.shaii";
+import Waifu from "./Waifu.shaii";
 
 /**
  * This manages a waifu battle, randomly picking enemy waifus,

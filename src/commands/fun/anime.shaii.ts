@@ -1,12 +1,11 @@
-import { defineCommand, IMessage } from "../../types";
 import Discord from "discord.js";
 import { anilistSearch } from "../../logic/logic.shaii";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "anime",
   category: "FUN",
   usage: "anime <search_string>",
-  aliases: [],
   description: "Looks up an anime on Anilist",
   requiresProcessing: true,
   execute: async (message) => {

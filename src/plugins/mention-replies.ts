@@ -1,11 +1,11 @@
-import { definePlugin } from "../shaii/Plugin.shaii";
 import { SHAII_ID } from "../constants";
 import { randomChoice } from "../logic/logic.shaii";
+import { definePlugin } from "../shaii/Plugin.shaii";
 import answers from "./mention-replies/answers.json";
 
 export default definePlugin({
   name: "@geoxor/mention-replies",
-  version: "v1.0.0",
+  version: "1.0.0",
   events: {
     messageCreate: (message) => {
       if (

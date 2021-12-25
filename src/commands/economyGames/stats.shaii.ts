@@ -1,14 +1,11 @@
-import Discord from "discord.js";
 import InventoryManager from "../../shaii/InventoryManager.shaii";
-import { defineCommand, IMessage } from "../../types";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "stats",
   usage: "stats",
   category: "ECONOMY",
-  aliases: [],
   description: "Shows the statistics of the user",
-  requiresProcessing: false,
   execute: async (message) => {
     try {
       const embed = await InventoryManager.getStatistics(message.author);

@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import fs from "fs";
-import { getWaifuNameFromFileName, calcSpread, randomChoice } from "../logic/logic.shaii";
+import { calcSpread, getWaifuNameFromFileName, randomChoice } from "../logic/logic.shaii";
 import { IWaifu, IWaifuRarity, IWaifuRarityName } from "../types";
 import logger from "./Logger.shaii";
 

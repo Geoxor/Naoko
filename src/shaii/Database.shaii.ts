@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import config from "./Config.shaii";
-import { IBattleUserRewards, IRewards, IUser, ActionHistory, HistoryTypes } from "../types";
 import Discord from "discord.js";
+import mongoose from "mongoose";
+import { ActionHistory, HistoryTypes, IBattleUserRewards, IUser } from "../types";
+import config from "./Config.shaii";
 import logger from "./Logger.shaii";
 mongoose
   .connect(config.mongo)

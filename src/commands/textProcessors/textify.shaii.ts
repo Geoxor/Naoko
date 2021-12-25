@@ -1,11 +1,10 @@
-import { defineCommand } from "../../types";
-import { textify } from "../../logic/textProcessors.shaii";
 import { SLURS } from "../../constants";
 import { randomChoice } from "../../logic/logic.shaii";
+import { textify } from "../../logic/textProcessors.shaii";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "textify",
-  aliases: [],
   usage: "textify <...processor_names> <text>",
   category: "TEXT_PROCESSORS",
   description: "Transform a sentence with a pipeline",

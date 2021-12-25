@@ -1,15 +1,12 @@
-import { MessageOptions } from "discord.js";
-import { randomDickSize } from "../../logic/logic.shaii";
-import { defineCommand, IMessage } from "../../types";
 import { Readable } from "stream";
+import { randomDickSize } from "../../logic/logic.shaii";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "dicksize",
   category: "FUN",
   usage: "dicksize ?<@user | user_id>",
-  aliases: [],
   description: "Tells you your dicksize or battle against someone else's dicksize!",
-  requiresProcessing: false,
   execute: async (message) => {
     if (
       message.mentions.members &&

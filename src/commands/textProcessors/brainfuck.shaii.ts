@@ -1,16 +1,13 @@
-import { textToBrainfuck } from "../../logic/logic.shaii";
-import { defineCommand } from "../../types";
-import { SLURS } from "../../constants";
-import { randomChoice } from "../../logic/logic.shaii";
 import { Readable } from "stream";
+import { SLURS } from "../../constants";
+import { randomChoice, textToBrainfuck } from "../../logic/logic.shaii";
+import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "brainfuck",
   category: "TEXT_PROCESSORS",
   usage: "brainfuck <sentence>",
-  aliases: [],
   description: "Translates your sentence to brainfuck esoteric language",
-  requiresProcessing: false,
   execute: async (message) => {
     if (message.args.length === 0) return `What to you want to translate ${randomChoice(SLURS)}`;
     const response: string = textToBrainfuck(message.args.join(" "));

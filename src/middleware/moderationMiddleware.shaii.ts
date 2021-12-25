@@ -1,11 +1,11 @@
-import logger from "../shaii/Logger.shaii";
-import { isFreeNitro } from "../moderation/isFreeNitro.shaii";
+import { GEOXOR_GUILD_ID, QBOT_DEV_GUILD_ID, TESTING_GUILD_ID } from "../constants";
 import { isBadWord } from "../moderation/isBadWord.shaii";
-import { IMessage } from "../types";
-import { isMuted } from "../moderation/isMuted.shaii";
-import { isIP } from "../moderation/isIP.shaii";
 import { isDiscordInvite } from "../moderation/isDiscordInvite.shaii";
-import { GEOXOR_GUILD_ID, TESTING_GUILD_ID, QBOT_DEV_GUILD_ID } from "../constants";
+import { isFreeNitro } from "../moderation/isFreeNitro.shaii";
+import { isIP } from "../moderation/isIP.shaii";
+import { isMuted } from "../moderation/isMuted.shaii";
+import logger from "../shaii/Logger.shaii";
+import { IMessage } from "../types";
 
 const checks = [isFreeNitro, isBadWord, isDiscordInvite, isMuted, isIP];
 

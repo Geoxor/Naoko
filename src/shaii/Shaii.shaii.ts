@@ -1,34 +1,34 @@
 import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
-import commandMiddleware from "../middleware/commandMiddleware.shaii";
-import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
-import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
-import { GeoxorGuildRole, ICommand } from "../types";
-import logger from "./Logger.shaii";
-import { getCommands } from "../commands";
-import config from "./Config.shaii";
-import { version } from "../../package.json";
+import fs from "fs";
+import levenshtein from "js-levenshtein";
+import path from "path";
 import si from "systeminformation";
-import { userMiddleware, hasGhostsRole, giveGhostsRole } from "../middleware/userMiddleware.shaii";
-import { User } from "./Database.shaii";
+import { version } from "../../package.json";
+import welcomeMessages from "../assets/welcome_messages.json";
+import { getCommands } from "../commands";
 import {
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
   GEOXOR_ID,
   GHOSTS_ROLE_ID,
-  QBOT_DEV_GUILD_ID,
-  SHAII_ID,
-  TESTING_GUILD_ID,
-  SLURS,
   MUTED_ROLE_ID,
+  N1KO_ID,
+  QBOT_DEV_GUILD_ID,
+  QEXAT_ID,
+  SHAII_ID,
+  SLURS,
   SVRGE_ID,
-  MORPHEUS_ID,
 } from "../constants";
-import welcomeMessages from "../assets/welcome_messages.json";
-import { highlight, markdown, randomChoice, removeMentions } from "../logic/logic.shaii";
-import levenshtein from "js-levenshtein";
-import fs from "fs";
-import path from "path";
+import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
+import commandMiddleware from "../middleware/commandMiddleware.shaii";
+import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
+import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
+import { giveGhostsRole, hasGhostsRole, userMiddleware } from "../middleware/userMiddleware.shaii";
 import { DISCORD_EVENTS, Plugin } from "../shaii/Plugin.shaii";
+import { GeoxorGuildRole, ICommand } from "../types";
+import config from "./Config.shaii";
+import { User } from "./Database.shaii";
+import logger from "./Logger.shaii";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
@@ -77,7 +77,6 @@ class Shaii {
       logger.print(`Logged in as ${this.bot.user!.tag}!`);
       logger.print(`Currently in ${this.bot.guilds.cache.size} servers`);
       this.updateActivity();
-      this.leaveRogueGuilds();
       this.joinThreads();
       this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
       this.geoxorRoleList = (this.geoxorGuild || this.bot.guilds.cache.get(QBOT_DEV_GUILD_ID))?.roles.cache.map((role) => {
@@ -262,64 +261,12 @@ class Shaii {
     }
   }
 
-  private leaveRogueGuilds() {
-    for (let guild of this.bot.guilds.cache.values()) {
-      if (guild.id !== GEOXOR_GUILD_ID && guild.id !== TESTING_GUILD_ID && guild.id !== QBOT_DEV_GUILD_ID) {
-        guild.leave().then(() => logger.print(`Left guild ${guild.name}`));
-      }
-    }
-  }
-
-  public doesNicknameStartWithEmoji(nickname: string): boolean {
-    if (!this.geoxorRoleList) return true;
-    for (let i = 0; i < this.geoxorRoleList.length; i++) {
-      if (nickname !== nickname.replace((this.geoxorRoleList[i].emoji as string)[0], "")) return true;
-    }
-    return false;
-  }
-
-  /**
-   * Adds an emoji before the nickname of the member if it has not
-   * @param member the member to add an emoji to their nickname
-   * @param emoji the emoji to add
-   * @returns true if the operation is a success, false otherwise
-   * @author Qexat
-   */
-  public nickEmojifier(member: Discord.GuildMember | null, role?: GeoxorGuildRole): boolean {
-    if (member && role && this.geoxorRoleList) {
-      const currentNickname = member.nickname || member.displayName;
-      if (!this.doesNicknameStartWithEmoji(currentNickname) && member.user.id !== member.guild.ownerId) {
-        try {
-          member.setNickname(`${role.emoji} ${currentNickname}`.slice(0, 31));
-          return true;
-        } catch (error) {
-          logger.error(error as string);
-        }
-      }
-      return false;
-    } else {
-      logger.error("Cannot emojify this member's nickname.");
-      return false;
-    }
-  }
-
-  private nickEmojiAdd(member: Discord.GuildMember) {
-    if (!this.geoxorRoleList) return;
-    member.roles.cache.forEach((memberRole) => {
-      if (memberRole.hoist)
-        this.geoxorRoleList?.forEach((guildRole) => {
-          if (memberRole.name.replace(emojiRegExp, "").trim() === guildRole.name && this.nickEmojifier(member, guildRole))
-            return;
-        });
-    });
-  }
-
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
         if (
           message.channel.id === GEOXOR_GENERAL_CHANNEL_ID &&
-          ![GEOXOR_ID, SVRGE_ID, MORPHEUS_ID].includes(message.author.id)
+          ![GEOXOR_ID, SVRGE_ID, QEXAT_ID, N1KO_ID].includes(message.author.id)
         )
           return;
 
@@ -330,7 +277,6 @@ class Shaii {
               logger.error("This role does not exist in the server.");
             });
           }
-          this.nickEmojiAdd(message.member);
         }
 
         // For channels that have "images" in their name we simply force delete any messages that don't have that in there
@@ -345,7 +291,7 @@ class Shaii {
         commandMiddleware(message, async (message) => {
           const command =
             this.commands.get(message.command) ||
-            this.commands.find((command) => command.aliases?.includes(message.command));
+            this.commands.find((command) => command.aliases.includes(message.command));
 
           const clearTyping = () => {
             if (processingMessage) {
@@ -397,7 +343,6 @@ class Shaii {
               }`
             );
           } catch (error: any) {
-            clearTyping();
             await message.reply(markdown(error)).catch(() => {});
           }
 
@@ -408,18 +353,16 @@ class Shaii {
           if (!result) return;
 
           // Send the result
-          try {
-            await message.reply(result);
-          } catch (error: any) {
-            try {
-              await message.channel.send(result);
-            } catch (error: any) {
-              if (error.code === 500) {
-                const embed = new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed");
-                await message.reply({ embeds: [embed] }).catch(() => {});
-              } else await message.reply(markdown(error)).catch(() => {});
-            }
-          }
+          message
+            .reply(result)
+            .catch(() => message.channel.send(result!))
+            .catch((error) =>
+              error.code === 500
+                ? message.reply({
+                    embeds: [new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
+                  })
+                : message.reply(markdown(error))
+            );
         });
       });
     });

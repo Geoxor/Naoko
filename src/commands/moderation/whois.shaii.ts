@@ -1,8 +1,8 @@
 import Discord, { Client, User } from "discord.js";
 import { version } from "../../../package.json";
 import { markdown, msToFullTime, timeSince } from "../../logic/logic.shaii";
-import { defineCommand, IMessage, History, ActionHistory } from "../../types";
 import { User as UserDb } from "../../shaii/Database.shaii";
+import { ActionHistory, defineCommand, History, IMessage } from "../../types";
 
 export default defineCommand({
   name: "whois",
@@ -10,7 +10,6 @@ export default defineCommand({
   aliases: ["who"],
   usage: "whois <@user | user_id)>",
   description: "Get information about a user",
-  requiresProcessing: false,
   execute: async (message) => {
     let user = message.mentions.users.first() || message.author;
     if (message.args[0] !== undefined && !message.mentions.users.first()) {
