@@ -18,9 +18,10 @@ export default definePlugin({
       
       // by default, it does not mention everyone
       let mention: string = "";
-      if (message.args[0] === "true") mention = "@everyone";
-      // removes doesMentionEveryone argument if it exists
-      if (["true", "false"].includes(message.args[0])) message.args.shift();
+      if (message.args[0] === "true") {
+        mention = "@everyone";
+        message.args.shift(); // removes doesMentionEveryone if it is set
+      }
 
       let announcementMessage = message.args.join(" ");
 
