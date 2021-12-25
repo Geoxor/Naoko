@@ -31,7 +31,7 @@ export default defineCommand({
     }
 
     // Get rekt
-    await targetUser.roles.add(MUTED_ROLE_ID);
+    await targetUser.timeout(parseInt(msDuration), reason);
 
     // Keep track of the mute
     await User.mute(message.author.id, targetUser.id, duration, reason).catch(() =>
@@ -40,16 +40,6 @@ export default defineCommand({
 
     // Send the embed
     sendMuteEmbed(message, targetUser, duration, reason);
-
-    setTimeout(async () => {
-      if (!targetUser.roles.cache.has(MUTED_ROLE_ID)) return;
-      try {
-        await targetUser.roles.remove(MUTED_ROLE_ID);
-        return sendUnmuteEmbed(message, targetUser);
-      } catch (error) {
-        return logger.error(error as string);
-      }
-    }, parseInt(msDuration));
   },
 });
 
