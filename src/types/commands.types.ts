@@ -8,8 +8,6 @@ export interface IMessage extends Discord.Message {
   databaseUser: DatabaseUser;
 }
 
-
-
 export type CommandExecute = (
   message: IMessage
 ) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;

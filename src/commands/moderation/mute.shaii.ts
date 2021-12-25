@@ -19,7 +19,8 @@ export default defineCommand({
     if (targetUser.permissions.has("ADMINISTRATOR")) return "You can't mute other admins";
     if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
-    let duration = message.args[0], msDurationInt ;
+    let duration = message.args[0],
+      msDurationInt;
     if (duration) {
       if (!duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) return "You must specify a valid duration";
       let msDuration = durationToMilliseconds(duration);
@@ -28,7 +29,7 @@ export default defineCommand({
         (duration = "14d"), (msDuration = "1209600000");
         logger.error("Duration entered is too big: it has been brought to 14 days");
       }
-      msDurationInt = parseInt(msDuration)
+      msDurationInt = parseInt(msDuration);
     } else {
       duration = "Infinity";
     }
