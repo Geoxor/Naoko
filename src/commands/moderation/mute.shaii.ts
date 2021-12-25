@@ -19,21 +19,16 @@ export default defineCommand({
     if (targetUser.permissions.has("ADMINISTRATOR")) return "You can't mute other admins";
     if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
-    let duration = message.args[0],
-      msDurationInt;
-    if (duration) {
-      if (!duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) return "You must specify a valid duration";
-      let msDuration = durationToMilliseconds(duration);
-      if (msDuration === "") return `${duration} is not a valid duration`;
-      if (parseInt(msDuration) > 1209600000) {
-        (duration = "14d"), (msDuration = "1209600000");
-        logger.error("Duration entered is too big: it has been brought to 14 days");
-      }
-      msDurationInt = parseInt(msDuration);
-    } else {
-      duration = "Infinity";
-    }
+    let duration = message.args[0];
+    if (!duration || !duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) return "You must specify a valid duration";
     const reason = message.args.slice(1).join(" ") || "No reason given";
+
+    let msDuration = durationToMilliseconds(duration);
+    if (msDuration === "") return `${duration} is not a valid duration`;
+    if (parseInt(msDuration) > 1209600000) {
+      (duration = "14d"), (msDuration = "1209600000");
+      logger.error("Duration entered is too big: it has been brought to 14 days");
+    }
 
     // Get rekt
     await targetUser.roles.add(MUTED_ROLE_ID);
@@ -46,17 +41,15 @@ export default defineCommand({
     // Send the embed
     sendMuteEmbed(message, targetUser, duration, reason);
 
-    if (duration !== "Infinity") {
-      setTimeout(async () => {
-        if (!targetUser.roles.cache.has(MUTED_ROLE_ID)) return;
-        try {
-          await targetUser.roles.remove(MUTED_ROLE_ID);
-          return sendUnmuteEmbed(message, targetUser);
-        } catch (error) {
-          return logger.error(error as string);
-        }
-      }, msDurationInt);
-    }
+    setTimeout(async () => {
+      if (!targetUser.roles.cache.has(MUTED_ROLE_ID)) return;
+      try {
+        await targetUser.roles.remove(MUTED_ROLE_ID);
+        return sendUnmuteEmbed(message, targetUser);
+      } catch (error) {
+        return logger.error(error as string);
+      }
+    }, parseInt(msDuration));
   },
 });
 
