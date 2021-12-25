@@ -1,5 +1,5 @@
-// @ts-ignore
 import normalize from "@taku.moe/pura";
+// @ts-ignore
 import badWords from "../assets/badWords.json";
 import goodWords from "../assets/goodWords.json";
 import { IMessage } from "../types";
