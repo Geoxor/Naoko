@@ -15,7 +15,7 @@ export default defineCommand({
       );
       return { files: [attachment] };
     } catch {
-      return ":x: Sorry, this command is not supported in this environment."
+      return ":x: Sorry, this command is not supported in this environment.";
     }
   },
 });
