@@ -34,7 +34,7 @@ export default definePlugin({
         .setDescription(announcementMessage)
         .setFooter("Generated with Announcer plugin made by Qexat");
 
-      await announcementChannel.send({ content: mention, embeds: [embed] }).catch((err) => {
+      announcementChannel.send({ content: mention, embeds: [embed] }).catch((err) => {
         logger.error(err);
         return ":x: Could not create the announcement message.";
       });
