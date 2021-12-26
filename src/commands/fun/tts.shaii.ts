@@ -8,10 +8,14 @@ export default defineCommand({
   usage: "tts <sentence>",
   description: "Turn a string into text to speech",
   execute: async (message) => {
-    const attachment = new Discord.MessageAttachment(
-      await tts(message.args.join(" ")),
-      `${message.args.slice(0, 6).join(" ")}.wav`
-    );
-    return { files: [attachment] };
+    try {
+      const attachment = new Discord.MessageAttachment(
+        await tts(message.args.join(" ")),
+        `${message.args.slice(0, 6).join(" ")}.wav`
+      );
+      return { files: [attachment] };
+    } catch {
+      return ":x: Sorry, this command is not supported in this environment."
+    }
   },
 });
