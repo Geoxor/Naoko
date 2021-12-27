@@ -81,7 +81,11 @@ class Shaii {
     });
     this.bot.on("messageCreate", async (message) => {
       // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
-      this.onMessageCreate(message);
+      try {
+        this.onMessageCreate(message);
+      } catch (error) {
+        console.log(error);
+      }
     });
     this.bot.on("messageDelete", async (message) => {
       if (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID) {
