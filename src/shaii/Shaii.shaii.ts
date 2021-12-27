@@ -63,7 +63,7 @@ class Shaii {
     ],
   });
   constructor() {
-    console.log(this.plugins);
+    //console.log(this.plugins);
     this.loadCommands();
     for (const event of DISCORD_EVENTS) {
       this.bot.on(event as string, (data) => {

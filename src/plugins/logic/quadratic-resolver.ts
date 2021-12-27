@@ -22,7 +22,6 @@ export class D2Polynom {
 
     let i = 0;
     factors.forEach((factor) => {
-      console.log(factors.slice(i).indexOf(factor) !== factors.slice(i).length - 1);
       if (factor !== +(factors.slice(i).indexOf(factor) !== factors.slice(i).length - 1)) {
         beautifiedFactors.push(`${["-", "+"][+(factor === Math.abs(factor))]} ${Math.abs(factor)}`);
       } else {
@@ -30,7 +29,7 @@ export class D2Polynom {
       }
       i++; // we do a bit of trolling
     });
-    console.log(factors, beautifiedFactors);
+    
     return beautifiedFactors;
   };
 
