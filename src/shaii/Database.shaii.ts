@@ -47,7 +47,7 @@ const schema = new Schema<IUser>({
 
 export interface IUserFunctions {
   addBattleRewards(rewards: IBattleUserRewards): Promise<IUser>;
-  mute(muter_id: string, mutee_id: string, length: string, reason?: string): Promise<IUser>;
+  mute(muter_id: string, mutee_id: string, duration?: string, reason?: string): Promise<IUser>;
   unmute(unmuter_id: string, unmutee_id: string, reason?: string): Promise<IUser>;
   kick(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
   ban(kicker_id: string, kickee_id: string, reason?: string): Promise<IUser>;
@@ -91,7 +91,7 @@ schema.statics.findOneOrCreate = async function (member: Discord.GuildMember | D
 schema.statics.mute = async function (
   muter_id: string,
   mutee_id: string,
-  duration: string,
+  duration: string = "Infinity",
   reason: string = "No reason given"
 ) {
   const mutee = await User.findOne({ discord_id: mutee_id });
