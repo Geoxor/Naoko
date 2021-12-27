@@ -29,7 +29,7 @@ export class D2Polynom {
       }
       i++; // we do a bit of trolling
     });
-    
+
     return beautifiedFactors;
   };
 
@@ -54,7 +54,7 @@ export class D2Polynom {
 
     if (this.delta > 0) {
       roots = [(-this.b + Math.sqrt(this.delta)) / (2 * this.a), (-this.b - Math.sqrt(this.delta)) / (2 * this.a)];
-    } else if (this.delta == 0) {
+    } else if (this.delta === 0) {
       roots = [-this.b / (2 * this.a)];
     }
 
