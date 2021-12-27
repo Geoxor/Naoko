@@ -83,8 +83,8 @@ export class D2Polynom {
   }
 }
 
-const cleanFactor = (member: string, expToRemove: RegExp, defaultValue?: number): number => {
-  const stringFactor = member.replace(expToRemove, "").trim();
+const cleanFactor = (eqMember: string, expToRemove: RegExp, defaultValue?: number): number => {
+  const stringFactor = eqMember.replace(expToRemove, "").trim();
 
   if (defaultValue && stringFactor.length === 0) return defaultValue;
   try {
@@ -107,10 +107,10 @@ export const extractFactors = (polynom: string): number[] => {
   let a = 0,
     b = 0,
     c = 0;
-  cleanPolynom.forEach((member) => {
-    if (member.replace(/x²|x\^2/g, "") !== member) a = cleanFactor(member, /x²|x\^2/g, 1);
-    else if (member.replace("x", "") !== member) b = cleanFactor(member, /x/g, 1);
-    else c = cleanFactor(member, / /g, 0);
+  cleanPolynom.forEach((eqMember) => {
+    if (eqMember.replace(/x²|x\^2/g, "") !== eqMember) a = cleanFactor(eqMember, /x²|x\^2/g, 1);
+    else if (eqMember.replace("x", "") !== eqMember) b = cleanFactor(eqMember, /x/g, 1);
+    else c = cleanFactor(eqMember, / /g, 0);
   });
 
   if (a === 0 || b == 0) return [];
