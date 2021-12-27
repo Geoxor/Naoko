@@ -13,13 +13,13 @@ const solve = defineCommand({
   execute: async (message) => {
     if (message.args.length === 0) return `What do you want to solve ${randomChoice(SLURS)}`;
     let [a, b, c] = extractFactors(message.args.join(" "));
-    if (!a || !b || !c) return `I can only resolve polynoms of degree 2 ${randomChoice(SLURS)}`;
+    if (!a || !b || !c) return `I can only solve polynoms of degree 2 ${randomChoice(SLURS)}`;
     return new D2Polynom(a, b, c).solve();
   },
 });
 
 export default definePlugin({
-  name: "@qexat/eqresolver",
+  name: "@qexat/quadratic-resolver",
   version: "1.0.0",
   command: [solve],
 });
