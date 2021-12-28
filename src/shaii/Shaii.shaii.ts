@@ -257,6 +257,8 @@ class Shaii {
   }
 
   private onMessageCreate(message: Discord.Message) {
+    console.log(message.content);
+
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
         if (
