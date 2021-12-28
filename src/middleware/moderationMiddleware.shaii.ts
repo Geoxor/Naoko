@@ -11,7 +11,6 @@ const checks = [isFreeNitro, isBadWord, isDiscordInvite, isMuted, isIP];
 
 export default async function (message: IMessage, next: (message: IMessage) => any): Promise<void> {
   try {
-    if (message.author.bot) return next(message);
     if (
       message.guild?.id !== GEOXOR_GUILD_ID &&
       message.guild?.id !== TESTING_GUILD_ID &&

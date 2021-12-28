@@ -13,8 +13,9 @@ export async function userMiddleware(message: Discord.Message, next: (message: I
         logger.error("Couldn't give Ghosts role to the member.");
       });
     }
-    next(message as IMessage);
   }
+
+  next(message as IMessage);
 }
 
 export function hasGhostsRole(member: Discord.GuildMember): boolean {
