@@ -23,7 +23,7 @@ export class D2Polynom {
     let i = 0;
     factors.forEach((factor) => {
       if (factor !== +(factors.slice(i).indexOf(factor) !== factors.slice(i).length - 1)) {
-        beautifiedFactors.push(`${["-", "+"][+(factor === Math.abs(factor))]} ${Math.abs(factor)}`);
+        beautifiedFactors.push(`${["-", "+", ""][+(factor === Math.abs(factor))+ +(factor === this.a)]} ${Math.abs(factor)}`.trim());
       } else {
         beautifiedFactors.push("");
       }

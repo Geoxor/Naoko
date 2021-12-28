@@ -1,4 +1,5 @@
 import axios from "axios";
+import { table } from "console";
 import Discord, { MessageMentions } from "discord.js";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
@@ -272,6 +273,27 @@ export function msToFullTime(ms: number): string {
  */
 export function randomChoice<T>(l: Array<T>): T {
   return l[~~(Math.random() * l.length)];
+}
+
+/**
+ * Picks a random item from the weighted array of a map values
+ * @example
+ *    new Map().set(0.7, "banana").set(0.2, "apple").set(0.1, "mango")
+ *    "banana" has 7 out of 10 chances to be selected, "apple" 2 out of 10 and "mango" 1 out of 10. 
+ * @author Qexat 
+ */
+export function weightedRandomChoice<T>(l: Map<number, T>): T {
+  let wl: Array<T> = [];
+
+  l.forEach((value, weight) => {
+    for (let j = 0; j < (weight * 100); j++) {
+      wl.push(value);
+    }
+  });
+
+  console.log(wl);
+
+  return randomChoice(wl);
 }
 
 /**
