@@ -291,8 +291,6 @@ export function weightedRandomChoice<T>(l: Map<number, T>): T {
     }
   });
 
-  console.log(wl);
-
   return randomChoice(wl);
 }
 
