@@ -8,7 +8,6 @@ import fs from "fs";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 import Jimp from "jimp";
 import path from "path";
-import { speak } from "windows-tts";
 import logger from "../shaii/Logger.shaii";
 import { defineCommand, IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
 const replaceLast = require("replace-last");
@@ -543,15 +542,6 @@ export function getMostRelevantImageURL(message: Discord.Message) {
     message.author.displayAvatarURL(defaultImageOptions) ||
     message.author.defaultAvatarURL
   );
-}
-
-/**
- * Generates text to speech wav buffer from a string
- * @param string the string to text to speech
- * @author Geoxor
- */
-export async function tts(string: string): Promise<Buffer> {
-  return speak(string);
 }
 
 export function findIndexOfURL(array: string[]) {

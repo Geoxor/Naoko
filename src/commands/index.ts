@@ -17,7 +17,6 @@ import rigbattle from "./moderation/rigbattle.shaii";
 // fun commands
 import anime from "./fun/anime.shaii";
 import dicksize from "./fun/dicksize.shaii";
-import tts from "./fun/tts.shaii";
 import traceAnime from "./fun/trace.shaii";
 import match from "./fun/match.shaii";
 import say from "./fun/say.shaii";
@@ -69,7 +68,6 @@ export const getCommands = async () => {
     stack,
     whois,
     logs,
-    tts,
     match,
     plugins,
     ping,
