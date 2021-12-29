@@ -31,11 +31,12 @@ export default defineCommand({
       .addFields(
         { name: "OS", value: `${distro} ${release}` },
         { name: "CPU", value: `x${cores} ${cpuManufacturer} ${brand}` },
-        { name: "GPU", value: `${gpuModel} ${vram}MB` },
         { name: "RAM", value: `${~~(totalRam / 1024 / 1024 / 1024)}GB` },
         { name: "Motherboard", value: `${moboManufacturer} ${model}` },
         { name: "Uptime", value: msToTime(Date.now() - startTime) }
       );
+
+    gpuModel && vram && embed.addFields({ name: "GPU", value: `${gpuModel} ${vram}MB` });
 
     return { embeds: [embed] };
   },
