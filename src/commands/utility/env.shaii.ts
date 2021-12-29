@@ -20,7 +20,8 @@ export default defineCommand({
     const { distro, platform, release } = systemInfo.os;
     const { manufacturer: cpuManufacturer, cores, brand } = systemInfo.cpu;
     const { manufacturer: moboManufacturer, model } = systemInfo.system;
-    const { model: gpuModel, vram } = systemInfo.graphics.controllers[0];
+    const gpuModel = systemInfo.graphics.controllers?.[0]?.model;
+    const vram = systemInfo.graphics.controllers?.[0]?.vram;
     const totalRam = systemInfo.memLayout.reduce((acc, mem) => acc + mem.size, 0);
 
     const embed = new Discord.MessageEmbed()
