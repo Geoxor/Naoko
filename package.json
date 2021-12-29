@@ -5,6 +5,7 @@
   "main": "./src/shaii.ts",
   "scripts": {
     "test": "ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
+    "start": "ts-node -T ./src/shaii.ts",
     "dev": "nodemon ./src/shaii.ts",
     "setup": "ts-node ./src/setup.shaii.ts",
     "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.shaii.ts",
