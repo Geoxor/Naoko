@@ -16,7 +16,8 @@ export default defineCommand({
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to mute";
     if (targetUser.id === message.author.id) return "You can't mute yourself";
-    if (targetUser.permissions.has("ADMINISTRATOR")) return "You can't mute other admins";
+    if (targetUser.permissions.has("ADMINISTRATOR") || targetUser.permissions.has("MODERATE_MEMBERS"))
+      return "You can't mute other admins";
     if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
     let duration = message.args[0];
