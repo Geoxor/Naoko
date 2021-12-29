@@ -1,8 +1,7 @@
 import Discord from "discord.js";
-import { defineCommand } from "../types";
-import { definePlugin } from "../shaii/Plugin.shaii";
-import { url } from "inspector";
 import logger from "../shaii/Logger.shaii";
+import { definePlugin } from "../shaii/Plugin.shaii";
+import { defineCommand } from "../types";
 
 export default definePlugin({
   name: "@qexat/announcer",

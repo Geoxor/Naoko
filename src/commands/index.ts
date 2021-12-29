@@ -4,8 +4,6 @@
 
 import { genCommands } from "../logic/logic.shaii";
 import { imageProcessors } from "../logic/imageProcessors.shaii";
-import { textProcessors } from "../logic/textProcessors.shaii";
-import logger from "../shaii/Logger.shaii";
 
 // economy game commands
 // import rank from "./economyGames/rank.shaii";

@@ -1,5 +1,5 @@
-import { defineCommand } from "../types";
 import { definePlugin } from "../shaii/Plugin.shaii";
+import { defineCommand } from "../types";
 
 export default definePlugin({
   name: "@geoxor/avatar",
