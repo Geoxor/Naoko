@@ -32,9 +32,9 @@ export default definePlugin({
 2. Install bloatware
 
 ```
-sudo apt install -y build-essential libxi-dev libxext-dev libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev
+sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev libjpeg-dev librsvg2-dev mesa-common-dev
 ```
-
-3. Configure your `config.shaii.json` in `src`
-4. `npm i` to install dependencies
-5. `npm run dev` to run the bot
+3. Use node.js 16.6.0 `nvm install 16.6.0 && nvm use 16.6.0`
+4. Configure your `config.shaii.json` in `src`
+5. `CXX=10 npm ci` to install dependencies
+6. `npm run dev` to run the bot
