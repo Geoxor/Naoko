@@ -32,7 +32,7 @@ export default definePlugin({
 2. Install bloatware
 
 ```
-sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev libjpeg-dev librsvg2-dev
+sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev libjpeg-dev librsvg2-dev mesa-common-dev
 ```
 3. Use node.js 16.6.0 `nvm install 16.6.0 && nvm use 16.6.0`
 4. Configure your `config.shaii.json` in `src`
