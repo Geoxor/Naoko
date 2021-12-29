@@ -8,6 +8,7 @@ import { defineCommand, IMessage } from "../../types";
 
 export default defineCommand({
   name: "mute",
+  aliases: ["stfu", "to", "timeout"],
   category: "MODERATION",
   usage: "mute <@user> <duration> <reason>",
   description: "Mute a user",
