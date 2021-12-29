@@ -7,6 +7,7 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
   name: "ban",
+  aliases: ["yeet"],
   category: "MODERATION",
   usage: "ban <@user> <reason>",
   description: "Bans a user",
