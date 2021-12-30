@@ -12,7 +12,7 @@ const report = defineCommand({
   category: "UTILITY",
   execute: async (message) => {
     if (message.args.length === 0) return "You need an user to report and a reason.";
-    let targetUser = message.client.guilds.cache.get("897185485313699891")!.members.cache.get(message.args[0]);
+    let targetUser = message.client.guilds.cache.get(GEOXOR_GUILD_ID)!.members.cache.get(message.args[0]);
     if (!targetUser) return `User with ID ${message.args[0]} is not in the guild.`;
     if (targetUser.id === message.author.id) return "You cannot report yourself.";
     message.args.shift();
