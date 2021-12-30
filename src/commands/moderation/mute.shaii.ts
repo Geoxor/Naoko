@@ -1,6 +1,6 @@
 import Discord, { MessageEmbed } from "discord.js";
 import { MUTED_ROLE_ID, SHAII_LOGO } from "../../constants";
-import { durationToMilliseconds } from "../../logic/logic.shaii";
+import { durationToMilliseconds, msToFullTime } from "../../logic/logic.shaii";
 import { User } from "../../shaii/Database.shaii";
 import logger from "../../shaii/Logger.shaii";
 import Shaii from "../../shaii/Shaii.shaii";
@@ -41,7 +41,7 @@ export default defineCommand({
     );
 
     // Send the embed
-    sendMuteEmbed(message, targetUser, duration, reason);
+    sendMuteEmbed(message, targetUser, msDuration, reason);
   },
 });
 
@@ -57,7 +57,7 @@ function sendMuteEmbed(
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
     .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
     .setTimestamp()
-    .addField("Duration", duration, true)
+    .addField("Duration", msToFullTime(parseInt(duration)), true)
     .addField("Reason", reason, true)
     .setFooter(Shaii.version, SHAII_LOGO)
     .setColor("#FF0000");
