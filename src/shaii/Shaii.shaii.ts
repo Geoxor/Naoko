@@ -1,4 +1,4 @@
-import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
+import Discord, { DMChannel, Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import fs from "fs";
 import levenshtein from "js-levenshtein";
 import path from "path";
@@ -60,7 +60,11 @@ class Shaii {
       Intents.FLAGS.GUILD_MESSAGES,
       Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
       Intents.FLAGS.GUILD_VOICE_STATES,
+      Intents.FLAGS.DIRECT_MESSAGES,
+      Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+      Intents.FLAGS.DIRECT_MESSAGE_TYPING,
     ],
+    partials: ["CHANNEL"],
   });
   constructor() {
     //console.log(this.plugins);
@@ -280,8 +284,6 @@ class Shaii {
           message.attachments.size === 0
         )
           return message.delete().catch(() => {});
-
-        // Reply with a funny message if they mention her at the start of the message
 
         commandMiddleware(message, async (message) => {
           const command =

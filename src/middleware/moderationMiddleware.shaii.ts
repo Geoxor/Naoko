@@ -1,3 +1,4 @@
+import Discord from "discord.js";
 import { GEOXOR_GUILD_ID, QBOT_DEV_GUILD_ID, TESTING_GUILD_ID } from "../constants";
 import { isBadWord } from "../moderation/isBadWord.shaii";
 import { isDiscordInvite } from "../moderation/isDiscordInvite.shaii";
@@ -12,9 +13,11 @@ const checks = [isFreeNitro, isBadWord, isDiscordInvite, isMuted, isIP];
 export default async function (message: IMessage, next: (message: IMessage) => any): Promise<void> {
   try {
     if (
-      message.guild?.id !== GEOXOR_GUILD_ID &&
-      message.guild?.id !== TESTING_GUILD_ID &&
-      message.guild?.id !== QBOT_DEV_GUILD_ID
+      !(
+        message.guild?.id === GEOXOR_GUILD_ID ||
+        message.guild?.id === TESTING_GUILD_ID ||
+        message.guild?.id === QBOT_DEV_GUILD_ID
+      )
     )
       return;
     for (let i = 0; i < checks.length; i++) {
