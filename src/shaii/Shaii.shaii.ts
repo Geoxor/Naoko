@@ -1,4 +1,4 @@
-import Discord, { DMChannel, Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
+import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import fs from "fs";
 import levenshtein from "js-levenshtein";
 import path from "path";
@@ -17,7 +17,7 @@ import {
   QEXAT_ID,
   SHAII_ID,
   SLURS,
-  SVRGE_ID,
+  SVRGE_ID
 } from "../constants";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";

@@ -1,9 +1,9 @@
-import Discord, { Guild } from "discord.js";
-import { defineCommand } from "../types";
-import { definePlugin } from "../shaii/Plugin.shaii";
-import { userMiddleware } from "../middleware/userMiddleware.shaii";
-import commandMiddleware from "../middleware/commandMiddleware.shaii";
+import Discord from "discord.js";
 import { GEOXOR_GUILD_ID, GEOXOR_STAFF_CHANNEL_ID } from "../constants";
+import commandMiddleware from "../middleware/commandMiddleware.shaii";
+import { userMiddleware } from "../middleware/userMiddleware.shaii";
+import { definePlugin } from "../shaii/Plugin.shaii";
+import { defineCommand } from "../types";
 
 const report = defineCommand({
   name: "report",
