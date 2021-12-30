@@ -40,19 +40,26 @@ export function timeSince(date: number) {
 export function durationToMilliseconds(duration: string): string {
   const [digits, abbr] = duration.match(/\d{1,3}|\D/g) as string[];
   switch (abbr) {
-    case "s" || "S":
+    case "s":
+    case "S":
       return (parseInt(digits) * 1000).toString();
-    case "m" || "M":
+    case "m":
+    case "M":
       return (parseInt(digits) * 60 * 1000).toString();
-    case "h" || "H":
+    case "h":
+    case "H":
       return (parseInt(digits) * 3600 * 1000).toString();
-    case "d" || "D":
+    case "d":
+    case "D":
       return (parseInt(digits) * 86400 * 1000).toString();
-    case "w" || "W":
+    case "w":
+    case "W":
       return (parseInt(digits) * 604800 * 1000).toString();
-    case "t" || "T": // t stands for month since m is already taken for minutes
+    case "t": // t stands for month since m is already taken for minutes
+    case "T":
       return (parseInt(digits) * 2592000 * 1000).toString();
-    case "y" || "Y":
+    case "y":
+    case "Y":
       return (parseInt(digits) * 31536000 * 1000).toString();
     default:
       logger.error("Invalid duration");
