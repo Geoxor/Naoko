@@ -552,8 +552,10 @@ export function getMostRelevantImageURL(message: Discord.Message) {
 
 /**
  * Gets the user server profile picture > global profile picture > default avatar
- * @param array 
- * @returns 
+ * @param user user to get the profile picture
+ * @param guild guild where the user is so we can get the server profile picture 
+ * @returns link to the profile picture
+ * @author Qexat
  */
 export async function getUserAvatarURL(user: Discord.User, guild?: Discord.Guild | null): Promise<string> {
   let link;
