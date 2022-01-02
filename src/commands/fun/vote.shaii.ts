@@ -20,11 +20,11 @@ export default defineCommand({
       .setColor("#ff00b6")
       .setTitle(voteContext)
       .setAuthor({
-        name: `${message.author.username} asks...`, 
-        iconURL: message.author.avatarURL() || message.author.defaultAvatarURL
+        name: `${message.author.username} asks...`,
+        iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
       })
       .setFooter({
-        text: `Vote with the reactions bellow, results in ${VOTE_TIME / 1000} seconds`
+        text: `Vote with the reactions bellow, results in ${VOTE_TIME / 1000} seconds`,
       });
 
     try {

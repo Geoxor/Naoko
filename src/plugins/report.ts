@@ -35,15 +35,13 @@ const report = defineCommand({
       .setDescription(`ID: ${targetUser.id}`)
       .addField("Reason", reason)
       .setFooter({
-        text: "Report abuse will be punished"
+        text: "Report abuse will be punished",
       })
       .setColor("#FFAF2F");
 
     const out = { content: content || "No file was attached.", embeds: [embed] };
     (
-      message.client.guilds.cache
-        .get(GEOXOR_GUILD_ID)!
-        .channels.cache.get(GEOXOR_STAFF_CHANNEL_ID) as Discord.TextChannel
+      message.client.guilds.cache.get(GEOXOR_GUILD_ID)!.channels.cache.get(GEOXOR_STAFF_CHANNEL_ID) as Discord.TextChannel
     ).send(out);
     return out;
   },

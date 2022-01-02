@@ -194,7 +194,7 @@ export const commands3D = {
     });
 
     return scene.render();
-  }
+  },
 };
 
 export class SceneProcessor {

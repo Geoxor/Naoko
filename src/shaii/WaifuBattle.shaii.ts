@@ -195,7 +195,7 @@ export default class WaifuBattle {
       .addField("Rewards", this.getRewardString(), false)
       .addField("Participants", this.getParticipantsString(), false)
       .setFooter({
-        text: `${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`
+        text: `${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`,
       });
   }
 

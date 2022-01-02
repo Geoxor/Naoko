@@ -32,7 +32,7 @@ export default definePlugin({
         })
         .setDescription(announcementMessage)
         .setFooter({
-          text: "Generated with Announcer plugin made by Qexat"
+          text: "Generated with Announcer plugin made by Qexat",
         });
 
       announcementChannel.send({ content: mention, embeds: [embed] }).catch((err) => {

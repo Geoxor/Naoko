@@ -17,7 +17,7 @@ import {
   QEXAT_ID,
   SHAII_ID,
   SLURS,
-  SVRGE_ID
+  SVRGE_ID,
 } from "../constants";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";

@@ -27,13 +27,13 @@ export default defineCommand({
       .setThumbnail(targetUser.avatarURL() || message.author.defaultAvatarURL)
       .setAuthor({
         name: message.author.tag,
-        iconURL: message.author.avatarURL() || message.author.defaultAvatarURL
+        iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
       })
       .setTimestamp()
       .addField("Reason", reason || "No reason given", true)
       .setFooter({
         text: Shaii.version,
-        iconURL: SHAII_LOGO
+        iconURL: SHAII_LOGO,
       })
       .setColor("#00FF00");
 

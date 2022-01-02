@@ -64,14 +64,14 @@ function sendMuteEmbed(
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
     .setAuthor({
       name: message.author.tag,
-      iconURL: message.author.avatarURL() || message.author.defaultAvatarURL
+      iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
     })
     .setTimestamp()
     .addField("Duration", msToFullTime(parseInt(duration)), true)
     .addField("Reason", reason, true)
     .setFooter({
       text: Shaii.version,
-      iconURL: SHAII_LOGO
+      iconURL: SHAII_LOGO,
     })
     .setColor("#FF0000");
 

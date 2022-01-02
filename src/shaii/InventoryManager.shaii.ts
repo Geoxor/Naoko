@@ -25,7 +25,7 @@ export default class InventoryManager {
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: `${user.username}'s Statistics`,
-        iconURL: user.avatarURL() || user.defaultAvatarURL
+        iconURL: user.avatarURL() || user.defaultAvatarURL,
       })
       .setColor("#BF360C")
       .setThumbnail(INVENTORY_ICON)

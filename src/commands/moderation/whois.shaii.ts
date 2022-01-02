@@ -24,7 +24,7 @@ export default defineCommand({
     const embed = new Discord.MessageEmbed()
       .setAuthor({
         name: `Shaii v${version}`,
-        iconURL: message.client.user?.displayAvatarURL()
+        iconURL: message.client.user?.displayAvatarURL(),
       })
       .setTitle(`Who is: ${user.username}#${user.discriminator}`)
       .setDescription(user.toString())

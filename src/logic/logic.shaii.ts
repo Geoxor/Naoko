@@ -553,7 +553,7 @@ export function getMostRelevantImageURL(message: Discord.Message) {
 /**
  * Gets the user server profile picture > global profile picture > default avatar
  * @param user user to get the profile picture
- * @param guild guild where the user is so we can get the server profile picture 
+ * @param guild guild where the user is so we can get the server profile picture
  * @returns link to the profile picture
  * @author Qexat
  */
@@ -563,8 +563,8 @@ export async function getUserAvatarURL(user: Discord.User, guild?: Discord.Guild
   if (guild) {
     const req = await axios.get(`https://discord.com/api/guilds/${guild.id}/members/${user.id}`, {
       headers: {
-        Authorization: `Bot ${config.token}`
-      }
+        Authorization: `Bot ${config.token}`,
+      },
     });
 
     if (req.data.avatar) {
@@ -576,7 +576,6 @@ export async function getUserAvatarURL(user: Discord.User, guild?: Discord.Guild
 
   return link + "?size=2048";
 }
-
 
 export function findIndexOfURL(array: string[]) {
   for (let i = 0; i < array.length; i++) {

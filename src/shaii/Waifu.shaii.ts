@@ -52,7 +52,7 @@ export default class Waifu {
       .addField("Total Attacks Dealt: ", this.attacksDealt.toString(), true)
       .setAuthor({
         name: this.name,
-        iconURL: SHAII_LOGO
+        iconURL: SHAII_LOGO,
       });
   }
 
@@ -65,7 +65,7 @@ export default class Waifu {
       .setImage(`attachment://waifu.png`)
       .setAuthor({
         name: this.name,
-        iconURL: SHAII_LOGO
+        iconURL: SHAII_LOGO,
       });
   }
 

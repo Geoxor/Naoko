@@ -50,7 +50,7 @@ export function logDelete(
     .setTitle(`Message deleted in #${message.channel.name}`)
     .setAuthor({
       name: message.author!.username,
-      iconURL: message.author?.avatarURL() || message.author?.defaultAvatarURL
+      iconURL: message.author?.avatarURL() || message.author?.defaultAvatarURL,
     })
     .setThumbnail(`${message.author?.avatarURL()}`)
     .addFields(
