@@ -183,6 +183,18 @@ export const commands3D = {
 
     return scene.render();
   },
+
+  async helicopter(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.0, y: Math.random() / 3 },
+      camera: { z: 10 },
+      shading: true,
+      geometry: cache.objects.helicopter,
+      texture,
+    });
+
+    return scene.render();
+  }
 };
 
 export class SceneProcessor {
