@@ -1,4 +1,5 @@
 import axios from "axios";
+import config from "../shaii/Config.shaii";
 import Discord, { MessageMentions } from "discord.js";
 // @ts-ignore this has broken types :whyyyyyyyyyyy:
 import fileType from "file-type";
@@ -545,10 +546,35 @@ export function getMostRelevantImageURL(message: Discord.Message) {
     message.stickers.first()?.url ||
     getFirstEmojiURL(message.content) ||
     message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
-    message.author.displayAvatarURL(defaultImageOptions) ||
-    message.author.defaultAvatarURL
+    getUserAvatarURL(message.author, message.guild)
   );
 }
+
+/**
+ * Gets the user server profile picture > global profile picture > default avatar
+ * @param array 
+ * @returns 
+ */
+export async function getUserAvatarURL(user: Discord.User, guild?: Discord.Guild | null): Promise<string> {
+  let link;
+
+  if (guild) {
+    const req = await axios.get(`https://discord.com/api/guilds/${guild.id}/members/${user.id}`, {
+      headers: {
+        Authorization: `Bot ${config.token}`
+      }
+    });
+
+    if (req.data.avatar) {
+      link = `https://cdn.discordapp.com/guilds/${guild.id}/users/${user.id}/avatars/${req.data.avatar}.png`;
+    }
+  }
+
+  if (!link) link = user.avatarURL() || user.defaultAvatarURL;
+
+  return link + "?size=2048";
+}
+
 
 export function findIndexOfURL(array: string[]) {
   for (let i = 0; i < array.length; i++) {

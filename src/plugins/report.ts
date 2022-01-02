@@ -34,7 +34,9 @@ const report = defineCommand({
       .setTitle(`Report ${targetUser.user.username}`)
       .setDescription(`ID: ${targetUser.id}`)
       .addField("Reason", reason)
-      .setFooter("Report abuse will be punished")
+      .setFooter({
+        text: "Report abuse will be punished"
+      })
       .setColor("#FFAF2F");
 
     const out = { content: content || "No file was attached.", embeds: [embed] };

@@ -15,14 +15,18 @@ export default definePlugin({
     execute: (message) => {
       const embed = new Discord.MessageEmbed()
         .setColor("#d2185e")
-        .setAuthor(`Fun Facts by azur`)
+        .setAuthor({
+          name: `Fun Facts by azur`
+        })
         .setThumbnail(`https://cdn.discordapp.com/attachments/806300597338767450/879888079832375326/book.gif`)
         .addFields({
           name: "Fun fact:",
           value: `${randomChoice(facts)}`,
           inline: true,
         })
-        .setFooter(`Total of ${facts.length} fun facts`);
+        .setFooter({
+          text: `Total of ${facts.length} fun facts`
+        });
 
       return { embeds: [embed] };
     },

@@ -34,6 +34,7 @@ export default defineCommand({
 
     // Get rekt
     await targetUser.timeout(parseInt(msDuration), reason);
+    await targetUser.roles.add(MUTED_ROLE_ID);
 
     // Keep track of the mute
     await User.mute(message.author.id, targetUser.id, duration, reason).catch(() =>
@@ -42,6 +43,12 @@ export default defineCommand({
 
     // Send the embed
     sendMuteEmbed(message, targetUser, msDuration, reason);
+
+    setInterval(async () => {
+      if (!targetUser.isCommunicationDisabled()) {
+        return await targetUser.roles.remove(MUTED_ROLE_ID);
+      }
+    }, 15000);
   },
 });
 
@@ -55,11 +62,17 @@ function sendMuteEmbed(
     .setTitle(`Mute - ${targetUser.user.tag}`)
     .setDescription(`ID: ${targetUser.user.id}, <@${targetUser.user.id}>`)
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
-    .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
+    .setAuthor({
+      name: message.author.tag,
+      iconURL: message.author.avatarURL() || message.author.defaultAvatarURL
+    })
     .setTimestamp()
     .addField("Duration", msToFullTime(parseInt(duration)), true)
     .addField("Reason", reason, true)
-    .setFooter(Shaii.version, SHAII_LOGO)
+    .setFooter({
+      text: Shaii.version,
+      iconURL: SHAII_LOGO
+    })
     .setColor("#FF0000");
 
   targetUser
@@ -80,7 +93,10 @@ export function sendUnmuteEmbed(
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
     .setTimestamp()
     .addField("Reason", reason || "No reason given", true)
-    .setFooter(Shaii.version, SHAII_LOGO)
+    .setFooter({
+      text: Shaii.version,
+      iconURL: SHAII_LOGO,
+    })
     .setColor("#00FF00");
 
   return message.channel.send({ embeds: [embed] });

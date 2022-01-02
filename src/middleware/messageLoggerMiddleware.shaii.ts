@@ -48,7 +48,10 @@ export function logDelete(
   const embed = new Discord.MessageEmbed()
     .setColor("#eb4034")
     .setTitle(`Message deleted in #${message.channel.name}`)
-    .setAuthor(message.author!.username, message.author?.avatarURL() || message.author?.defaultAvatarURL)
+    .setAuthor({
+      name: message.author!.username,
+      iconURL: message.author?.avatarURL() || message.author?.defaultAvatarURL
+    })
     .setThumbnail(`${message.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${message.author?.id}>` },

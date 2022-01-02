@@ -23,7 +23,10 @@ export default class InventoryManager {
     const { statistics } = dbUser!;
 
     const embed = new Discord.MessageEmbed()
-      .setAuthor(`${user.username}'s Statistics`, user.avatarURL() || user.defaultAvatarURL)
+      .setAuthor({
+        name: `${user.username}'s Statistics`,
+        iconURL: user.avatarURL() || user.defaultAvatarURL
+      })
       .setColor("#BF360C")
       .setThumbnail(INVENTORY_ICON)
       .setTitle(`${user.username}'s Statistics`)

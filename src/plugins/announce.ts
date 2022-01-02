@@ -31,7 +31,9 @@ export default definePlugin({
           iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
         })
         .setDescription(announcementMessage)
-        .setFooter("Generated with Announcer plugin made by Qexat");
+        .setFooter({
+          text: "Generated with Announcer plugin made by Qexat"
+        });
 
       announcementChannel.send({ content: mention, embeds: [embed] }).catch((err) => {
         logger.error(err);
