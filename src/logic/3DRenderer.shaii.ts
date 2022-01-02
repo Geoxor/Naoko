@@ -195,6 +195,18 @@ export const commands3D = {
 
     return scene.render();
   },
+
+  async skull(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.0, y: Math.random() / 8},
+      camera: { z: 2.5 },
+      shading: true,
+      geometry: cache.objects.skull,
+      texture,
+    });
+
+    return scene.render();
+  }
 };
 
 export class SceneProcessor {
