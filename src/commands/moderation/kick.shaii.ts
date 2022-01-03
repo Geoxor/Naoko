@@ -24,16 +24,10 @@ export default defineCommand({
       .setTitle(`Kick - ${targetUser.user.tag}`)
       .setDescription(`ID: ${targetUser.user.id}, <@${targetUser.user.id}>`)
       .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
-      .setAuthor({
-        name: message.author.tag,
-        iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
-      })
+      .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
       .setTimestamp()
       .addField("Reason", reason || "No reason given", true)
-      .setFooter({
-        text: Shaii.version,
-        iconURL: SHAII_LOGO,
-      })
+      .setFooter(Shaii.version, SHAII_LOGO)
       .setColor("#FF4500");
 
     targetUser

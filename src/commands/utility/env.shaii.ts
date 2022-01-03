@@ -25,10 +25,7 @@ export default defineCommand({
     const totalRam = systemInfo.memLayout.reduce((acc, mem) => acc + mem.size, 0);
 
     const embed = new Discord.MessageEmbed()
-      .setAuthor({
-        name: `Shaii v${version}`,
-        iconURL: SHAII_LOGO,
-      })
+      .setAuthor(`Shaii v${version}`, SHAII_LOGO)
       .setColor("#FF00B6")
       .setThumbnail(platform === "win32" || platform === "win64" ? WINDOWS_LOGO : LINUX_LOGO)
       .addFields(

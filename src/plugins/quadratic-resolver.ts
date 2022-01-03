@@ -26,6 +26,8 @@ const solve = defineCommand({
         return "https://cdn.discordapp.com/attachments/920806500828606474/925491933969809449/you-should-install-linux-now.png";
       case "where to find keqing":
         return "The equation where to find keqing has 1 solution in R: touch grass";
+      case "lily":
+        return "i forgor :skull:";
     }
 
     let [a, b, c] = extractFactors(message.args.join(" "));

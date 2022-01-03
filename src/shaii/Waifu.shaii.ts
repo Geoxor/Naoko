@@ -50,10 +50,7 @@ export default class Waifu {
       .setTitle(`⚠️ ${this.name} still has *${~~this.currentHp}* HP!`)
       .addField("Current HP: ", this.currentHp.toFixed(2), true)
       .addField("Total Attacks Dealt: ", this.attacksDealt.toString(), true)
-      .setAuthor({
-        name: this.name,
-        iconURL: SHAII_LOGO,
-      });
+      .setAuthor(this.name, SHAII_LOGO);
   }
 
   private prepareUi() {
@@ -63,10 +60,7 @@ export default class Waifu {
       .addField("Rarity", `${this.emoji} ${this.rarity}`, true)
       .setDescription(`${this.maxHp} HP ${this.armor} AP`)
       .setImage(`attachment://waifu.png`)
-      .setAuthor({
-        name: this.name,
-        iconURL: SHAII_LOGO,
-      });
+      .setAuthor(this.name, SHAII_LOGO);
   }
 
   public dealDamage(damage: number) {

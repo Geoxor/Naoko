@@ -14,10 +14,7 @@ export default defineCommand({
   description: "See loaded plugins",
   execute: () => {
     const embed = new Discord.MessageEmbed()
-      .setAuthor({
-        name: `Shaii v${version}`,
-        iconURL: SHAII_LOGO,
-      })
+      .setAuthor(`Shaii v${version}`, SHAII_LOGO)
       .setThumbnail(PLUGIN_ICON)
       .setColor("#FF00B6")
       .addFields({

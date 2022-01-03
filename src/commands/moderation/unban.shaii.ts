@@ -25,16 +25,10 @@ export default defineCommand({
       .setTitle(`Unban - ${targetUser.tag}`)
       .setDescription(`ID: ${targetUser.id}, <@${targetUser.id}>`)
       .setThumbnail(targetUser.avatarURL() || message.author.defaultAvatarURL)
-      .setAuthor({
-        name: message.author.tag,
-        iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
-      })
+      .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
       .setTimestamp()
       .addField("Reason", reason || "No reason given", true)
-      .setFooter({
-        text: Shaii.version,
-        iconURL: SHAII_LOGO,
-      })
+      .setFooter(Shaii.version, SHAII_LOGO)
       .setColor("#00FF00");
 
     targetUser
