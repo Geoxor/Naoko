@@ -25,10 +25,16 @@ export default defineCommand({
       .setTitle(`Ban - ${targetUser.user.tag}`)
       .setDescription(`ID: ${targetUser.user.id}, <@${targetUser.user.id}>`)
       .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
-      .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
+      .setAuthor({
+        name: message.author.tag,
+        iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
+      })
       .setTimestamp()
       .addField("Reason", reason || "No reason given", true)
-      .setFooter(Shaii.version, SHAII_LOGO)
+      .setFooter({
+        text: Shaii.version,
+        iconURL: SHAII_LOGO,
+      })
       .setColor("#FF0000");
 
     targetUser

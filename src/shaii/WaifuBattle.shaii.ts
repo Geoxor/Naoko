@@ -194,7 +194,9 @@ export default class WaifuBattle {
       .setTitle(`${this.waifu.name} has been defeated!`)
       .addField("Rewards", this.getRewardString(), false)
       .addField("Participants", this.getParticipantsString(), false)
-      .setFooter(`${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`);
+      .setFooter({
+        text: `${this.calculateBattleDuration().toFixed(2)} seconds - ${this.calculateDPS().toFixed(2)}DPS`,
+      });
   }
 
   /**

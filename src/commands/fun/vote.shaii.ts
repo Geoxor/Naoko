@@ -19,8 +19,13 @@ export default defineCommand({
     const embed = new Discord.MessageEmbed()
       .setColor("#ff00b6")
       .setTitle(voteContext)
-      .setAuthor(`${message.author.username} asks...`, message.author.avatarURL() || message.author.defaultAvatarURL)
-      .setFooter(`Vote with the reactions bellow, results in ${VOTE_TIME / 1000} seconds`);
+      .setAuthor({
+        name: `${message.author.username} asks...`,
+        iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
+      })
+      .setFooter({
+        text: `Vote with the reactions bellow, results in ${VOTE_TIME / 1000} seconds`,
+      });
 
     try {
       var vote = await message.channel.send({ embeds: [embed] });
