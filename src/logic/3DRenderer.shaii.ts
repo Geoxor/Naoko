@@ -183,6 +183,7 @@ export const commands3D = {
 
     return scene.render();
   },
+<<<<<<< HEAD
 
   async helicopter(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -195,6 +196,8 @@ export const commands3D = {
 
     return scene.render();
   },
+=======
+>>>>>>> parent of 9b89740 (Merge pull request #110 from qexat/main)
 };
 
 export class SceneProcessor {
