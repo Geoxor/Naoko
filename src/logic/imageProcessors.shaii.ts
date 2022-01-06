@@ -239,13 +239,13 @@ export async function shy(texture: Buffer) {
   pointingRight.resize(Jimp.AUTO, image.bitmap.height / 3);
   pointingLeft.resize(Jimp.AUTO, image.bitmap.height / 3);
 
-  const verticalOffset = image.bitmap.height - pointingRight.bitmap.height;
+  const verticalOffset = image.bitmap.height - pointingLeft.bitmap.height;
 
   const center = image.bitmap.width / 2 - pointingLeft.bitmap.width;
 
   const composite = image
     .composite(pointingRight, center, verticalOffset)
-    .composite(pointingLeft, center + pointingRight.bitmap.width, verticalOffset);
+    .composite(pointingLeft, center + pointingLeft.bitmap.width, verticalOffset);
 
   return composite.getBufferAsync("image/png");
 }
