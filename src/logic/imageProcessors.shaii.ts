@@ -12,11 +12,13 @@ let bobbyImage: Jimp;
 let wastedImage: Jimp;
 let vignetteImage: Jimp;
 let fuckyouImage: Jimp;
+let pointingHandImage: Jimp;
 Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
 Jimp.read("./src/assets/images/bobbyTemplate.png").then(async (image) => (bobbyImage = image));
 Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
 Jimp.read("./src/assets/images/vignette.png").then(async (image) => (vignetteImage = image));
 Jimp.read("./src/assets/images/fuckyou.png").then(async (image) => (fuckyouImage = image));
+Jimp.read("./src/assets/images/finger.png").then(async (image) => (pointingHandImage = image));
 
 export const imageProcessors: ImageProcessors = {
   autocrop,
@@ -25,6 +27,7 @@ export const imageProcessors: ImageProcessors = {
   invert,
   fisheye,
   fuckyou,
+  shy,
   squish,
   grayscale,
   wasted,
@@ -225,6 +228,25 @@ export async function vignette(texture: Buffer) {
   vignette = vignette.resize(image.bitmap.width, image.bitmap.height);
   // Composite the vignette in the center of the image
   const composite = image.grayscale().composite(vignette, 0, 0);
+  return composite.getBufferAsync("image/png");
+}
+
+export async function shy(texture: Buffer) {
+  let image = await Jimp.read(texture);
+  let pointingRight = pointingHandImage.clone();
+  let pointingLeft = pointingHandImage.clone().mirror(true, false);
+
+  pointingRight.resize(Jimp.AUTO, image.bitmap.height / 3);
+  pointingLeft.resize(Jimp.AUTO, image.bitmap.height / 3);
+
+  const verticalOffset = image.bitmap.height - pointingRight.bitmap.height;
+
+  const center = image.bitmap.width / 2 - pointingLeft.bitmap.width;
+
+  const composite = image
+    .composite(pointingRight, center, verticalOffset)
+    .composite(pointingLeft, center + pointingRight.bitmap.width, verticalOffset);
+
   return composite.getBufferAsync("image/png");
 }
 
