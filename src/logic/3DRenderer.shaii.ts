@@ -194,13 +194,10 @@ export const commands3D = {
     });
 
     return scene.render();
-  }
+  },
 };
 
 export class SceneProcessor {
-  public width: number;
-  public height: number;
-  public fps: number;
   public camera: THREE.Camera;
   public scene: THREE.Scene;
   public renderer: THREE.WebGLRenderer;
@@ -208,7 +205,12 @@ export class SceneProcessor {
   public light: THREE.AmbientLight;
   public sun?: THREE.DirectionalLight;
 
-  protected constructor(width: number = 256, height: number = 256, fps: number = 25, shading: boolean = false) {
+  protected constructor(
+    public width: number = 256,
+    public height: number = 256,
+    public fps: number = 25,
+    shading: boolean = false
+  ) {
     this.width = width;
     this.height = height;
     this.fps = fps;
