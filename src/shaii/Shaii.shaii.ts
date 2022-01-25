@@ -9,20 +9,19 @@ import { getCommands } from "../commands";
 import {
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
-  GEOXOR_ID,
   GHOSTS_ROLE_ID,
   MUTED_ROLE_ID,
-  N1KO_ID,
   QBOT_DEV_GUILD_ID,
-  QEXAT_ID,
   SHAII_ID,
   SLURS,
-  SVRGE_ID
+  GEOXOR_ID,
+  
 } from "../constants";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii";
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
+import restrictedChannelMiddleware from "../middleware/restrictedChannelMiddleware.shaii";
 import { giveGhostsRole, hasGhostsRole, userMiddleware } from "../middleware/userMiddleware.shaii";
 import { DISCORD_EVENTS, Plugin } from "../shaii/Plugin.shaii";
 import { ICommand } from "../types";
@@ -263,11 +262,6 @@ class Shaii {
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
-        if (
-          message.channel.id === GEOXOR_GENERAL_CHANNEL_ID &&
-          ![GEOXOR_ID, SVRGE_ID, QEXAT_ID, N1KO_ID].includes(message.author.id)
-        )
-          return;
 
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
         if (message.member && (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID)) {
@@ -284,82 +278,84 @@ class Shaii {
           message.attachments.size === 0
         )
           return message.delete().catch(() => {});
-
-        commandMiddleware(message, async (message) => {
-          const command =
-            this.commands.get(message.command) ||
-            this.commands.find((command) => command.aliases.includes(message.command));
-
-          const clearTyping = () => {
-            if (processingMessage) {
-              processingMessage.delete().catch(() => {});
-              // @ts-ignore
-              clearInterval(typingInterval);
+        
+        restrictedChannelMiddleware(message, (message) => {
+          commandMiddleware(message, async (message) => {
+            const command =
+              this.commands.get(message.command) ||
+              this.commands.find((command) => command.aliases.includes(message.command));
+  
+            const clearTyping = () => {
+              if (processingMessage) {
+                processingMessage.delete().catch(() => {});
+                // @ts-ignore
+                clearInterval(typingInterval);
+              }
+            };
+  
+            // If it doesn't exist we respond
+            if (!command) {
+              const commandDoesntExistString = `That command doesn't exist ${randomChoice(SLURS)}`;
+              const closestCommand = this.getClosestCommand(message.command);
+  
+              if (closestCommand)
+                return message
+                  .reply(
+                    `${commandDoesntExistString}\nThere's this however ${highlight(config.prefix + closestCommand.usage)}`
+                  )
+                  .catch(() => {});
+  
+              return message.reply(`${commandDoesntExistString}`).catch(() => {});
             }
-          };
-
-          // If it doesn't exist we respond
-          if (!command) {
-            const commandDoesntExistString = `That command doesn't exist ${randomChoice(SLURS)}`;
-            const closestCommand = this.getClosestCommand(message.command);
-
-            if (closestCommand)
-              return message
-                .reply(
-                  `${commandDoesntExistString}\nThere's this however ${highlight(config.prefix + closestCommand.usage)}`
-                )
-                .catch(() => {});
-
-            return message.reply(`${commandDoesntExistString}`).catch(() => {});
-          }
-
-          // Notify the user their shit's processing
-          if (command.requiresProcessing) {
-            var processingMessage = await message.channel.send("Processing...").catch(() => {});
-            var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
-          }
-
-          // Check permissions
-          if (command.permissions) {
-            for (const perm of command.permissions) {
-              if (!message.member?.permissions.has(perm)) {
-                if (command.requiresProcessing) clearTyping();
-                return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => {});
+  
+            // Notify the user their shit's processing
+            if (command.requiresProcessing) {
+              var processingMessage = await message.channel.send("Processing...").catch(() => {});
+              var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
+            }
+  
+            // Check permissions
+            if (command.permissions) {
+              for (const perm of command.permissions) {
+                if (!message.member?.permissions.has(perm)) {
+                  if (command.requiresProcessing) clearTyping();
+                  return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => {});
+                }
               }
             }
-          }
-
-          // Get the result to send from the command
-          try {
-            let timeStart = Date.now();
-            var result = await command.execute(message);
-            let timeEnd = Date.now();
-            logger.print(
-              `${timeEnd - timeStart}ms - Executed command: ${command.name} - User: ${message.author.username} - Guild: ${
-                message.guild?.name || "dm"
-              }`
-            );
-          } catch (error: any) {
-            await message.reply(markdown(error)).catch(() => {});
-          }
-
-          // Delete the processing message if it exists
-          clearTyping();
-
-          // If the command returns void we just return
-          if (!result) return;
-
-          // Send the result
-          message
-            .reply(result)
-            .catch(() => message.channel.send(result!))
-            .catch((error) =>
-              error.code === 500
-                ? message.reply({
-                    embeds: [new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
-                  })
-                : message.reply(markdown(error))
-            );
+  
+            // Get the result to send from the command
+            try {
+              let timeStart = Date.now();
+              var result = await command.execute(message);
+              let timeEnd = Date.now();
+              logger.print(
+                `${timeEnd - timeStart}ms - Executed command: ${command.name} - User: ${message.author.username} - Guild: ${
+                  message.guild?.name || "dm"
+                }`
+              );
+            } catch (error: any) {
+              await message.reply(markdown(error)).catch(() => {});
+            }
+  
+            // Delete the processing message if it exists
+            clearTyping();
+  
+            // If the command returns void we just return
+            if (!result) return;
+  
+            // Send the result
+            message
+              .reply(result)
+              .catch(() => message.channel.send(result!))
+              .catch((error) =>
+                error.code === 500
+                  ? message.reply({
+                      embeds: [new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
+                    })
+                  : message.reply(markdown(error))
+              );
+          });
         });
       });
     });
