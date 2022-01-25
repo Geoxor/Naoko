@@ -1,4 +1,4 @@
-import { ADMIN_ROLE_ID, GEOXOR_GUILD_ID, GEOXOR_ID, MOD_ROLE_ID, restricedChannels, SVRGE_ID } from "../constants";
+import { ADMIN_ROLE_ID, GEOXOR_GUILD_ID, GEOXOR_ID, MOD_ROLE_ID, restrictedChannels, SVRGE_ID } from "../constants";
 import logger from "../shaii/Logger.shaii";
 import { IMessage } from "../types";
 
@@ -12,7 +12,7 @@ import { IMessage } from "../types";
 export default function (message: IMessage, next: (message: IMessage) => any): void {
   try {
     // Not Geoxor's guild or restricted channel, continue to next function
-    if (message.guild?.id !== GEOXOR_GUILD_ID || !restricedChannels.includes(message.channel.id)) 
+    if (message.guild?.id !== GEOXOR_GUILD_ID || !restrictedChannels.includes(message.channel.id)) 
       return next(message);
     // Geoxor's guild and restricted channel, check if user is a mod or admin, svrge or geo, if not, return
     if (!(message.member?.roles.cache.some(role => role.id === MOD_ROLE_ID || role.id === ADMIN_ROLE_ID) || message.author.id === GEOXOR_ID || message.author.id === SVRGE_ID))
