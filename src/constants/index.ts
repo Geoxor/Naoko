@@ -21,7 +21,7 @@ export const GHOSTS_ROLE_ID = "736285344659669003";
 export const GEOBOTS_ROLE_ID = "720006137151488121";
 export const VOTE_TIME = 30000;
 
-export const restricedChannels: string[] = [
+export const restrictedChannels: string[] = [
   "845328432715923487"
 ];
 
