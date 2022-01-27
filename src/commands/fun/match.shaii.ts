@@ -7,7 +7,7 @@ export default defineCommand({
   category: "FUN",
   usage: "match <@user | user_id> ?<@user | user_id>",
   description: "See how much you and another user match!",
-  execute: message => {
+  execute: (message) => {
     if (!message.mentions.members?.size) return "Tag the person you want to match with!";
 
     let matcher: Discord.User;

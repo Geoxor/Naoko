@@ -14,16 +14,14 @@ export const SVRGE_ID = "148295829810053120";
 export const QEXAT_ID = "439424425780183040";
 export const N1KO_ID = "251270690160771072";
 export const MOD_ROLE_ID = "438797772414648320";
-export const ADMIN_ROLE_ID = "385391699293372429"
+export const ADMIN_ROLE_ID = "385391699293372429";
 export const OVERPERM_ROLE_ID = "422444741527994368";
 export const MUTED_ROLE_ID = "737011597217628231";
 export const GHOSTS_ROLE_ID = "736285344659669003";
 export const GEOBOTS_ROLE_ID = "720006137151488121";
 export const VOTE_TIME = 30000;
 
-export const restrictedChannels: string[] = [
-  "845328432715923487"
-];
+export const restrictedChannels: string[] = ["845328432715923487"];
 
 export const SLURS = [
   "idiot",
@@ -81,6 +79,6 @@ export const COMMAND_CATEGORIES: { categoryName: string; categoryEmoji: EmojiIde
   },
 ];
 
-export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map(category => {
+export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {
   return category.categoryName;
 });

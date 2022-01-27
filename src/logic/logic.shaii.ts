@@ -189,7 +189,7 @@ export function genCommand(fn: ImageProcessorFn): ICommand {
  * @author Bluskript
  */
 export function genCommands(fns: ImageProcessorFn[]): ICommand[] {
-  return fns.map(fn => genCommand(fn));
+  return fns.map((fn) => genCommand(fn));
 }
 
 /**
@@ -336,7 +336,7 @@ export function getWaifuNameFromFileName(filename: string) {
   let parsedWaifuName = filename.replace(/\.[^.]*$/, "").replace(/_/g, " ");
   return parsedWaifuName
     .split(" ")
-    .map(word => capitalizeFirstLetter(word))
+    .map((word) => capitalizeFirstLetter(word))
     .join(" ");
 }
 
@@ -432,7 +432,7 @@ export function textToUwufy(sentence: string): string {
     .replace(/N([AEIOU])/g, "NY$1")
     .replace(/ove/g, "uv")
     .split(" ")
-    .map(val => {
+    .map((val) => {
       return Math.random() < 0.1 ? `${val.charAt(0)}-${val}` : `${val}`;
     })
     .join(" ");
@@ -511,7 +511,7 @@ export function textToBrainfuck(sentence: string): string {
 
   const output = { value: "", append: (txt: string) => (output.value += txt) };
 
-  const charArray: number[] = sentence.split("").map(c => c.charCodeAt(0));
+  const charArray: number[] = sentence.split("").map((c) => c.charCodeAt(0));
   const baseTable: number[] = charArray
     .map((c: number) => Math.round(c / 10) * 10)
     .filter((i: number, p: number, s: number[]) => s.indexOf(i) === p);
@@ -662,7 +662,7 @@ export async function getLastAttachmentInChannel(message: IMessage) {
   const messages = await message.channel.messages.fetch();
   const lastMessage = messages
     .sort((a, b) => b.createdTimestamp - a.createdTimestamp)
-    .filter(m => m.attachments.size > 0)
+    .filter((m) => m.attachments.size > 0)
     .first();
   return lastMessage?.attachments.first()?.attachment;
 }
@@ -687,6 +687,6 @@ export function removeMentions(messageContent: string): string {
  */
 export const objectFlip = <T extends { [key: string]: string }>(obj: T): { [key: string]: string } => {
   const ret: { [key: string]: string } = {};
-  Object.keys(obj).forEach(key => (ret[obj[key]] = key));
+  Object.keys(obj).forEach((key) => (ret[obj[key]] = key));
   return ret;
 };

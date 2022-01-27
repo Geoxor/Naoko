@@ -1,7 +1,7 @@
 import Discord from "discord.js";
-import logger from "../shaii/Logger.shaii";
-import { definePlugin } from "../shaii/Plugin.shaii";
-import { defineCommand } from "../types";
+import logger from "../../shaii/Logger.shaii";
+import { definePlugin } from "../../shaii/Plugin.shaii";
+import { defineCommand } from "../../types";
 
 export default definePlugin({
   name: "@qexat/announcer",
@@ -13,7 +13,7 @@ export default definePlugin({
     permissions: ["ADMINISTRATOR"],
     usage: "announce <channel> <doesMentionEveryone> <message>",
     description: "Make an embedded announcement in a chosen channel",
-    execute: async message => {
+    execute: async (message) => {
       const announcementChannel = message.mentions.channels.first() || message.channel;
       let mention;
       // by default, it does not mention everyone
@@ -33,7 +33,7 @@ export default definePlugin({
         .setDescription(announcementMessage)
         .setFooter("Generated with Announcer plugin made by Qexat");
 
-      announcementChannel.send({ content: mention, embeds: [embed] }).catch(err => {
+      announcementChannel.send({ content: mention, embeds: [embed] }).catch((err) => {
         logger.error(err);
         return ":x: Could not create the announcement message.";
       });

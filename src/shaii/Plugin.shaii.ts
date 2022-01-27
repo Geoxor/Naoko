@@ -1,5 +1,7 @@
 import Discord from "discord.js";
 import { ICommand } from "../types";
+import fs from "fs";
+import path from "path";
 
 // Add more types as the project grows
 export const DISCORD_EVENTS: (keyof Discord.ClientEvents)[] = ["messageCreate"];
@@ -8,7 +10,8 @@ export type DiscordEventHandler<K extends keyof Discord.ClientEvents> = (
   ...args: Discord.ClientEvents[K]
 ) => Discord.Awaitable<void>;
 
-export type PluginIdentifier = `@${string}/${string}`;
+export type PluginAuthor = `@${string}`;
+export type PluginIdentifier = `${PluginAuthor}/${string}`;
 export type PluginTimers = { [key: string]: NodeJS.Timeout | NodeJS.Timer };
 export type PluginEvents = { [key in keyof Discord.ClientEvents]?: DiscordEventHandler<key> };
 export type PluginVersion = `${string}.${string}.${string}`;
@@ -121,3 +124,18 @@ export interface IPluginDefinition {
  *
  */
 export const definePlugin = (definition: IPluginDefinition): Plugin => new Plugin(definition);
+
+export const importPlugins = (): Plugin[] => {
+  const pluginsPath = "../plugins";
+  const pluginsList: Plugin[] = [];
+  fs.readdirSync(path.join(__dirname, pluginsPath), { withFileTypes: true })
+    .filter((dirent) => dirent.name.startsWith("@"))
+    .forEach((dirent) => {
+      fs.readdirSync(path.join(__dirname, `${pluginsPath}/${dirent.name}`))
+        .filter((file) => file.endsWith(".ts"))
+        .map((file) => {
+          pluginsList.push(require(path.join(__dirname, `${pluginsPath}/${dirent.name}/${file}`)).default);
+        });
+    });
+  return pluginsList;
+};

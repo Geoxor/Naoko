@@ -36,7 +36,7 @@ export default class MusicPlayer {
         noSubscriber: NoSubscriberBehavior.Pause,
       },
     });
-    this.player.on("error", error => {
+    this.player.on("error", (error) => {
       console.error(error);
     });
     this.queue = [];
@@ -89,7 +89,7 @@ export default class MusicPlayer {
     try {
       await entersState(connection, VoiceConnectionStatus.Ready, 10e3);
       if (voiceChannel && voiceChannel.type == ("GUILD_STAGE_VOICE" as string) && voiceChannel.guild.me) {
-        await voiceChannel.guild.me.voice.setSuppressed(false).catch(error => console.error(error));
+        await voiceChannel.guild.me.voice.setSuppressed(false).catch((error) => console.error(error));
       }
       connection.subscribe(this.player);
     } catch (error: any) {

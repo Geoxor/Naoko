@@ -14,8 +14,6 @@ import {
   QBOT_DEV_GUILD_ID,
   SHAII_ID,
   SLURS,
-  GEOXOR_ID,
-  
 } from "../constants";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
@@ -23,7 +21,7 @@ import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.shaii"
 import moderationMiddleware from "../middleware/moderationMiddleware.shaii";
 import restrictedChannelMiddleware from "../middleware/restrictedChannelMiddleware.shaii";
 import { giveGhostsRole, hasGhostsRole, userMiddleware } from "../middleware/userMiddleware.shaii";
-import { DISCORD_EVENTS, Plugin } from "../shaii/Plugin.shaii";
+import { DISCORD_EVENTS, Plugin, importPlugins } from "../shaii/Plugin.shaii";
 import { ICommand } from "../types";
 import config from "./Config.shaii";
 import { User } from "./Database.shaii";
@@ -31,13 +29,10 @@ import logger from "./Logger.shaii";
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
-si.getStaticData().then(info => {
+si.getStaticData().then((info) => {
   logger.print("Environment info fetched");
   systemInfo = info;
 });
-
-const emojiRegExp: RegExp =
-  /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
 
 /**
  * Shaii multi purpose Discord bot
@@ -47,10 +42,7 @@ class Shaii {
   public commands: Discord.Collection<string, ICommand> = new Discord.Collection();
   public geoxorGuild: Discord.Guild | undefined;
   public version: string = require("../../package.json").version;
-  public plugins: Plugin[] = fs
-    .readdirSync("./src/plugins")
-    .filter(file => file.endsWith(".ts"))
-    .map(file => require(path.join("../plugins/" + file)).default);
+  public plugins: Plugin[] = importPlugins();
   public bot: Discord.Client = new Discord.Client({
     intents: [
       Intents.FLAGS.GUILDS,
@@ -69,8 +61,8 @@ class Shaii {
     //console.log(this.plugins);
     this.loadCommands();
     for (const event of DISCORD_EVENTS) {
-      this.bot.on(event as string, data => {
-        this.plugins.forEach(plugin => plugin.send(event, [data]));
+      this.bot.on(event as string, (data) => {
+        this.plugins.forEach((plugin) => plugin.send(event, [data]));
       });
     }
 
@@ -82,7 +74,7 @@ class Shaii {
       this.joinThreads();
       this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
     });
-    this.bot.on("messageCreate", async message => {
+    this.bot.on("messageCreate", async (message) => {
       // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
       try {
         this.onMessageCreate(message);
@@ -90,24 +82,24 @@ class Shaii {
         console.log(error);
       }
     });
-    this.bot.on("messageDelete", async message => {
+    this.bot.on("messageDelete", async (message) => {
       if (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID) {
-        logDelete(message, message => {});
+        logDelete(message, (message) => {});
       }
     });
     this.bot.on("messageUpdate", async (oldMessage, newMessage) => {
       logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
-      userMiddleware(newMessage as Discord.Message, newMessage => {
-        moderationMiddleware(newMessage, newMessage => {});
+      userMiddleware(newMessage as Discord.Message, (newMessage) => {
+        moderationMiddleware(newMessage, (newMessage) => {});
       });
     });
     this.bot.on("messageReactionAdd", async (messageReaction, user) => this.onMessageReactionAdd(messageReaction, user));
-    this.bot.on("guildMemberRemove", async member => {
+    this.bot.on("guildMemberRemove", async (member) => {
       if (member.id === SHAII_ID) return;
       let user = await User.findOneOrCreate(member);
       user.updateRoles(Array.from(member.roles.cache.keys()));
     });
-    this.bot.on("guildMemberAdd", async member => {
+    this.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID || member.guild.id === QBOT_DEV_GUILD_ID) {
         if (!hasGhostsRole(member) && member.guild.id === GEOXOR_GUILD_ID) {
           giveGhostsRole(member).catch(() => {
@@ -117,7 +109,7 @@ class Shaii {
         try {
           (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
             .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
-            .then(m => m.react("👋"));
+            .then((m) => m.react("👋"));
         } catch {
           logger.error(`The channel <#${GEOXOR_GENERAL_CHANNEL_ID}> doesn't exist`);
         }
@@ -125,12 +117,12 @@ class Shaii {
 
       let user = await User.findOneOrCreate(member);
       for (const roleId of user.roles) {
-        const role = member.guild.roles.cache.find(role => role.id === roleId);
+        const role = member.guild.roles.cache.find((role) => role.id === roleId);
         if (role) {
           member.roles
             .add(role)
             .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
-            .catch(error => {
+            .catch((error) => {
               logger.error(error as string);
             });
         }
@@ -138,8 +130,8 @@ class Shaii {
     });
     this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
       // Get their custom status
-      const newStatus = newPresence.activities.find(activity => activity.type === "CUSTOM")?.state;
-      const oldStatus = oldPresence?.activities.find(activity => activity.type === "CUSTOM")?.state;
+      const newStatus = newPresence.activities.find((activity) => activity.type === "CUSTOM")?.state;
+      const oldStatus = oldPresence?.activities.find((activity) => activity.type === "CUSTOM")?.state;
 
       if (!newStatus || !newPresence.user) return;
 
@@ -171,7 +163,7 @@ class Shaii {
         User.pushHistory("nickname_history", oldMember.id, newMember.nickname);
       }
     });
-    this.bot.on("threadCreate", thread => {
+    this.bot.on("threadCreate", (thread) => {
       thread.join();
     });
     this.bot.login(config.token);
@@ -213,7 +205,7 @@ class Shaii {
     const commandSources = await getCommands();
 
     // Get commands from plugins
-    const pluginCommands = this.plugins.map(plugin => plugin.command).filter(plugin => !!plugin) as (
+    const pluginCommands = this.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin) as (
       | ICommand
       | ICommand[]
     )[];
@@ -224,7 +216,7 @@ class Shaii {
 
       // If theres multiple commands in 1 plugin add each
       if (command instanceof Array) {
-        command.forEach(command => commandSources.push(command));
+        command.forEach((command) => commandSources.push(command));
         continue;
       }
 
@@ -260,9 +252,8 @@ class Shaii {
   }
 
   private onMessageCreate(message: Discord.Message) {
-    userMiddleware(message, message => {
-      moderationMiddleware(message, message => {
-
+    userMiddleware(message, (message) => {
+      moderationMiddleware(message, (message) => {
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
         if (message.member && (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID)) {
           if (!this.hasGhostRole(message.member)) {
@@ -278,13 +269,13 @@ class Shaii {
           message.attachments.size === 0
         )
           return message.delete().catch(() => {});
-        
-        restrictedChannelMiddleware(message, message => {
-          commandMiddleware(message, async message => {
+
+        restrictedChannelMiddleware(message, (message) => {
+          commandMiddleware(message, async (message) => {
             const command =
               this.commands.get(message.command) ||
-              this.commands.find(command => command.aliases.includes(message.command));
-  
+              this.commands.find((command) => command.aliases.includes(message.command));
+
             const clearTyping = () => {
               if (processingMessage) {
                 processingMessage.delete().catch(() => {});
@@ -292,28 +283,28 @@ class Shaii {
                 clearInterval(typingInterval);
               }
             };
-  
+
             // If it doesn't exist we respond
             if (!command) {
               const commandDoesntExistString = `That command doesn't exist ${randomChoice(SLURS)}`;
               const closestCommand = this.getClosestCommand(message.command);
-  
+
               if (closestCommand)
                 return message
                   .reply(
                     `${commandDoesntExistString}\nThere's this however ${highlight(config.prefix + closestCommand.usage)}`
                   )
                   .catch(() => {});
-  
+
               return message.reply(`${commandDoesntExistString}`).catch(() => {});
             }
-  
+
             // Notify the user their shit's processing
             if (command.requiresProcessing) {
               var processingMessage = await message.channel.send("Processing...").catch(() => {});
               var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
             }
-  
+
             // Check permissions
             if (command.permissions) {
               for (const perm of command.permissions) {
@@ -323,7 +314,7 @@ class Shaii {
                 }
               }
             }
-  
+
             // Get the result to send from the command
             try {
               let timeStart = Date.now();
@@ -337,18 +328,18 @@ class Shaii {
             } catch (error: any) {
               await message.reply(markdown(error)).catch(() => {});
             }
-  
+
             // Delete the processing message if it exists
             clearTyping();
-  
+
             // If the command returns void we just return
             if (!result) return;
-  
+
             // Send the result
             message
               .reply(result)
               .catch(() => message.channel.send(result!))
-              .catch(error =>
+              .catch((error) =>
                 error.code === 500
                   ? message.reply({
                       embeds: [new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
@@ -367,7 +358,7 @@ class Shaii {
   ) {
     const messageReactionGuild = this.bot.guilds.cache.get(messageReaction.message.guild?.id || "");
     if (!messageReactionGuild) return;
-    messageReactionGuild.members.fetch().then(data => {
+    messageReactionGuild.members.fetch().then((data) => {
       if (data.get(user.id)?.roles.cache.has(MUTED_ROLE_ID)) {
         messageReaction.remove();
       }

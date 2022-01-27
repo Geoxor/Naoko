@@ -20,12 +20,12 @@ export default defineCommand({
       .addFields({
         inline: true,
         name: "Plugins",
-        value: Shaii.plugins.map(plugin => `🔌 ${plugin.name}`).join("\n"),
+        value: Shaii.plugins.map((plugin) => `🔌 ${plugin.name}`).join("\n"),
       })
       .addFields({
         inline: true,
         name: "Version",
-        value: Shaii.plugins.map(plugin => plugin.version).join("\n"),
+        value: Shaii.plugins.map((plugin) => plugin.version).join("\n"),
       });
 
     return { embeds: [embed] };

@@ -1,8 +1,8 @@
 import Discord from "discord.js";
-import { randomChoice } from "../logic/logic.shaii";
-import { definePlugin } from "../shaii/Plugin.shaii";
-import { defineCommand } from "../types";
-import facts from "./fun-facts/facts.json";
+import { randomChoice } from "../../logic/logic.shaii";
+import { definePlugin } from "../../shaii/Plugin.shaii";
+import { defineCommand } from "../../types";
+import facts from "./data/facts.json";
 
 export default definePlugin({
   name: "@azur1s/fun-fact",
@@ -12,7 +12,7 @@ export default definePlugin({
     category: "FUN",
     usage: "funfact",
     description: "Random fun fact",
-    execute: message => {
+    execute: (message) => {
       const embed = new Discord.MessageEmbed()
         .setColor("#d2185e")
         .setAuthor(`Fun Facts by azur`)

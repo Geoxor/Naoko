@@ -8,7 +8,7 @@ export default defineCommand({
   usage: "anime <search_string>",
   description: "Looks up an anime on Anilist",
   requiresProcessing: true,
-  execute: async message => {
+  execute: async (message) => {
     // Get the anime
     try {
       const animeMeta = await anilistSearch(message.args.join(" "));

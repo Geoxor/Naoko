@@ -8,7 +8,7 @@ export default defineCommand({
   usage: "trace <image_url>",
   description: "Attempts to find what anime a screenshot or GIF is from",
   requiresProcessing: true,
-  execute: async message => {
+  execute: async (message) => {
     // Check if they sent shit
     const url = message.args[0] || message.attachments.first()?.url;
 

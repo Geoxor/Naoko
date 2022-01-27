@@ -84,7 +84,7 @@ const rarities = [COMMON, UNCOMMON, RARE, LEGENDARY, MYTHICAL];
 export function chooseWaifu(): { chosenWaifu: IWaifu; chosenRarity: IWaifuRarity } {
   // sum up all these relative frequencies to generate a maximum for our random number generation
   let maximum = 0;
-  rarities.forEach(w => (maximum += w.relativeFrequency));
+  rarities.forEach((w) => (maximum += w.relativeFrequency));
 
   let choiceValue = Math.random() * maximum;
 
@@ -114,7 +114,7 @@ export async function rigChooseWaifu(
   name: string
 ): Promise<{ chosenWaifu: IWaifu; chosenRarity: IWaifuRarity } | undefined> {
   for (const rarity of Object.values(rarities)) {
-    const searchResult = rarity.waifus.find(waifu => waifu.name.toLowerCase().includes(name.toLowerCase()));
+    const searchResult = rarity.waifus.find((waifu) => waifu.name.toLowerCase().includes(name.toLowerCase()));
     if (searchResult) {
       return { chosenWaifu: searchResult, chosenRarity: rarity };
     }

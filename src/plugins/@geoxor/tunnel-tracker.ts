@@ -1,10 +1,10 @@
-import { definePlugin } from "../shaii/Plugin.shaii";
+import { definePlugin } from "../../shaii/Plugin.shaii";
 
 export default definePlugin({
   name: "@geoxor/tunnel-tracker",
   version: "1.0.0",
   events: {
-    messageCreate: message => {
+    messageCreate: (message) => {
       if (
         message.channel.type == "GUILD_PUBLIC_THREAD" &&
         message.channel.id === "923126477610962964" &&

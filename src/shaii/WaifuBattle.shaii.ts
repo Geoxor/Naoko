@@ -86,7 +86,7 @@ export default class WaifuBattle {
     this.collector = new Discord.MessageCollector(this.thread!);
 
     // Collect messages
-    this.collector.on("collect", async message => {
+    this.collector.on("collect", async (message) => {
       if (message.content.includes("!attack")) {
         // Keep track of when the battle started
         if (this.battleStart == 0) this.battleStart = Date.now();
@@ -115,7 +115,7 @@ export default class WaifuBattle {
 
         // Rare and above waifu can dodge attacks
         // if (Math.random() < 0.9 && relativeFrequency >= 5 ) this.waifu.dealDamage(damage);
-        if (this.waifu.isDead) await this.endBattle().catch(error => logger.error(error));
+        if (this.waifu.isDead) await this.endBattle().catch((error) => logger.error(error));
       }
     });
   }

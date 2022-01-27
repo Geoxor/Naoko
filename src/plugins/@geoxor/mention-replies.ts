@@ -1,13 +1,13 @@
-import { SHAII_ID } from "../constants";
-import { randomChoice } from "../logic/logic.shaii";
-import { definePlugin } from "../shaii/Plugin.shaii";
-import answers from "./mention-replies/answers.json";
+import { SHAII_ID } from "../../constants";
+import { randomChoice } from "../../logic/logic.shaii";
+import { definePlugin } from "../../shaii/Plugin.shaii";
+import answers from "./data/answers.json";
 
 export default definePlugin({
   name: "@geoxor/mention-replies",
   version: "1.0.0",
   events: {
-    messageCreate: message => {
+    messageCreate: (message) => {
       if (
         message.content.startsWith("<@!") &&
         message.mentions.members?.first()?.id === SHAII_ID &&

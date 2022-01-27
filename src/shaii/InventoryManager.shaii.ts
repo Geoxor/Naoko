@@ -14,7 +14,7 @@ export default class InventoryManager {
       .setAuthor(`${user.username}'s Inventory`, user.avatarURL() || user.defaultAvatarURL)
       .setColor("#BF360C")
       .setThumbnail(INVENTORY_ICON)
-      .addField("\u200B", markdown(fields.map(field => field + "\n").join("")), true);
+      .addField("\u200B", markdown(fields.map((field) => field + "\n").join("")), true);
     return embed;
   }
 

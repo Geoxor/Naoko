@@ -10,7 +10,7 @@ export default defineCommand({
   usage: "rigbattle <waifu_name>",
   description: "Battle with predefined waifu for testing purpose",
   permissions: ["ADMINISTRATOR"],
-  execute: async message => {
+  execute: async (message) => {
     if (!(message.channel instanceof Discord.TextChannel)) return "Can't start battles in here!";
     const result = await rigChooseWaifu(message.args.join(" "));
     if (!result) return "That waifu doesn't exist";

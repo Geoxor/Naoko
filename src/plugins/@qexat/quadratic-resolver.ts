@@ -1,7 +1,7 @@
-import { SLURS } from "../constants";
-import { randomChoice, weightedRandomChoice } from "../logic/logic.shaii";
-import { definePlugin } from "../shaii/Plugin.shaii";
-import { defineCommand } from "../types";
+import { SLURS } from "../../constants";
+import { randomChoice, weightedRandomChoice } from "../../logic/logic.shaii";
+import { definePlugin } from "../../shaii/Plugin.shaii";
+import { defineCommand } from "../../types";
 import { D2Polynom, extractFactors } from "./logic/quadratic-resolver";
 
 const solve = defineCommand({
@@ -9,7 +9,7 @@ const solve = defineCommand({
   category: "UTILITY",
   usage: "solve <polynom>",
   description: "Solve your degree-2 polynom",
-  execute: async message => {
+  execute: async (message) => {
     if (message.args.length === 0) return `What do you want to solve ${randomChoice(SLURS)}`;
 
     // some easter eggs :tro:

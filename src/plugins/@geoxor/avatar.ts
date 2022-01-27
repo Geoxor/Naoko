@@ -1,6 +1,6 @@
-import { definePlugin } from "../shaii/Plugin.shaii";
-import { defineCommand } from "../types";
-import config from "../shaii/Config.shaii";
+import { definePlugin } from "../../shaii/Plugin.shaii";
+import { defineCommand } from "../../types";
+import config from "../../shaii/Config.shaii";
 
 import Axios from "axios";
 
@@ -14,15 +14,15 @@ export default definePlugin({
     usage: "avatar <@user | user_id>",
     description: "Get the avatar of a user or yours",
 
-    execute: async message => {
+    execute: async (message) => {
       const otherUser = message.mentions.users.first() || message.client.users.cache.get(message.args[0]) || message.author;
       let link;
 
       if (message.guild) {
         const req = await Axios.get(`https://discord.com/api/guilds/${message.guild.id}/members/${otherUser.id}`, {
           headers: {
-            Authorization: `Bot ${config.token}`
-          }
+            Authorization: `Bot ${config.token}`,
+          },
         });
 
         if (req.data.avatar) {

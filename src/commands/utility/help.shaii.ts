@@ -15,11 +15,11 @@ export default defineCommand({
 
     for (let i = 0; i < categories.length; i++) {
       const category = categories[i];
-      const commands = Array.from(shaii.commands.filter(command => command.category === category));
+      const commands = Array.from(shaii.commands.filter((command) => command.category === category));
 
       let categoryCommands = commands
-        .map(command => command[1])
-        .map(command =>
+        .map((command) => command[1])
+        .map((command) =>
           command.aliases.length
             ? `${command.name}: ${command.description} # [${command.aliases.join(", ")}]`
             : `${command.name}: ${command.description}`
