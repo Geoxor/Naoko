@@ -1,5 +1,5 @@
 import { objectFlip } from "../../logic/logic.shaii";
-import { definePlugin, PluginAuthor } from "../../shaii/Plugin.shaii";
+import { definePlugin } from "../../shaii/Plugin.shaii";
 import { defineCommand } from "../../types";
 
 const MORSE_CODE_TABLE = {
@@ -97,5 +97,3 @@ export default definePlugin({
     }),
   ],
 });
-
-console.log(__dirname.split("/")[-1]);

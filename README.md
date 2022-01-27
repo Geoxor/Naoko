@@ -17,7 +17,7 @@ replies to them with a random answer from an array of strings:
 export default definePlugin({
   name: "@geoxor/reply-on-mentions",
   events: {
-    messageCreate: message => {
+    messageCreate: (message) => {
       if (message.mentions.first() === SHAII) {
         message.reply(randomItem(["hello", "you're annoying", "don't talk to me again!"]));
       }
