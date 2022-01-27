@@ -9,7 +9,7 @@ const solve = defineCommand({
   category: "UTILITY",
   usage: "solve <polynom>",
   description: "Solve your degree-2 polynom",
-  execute: async (message) => {
+  execute: async message => {
     if (message.args.length === 0) return `What do you want to solve ${randomChoice(SLURS)}`;
 
     // some easter eggs :tro:

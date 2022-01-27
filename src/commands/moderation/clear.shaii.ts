@@ -8,7 +8,7 @@ export default defineCommand({
   usage: "clear <amount>",
   description: "Bulk delete messages up to 100",
   permissions: ["MANAGE_MESSAGES"],
-  execute: async (message) => {
+  execute: async message => {
     let count = parseFloat(message.args[0]) + 1;
     count = count > 100 ? 100 : count;
     // Will return if count is not a string.

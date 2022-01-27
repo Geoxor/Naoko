@@ -12,7 +12,7 @@ export default defineCommand({
   category: "IMAGE_PROCESSORS",
   description: "Transform an image with a pipeline",
   requiresProcessing: true,
-  execute: async (message) => {
+  execute: async message => {
     const pipeline = message.args;
     if (pipeline.length > 10) return "Pipeline can't be longer than 10 iterators";
     const buffer = await parseBufferFromMessage(message);

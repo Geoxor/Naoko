@@ -21,7 +21,7 @@ export class D2Polynom {
     const factors = [this.a, this.b, this.c];
 
     let i = 0;
-    factors.forEach((factor) => {
+    factors.forEach(factor => {
       if (factor !== +(factors.slice(i).indexOf(factor) !== factors.slice(i).length - 1)) {
         beautifiedFactors.push(
           `${["-", "+", ""][+(factor === Math.abs(factor)) + +(factor === this.a)]} ${Math.abs(factor)}`.trim()
@@ -101,7 +101,7 @@ export const extractFactors = (polynom: string): number[] => {
   let cleanPolynom: string[] = polynom
     .replace(" ", "")
     .split(/(?=(\+|\-))/g)
-    .filter((value) => !["+", "-"].includes(value));
+    .filter(value => !["+", "-"].includes(value));
 
   for (let i = 0; i < cleanPolynom.length; i++) cleanPolynom[i] = cleanPolynom[i].replace(/\+|\ /g, "").trim();
 
@@ -109,7 +109,7 @@ export const extractFactors = (polynom: string): number[] => {
   let a = 0,
     b = 0,
     c = 0;
-  cleanPolynom.forEach((eqMember) => {
+  cleanPolynom.forEach(eqMember => {
     if (eqMember.replace(/x²|x\^2/g, "") !== eqMember) a = cleanFactor(eqMember, /x²|x\^2/g, 1);
     else if (eqMember.replace("x", "") !== eqMember) b = cleanFactor(eqMember, /x/g, 1);
     else c = cleanFactor(eqMember, / /g, 0);

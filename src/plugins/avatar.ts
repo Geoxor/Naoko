@@ -14,7 +14,7 @@ export default definePlugin({
     usage: "avatar <@user | user_id>",
     description: "Get the avatar of a user or yours",
 
-    execute: async (message) => {
+    execute: async message => {
       const otherUser = message.mentions.users.first() || message.client.users.cache.get(message.args[0]) || message.author;
       let link;
 

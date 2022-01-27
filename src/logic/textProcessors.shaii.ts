@@ -18,7 +18,7 @@ export const textProcessors: TextProcessors = {
 export async function textify(pipeline: string[], sentence: string) {
   let fuckedSentence = sentence;
 
-  const functions = pipeline.map((name) => textProcessors[name]).filter((processor) => !!processor);
+  const functions = pipeline.map(name => textProcessors[name]).filter(processor => !!processor);
   const bar = logger.progress("Pipelines - ", functions.length);
   for (let i = 0; i < functions.length; i++) {
     const start = Date.now();

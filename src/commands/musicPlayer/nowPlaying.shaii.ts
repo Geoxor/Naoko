@@ -8,7 +8,7 @@ export default defineCommand({
   category: "MUSIC",
   description: "Shows you the currently playing song",
   requiresProcessing: true,
-  execute: async (message) => {
+  execute: async message => {
     return musicMiddleware(message, async (channel, player) => {
       return await player.createNowPlayingEmbed();
     });

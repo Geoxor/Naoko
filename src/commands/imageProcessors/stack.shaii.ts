@@ -22,7 +22,7 @@ export default defineCommand({
   usage: `stack <processor_name> <image | url | reply | user_id>`,
   description: "Stack an image processor and make a gif out of it",
   requiresProcessing: true,
-  execute: async (message) => {
+  execute: async message => {
     const processorFunctionName = message.args[0];
     if (!processorFunctionName) return "Please enter the name of an image processor function";
     const buffer = await parseBufferFromMessage(message);

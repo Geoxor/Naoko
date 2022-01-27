@@ -14,7 +14,7 @@ export default defineCommand({
   usage: "env",
   description: "Show environment details",
 
-  execute: (message) => {
+  execute: message => {
     // Leave these in here because systeminfo takes 10 hours to fetch data
     // and putting these out there will cause it to be undefined
     const { distro, platform, release } = systemInfo.os;

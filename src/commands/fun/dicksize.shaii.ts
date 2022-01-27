@@ -7,7 +7,7 @@ export default defineCommand({
   category: "FUN",
   usage: "dicksize ?<@user | user_id>",
   description: "Tells you your dicksize or battle against someone else's dicksize!",
-  execute: async (message) => {
+  execute: async message => {
     if (
       message.mentions.members &&
       message.mentions.members.size !== 0 &&

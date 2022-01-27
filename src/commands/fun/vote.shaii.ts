@@ -11,7 +11,7 @@ export default defineCommand({
   category: "FUN",
   usage: "vote <topic>",
   description: "Creates a vote",
-  execute: async (message) => {
+  execute: async message => {
     const voteContext = message.args.join(" ").trim();
 
     if (!voteContext) return "Please write what your vote is about";
@@ -34,7 +34,7 @@ export default defineCommand({
 
     collector.on("collect", (reaction, user) => filter(reaction, user) || reaction.remove());
 
-    collector.on("end", (collected) => {
+    collector.on("end", collected => {
       const downvotes = collected.get(DOWNVOTE_EMOJI_ID);
       const upvotes = collected.get(UPVOTE_EMOJI_ID);
 

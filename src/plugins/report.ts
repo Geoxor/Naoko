@@ -10,7 +10,7 @@ const report = defineCommand({
   description: "Report an user",
   usage: "~report <user_id> <reason>",
   category: "UTILITY",
-  execute: async (message) => {
+  execute: async message => {
     if (message.args.length === 0) return "You need an user to report and a reason.";
     let targetUser = message.client.guilds.cache.get(GEOXOR_GUILD_ID)!.members.cache.get(message.args[0]);
     if (!targetUser) return `User with ID ${message.args[0]} is not in the guild.`;
@@ -22,7 +22,7 @@ const report = defineCommand({
     let content;
 
     if (message.attachments) {
-      message.attachments.forEach((attachment) => attachments.push(attachment.url));
+      message.attachments.forEach(attachment => attachments.push(attachment.url));
       content = attachments.join("\n");
     }
 
@@ -51,10 +51,10 @@ export default definePlugin({
   name: "@qexat/report",
   version: "1.0.0",
   events: {
-    messageCreate: (message) => {
+    messageCreate: message => {
       if (!(message.channel instanceof Discord.DMChannel)) return;
-      userMiddleware(message, (message) => {
-        commandMiddleware(message, async (message) => {
+      userMiddleware(message, message => {
+        commandMiddleware(message, async message => {
           // ignore if the command is not report
           if (message.command !== "report") return;
           try {

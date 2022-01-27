@@ -7,7 +7,7 @@ export default defineCommand({
   category: "TEXT_PROCESSORS",
   usage: "spongify <sentence>",
   description: "mAkEs YoU sPeAk lIkE ThIs",
-  execute: async (message) => {
+  execute: async message => {
     if (message.args.length === 0) return `What do you want to SpOnGiFy ${randomChoice(SLURS)}`;
     return textToSpongify(message.args.join(" "), randomChoice([true, false]));
   },

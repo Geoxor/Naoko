@@ -62,7 +62,7 @@ export function logDelete(
 
   const logChannel = message.client.channels.cache.get(config.chatLogChannel) as Discord.TextChannel;
 
-  logChannel.send({ embeds: [embed] }).catch(() => {});
+  if (logChannel) logChannel.send({ embeds: [embed] }).catch((err) => console.log(err));
   logger.print(`Message deleted at #${message.channel.name} by ${message.author?.username}`);
 
   next(message);

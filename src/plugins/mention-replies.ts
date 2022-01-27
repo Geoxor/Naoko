@@ -7,7 +7,7 @@ export default definePlugin({
   name: "@geoxor/mention-replies",
   version: "1.0.0",
   events: {
-    messageCreate: (message) => {
+    messageCreate: message => {
       if (
         message.content.startsWith("<@!") &&
         message.mentions.members?.first()?.id === SHAII_ID &&

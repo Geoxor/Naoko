@@ -81,6 +81,6 @@ export const COMMAND_CATEGORIES: { categoryName: string; categoryEmoji: EmojiIde
   },
 ];
 
-export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {
+export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map(category => {
   return category.categoryName;
 });

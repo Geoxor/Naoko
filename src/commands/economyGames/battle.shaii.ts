@@ -9,7 +9,7 @@ export default defineCommand({
   category: "ECONOMY",
   usage: "Battle",
   description: "Battle a random waifu with your friends for rewards!",
-  execute: async (message) => {
+  execute: async message => {
     if (!(message.channel instanceof Discord.TextChannel)) return "Can't start battles in here!";
     const { chosenWaifu, chosenRarity } = chooseWaifu();
 

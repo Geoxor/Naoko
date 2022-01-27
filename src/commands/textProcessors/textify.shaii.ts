@@ -9,12 +9,12 @@ export default defineCommand({
   category: "TEXT_PROCESSORS",
   description: "Transform a sentence with a pipeline",
   requiresProcessing: true,
-  execute: async (message) => {
+  execute: async message => {
     // can be IMPROVED
     let pipeline: string[] = [];
     let userSentence: string[] = [];
     let isArgCommand: boolean = true;
-    message.args.forEach((arg) => {
+    message.args.forEach(arg => {
       isArgCommand
         ? ["brainfuck", "britify", "spongify", "uwufy"].includes(arg)
           ? pipeline.push(arg)

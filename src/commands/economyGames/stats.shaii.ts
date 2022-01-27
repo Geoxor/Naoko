@@ -6,7 +6,7 @@ export default defineCommand({
   usage: "stats",
   category: "ECONOMY",
   description: "Shows the statistics of the user",
-  execute: async (message) => {
+  execute: async message => {
     try {
       const embed = await InventoryManager.getStatistics(message.author);
       return { embeds: [embed] };

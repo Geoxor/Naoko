@@ -13,12 +13,12 @@ let wastedImage: Jimp;
 let vignetteImage: Jimp;
 let fuckyouImage: Jimp;
 let pointingHandImage: Jimp;
-Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
-Jimp.read("./src/assets/images/bobbyTemplate.png").then(async (image) => (bobbyImage = image));
-Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
-Jimp.read("./src/assets/images/vignette.png").then(async (image) => (vignetteImage = image));
-Jimp.read("./src/assets/images/fuckyou.png").then(async (image) => (fuckyouImage = image));
-Jimp.read("./src/assets/images/finger.png").then(async (image) => (pointingHandImage = image));
+Jimp.read("./src/assets/images/trolleyTemplate.png").then(async image => (trolleyImage = image));
+Jimp.read("./src/assets/images/bobbyTemplate.png").then(async image => (bobbyImage = image));
+Jimp.read("./src/assets/images/wasted.png").then(async image => (wastedImage = image));
+Jimp.read("./src/assets/images/vignette.png").then(async image => (vignetteImage = image));
+Jimp.read("./src/assets/images/fuckyou.png").then(async image => (fuckyouImage = image));
+Jimp.read("./src/assets/images/finger.png").then(async image => (pointingHandImage = image));
 
 export const imageProcessors: ImageProcessors = {
   autocrop,
@@ -55,7 +55,7 @@ export async function transform(pipeline: string[], buffer: Buffer) {
   let fuckedBuffer = buffer;
   const allImageProcessors: ImageProcessors = { ...imageProcessors, ...commands3D };
 
-  const functions = pipeline.map((name) => allImageProcessors[name]).filter((processor) => !!processor);
+  const functions = pipeline.map(name => allImageProcessors[name]).filter(processor => !!processor);
   const bar = logger.progress("Pipelines - ", functions.length);
   for (let i = 0; i < functions.length; i++) {
     const start = Date.now();

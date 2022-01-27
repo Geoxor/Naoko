@@ -252,7 +252,7 @@ export class SceneProcessor {
     }
 
     return await encodeFramesToGif(
-      renderedFrames.map((frame) => frame.data),
+      renderedFrames.map(frame => frame.data),
       renderedFrames[0].width,
       renderedFrames[0].height,
       ~~(1000 / this.fps)
@@ -400,7 +400,7 @@ export class GeometryScene extends SceneProcessor {
       this.sceneObject = this.geometry;
 
       // Apply the texture to each child
-      this.sceneObject.children.map((child) => ((child as THREE.Mesh).material = this.media?.material!));
+      this.sceneObject.children.map(child => ((child as THREE.Mesh).material = this.media?.material!));
 
       // Add the entire group as the sceneObject
       this.scene.add(this.sceneObject);

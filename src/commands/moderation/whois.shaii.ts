@@ -10,7 +10,7 @@ export default defineCommand({
   aliases: ["who"],
   usage: "whois <@user | user_id)>",
   description: "Get information about a user",
-  execute: async (message) => {
+  execute: async message => {
     let user = message.mentions.users.first() || message.author;
     if (message.args[0] !== undefined && !message.mentions.users.first()) {
       try {

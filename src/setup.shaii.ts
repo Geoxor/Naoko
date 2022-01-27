@@ -26,7 +26,7 @@ if (!fs.existsSync(iconPath)) {
 
 // Install the SVG icons in there
 console.log("Installing custom workspace icons");
-fs.readdirSync("./src/assets/icons").forEach((file) => {
+fs.readdirSync("./src/assets/icons").forEach(file => {
   fs.copyFileSync("./src/assets/icons/" + file, iconPath + file);
 });
 console.log("Icons installed");
