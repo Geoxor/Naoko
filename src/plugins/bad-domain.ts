@@ -5,11 +5,10 @@ export default definePlugin({
   version: "1.0.0",
   events: {
     messageCreate: (message) => {
-      for (const badDomain of badDomains) {
+      for (const badDomain of badDomains)
         if (message.content.toLowerCase().includes(badDomain)) {
           message.delete().catch();
         }
-      }
     },
   },
 });
