@@ -75,7 +75,7 @@ export default definePlugin({
       category: "FUN",
       usage: "morse-encode <sentence>",
       description: "Encodes a string to morse code",
-      execute: async (message) => {
+      execute: (message) => {
         // Reply if no args
         if (message.args.length === 0) return "Give me a string to encode!";
         let messageContent: string = message.args.join(" ");
@@ -89,7 +89,7 @@ export default definePlugin({
       category: "FUN",
       usage: "morse-decode <sentence>",
       description: "Decodes morse code",
-      execute: async (message) => {
+      execute: (message) => {
         // Reply if no args
         if (message.args.length === 0) return "Give me a string to decode!";
         return decodeMorse(message.args.join(" ")).substring(0, 2000);
