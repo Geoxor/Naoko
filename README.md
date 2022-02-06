@@ -47,7 +47,7 @@ sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev
 
 1. Install Node versoin 16.x.x
 2. Install MongoDB Community https://www.mongodb.com/try/download/community & follow default installation
-3. npm i
+3. With administrator privileges, do `npm i` in the repository folder
 
 Once all these are set up:
 
