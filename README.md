@@ -41,7 +41,7 @@ sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev
 ```
 2. *TODO: set up mongo on linux*
 3. Use node.js 16.6.0 `nvm install 16.6.0 && nvm use 16.6.0`
-4. `CXX=10 npm ci` to install dependencies
+4. `CXX=gcc-10 npm ci` to install dependencies
 
 ### Windows
 
