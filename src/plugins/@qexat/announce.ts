@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { APIErrors } from "discord.js";
 import logger from "../../shaii/Logger.shaii";
 import { definePlugin } from "../../shaii/Plugin.shaii";
 import { defineCommand } from "../../types";
@@ -33,10 +33,12 @@ export default definePlugin({
         .setDescription(announcementMessage)
         .setFooter("Generated with Announcer plugin made by Qexat");
 
-      announcementChannel.send({ content: mention, embeds: [embed] }).catch((err) => {
+      try {
+        await announcementChannel.send({ content: mention, embeds: [embed] });
+      } catch (err: any) {
         logger.error(err);
         return ":x: Could not create the announcement message.";
-      });
+      }
 
       return `:white_check_mark: Successfully created the announcement message in <#${announcementChannel.id}>`;
     },

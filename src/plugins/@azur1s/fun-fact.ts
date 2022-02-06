@@ -12,7 +12,7 @@ export default definePlugin({
     category: "FUN",
     usage: "funfact",
     description: "Random fun fact",
-    execute: (message) => {
+    execute: () => {
       const embed = new Discord.MessageEmbed()
         .setColor("#d2185e")
         .setAuthor(`Fun Facts by azur`)

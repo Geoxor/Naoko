@@ -38,7 +38,9 @@ const report = defineCommand({
       .setColor("#FFAF2F");
 
     const out = { content: content || "No file was attached.", embeds: [embed] };
-    (
+
+    // This is kinda scuff
+    await (
       message.client.guilds.cache.get(GEOXOR_GUILD_ID)!.channels.cache.get(GEOXOR_STAFF_CHANNEL_ID) as Discord.TextChannel
     ).send(out);
     return out;
