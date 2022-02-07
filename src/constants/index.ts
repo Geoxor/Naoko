@@ -40,7 +40,7 @@ export const SLURS = [
   "neanderthal",
   "python dev",
   "developerl",
-  "soydev",
+  "soydev"
 ];
 
 export const IPV4_REGEX = /((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g;
@@ -55,32 +55,32 @@ export const HISTORY_TYPES = ["nickname_history", "username_history", "status_hi
 export const COMMAND_CATEGORIES: { categoryName: string; categoryEmoji: EmojiIdentifierResolvable }[] = [
   {
     categoryName: "ECONOMY",
-    categoryEmoji: "💰",
+    categoryEmoji: "💰"
   },
   {
     categoryName: "FUN",
-    categoryEmoji: "😆",
+    categoryEmoji: "😆"
   },
   {
     categoryName: "IMAGE_PROCESSORS",
-    categoryEmoji: "🖼️",
+    categoryEmoji: "🖼️"
   },
   {
     categoryName: "MODERATION",
-    categoryEmoji: "🔨",
+    categoryEmoji: "🔨"
   },
   {
     categoryName: "MUSIC",
-    categoryEmoji: "🎵",
+    categoryEmoji: "🎵"
   },
   {
     categoryName: "TEXT_PROCESSORS",
-    categoryEmoji: "📝",
+    categoryEmoji: "📝"
   },
   {
     categoryName: "UTILITY",
-    categoryEmoji: "🔧",
-  },
+    categoryEmoji: "🔧"
+  }
 ];
 
 export const COMMAND_CATEGORIES_RAW = COMMAND_CATEGORIES.map((category) => {
