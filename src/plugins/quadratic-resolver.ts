@@ -23,6 +23,7 @@ const solve = defineCommand({
         return "bro it's too big";
       case "windows":
       case "macos":
+      case "microsoft":
         return "https://cdn.discordapp.com/attachments/920806500828606474/925491933969809449/you-should-install-linux-now.png";
       case "where to find keqing":
         return "The equation where to find keqing has 1 solution in R: touch grass";
