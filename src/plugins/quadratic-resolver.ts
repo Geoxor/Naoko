@@ -29,6 +29,8 @@ const solve = defineCommand({
         return "The equation where to find keqing has 1 solution in R: touch grass";
       case "lily":
         return "i forgor :skull:";
+      case "shaii":
+        return "https://cdn.discordapp.com/attachments/933655392972595200/941029796996063252/TurnAroundBut.mp4";
     }
 
     let [a, b, c] = extractFactors(message.args.join(" "));
