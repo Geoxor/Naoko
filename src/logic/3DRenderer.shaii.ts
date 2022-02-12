@@ -172,6 +172,17 @@ export const commands3D = {
     return scene.render();
   },
 
+  async trollmask(texture: Buffer) {
+    const scene = await GeometryScene.create({
+      rotation: { x: 0.0, y: 0.05 },
+      camera: { z: 0, y: 0 },
+      shading: true,
+      geometry: cache.objects.trollmask,
+      texture,
+    });
+    return scene.render();
+  },
+
   async geoxor(texture: Buffer) {
     const scene = await GeometryScene.create({
       rotation: { x: Math.random() / 3 },
