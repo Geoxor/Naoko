@@ -15,7 +15,6 @@ import {
   SHAII_ID,
   SLURS,
   GEOXOR_ID,
-  
 } from "../constants";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
@@ -66,7 +65,6 @@ class Shaii {
     partials: ["CHANNEL"],
   });
   constructor() {
-    //console.log(this.plugins);
     this.loadCommands();
     for (const event of DISCORD_EVENTS) {
       this.bot.on(event as string, (data) => {
@@ -262,7 +260,6 @@ class Shaii {
   private onMessageCreate(message: Discord.Message) {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
-
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
         if (message.member && (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID)) {
           if (!this.hasGhostRole(message.member)) {
@@ -278,13 +275,13 @@ class Shaii {
           message.attachments.size === 0
         )
           return message.delete().catch(() => {});
-        
+
         restrictedChannelMiddleware(message, (message) => {
           commandMiddleware(message, async (message) => {
             const command =
               this.commands.get(message.command) ||
               this.commands.find((command) => command.aliases.includes(message.command));
-  
+
             const clearTyping = () => {
               if (processingMessage) {
                 processingMessage.delete().catch(() => {});
@@ -292,28 +289,28 @@ class Shaii {
                 clearInterval(typingInterval);
               }
             };
-  
+
             // If it doesn't exist we respond
             if (!command) {
               const commandDoesntExistString = `That command doesn't exist ${randomChoice(SLURS)}`;
               const closestCommand = this.getClosestCommand(message.command);
-  
+
               if (closestCommand)
                 return message
                   .reply(
                     `${commandDoesntExistString}\nThere's this however ${highlight(config.prefix + closestCommand.usage)}`
                   )
                   .catch(() => {});
-  
+
               return message.reply(`${commandDoesntExistString}`).catch(() => {});
             }
-  
+
             // Notify the user their shit's processing
             if (command.requiresProcessing) {
               var processingMessage = await message.channel.send("Processing...").catch(() => {});
               var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
             }
-  
+
             // Check permissions
             if (command.permissions) {
               for (const perm of command.permissions) {
@@ -323,7 +320,7 @@ class Shaii {
                 }
               }
             }
-  
+
             // Get the result to send from the command
             try {
               let timeStart = Date.now();
@@ -337,13 +334,13 @@ class Shaii {
             } catch (error: any) {
               await message.reply(markdown(error)).catch(() => {});
             }
-  
+
             // Delete the processing message if it exists
             clearTyping();
-  
+
             // If the command returns void we just return
             if (!result) return;
-  
+
             // Send the result
             message
               .reply(result)
