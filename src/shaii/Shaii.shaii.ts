@@ -71,7 +71,12 @@ class Shaii {
         this.plugins.forEach((plugin) => plugin.send(event, [data]));
       });
     }
-
+    this.bot.on("guildMemberRemove", (member) => {
+      const channel = this.geoxorGuild?.channels.cache.get("823403109522866217");
+      if (channel && channel.type === "GUILD_TEXT") {
+        channel.send(`User ${member.user.username}#${member.user.discriminator} left the server`).catch();
+      }
+    });
     this.bot.on("ready", () => {
       logger.print("Instantiated Discord client instance");
       logger.print(`Logged in as ${this.bot.user!.tag}!`);
