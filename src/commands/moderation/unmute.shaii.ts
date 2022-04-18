@@ -18,6 +18,7 @@ export default defineCommand({
     const reason = message.args.join(" ");
 
     // Unget rekt
+    await targetUser.roles.remove(MUTED_ROLE_ID);
     await targetUser.timeout(0 && Date.now(), reason);
 
     // Keep track of the unmute
