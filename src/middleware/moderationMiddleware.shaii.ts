@@ -9,7 +9,7 @@ import { isSelfMuted } from "../moderation/isSelfMuted.shaii";
 import logger from "../shaii/Logger.shaii";
 import { IMessage } from "../types";
 
-const checks = [isFreeNitro, isBadWord, isDiscordInvite, isMuted, isSelfMuted, isIP];
+const checks = [isFreeNitro, isBadWord, isDiscordInvite, isMuted, isIP];
 
 export default async function (message: IMessage, next: (message: IMessage) => any): Promise<void> {
   try {
