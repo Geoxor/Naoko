@@ -5,6 +5,7 @@ import { isDiscordInvite } from "../moderation/isDiscordInvite.shaii";
 import { isFreeNitro } from "../moderation/isFreeNitro.shaii";
 import { isIP } from "../moderation/isIP.shaii";
 import { isMuted } from "../moderation/isMuted.shaii";
+import { isSelfMuted } from "../moderation/isSelfMuted.shaii";
 import logger from "../shaii/Logger.shaii";
 import { IMessage } from "../types";
 
@@ -16,7 +17,8 @@ export default async function (message: IMessage, next: (message: IMessage) => a
       !(
         message.guild?.id === GEOXOR_GUILD_ID ||
         message.guild?.id === TESTING_GUILD_ID ||
-        message.guild?.id === QBOT_DEV_GUILD_ID
+        message.guild?.id === QBOT_DEV_GUILD_ID ||
+        message.channel.type == "DM"
       )
     )
       return;
