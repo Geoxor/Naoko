@@ -7,6 +7,7 @@ import fs from "fs";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 import Jimp from "jimp";
 import path from "path";
+import config from "src/shaii/Config.shaii";
 import logger from "../shaii/Logger.shaii";
 import { defineCommand, IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
 const replaceLast = require("replace-last");
@@ -544,9 +545,7 @@ export function getMostRelevantImageURL(message: Discord.Message) {
     message.attachments.first()?.url ||
     message.stickers.first()?.url ||
     getFirstEmojiURL(message.content) ||
-    message.mentions.users.first()?.displayAvatarURL(defaultImageOptions) ||
-    message.author.displayAvatarURL(defaultImageOptions) ||
-    message.author.defaultAvatarURL
+    getUserProfilePicture(message)
   );
 }
 
@@ -582,7 +581,7 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
   if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:")) return getMostRelevantImageURL(message); // this is a hack...
 
   const user = await message.client.users.fetch(arg);
-  return replaceLast(user.displayAvatarURL(defaultImageOptions), ".webp", ".png") || user.defaultAvatarURL;
+  return replaceLast(user.displayAvatarURL(defaultImageOptions), ".webp", ".png") || user.avatarURL();
 }
 
 /**
@@ -688,3 +687,30 @@ export const objectFlip = <T extends { [key: string]: string }>(obj: T): { [key:
   Object.keys(obj).forEach((key) => (ret[obj[key]] = key));
   return ret;
 };
+
+/**
+ * Gets users profile picture from either mention or from author
+ * @param message discord message
+ * @returns url of the user's profile picture
+ * @author N1kO23
+ */
+export async function getUserProfilePicture(message: IMessage): Promise<string> {
+  const userToFetch = message.mentions.users.first() || message.author;
+  let link;
+
+  if (message.guild) {
+    const req = await axios.get(`https://discord.com/api/guilds/${message.guild.id}/members/${userToFetch.id}`, {
+      headers: {
+        Authorization: `Bot ${config.token}`,
+      },
+    });
+
+    if (req.data.avatar) {
+      link = `https://cdn.discordapp.com/guilds/${message.guild.id}/users/${userToFetch.id}/avatars/${req.data.avatar}.png`;
+    }
+  } else {
+    link = userToFetch.avatarURL();
+  }
+
+  return link + "?size=2048";
+}

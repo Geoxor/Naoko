@@ -31,6 +31,11 @@ const solve = defineCommand({
         return "i forgor :skull:";
       case "shaii":
         return "https://cdn.discordapp.com/attachments/933655392972595200/941029796996063252/TurnAroundBut.mp4";
+      case "niko":
+        return "I understand why did u leave\nNiko is motherfucker\nNah cya";
+      case "n1ko":
+      case "n1ko23":
+        return "Fubuki is his solution";
     }
 
     let [a, b, c] = extractFactors(message.args.join(" "));
@@ -38,7 +43,7 @@ const solve = defineCommand({
       return weightedRandomChoice(
         new Map()
           .set(0.99, `I can only solve polynoms of degree 2 ${randomChoice(SLURS)}`)
-          .set(0.01, "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+          .set(0.01, "https://www.youtube.com/watch?v=dQw4w9WgXcQ") // Troll rickroll
       );
     return new D2Polynom(a, b, c).solve();
   },
