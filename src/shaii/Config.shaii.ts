@@ -1,4 +1,4 @@
-import logger from "./Logger.shaii";
+import configTrolley from "../config.shaii.json";
 
 interface IConfig {
   prefix: string;
@@ -7,19 +7,5 @@ interface IConfig {
   mongo: string;
   chatLogChannel: string;
 }
-
-class Config {
-  config!: IConfig;
-  constructor() {
-    try {
-      var configJSON = require("../config.shaii.json");
-    } catch (error) {
-      logger.error("You don't have a config set, please fill in your config.shaii.json");
-    }
-
-    this.config = configJSON;
-  }
-}
-
-const { config } = new Config();
+const config: IConfig = configTrolley;
 export default config;
