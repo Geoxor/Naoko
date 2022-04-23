@@ -7,7 +7,7 @@ import fs from "fs";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 import Jimp from "jimp";
 import path from "path";
-import config from "src/shaii/Config.shaii";
+import config from "../shaii/Config.shaii";
 import logger from "../shaii/Logger.shaii";
 import { defineCommand, IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
 const replaceLast = require("replace-last");
