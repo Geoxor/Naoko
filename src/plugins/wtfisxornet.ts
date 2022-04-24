@@ -6,11 +6,11 @@ export default definePlugin({
   name: "@otiskujawa/wtfisxornet",
   version: "1.0.0",
   command: defineCommand({
-    name: "xornet",
-    aliases: ["wtfisxornet", "wtfxornet"],
+    name: "wtfisxornet",
+    aliases: ["xornet", "wtfxornet"],
     category: "UTILITY",
-    usage: "xornet",
-    description: "Make an embedded info about xornet",
+    usage: "wtfisxornet <reporter/links>",
+    description: "Create an embed with information about Xornet",
     execute: async (message) => {
       const embed = new Discord.MessageEmbed();
       embed.setFooter( "Used by " + message.author.username + ". Plugin made by otiskujawa." , message.author.avatarURL() || message.author.defaultAvatarURL )
