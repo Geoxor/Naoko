@@ -44,7 +44,7 @@ export function hasSelfMute(member: Discord.GuildMember): boolean {
 export function hasActualMute(member: Discord.GuildMember): boolean {
   const guild = member.client.guilds.cache.get(GEOXOR_GUILD_ID);
   const guildMember = guild?.members.cache.get(member.id);
-  return guildMember!.roles.cache.has(SELF_MUTED_ROLE_ID);
+  return guildMember!.roles.cache.has(MUTED_ROLE_ID);
 }
 
 export function unSelfMute(member: Discord.GuildMember): Promise<GuildMember> {
