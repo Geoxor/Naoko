@@ -7,23 +7,27 @@ env:
   
 jobs:
   compile:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: "Compile Typescript"
     steps: 
       - name: 🛎 Checkout
         uses: actions/checkout@v2
+      - name: Install system deps
+        run: sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev libjpeg-dev librsvg2-dev mesa-common-dev
       - name: 🛠 Install deps
-        run: npm ci
+        run: npm i
       - name: 🛠 Compile 
         run: tsc
      
   unit-test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: "Run unit tests"
     steps: 
       - name: 🛎 Checkout
         uses: actions/checkout@v2
+      - name: Install system deps
+        run: sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev libjpeg-dev librsvg2-dev mesa-common-dev
       - name: 🛠 Install deps
-        run: npm ci
+        run: npm i
       - name: 🛠 Run tests 
         run: npm run test
