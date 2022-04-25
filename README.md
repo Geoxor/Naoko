@@ -3,8 +3,6 @@
 
 ## ⚡ Plugins
 Plugins are runtime-loadable type-safe flexible components that have access to all of the bot's events
-including `timers` which automatically get cleared on hot reloads so you don't have to manage
-memory
 
 ### Example
 
