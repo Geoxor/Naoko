@@ -32,6 +32,7 @@ export interface IUser extends mongoose.Document, IUserFunctions {
   chat_xp: number;
   bonks: number;
   is_muted: Boolean;
+  is_self_muted: Boolean;
   is_banned: Boolean;
   roles: string[];
   joined_at: number;

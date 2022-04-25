@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { GEOXOR_GUILD_ID, QBOT_DEV_GUILD_ID, TESTING_GUILD_ID } from "../constants";
+import { GEOXOR_GUILD_ID, TESTING_GUILD_ID } from "../constants";
 import { isBadWord } from "../moderation/isBadWord.shaii";
 import { isDiscordInvite } from "../moderation/isDiscordInvite.shaii";
 import { isFreeNitro } from "../moderation/isFreeNitro.shaii";
@@ -13,14 +13,7 @@ const checks = [isFreeNitro, isBadWord, isDiscordInvite, isMuted, isIP];
 
 export default async function (message: IMessage, next: (message: IMessage) => any): Promise<void> {
   try {
-    if (
-      !(
-        message.guild?.id === GEOXOR_GUILD_ID ||
-        message.guild?.id === TESTING_GUILD_ID ||
-        message.guild?.id === QBOT_DEV_GUILD_ID ||
-        message.channel.type == "DM"
-      )
-    )
+    if (!(message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === TESTING_GUILD_ID || message.channel.type == "DM"))
       return;
     for (let i = 0; i < checks.length; i++) {
       const checkFn = checks[i];

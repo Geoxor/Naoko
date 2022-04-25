@@ -3,7 +3,6 @@ import { EmojiIdentifierResolvable } from "discord.js";
 export const SHAII_ID = "870496144881492069";
 export const GEOXOR_GUILD_ID = "385387666415550474";
 export const TESTING_GUILD_ID = "911762334538670160";
-export const QBOT_DEV_GUILD_ID = "897185485313699891";
 export const GEOXOR_GENERAL_CHANNEL_ID = "845328432715923487";
 export const GEOXOR_STAFF_CHANNEL_ID = "553776591910600714";
 export const DOWNVOTE_EMOJI_ID = "823666555123662888";
@@ -11,10 +10,9 @@ export const UPVOTE_EMOJI_ID = "834402501397577729";
 export const GEOXOR_ID = "153274351561605120";
 export const TARDOKI_ID = "858340143131787274";
 export const SVRGE_ID = "148295829810053120";
-export const QEXAT_ID = "439424425780183040";
 export const N1KO_ID = "251270690160771072";
 export const MOD_ROLE_ID = "438797772414648320";
-export const ADMIN_ROLE_ID = "385391699293372429"
+export const ADMIN_ROLE_ID = "385391699293372429";
 export const OVERPERM_ROLE_ID = "422444741527994368";
 export const MUTED_ROLE_ID = "737011597217628231";
 export const SELF_MUTED_ROLE_ID = "965067505779486810";
@@ -22,9 +20,7 @@ export const GHOSTS_ROLE_ID = "736285344659669003";
 export const GEOBOTS_ROLE_ID = "720006137151488121";
 export const VOTE_TIME = 30000;
 
-export const restrictedChannels: string[] = [
-  "845328432715923487"
-];
+export const restrictedChannels: string[] = ["845328432715923487"];
 
 export const SLURS = [
   "idiot",

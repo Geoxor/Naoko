@@ -1,5 +1,5 @@
 import Discord, { GuildMember, MessageEmbed } from "discord.js";
-import { KATSUMI_LOGO } from "../constants";
+import { SHAII_LOGO } from "../constants";
 import { SELF_MUTED_ROLE_ID } from "../constants";
 import { durationToMilliseconds, msToFullTime } from "../logic/logic.shaii";
 import { User } from "../shaii/Database.shaii";
@@ -21,9 +21,9 @@ const gn = defineCommand({
 
     let duration = message.args[0];
     if (!duration) {
-        duration = "6h";
+      duration = "6h";
     } else if (!duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) {
-        return "You must specify a valid duration";
+      return "You must specify a valid duration";
     }
     const reason = message.args.slice(1).join(" ") || "No reason given";
 
@@ -48,8 +48,6 @@ const gn = defineCommand({
   },
 });
 
-
-
 function sendMuteEmbed(
   message: IMessage,
   targetUser: Discord.GuildMember,
@@ -65,12 +63,12 @@ function sendMuteEmbed(
     .setTimestamp()
     .addField("Duration", msToFullTime(parseInt(duration)), true)
     .addField("Reason", reason, true)
-    .setFooter(Shaii.version, KATSUMI_LOGO)
+    .setFooter(Shaii.version, SHAII_LOGO)
     .setColor("#FF0000");
 
-//   targetUser
-//     .send({ embeds: [embed] })
-//     .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`));
+  //   targetUser
+  //     .send({ embeds: [embed] })
+  //     .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`));
 
   return message.reply({ embeds: [embed] });
 }
@@ -86,7 +84,7 @@ export function sendUnmuteEmbed(
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
     .setTimestamp()
     .addField("Reason", reason || "No reason given", true)
-    .setFooter(Shaii.version, KATSUMI_LOGO)
+    .setFooter(Shaii.version, SHAII_LOGO)
     .setColor("#00FF00");
 
   return message.channel.send({ embeds: [embed] });
@@ -101,7 +99,7 @@ export async function selfMute(member: Discord.GuildMember): Promise<GuildMember
 }
 
 export default definePlugin({
-    name: "@shkoop/goodnight",
-    version: "1.0.0",
-    command: [gn],
-  });
+  name: "@shkoop/goodnight",
+  version: "1.0.0",
+  command: [gn],
+});

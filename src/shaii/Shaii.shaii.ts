@@ -11,7 +11,6 @@ import {
   GEOXOR_GUILD_ID,
   GHOSTS_ROLE_ID,
   MUTED_ROLE_ID,
-  QBOT_DEV_GUILD_ID,
   SHAII_ID,
   SLURS,
   GEOXOR_ID,
@@ -94,8 +93,8 @@ class Shaii {
       }
     });
     this.bot.on("messageDelete", async (message) => {
-      if (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID) {
-        logDelete(message, (message) => {});
+      if (message.guild?.id === GEOXOR_GUILD_ID) {
+        logDelete(message);
       }
     });
     this.bot.on("messageUpdate", async (oldMessage, newMessage) => {
@@ -111,7 +110,7 @@ class Shaii {
       user.updateRoles(Array.from(member.roles.cache.keys()));
     });
     this.bot.on("guildMemberAdd", async (member) => {
-      if (member.guild.id === GEOXOR_GUILD_ID || member.guild.id === QBOT_DEV_GUILD_ID) {
+      if (member.guild.id === GEOXOR_GUILD_ID) {
         if (!hasGhostsRole(member) && member.guild.id === GEOXOR_GUILD_ID) {
           giveGhostsRole(member).catch(() => {
             logger.error("Couldn't give Ghosts role to the member.");
@@ -266,7 +265,7 @@ class Shaii {
     userMiddleware(message, (message) => {
       moderationMiddleware(message, (message) => {
         // If some users joined while legacy Shaii was kicked, adds to them the ghost role if they talk in chat
-        if (message.member && (message.guild?.id === GEOXOR_GUILD_ID || message.guild?.id === QBOT_DEV_GUILD_ID)) {
+        if (message.member && message.guild?.id === GEOXOR_GUILD_ID) {
           if (!this.hasGhostRole(message.member)) {
             message.member.roles.add(GHOSTS_ROLE_ID).catch(() => {
               logger.error("This role does not exist in the server.");

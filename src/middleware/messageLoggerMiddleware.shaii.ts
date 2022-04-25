@@ -40,7 +40,7 @@ export function logEdit(
 
 export function logDelete(
   message: Discord.Message | Discord.PartialMessage,
-  next: (message: Discord.Message | Discord.PartialMessage) => any
+  next?: (message: Discord.Message | Discord.PartialMessage) => any
 ) {
   if (message.channel.type == "DM") return;
   if (message.author?.id === SHAII_ID) return;
@@ -65,5 +65,5 @@ export function logDelete(
   logChannel.send({ embeds: [embed] }).catch(() => {});
   logger.print(`Message deleted at #${message.channel.name} by ${message.author?.username}`);
 
-  next(message);
+  next && next(message);
 }

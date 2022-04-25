@@ -8,7 +8,7 @@ dist
 cache/*
 libs/*
 src/cache/*
+src/assets/goodWords.json
+src/assets/badWords.json
 shaii.json
 config.shaii.json
-!prisma/migrations
-!prisma/schema.prisma

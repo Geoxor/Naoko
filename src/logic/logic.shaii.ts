@@ -14,7 +14,7 @@ const replaceLast = require("replace-last");
 
 const defaultImageOptions: Discord.ImageURLOptions = {
   format: "png",
-  size: 512,
+  size: 2048,
 };
 
 export function timeSince(date: number) {
@@ -540,7 +540,7 @@ export function textToBrainfuck(sentence: string): string {
  * @param message the discord message to fetch from
  * @author Bluskript
  */
-export function getMostRelevantImageURL(message: Discord.Message) {
+export function getMostRelevantImageURL(message: IMessage) {
   return (
     message.attachments.first()?.url ||
     message.stickers.first()?.url ||
@@ -564,12 +564,6 @@ export function findIndexOfURL(array: string[]) {
 export async function getImageURLFromMessage(message: IMessage): Promise<string> {
   const arg = message.args[findIndexOfURL(message.args)];
   const userMention = message.mentions.users.first();
-
-  // If theres a reply
-  if (message.reference) {
-    const reference = await message.fetchReference();
-    return replaceLast(getMostRelevantImageURL(reference), ".webp", ".png");
-  }
 
   if (isValidHttpUrl(arg)) {
     if (arg.startsWith("https://tenor") && !arg.endsWith(".gif")) {
@@ -694,23 +688,13 @@ export const objectFlip = <T extends { [key: string]: string }>(obj: T): { [key:
  * @returns url of the user's profile picture
  * @author N1kO23
  */
-export async function getUserProfilePicture(message: IMessage): Promise<string> {
-  const userToFetch = message.mentions.users.first() || message.author;
-  let link;
+export function getUserProfilePicture(message: IMessage): string {
+  const otherUser = message.mentions.users.first() || message.client.users.cache.get(message.args[0]) || message.author;
+  let avatar;
 
   if (message.guild) {
-    const req = await axios.get(`https://discord.com/api/guilds/${message.guild.id}/members/${userToFetch.id}`, {
-      headers: {
-        Authorization: `Bot ${config.token}`,
-      },
-    });
-
-    if (req.data.avatar) {
-      link = `https://cdn.discordapp.com/guilds/${message.guild.id}/users/${userToFetch.id}/avatars/${req.data.avatar}.png`;
-    }
-  } else {
-    link = userToFetch.avatarURL();
+    const member = message.guild.members.cache.get(otherUser.id);
+    if (member && member.avatar) avatar = member.avatarURL(defaultImageOptions);
   }
-
-  return link + "?size=2048";
+  return avatar || otherUser.displayAvatarURL(defaultImageOptions);
 }

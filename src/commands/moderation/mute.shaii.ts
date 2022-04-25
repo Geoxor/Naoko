@@ -34,7 +34,6 @@ export default defineCommand({
 
     // Get rekt
     await targetUser.timeout(parseInt(msDuration), reason);
-    
 
     // Keep track of the mute
     await User.mute(message.author.id, targetUser.id, duration, reason).catch(() =>
