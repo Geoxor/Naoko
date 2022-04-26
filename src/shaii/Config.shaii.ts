@@ -82,7 +82,7 @@ class Config {
    * Saves the config to the config.shaii.json file
    */
   public save(): void {
-    fs.writeFileSync(this.path, JSON.stringify(this.config));
+    fs.writeFileSync(this.path, JSON.stringify(this.config, null, 2));
   }
 
   /**
