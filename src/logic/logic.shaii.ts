@@ -571,6 +571,15 @@ export async function getImageURLFromMessage(message: IMessage): Promise<string>
     return replaceLast(arg, ".webp", ".png");
   }
 
+  // If theres a reply
+  if (message.reference) {
+    let reference = (await message.fetchReference()) as IMessage;
+    reference.command = message.command;
+    reference.args = message.args;
+    reference.databaseUser = message.databaseUser;
+    return replaceLast(getMostRelevantImageURL(reference), ".webp", ".png");
+  }
+
   if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:")) return getMostRelevantImageURL(message); // this is a hack...
 
   const user = await message.client.users.fetch(arg);

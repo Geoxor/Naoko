@@ -9,6 +9,10 @@ interface IConfig {
   chatLogChannel: string;
 }
 
+/**
+ * The Config class responsible for handling config loading and saving
+ * @author N1kO23
+ */
 class Config {
   // Initializes the config with default path
   private path: string = "../config.shaii.json";
@@ -61,6 +65,7 @@ class Config {
    * Validates the config object
    * @param configToValidate Config object to validate
    * @throws Error if the config is invalid
+   * @author N1kO23
    */
   private validateConfig(configToValidate?: IConfig): void {
     const config = configToValidate || this.config;
@@ -80,6 +85,7 @@ class Config {
 
   /**
    * Saves the config to the config.shaii.json file
+   * @author N1kO23
    */
   public save(): void {
     fs.writeFileSync(this.path, JSON.stringify(this.config, null, 2));
@@ -87,6 +93,7 @@ class Config {
 
   /**
    * Loads the config from the path, validates it and sets it to the config object
+   * @author N1kO23
    */
   public load(): void {
     try {
