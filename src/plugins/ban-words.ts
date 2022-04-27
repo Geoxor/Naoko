@@ -2,7 +2,7 @@ import { Collection, Snowflake, Message } from "discord.js";
 import { definePlugin } from "../shaii/Plugin.shaii";
 
 type MemberWarning = {
-  saidBannedWords: BannedWords[];
+  saidBannedWords: string[];
   saidDifferentBannedWordCount: 0 | 1 | 2;
   lastBannedWordSentTime: number;
 };
@@ -32,7 +32,7 @@ export default definePlugin({
       if (!message.member) return;    
   
       const content = message.content;
-      const saidBannedWord = bannedWords.find(word => content.includes(word)) as BannedWords | undefined;
+      const saidBannedWord = bannedWords.find(word => content.includes(word));
 
       if (saidBannedWord != null) {
         message.delete();
