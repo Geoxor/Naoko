@@ -31,15 +31,17 @@ export default definePlugin({
   timers: { memberWarningTimeoutTimer },
   events: {
     messageCreate: (message: Message): void => {
-      const content = message.content;  
+      if (!message.member) return;    
+  
+      const content = message.content;
       const saidBannedWord = bannedWords.find(word => content.includes(word)) as BannedWords | undefined;
 
-      if (saidBannedWord == null) {
+      if (saidBannedWord != null) {
         message.delete();
 
         const authorId = message.author.id;
         const warning = memberWarnings.has(authorId)
-          ? memberWarnings.get(authorId)
+          ? memberWarnings.get(authorId)!
           : emptyMemberWarning();
         
         if (
