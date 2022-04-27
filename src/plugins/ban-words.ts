@@ -4,7 +4,7 @@ import { definePlugin } from "../shaii/Plugin.shaii";
 type MemberWarning = {
   saidBannedWords: string[];
   saidDifferentBannedWordCount: 0 | 1 | 2;
-  lastBannedWordSentTime: number;
+  removeWarningTime: number;
 };
 
 // just in case some trolley happened and `require()` is banned
@@ -14,7 +14,7 @@ const bannedWords = require("../assets/badWords.json") as string[];
 const memberWarnings: Collection<Snowflake, MemberWarning> = new Collection();
 const memberWarningTimeoutTimer = setInterval(() => {
   memberWarnings.forEach((warning, authorId) => {
-    const timeLeft = Date.now() - warning.lastBannedWordSentTime; 
+    const timeLeft = warning.removeWarningTime - Date.now(); 
     if (timeLeft < 60 * 1000) {
       setTimeout(() => {
         memberWarnings.delete(authorId);
@@ -22,6 +22,8 @@ const memberWarningTimeoutTimer = setInterval(() => {
     }
   });
 }, 60 * 1000);
+
+const DAY = 24 * 60 * 60 * 1000;
 
 export default definePlugin({
   name: "@nightmaretopia/ban-words",
@@ -45,7 +47,7 @@ export default definePlugin({
           warning.saidDifferentBannedWordCount === 2
         ) {
           message.channel.send(`<@${authorId}>, you really like breaking rules, don't you?`);
-          message.member.timeout(24 * 60 * 60 * 1000);
+          message.member.timeout(DAY).catch(() => {});
           memberWarnings.delete(authorId);
         } else {
           message.channel.send( 
@@ -54,7 +56,7 @@ export default definePlugin({
             : `<@${authorId}>, you said a word that you shouldn't say, don't do this again.`
           );
           warning.saidBannedWords.push(saidBannedWord);
-          warning.lastBannedWordSentTime = Date.now();
+          warning.removeWarningTime = Date.now() + DAY;
           warning.saidDifferentBannedWordCount++;
           memberWarnings.set(authorId, warning);
         }
@@ -67,6 +69,6 @@ function emptyMemberWarning(): MemberWarning {
   return {
     saidBannedWords: [],
     saidDifferentBannedWordCount: 0,
-    lastBannedWordSentTime: Date.now(),
+    removeWarningTime: Date.now() + DAY,
   };
 }
