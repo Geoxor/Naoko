@@ -1,4 +1,4 @@
-import { Collection, Snowflake, Message } from 'discord.js';
+import { Collection, Snowflake, Message } from "discord.js";
 import { definePlugin } from "../shaii/Plugin.shaii";
 
 type MemberWarning = {
@@ -40,9 +40,7 @@ export default definePlugin({
         message.delete();
 
         const authorId = message.author.id;
-        const warning = memberWarnings.has(authorId)
-          ? memberWarnings.get(authorId)!
-          : emptyMemberWarning();
+        const warning = memberWarnings.get(authorId) ?? emptyMemberWarning();
         
         if (
           warning.saidBannedWords.includes(saidBannedWord) ||
