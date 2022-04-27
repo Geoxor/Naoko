@@ -7,11 +7,9 @@ type MemberWarning = {
   lastBannedWordSentTime: number;
 };
 
-type BannedWords = typeof bannedWords[number];
-const bannedWords = [
-  "niger",
-  "nigger",
-] as const;
+// just in case some trolley happened and `require()` is banned
+//@ts-ignore
+const bannedWords = require("../assets/badWords.json") as string[];
 
 const memberWarnings: Collection<Snowflake, MemberWarning> = new Collection();
 const memberWarningTimeoutTimer = setInterval(() => {
