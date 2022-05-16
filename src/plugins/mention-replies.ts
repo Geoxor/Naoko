@@ -9,7 +9,7 @@ export default definePlugin({
   events: {
     messageCreate: (message) => {
       if (
-        message.content.startsWith("<@!") &&
+        message.content.startsWith("<@") &&
         message.mentions.members?.first()?.id === SHAII_ID &&
         message.type !== "REPLY"
       ) {
