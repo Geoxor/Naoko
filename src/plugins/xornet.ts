@@ -3,7 +3,7 @@ import { definePlugin } from "../shaii/Plugin.shaii";
 import { defineCommand } from "../types";
 
 export default definePlugin({
-  name: "@otiskujawa/wtfisxornet",
+  name: "@otiskujawa/xornet",
   version: "1.0.0",
   command: defineCommand({
     name: "wtfisxornet",
