@@ -16,7 +16,7 @@ export default definePlugin({
       const member = oldState.member || newState.member;
       if (!member) return;
 
-      if (oldState.channelId !== newState.channelId) {
+      if ((oldState.channelId && newState.channelId) && oldState.channelId !== newState.channelId) {
         logChannel.send(`User: ${member.displayName} changed voice channel from ${pingVoiceChannel(oldState.channelId)} => ${pingVoiceChannel(newState.channelId)}`).catch(console.error);
       }
 
