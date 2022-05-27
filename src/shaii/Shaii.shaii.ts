@@ -1,4 +1,4 @@
-import Discord, { Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
+import Discord, { GuildTextBasedChannel, Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
 import fs from "fs";
 import levenshtein from "js-levenshtein";
 import path from "path";
@@ -76,6 +76,36 @@ class Shaii {
         channel.send(`User ${member.user.username}#${member.user.discriminator} left the server`).catch();
       }
     });
+    this.bot.on("voiceStateUpdate", (oldState, newState) => {
+      const LOG_CHANNEL = "755597803102928966";
+      const pingVoiceChannel = (channelId: string) => `<#${channelId}>`;
+
+      const logChannel = newState.guild.channels.cache.get(LOG_CHANNEL) as GuildTextBasedChannel;
+      if (!logChannel) return;
+
+      const member = oldState.member || newState.member;
+      if (!member) return;
+      if (member.user.bot) return;
+
+      if (!oldState?.channelId && newState?.channelId) {
+        logChannel.send(`User: ${member.displayName} joined voice channel ${pingVoiceChannel(newState.channelId)}`).then((message) => {
+          message.edit(`User: <@${member.id}> joined voice channel ${pingVoiceChannel(newState.channelId!)}`).catch();
+        }).catch();
+      }
+
+      if ((oldState?.channelId && newState?.channelId) && oldState?.channelId !== newState?.channelId) {
+        logChannel.send(`User: ${member.displayName} changed voice channel from ${pingVoiceChannel(oldState.channelId)} => ${pingVoiceChannel(newState.channelId)}`).then((message) => {
+          message.edit(`User: <@${member.id}> changed voice channel from ${pingVoiceChannel(oldState.channelId!)} => ${pingVoiceChannel(newState.channelId!)}`).catch();
+        }).catch();
+      }
+
+      if (oldState?.channelId && !newState?.channelId) {
+        logChannel.send(`User: ${member.displayName} left voice channel ${pingVoiceChannel(oldState.channelId)}`).then((message) => {
+          message.edit(`User: <@${member.id}> left voice channel ${pingVoiceChannel(oldState.channelId!)}`).catch();
+        }).catch();
+      }
+    });
+
     this.bot.on("ready", () => {
       logger.print("Instantiated Discord client instance");
       logger.print(`Logged in as ${this.bot.user!.tag}!`);

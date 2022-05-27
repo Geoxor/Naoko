@@ -2,7 +2,7 @@ import Discord from "discord.js";
 import { ICommand } from "../types";
 
 // Add more types as the project grows
-export const DISCORD_EVENTS: (keyof Discord.ClientEvents)[] = ["messageCreate"];
+export const DISCORD_EVENTS: (keyof Discord.ClientEvents)[] = ["messageCreate", "voiceStateUpdate"];
 
 export type DiscordEventHandler<K extends keyof Discord.ClientEvents> = (
   ...args: Discord.ClientEvents[K]
@@ -31,11 +31,11 @@ export class Plugin implements IPluginDefinition {
   public version: PluginVersion;
 
   constructor(def: IPluginDefinition) {
-    (this.timers = def.timers),
-      (this.name = def.name),
-      (this.command = def.command),
-      (this.version = def.version),
-      (this.events = def.events);
+    this.timers = def.timers;
+    this.name = def.name;
+    this.command = def.command;
+    this.version = def.version;
+    this.events = def.events;
 
     this.state = def.state || def.startupState || PluginStates.Enabled;
     console.log(`  Loaded plugin ${this.name}`);
@@ -47,7 +47,7 @@ export class Plugin implements IPluginDefinition {
     if (this.events) {
       // TODO: Something is wrong here and it gets passed in in an array im not sure why
       // @ts-ignore
-      this.events![event]!(data[0]);
+      this.events![event]?.(data[0]);
     }
   }
 
