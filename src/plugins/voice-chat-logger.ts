@@ -3,6 +3,8 @@ import { definePlugin } from "../shaii/Plugin.shaii";
 
 const LOG_CHANNEL = "755597803102928966";
 
+const pingVoiceChannel = (channelId: string) => `<#${channelId}>`;
+
 export default definePlugin({
   name: "@geoxor/voice-chat-logger",
   version: "1.0.0",
@@ -15,15 +17,15 @@ export default definePlugin({
       if (!member) return;
 
       if (oldState.channelId !== newState.channelId) {
-        logChannel.send(`User: ${member.displayName} changed voice channel from ${oldState.channelId} to ${newState.channelId}`).catch(console.error);
+        logChannel.send(`User: ${member.displayName} changed voice channel from ${pingVoiceChannel(oldState.channelId)} => ${pingVoiceChannel(newState.channelId)}`).catch(console.error);
       }
 
       if (!oldState.channelId && newState.channelId) {
-        logChannel.send(`User: ${member.displayName} joined voice channel ${newState.channelId}`).catch(console.error);
+        logChannel.send(`User: ${member.displayName} joined voice channel ${pingVoiceChannel(newState.channelId)}`).catch(console.error);
       }
 
       if (oldState.channelId && !newState.channelId) {
-        logChannel.send(`User: ${member.displayName} left voice channel ${oldState.channelId}`).catch(console.error);
+        logChannel.send(`User: ${member.displayName} left voice channel ${pingVoiceChannel(oldState.channelId)}`).catch(console.error);
       }
     },
   },
