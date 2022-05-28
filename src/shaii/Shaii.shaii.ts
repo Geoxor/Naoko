@@ -88,20 +88,20 @@ class Shaii {
       if (member.user.bot) return;
 
       if (!oldState?.channelId && newState?.channelId) {
-        logChannel.send(`User: ${member.displayName} joined voice channel ${pingVoiceChannel(newState.channelId)}`).then((message) => {
-          message.edit(`User: <@${member.id}> joined voice channel ${pingVoiceChannel(newState.channelId!)}`).catch();
+        logChannel.send(`User: ${member.displayName} joined ${pingVoiceChannel(newState.channelId)}`).then((message) => {
+          message.edit(`User: <@${member.id}> joined ${pingVoiceChannel(newState.channelId!)}`).catch();
         }).catch();
       }
 
       if ((oldState?.channelId && newState?.channelId) && oldState?.channelId !== newState?.channelId) {
-        logChannel.send(`User: ${member.displayName} changed voice channel from ${pingVoiceChannel(oldState.channelId)} => ${pingVoiceChannel(newState.channelId)}`).then((message) => {
-          message.edit(`User: <@${member.id}> changed voice channel from ${pingVoiceChannel(oldState.channelId!)} => ${pingVoiceChannel(newState.channelId!)}`).catch();
+        logChannel.send(`User: ${member.displayName} moved from ${pingVoiceChannel(oldState.channelId)} => ${pingVoiceChannel(newState.channelId)}`).then((message) => {
+          message.edit(`User: <@${member.id}> moved from ${pingVoiceChannel(oldState.channelId!)} => ${pingVoiceChannel(newState.channelId!)}`).catch();
         }).catch();
       }
 
       if (oldState?.channelId && !newState?.channelId) {
-        logChannel.send(`User: ${member.displayName} left voice channel ${pingVoiceChannel(oldState.channelId)}`).then((message) => {
-          message.edit(`User: <@${member.id}> left voice channel ${pingVoiceChannel(oldState.channelId!)}`).catch();
+        logChannel.send(`User: ${member.displayName} left ${pingVoiceChannel(oldState.channelId)}`).then((message) => {
+          message.edit(`User: <@${member.id}> left ${pingVoiceChannel(oldState.channelId!)}`).catch();
         }).catch();
       }
     });
