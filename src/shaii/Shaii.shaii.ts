@@ -114,12 +114,6 @@ class Shaii {
       this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
     });
     this.bot.on("messageCreate", async (message) => {
-      if (message.author.id === "462257487261728768") {
-        if (message.content.toLowerCase() === "m" || message.content.toLowerCase() === ".") {
-          message.delete().then(() => message.reply("stfu")).catch();
-        }
-      }
-
       // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
       try {
         this.onMessageCreate(message);
