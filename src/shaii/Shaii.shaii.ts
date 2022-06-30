@@ -34,8 +34,7 @@ si.getStaticData().then((info) => {
   systemInfo = info;
 });
 
-const emojiRegExp: RegExp =
-  /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+
 
 /**
  * Shaii multi purpose Discord bot
@@ -115,6 +114,12 @@ class Shaii {
       this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
     });
     this.bot.on("messageCreate", async (message) => {
+      if (message.author.id === "462257487261728768") {
+        if (message.content.toLowerCase() === "m" || message.content.toLowerCase() === ".") {
+          message.delete().then(() => message.reply("stfu")).catch();
+        }
+      }
+
       // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
       try {
         this.onMessageCreate(message);
@@ -128,12 +133,11 @@ class Shaii {
       }
     });
     this.bot.on("messageUpdate", async (oldMessage, newMessage) => {
-      logEdit(oldMessage, newMessage, (oldMessage, newMessage) => {});
+      logEdit(oldMessage, newMessage, (oldMessage, newMessage) => { });
       userMiddleware(newMessage as Discord.Message, (newMessage) => {
-        moderationMiddleware(newMessage, (newMessage) => {});
+        moderationMiddleware(newMessage, (newMessage) => { });
       });
     });
-    this.bot.on("messageReactionAdd", async (messageReaction, user) => this.onMessageReactionAdd(messageReaction, user));
     this.bot.on("guildMemberRemove", async (member) => {
       if (member.id === SHAII_ID) return;
       let user = await User.findOneOrCreate(member);
@@ -283,7 +287,7 @@ class Shaii {
           channel
             .delete()
             .then(() => logger.print(`Deleted residual battle thread ${channel.id}`))
-            .catch(() => {});
+            .catch(() => { });
           continue;
         }
         channel.join().then(() => logger.print(`Joined thread ${channel.id}`));
@@ -308,7 +312,7 @@ class Shaii {
           message.guild?.channels.cache.get(message.channel.id)?.name.includes("images") &&
           message.attachments.size === 0
         )
-          return message.delete().catch(() => {});
+          return message.delete().catch(() => { });
 
         restrictedChannelMiddleware(message, (message) => {
           commandMiddleware(message, async (message) => {
@@ -318,7 +322,7 @@ class Shaii {
 
             const clearTyping = () => {
               if (processingMessage) {
-                processingMessage.delete().catch(() => {});
+                processingMessage.delete().catch(() => { });
                 // @ts-ignore
                 clearInterval(typingInterval);
               }
@@ -334,14 +338,14 @@ class Shaii {
                   .reply(
                     `${commandDoesntExistString}\nThere's this however ${highlight(config.prefix + closestCommand.usage)}`
                   )
-                  .catch(() => {});
+                  .catch(() => { });
 
-              return message.reply(`${commandDoesntExistString}`).catch(() => {});
+              return message.reply(`${commandDoesntExistString}`).catch(() => { });
             }
 
             // Notify the user their shit's processing
             if (command.requiresProcessing) {
-              var processingMessage = await message.channel.send("Processing...").catch(() => {});
+              var processingMessage = await message.channel.send("Processing...").catch(() => { });
               var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
             }
 
@@ -350,7 +354,7 @@ class Shaii {
               for (const perm of command.permissions) {
                 if (!message.member?.permissions.has(perm)) {
                   if (command.requiresProcessing) clearTyping();
-                  return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => {});
+                  return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => { });
                 }
               }
             }
@@ -361,12 +365,11 @@ class Shaii {
               var result = await command.execute(message);
               let timeEnd = Date.now();
               logger.print(
-                `${timeEnd - timeStart}ms - Executed command: ${command.name} - User: ${message.author.username} - Guild: ${
-                  message.guild?.name || "dm"
+                `${timeEnd - timeStart}ms - Executed command: ${command.name} - User: ${message.author.username} - Guild: ${message.guild?.name || "dm"
                 }`
               );
             } catch (error: any) {
-              await message.reply(markdown(error)).catch(() => {});
+              await message.reply(markdown(error)).catch(() => { });
             }
 
             // Delete the processing message if it exists
@@ -382,27 +385,13 @@ class Shaii {
               .catch((error) =>
                 error.code === 500
                   ? message.reply({
-                      embeds: [new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
-                    })
+                    embeds: [new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
+                  })
                   : message.reply(markdown(error))
               );
           });
         });
       });
-    });
-  }
-
-  public onMessageReactionAdd(
-    messageReaction: MessageReaction | PartialMessageReaction,
-    user: Discord.User | Discord.PartialUser
-  ) {
-    const messageReactionGuild = this.bot.guilds.cache.get(messageReaction.message.guild?.id || "");
-    if (!messageReactionGuild) return;
-    messageReactionGuild.members.fetch().then((data) => {
-      if (data.get(user.id)?.roles.cache.has(MUTED_ROLE_ID)) {
-        messageReaction.remove();
-      }
-      return;
     });
   }
 }
