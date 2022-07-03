@@ -13,6 +13,7 @@ const DB_NUMBER = { type: "Number", default: 0 };
 
 const schema = new Schema<IUser>({
   discord_id: { type: "String", required: true },
+  minecraft_username: { type: "String", required: false },
   bonks: { type: "Number", default: 0 },
   chat_xp: { type: "Number", default: 0 },
   is_muted: { type: "Boolean", default: false },

@@ -50,6 +50,7 @@
     "node-canvas-webgl": "^0.2.6",
     "pet-pet-gif": "^1.0.9",
     "progress": "^2.0.3",
+    "rcon.js": "^1.0.0",
     "replace-last": "^1.2.6",
     "systeminformation": "^5.8.0",
     "three": "^0.131.3",

@@ -8,9 +8,11 @@ export interface IMessage extends Discord.Message {
   databaseUser: DatabaseUser;
 }
 
+export type CommandExecuteRespones = string | Discord.ReplyMessageOptions | void
+
 export type CommandExecute = (
   message: IMessage
-) => Promise<string | Discord.ReplyMessageOptions | void> | Discord.ReplyMessageOptions | string | void;
+) => Promise<CommandExecuteRespones> | CommandExecuteRespones;
 
 export type CommandCategories = typeof COMMAND_CATEGORIES_RAW[number];
 

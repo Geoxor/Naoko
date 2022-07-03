@@ -7,6 +7,9 @@ interface IConfig {
   token: string;
   mongo: string;
   chatLogChannel: string;
+  rconPort: number;
+  rconHost: string;
+  rconPassword: string;
 }
 
 /**
@@ -43,6 +46,15 @@ class Config {
   public get chatLogChannel(): string {
     return this.config.chatLogChannel;
   }
+  public get rconPort(): number {
+    return this.config.rconPort;
+  };
+  public get rconHost(): string {
+    return this.config.rconHost;
+  };
+  public get rconPassword(): string {
+    return this.config.rconPassword;
+  };
 
   /// SETTERS ///
   public set prefix(value: string) {
@@ -60,6 +72,15 @@ class Config {
   public set chatLogChannel(value: string) {
     this.config.chatLogChannel = value;
   }
+  public set rconPort(value: number) {
+    this.config.rconPort = value;
+  };
+  public set rconHost(value: string) {
+    this.config.rconHost = value;
+  };
+  public set rconPassword(value: string) {
+    this.config.rconPassword = value;
+  };
 
   /**
    * Validates the config object

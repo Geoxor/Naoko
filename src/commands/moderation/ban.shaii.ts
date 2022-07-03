@@ -33,7 +33,7 @@ export default defineCommand({
 
     targetUser
       .send({ embeds: [embed] })
-      .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`));
+      .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`).then(() => setTimeout(() => message.delete().catch(), 5000)));
 
     // Get fucked
     await targetUser.ban({

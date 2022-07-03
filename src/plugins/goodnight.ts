@@ -66,10 +66,6 @@ function sendMuteEmbed(
     .setFooter(Shaii.version, SHAII_LOGO)
     .setColor("#FF0000");
 
-  //   targetUser
-  //     .send({ embeds: [embed] })
-  //     .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`));
-
   return message.reply({ embeds: [embed] });
 }
 

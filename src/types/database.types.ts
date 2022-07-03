@@ -18,7 +18,8 @@ export interface ActionHistory {
 }
 
 export interface IUser extends mongoose.Document, IUserFunctions {
-  discord_id: String;
+  discord_id: string;
+  minecraft_username: string;
 
   kick_history: ActionHistory[];
   mute_history: ActionHistory[];
@@ -31,9 +32,9 @@ export interface IUser extends mongoose.Document, IUserFunctions {
 
   chat_xp: number;
   bonks: number;
-  is_muted: Boolean;
-  is_self_muted: Boolean;
-  is_banned: Boolean;
+  is_muted: boolean;
+  is_self_muted: boolean;
+  is_banned: boolean;
   roles: string[];
   joined_at: number;
   account_created_at: number;
