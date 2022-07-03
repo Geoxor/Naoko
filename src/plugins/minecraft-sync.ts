@@ -80,7 +80,7 @@ class MinecraftSynchronizer {
   public sendHelloWorld = async () => this.say(`Hello I've logged in!`)
 }
 
-const minecraftSynchronizer = new MinecraftSynchronizer();
+// const minecraftSynchronizer = new MinecraftSynchronizer();
 
 const MINECRAFT_USERNAME_REGEX = /^[a-zA-Z0-9_]{2,16}$/g
 
