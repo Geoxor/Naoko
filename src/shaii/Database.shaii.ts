@@ -59,7 +59,7 @@ export interface IUserFunctions {
 }
 schema.methods.updateRoles = function (roles: string[]) {
   this.roles = roles;
-  return this.save();
+  // return this.save().catch();
 };
 
 schema.methods.addBattleRewards = function (rewards: IBattleUserRewards) {

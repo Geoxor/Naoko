@@ -1,9 +1,41 @@
-import Discord from "discord.js";
-import { SHAII_LOGO } from "../../constants";
+import Discord, { GuildMember, TextChannel } from "discord.js";
+import Shaii from "../../shaii/Shaii.shaii";
+import { GEOXOR_GENERAL_CHANNEL_ID, GEOXOR_GUILD_ID, SHAII_ID, SHAII_LOGO } from "../../constants";
 import { User } from "../../shaii/Database.shaii";
 import logger from "../../shaii/Logger.shaii";
-import Shaii from "../../shaii/Shaii.shaii";
-import { defineCommand } from "../../types";
+import { defineCommand, IMessage } from "../../types";
+
+export const sendToGeneral = (message: string | Discord.MessagePayload | Discord.MessageOptions) => {
+  const general = Shaii.bot.guilds.cache.get(GEOXOR_GUILD_ID)!.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel;
+  return general.send(message);
+}
+
+export const ban = async (target: GuildMember, message?: IMessage, reason?: string) => {
+  if (message && (target.id === message.author.id)) return "You can't ban yourself";
+  if (target.permissions.has("ADMINISTRATOR")) return "You can't ban other admins";
+
+  // Create the result embed
+  const embed = {
+    embeds: [new Discord.MessageEmbed()
+      .setTitle(`Ban - ${target.user.tag}`)
+      .setDescription(`ID: ${target.user.id}, <@${target.user.id}>`)
+      .setThumbnail(target.user.avatarURL() || (message ? message.author.defaultAvatarURL : SHAII_LOGO))
+      .setTimestamp()
+      .addField("Reason", (reason || message?.args.join(" ") || "No reason given") + `- at ${Date.now()}`, true)
+      .setColor("#FF0000")]
+  }
+
+  try {
+    await target.send(embed)
+    await target.ban({ reason })
+    if (!message) await sendToGeneral(embed)
+    await User.ban(message ? message.author.id : SHAII_ID, target.id, reason)
+  } catch (error) {
+    logger.error(error as string);
+  }
+
+  return embed;
+}
 
 export default defineCommand({
   name: "ban",
@@ -13,36 +45,8 @@ export default defineCommand({
   description: "Bans a user",
   permissions: ["BAN_MEMBERS"],
   execute: async (message) => {
-    const targetUser = message.mentions.members?.first();
-    if (!targetUser) return "Please mention the user you want to ban";
-    if (targetUser.id === message.author.id) return "You can't ban yourself";
-    if (targetUser.permissions.has("ADMINISTRATOR")) return "You can't ban other admins";
-
-    const reason = message.args.join(" ");
-
-    // Create the result embed
-    const embed = new Discord.MessageEmbed()
-      .setTitle(`Ban - ${targetUser.user.tag}`)
-      .setDescription(`ID: ${targetUser.user.id}, <@${targetUser.user.id}>`)
-      .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
-      .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
-      .setTimestamp()
-      .addField("Reason", reason || "No reason given", true)
-      .setFooter(Shaii.version, SHAII_LOGO)
-      .setColor("#FF0000");
-
-    targetUser
-      .send({ embeds: [embed] })
-      .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`).then(() => setTimeout(() => message.delete().catch(), 5000)));
-
-    // Get fucked
-    await targetUser.ban({
-      reason,
-    });
-
-    // Keep track of the ban
-    await User.ban(message.author.id, targetUser.id, reason).catch(() => logger.error("Ban database update failed"));
-
-    return { embeds: [embed] };
+    const target = message.mentions.members?.first();
+    if (!target) return "Please mention the user you want to ban";
+    ban(target, message).catch();
   },
 });

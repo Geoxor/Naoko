@@ -1,7 +1,8 @@
-import Discord, { GuildTextBasedChannel, Intents, MessageReaction, PartialMessageReaction, TextChannel } from "discord.js";
+import Discord, { GuildTextBasedChannel, Intents, TextChannel } from "discord.js";
 import fs from "fs";
 import levenshtein from "js-levenshtein";
 import path from "path";
+import { ban } from "../commands/moderation/ban.shaii";
 import si from "systeminformation";
 import { version } from "../../package.json";
 import welcomeMessages from "../assets/welcome_messages.json";
@@ -10,10 +11,8 @@ import {
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
   GHOSTS_ROLE_ID,
-  MUTED_ROLE_ID,
   SHAII_ID,
   SLURS,
-  GEOXOR_ID,
 } from "../constants";
 import { highlight, markdown, randomChoice } from "../logic/logic.shaii";
 import commandMiddleware from "../middleware/commandMiddleware.shaii";
@@ -34,7 +33,7 @@ si.getStaticData().then((info) => {
   systemInfo = info;
 });
 
-
+const SEVEN_DAYS = 604800000;
 
 /**
  * Shaii multi purpose Discord bot
@@ -139,6 +138,10 @@ class Shaii {
     });
     this.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID) {
+        if (member.user.createdAt.getTime() + SEVEN_DAYS > Date.now()) {
+          ban(member, undefined, "account age less than 7 days");
+        }
+
         if (!hasGhostsRole(member) && member.guild.id === GEOXOR_GUILD_ID) {
           giveGhostsRole(member).catch(() => {
             logger.error("Couldn't give Ghosts role to the member.");

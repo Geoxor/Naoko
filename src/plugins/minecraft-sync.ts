@@ -110,6 +110,5 @@ export default definePlugin({
   version: "1.0.0",
   command: [
     mcname,
-
   ],
 });
