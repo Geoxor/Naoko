@@ -9,7 +9,8 @@ type MemberWarning = {
 
 // just in case some trolley happened and `require()` is banned
 //@ts-ignore
-const bannedWords = require("../assets/badWords.json") as string[];
+const bannedWords = (require("../assets/badWords.json") as string[])
+    .map(word => ` ${word} `); // makes it so that it doesn't mute people randomly
 
 const memberWarnings: Collection<Snowflake, MemberWarning> = new Collection();
 const memberWarningTimeoutTimer = setInterval(() => {
