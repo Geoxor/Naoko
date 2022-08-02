@@ -138,10 +138,6 @@ class Shaii {
     });
     this.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID) {
-        if (member.user.createdAt.getTime() + SEVEN_DAYS > Date.now()) {
-          ban(member, undefined, "account age less than 7 days");
-        }
-
         if (!hasGhostsRole(member) && member.guild.id === GEOXOR_GUILD_ID) {
           giveGhostsRole(member).catch(() => {
             logger.error("Couldn't give Ghosts role to the member.");
