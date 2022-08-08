@@ -9,9 +9,7 @@ export default definePlugin({
   events: {
     messageCreate: (message) => {
       if (
-        message.content.startsWith("<@") &&
-        message.mentions.members?.first()?.id === SHAII_ID &&
-        message.type !== "REPLY"
+        message.content.startsWith("<@" + SHAII_ID)
       ) {
         // Reply with this when they purely ping her with no question
         if (!message.content.substring(`<@!${SHAII_ID}>`.length).trim()) {
