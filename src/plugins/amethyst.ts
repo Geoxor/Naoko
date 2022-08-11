@@ -18,7 +18,7 @@ export default definePlugin({
           "Used by " + message.author.username + ". Plugin made by otiskujawa.",
           message.author.avatarURL() || message.author.defaultAvatarURL
         )
-        .setColor("#00abff");
+        .setColor("#424681");
 
         // default
         embed
