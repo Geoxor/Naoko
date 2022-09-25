@@ -1,4 +1,4 @@
-import { definePlugin } from "../naoko/Plugin.naoko";
+import { definePlugin } from "../naoko/Plugin";
 
 export default definePlugin({
   name: "@geoxor/tunnel-tracker",

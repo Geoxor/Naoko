@@ -1,10 +1,10 @@
 import Discord, { Client, Guild, GuildMember, Intents } from "discord.js";
 import { MUTED_ROLE_ID, SELF_MUTED_ROLE_ID } from "../constants";
-import { User } from "../naoko/Database.naoko";
-import logger from "../naoko/Logger.naoko";
+import { User } from "../naoko/Database";
+import { logger } from "../naoko/Logger";
 import { defineCommand } from "../types";
-import { sendUnmuteEmbed } from "../commands/moderation/mute.naoko";
-import { definePlugin } from "../naoko/Plugin.naoko";
+import { sendUnmuteEmbed } from "../commands/moderation/mute";
+import { definePlugin } from "../naoko/Plugin";
 import { GEOXOR_GUILD_ID } from "../constants";
 
 const gm = defineCommand({

@@ -1,6 +1,6 @@
 import { SHAII_ID } from "../constants";
-import { randomChoice } from "../logic/logic.naoko";
-import { definePlugin } from "../naoko/Plugin.naoko";
+import { randomChoice } from "../logic/logic";
+import { definePlugin } from "../naoko/Plugin";
 import answers from "./mention-replies/answers.json";
 
 export default definePlugin({

@@ -7,7 +7,7 @@ console.clear();
 // Cosmetic Imports
 import chalk from "chalk";
 import { version } from "../package.json";
-import logger from "./naoko/Logger.naoko";
+import { logger } from "./naoko/Logger";
 
 // Print log
 logger.print(
@@ -30,5 +30,5 @@ logger.print(
 logger.inspiration();
 
 // Create naoko
-import "./naoko/Naoko.naoko";
-import "./naoko/Database.naoko";
+import "./naoko/Naoko";
+import "./naoko/Database";

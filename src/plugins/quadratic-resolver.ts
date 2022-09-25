@@ -1,6 +1,6 @@
 import { SLURS } from "../constants";
-import { randomChoice, weightedRandomChoice } from "../logic/logic.naoko";
-import { definePlugin } from "../naoko/Plugin.naoko";
+import { randomChoice, weightedRandomChoice } from "../logic/logic";
+import { definePlugin } from "../naoko/Plugin";
 import { defineCommand } from "../types";
 import { D2Polynom, extractFactors } from "./logic/quadratic-resolver";
 

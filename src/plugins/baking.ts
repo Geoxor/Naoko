@@ -1,7 +1,7 @@
 import { SLURS } from "../constants";
 import { CAKES, PIES } from "../plugins/baking-const/baking";
-import { randomChoice } from "../logic/logic.naoko";
-import { definePlugin } from "../naoko/Plugin.naoko";
+import { randomChoice } from "../logic/logic";
+import { definePlugin } from "../naoko/Plugin";
 import { defineCommand } from "../types";
 
 const bake = defineCommand({

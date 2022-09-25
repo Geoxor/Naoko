@@ -1,4 +1,4 @@
-import logger from "../../naoko/Logger.naoko";
+import { logger } from "../../naoko/Logger";
 
 export class D2Polynom {
   a: number;

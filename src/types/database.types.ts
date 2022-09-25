@@ -1,5 +1,5 @@
 import mongoose, { Types, Document } from "mongoose";
-import { IUserFunctions } from "../naoko/Database.naoko";
+import { IUserFunctions } from "../naoko/Database";
 import { HISTORY_TYPES } from "../constants";
 import { IGameInventory, IGameStatistics } from "./waifu.types";
 

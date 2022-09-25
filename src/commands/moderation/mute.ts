@@ -1,33 +1,32 @@
-import Discord, { GuildMember, MessageEmbed } from "discord.js";
-import { SHAII_LOGO } from "../constants";
-import { SELF_MUTED_ROLE_ID } from "../constants";
-import { durationToMilliseconds, msToFullTime } from "../logic/logic";
-import { User } from "../naoko/Database";
-import { logger } from "../naoko/Logger";
-import Naoko from "../naoko/Naoko";
-import { defineCommand, IMessage } from "../types";
-import { definePlugin } from "../naoko/Plugin";
+import Discord, { MessageEmbed } from "discord.js";
+import { MUTED_ROLE_ID, SHAII_LOGO } from "../../constants";
+import { durationToMilliseconds, msToFullTime } from "../../logic/logic";
+import { User } from "../../naoko/Database";
+import { logger } from "../../naoko/Logger";
+import Naoko from "../../naoko/Naoko";
+import { defineCommand, IMessage } from "../../types";
 
-const gn = defineCommand({
-  name: "gn",
-  aliases: ["bye", "study"],
-  category: "UTILITY",
-  usage: "gn <duration?> <reason?>",
-  description: "Mute yourself when you go to bed or if you need to focus on studying!",
-  permissions: ["VIEW_CHANNEL"],
+export default defineCommand({
+  name: "mute",
+  aliases: ["stfu", "to", "timeout", "shut"],
+  category: "MODERATION",
+  usage: "mute <@user> <duration> <reason>",
+  description: "Mute a user",
+  permissions: ["MANAGE_ROLES"],
   execute: async (message) => {
-    const targetUser = message.member;
-    if (!targetUser) throw new Error("No User");
+    const targetUser = message.mentions.members?.first();
+    if (!targetUser) return "Please mention the user you want to mute";
+    if (targetUser.id === message.author.id) return "You can't mute yourself";
+    if (targetUser.permissions.has("ADMINISTRATOR") || targetUser.permissions.has("MODERATE_MEMBERS"))
+      return "You can't mute other admins";
+    if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
     let duration = message.args[0];
-    if (!duration) {
-      duration = "6h";
-    } else if (!duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) {
-      return "You must specify a valid duration";
-    }
+    if (!duration || !duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) return "You must specify a valid duration";
     const reason = message.args.slice(1).join(" ") || "No reason given";
 
     let msDuration = durationToMilliseconds(duration);
+    if (msDuration === "") return `${duration} is not a valid duration`;
     if (parseInt(msDuration) > 1209600000) {
       (duration = "14d"), (msDuration = "1209600000");
       logger.error("Duration entered is too big: it has been brought to 14 days");
@@ -35,8 +34,6 @@ const gn = defineCommand({
 
     // Get rekt
     await targetUser.timeout(parseInt(msDuration), reason);
-
-    selfMute(targetUser);
 
     // Keep track of the mute
     await User.mute(message.author.id, targetUser.id, duration, reason).catch(() =>
@@ -57,7 +54,6 @@ function sendMuteEmbed(
   const embed = new Discord.MessageEmbed()
     .setTitle(`Mute - ${targetUser.user.tag}`)
     .setDescription(`ID: ${targetUser.user.id}, <@${targetUser.user.id}>`)
-    .addField("Explanation", `To be unmuted at any time, just dm the bot ~gm`)
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
     .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
     .setTimestamp()
@@ -65,6 +61,10 @@ function sendMuteEmbed(
     .addField("Reason", reason, true)
     .setFooter(Naoko.version, SHAII_LOGO)
     .setColor("#FF0000");
+
+  targetUser
+    .send({ embeds: [embed] })
+    .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`).then(() => setTimeout(() => message.delete().catch(), 5000)));
 
   return message.reply({ embeds: [embed] });
 }
@@ -85,17 +85,3 @@ export function sendUnmuteEmbed(
 
   return message.channel.send({ embeds: [embed] });
 }
-
-export function hasSelfMute(member: Discord.GuildMember): boolean {
-  return member.roles.cache.has(SELF_MUTED_ROLE_ID);
-}
-
-export async function selfMute(member: Discord.GuildMember): Promise<GuildMember> {
-  return member.roles.add(SELF_MUTED_ROLE_ID);
-}
-
-export default definePlugin({
-  name: "@shkoop/goodnight",
-  version: "1.0.0",
-  command: [gn],
-});

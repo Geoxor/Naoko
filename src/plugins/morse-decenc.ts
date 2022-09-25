@@ -1,5 +1,5 @@
-import { objectFlip } from "../logic/logic.naoko";
-import { definePlugin } from "../naoko/Plugin.naoko";
+import { objectFlip } from "../logic/logic";
+import { definePlugin } from "../naoko/Plugin";
 import { defineCommand } from "../types";
 
 const MORSE_CODE_TABLE = {

@@ -1,8 +1,8 @@
 import Discord from "discord.js";
 import { GEOXOR_GUILD_ID, GEOXOR_STAFF_CHANNEL_ID } from "../constants";
-import commandMiddleware from "../middleware/commandMiddleware.naoko";
-import { userMiddleware } from "../middleware/userMiddleware.naoko";
-import { definePlugin } from "../naoko/Plugin.naoko";
+import commandMiddleware from "../middleware/commandMiddleware";
+import { userMiddleware } from "../middleware/userMiddleware";
+import { definePlugin } from "../naoko/Plugin";
 import { defineCommand } from "../types";
 
 const report = defineCommand({

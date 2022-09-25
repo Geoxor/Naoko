@@ -1,11 +1,11 @@
 import { GEOXOR_GUILD_ID } from "../constants";
-import { User } from "../naoko/Database.naoko";
+import { User } from "../naoko/Database";
 import { defineCommand } from "../types";
-import { definePlugin } from "../naoko/Plugin.naoko";
-import config from "../naoko/Config.naoko";
+import { definePlugin } from "../naoko/Plugin";
+import { config } from "../naoko/Config";
 import { RCONClient } from 'rcon.js';
-import Logger from "../naoko/Logger.naoko";
-import Naoko from "../naoko/Naoko.naoko";
+import { logger } from "../naoko/Logger";
+import Naoko from "../naoko/Naoko";
 
 
 class MinecraftSynchronizer {

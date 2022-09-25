@@ -1,6 +1,6 @@
-import { definePlugin } from "../naoko/Plugin.naoko";
+import { definePlugin } from "../naoko/Plugin";
 import { defineCommand } from "../types";
-import { getUserProfilePicture } from "../logic/logic.naoko";
+import { getUserProfilePicture } from "../logic/logic";
 
 export default definePlugin({
   name: "@geoxor/avatar",
