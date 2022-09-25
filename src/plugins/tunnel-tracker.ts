@@ -1,4 +1,4 @@
-import { definePlugin } from "../shaii/Plugin.shaii";
+import { definePlugin } from "../naoko/Plugin.naoko";
 
 export default definePlugin({
   name: "@geoxor/tunnel-tracker",

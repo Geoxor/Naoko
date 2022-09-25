@@ -1,5 +1,5 @@
 import Discord, { APIErrors } from "discord.js";
-import { definePlugin } from "../shaii/Plugin.shaii";
+import { definePlugin } from "../naoko/Plugin.naoko";
 import { defineCommand } from "../types";
 
 export default definePlugin({

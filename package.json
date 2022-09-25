@@ -1,19 +1,19 @@
 {
-  "name": "shaii",
+  "name": "naoko",
   "version": "2.1.4",
-  "description": "Shaii is Geoxor's Discord Bot",
-  "main": "./src/shaii.ts",
+  "description": "Naoko is Geoxor's Discord Bot",
+  "main": "./src/naoko.ts",
   "scripts": {
     "test": "ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
-    "start": "ts-node -T ./src/shaii.ts",
-    "dev": "nodemon ./src/shaii.ts",
-    "setup": "ts-node ./src/setup.shaii.ts",
-    "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.shaii.ts",
+    "start": "ts-node -T ./src/naoko.ts",
+    "dev": "nodemon ./src/naoko.ts",
+    "setup": "ts-node ./src/setup.naoko.ts",
+    "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.naoko.ts",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Geoxor/shaii.git"
+    "url": "git+https://github.com/Geoxor/naoko.git"
   },
   "keywords": [
     "bot",
@@ -24,9 +24,9 @@
   "author": "Geoxor",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Geoxor/shaii/issues"
+    "url": "https://github.com/Geoxor/naoko/issues"
   },
-  "homepage": "https://github.com/Geoxor/shaii#readme",
+  "homepage": "https://github.com/Geoxor/naoko#readme",
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
     "@discordjs/voice": "^0.5.5",

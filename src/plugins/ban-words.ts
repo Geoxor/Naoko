@@ -1,5 +1,5 @@
 import { Collection, Snowflake, Message } from "discord.js";
-import { definePlugin } from "../shaii/Plugin.shaii";
+import { definePlugin } from "../naoko/Plugin.naoko";
 
 type MemberWarning = {
   saidBannedWords: string[];
@@ -10,12 +10,12 @@ type MemberWarning = {
 // just in case some trolley happened and `require()` is banned
 //@ts-ignore
 const bannedWords = (require("../assets/badWords.json") as string[])
-    .map(word => ` ${word} `); // makes it so that it doesn't mute people randomly
+  .map(word => ` ${word} `); // makes it so that it doesn't mute people randomly
 
 const memberWarnings: Collection<Snowflake, MemberWarning> = new Collection();
 const memberWarningTimeoutTimer = setInterval(() => {
   memberWarnings.forEach((warning, authorId) => {
-    const timeLeft = warning.removeWarningTime - Date.now(); 
+    const timeLeft = warning.removeWarningTime - Date.now();
     if (timeLeft < 60 * 1000) {
       setTimeout(() => {
         memberWarnings.delete(authorId);
@@ -32,8 +32,8 @@ export default definePlugin({
   timers: { memberWarningTimeoutTimer },
   events: {
     messageCreate: (message: Message): void => {
-      if (!message.member) return;    
-  
+      if (!message.member) return;
+
       const content = message.content;
       const saidBannedWord = bannedWords.find(word => content.includes(word));
 
@@ -42,19 +42,19 @@ export default definePlugin({
 
         const authorId = message.author.id;
         const warning = memberWarnings.get(authorId) ?? emptyMemberWarning();
-        
+
         if (
           warning.saidBannedWords.includes(saidBannedWord) ||
           warning.saidDifferentBannedWordCount === 2
         ) {
           message.channel.send(`<@${authorId}>, you really like breaking rules, don't you?`);
-          message.member.timeout(DAY).catch(() => {});
+          message.member.timeout(DAY).catch(() => { });
           memberWarnings.delete(authorId);
         } else {
-          message.channel.send( 
+          message.channel.send(
             warning.saidDifferentBannedWordCount === 1
-            ? `<@${authorId}>, you said another word that you shouldn't say, please be careful.`
-            : `<@${authorId}>, you said a word that you shouldn't say, don't do this again.`
+              ? `<@${authorId}>, you said another word that you shouldn't say, please be careful.`
+              : `<@${authorId}>, you said a word that you shouldn't say, don't do this again.`
           );
           warning.saidBannedWords.push(saidBannedWord);
           warning.removeWarningTime = Date.now() + DAY;

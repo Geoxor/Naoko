@@ -1,12 +1,14 @@
-# 🌸 Shaii General Purpose Bot
-<img align="left" src="https://media.discordapp.net/attachments/550913067517607946/634231448928387072/OC_Shaii_CHIBICHARM2.png?width=200&height=236">
+# 🌸 Naoko General Purpose Bot
+
+<img align="left" src="https://media.discordapp.net/attachments/550913067517607946/634231448928387072/OC_Naoko_CHIBICHARM2.png?width=200&height=236">
 
 ## ⚡ Plugins
+
 Plugins are runtime-loadable type-safe flexible components that have access to all of the bot's events
 
 ### Example
 
-Let's say you wanna make a plugin that when someone pings shaii she automatically
+Let's say you wanna make a plugin that when someone pings naoko she automatically
 replies to them with a random answer from an array of strings:
 
 ```ts
@@ -26,10 +28,11 @@ export default definePlugin({
 
 ## 🗃 Installation
 
-1. Make a new bot through the developer portal so that you have a token for use in `config.shaii.json`
-2. Fork, clone repo & cd into the folder Shaii
+1. Make a new bot through the developer portal so that you have a token for use in `config.naoko.json`
+2. Fork, clone repo & cd into the folder Naoko
 
 Next, depending on your platform:
+
 ### Linux
 
 1. Install dependencies
@@ -37,7 +40,8 @@ Next, depending on your platform:
 ```
 sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev libjpeg-dev librsvg2-dev mesa-common-dev
 ```
-2. *TODO: set up mongo on linux*
+
+2. _TODO: set up mongo on linux_
 3. Use node.js 16.6.0 `nvm install 16.6.0 && nvm use 16.6.0`
 4. `CXX=gcc-10 npm ci` to install dependencies
 
@@ -49,11 +53,11 @@ sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev
 
 Once all these are set up:
 
-1. Make `config.shaii.json` in `src` following `example.config.shaii.json` 
-  Set path to a music folder (make an empty one in the repo folder if you don't care)
-  Set the token
-  Set the chat log ID
-  Set url to mongodb (mongodb://127.0.0.1:27017 if hosting locally)
+1. Make `config.naoko.json` in `src` following `example.config.naoko.json`
+   Set path to a music folder (make an empty one in the repo folder if you don't care)
+   Set the token
+   Set the chat log ID
+   Set url to mongodb (mongodb://127.0.0.1:27017 if hosting locally)
 2. In `constants/index.ts` replace guild & channel IDs with those of your test guild
 3. `npm run dev`
 

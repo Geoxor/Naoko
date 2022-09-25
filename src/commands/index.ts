@@ -2,60 +2,60 @@
 // when they are hardcoded like this than
 // dynamically importing them with FS
 
-import { genCommands } from "../logic/logic.shaii";
-import { imageProcessors } from "../logic/imageProcessors.shaii";
+import { genCommands } from "../logic/logic.naoko";
+import { imageProcessors } from "../logic/imageProcessors.naoko";
 
 // economy game commands
-// import rank from "./economyGames/rank.shaii";
-import battle from "./economyGames/battle.shaii";
-import inventory from "./economyGames/inventory.shaii";
-import stats from "./economyGames/stats.shaii";
-import rigbattle from "./moderation/rigbattle.shaii";
+// import rank from "./economyGames/rank.naoko";
+import battle from "./economyGames/battle.naoko";
+import inventory from "./economyGames/inventory.naoko";
+import stats from "./economyGames/stats.naoko";
+import rigbattle from "./moderation/rigbattle.naoko";
 
 // fun commands
-import anime from "./fun/anime.shaii";
-import dicksize from "./fun/dicksize.shaii";
-import traceAnime from "./fun/trace.shaii";
-import match from "./fun/match.shaii";
-import say from "./fun/say.shaii";
+import anime from "./fun/anime.naoko";
+import dicksize from "./fun/dicksize.naoko";
+import traceAnime from "./fun/trace.naoko";
+import match from "./fun/match.naoko";
+import say from "./fun/say.naoko";
 
 // text processing
-import textify from "./textProcessors/textify.shaii";
-import brainfuck from "./textProcessors/brainfuck.shaii";
-import britify from "./textProcessors/britify.shaii";
-import spongify from "./textProcessors/spongify.shaii";
-import uwuify from "./textProcessors/uwufy.shaii";
+import textify from "./textProcessors/textify.naoko";
+import brainfuck from "./textProcessors/brainfuck.naoko";
+import britify from "./textProcessors/britify.naoko";
+import spongify from "./textProcessors/spongify.naoko";
+import uwuify from "./textProcessors/uwufy.naoko";
 
 // moderation commands
-import clear from "./moderation/clear.shaii";
-import kick from "./moderation/kick.shaii";
-import ban from "./moderation/ban.shaii";
-import unban from "./moderation/unban.shaii";
-import whois from "./moderation/whois.shaii";
-import mute from "./moderation/mute.shaii";
-import unmute from "./moderation/unmute.shaii";
+import clear from "./moderation/clear.naoko";
+import kick from "./moderation/kick.naoko";
+import ban from "./moderation/ban.naoko";
+import unban from "./moderation/unban.naoko";
+import whois from "./moderation/whois.naoko";
+import mute from "./moderation/mute.naoko";
+import unmute from "./moderation/unmute.naoko";
 
 // utility commands
-import help from "./utility/help.shaii";
-import ping from "./utility/ping.shaii";
-import plugins from "./utility/plugins.shaii";
-import uptime from "./utility/uptime.shaii";
-import logs from "./utility/logs.shaii";
-import env from "./utility/env.shaii";
+import help from "./utility/help.naoko";
+import ping from "./utility/ping.naoko";
+import plugins from "./utility/plugins.naoko";
+import uptime from "./utility/uptime.naoko";
+import logs from "./utility/logs.naoko";
+import env from "./utility/env.naoko";
 
 // music player commands
-import play from "./musicPlayer/play.shaii";
-import skip from "./musicPlayer/skip.shaii";
-import volume from "./musicPlayer/volume.shaii";
-import shuffle from "./musicPlayer/shuffle.shaii";
-import queue from "./musicPlayer/queue.shaii";
-import nowPlaying from "./musicPlayer/nowPlaying.shaii";
+import play from "./musicPlayer/play.naoko";
+import skip from "./musicPlayer/skip.naoko";
+import volume from "./musicPlayer/volume.naoko";
+import shuffle from "./musicPlayer/shuffle.naoko";
+import queue from "./musicPlayer/queue.naoko";
+import nowPlaying from "./musicPlayer/nowPlaying.naoko";
 
 // image processing
-import transform from "./imageProcessors/transform.shaii";
-import stack from "./imageProcessors/stack.shaii";
-import vote from "./fun/vote.shaii";
-import { commands3D } from "../logic/3DRenderer.shaii";
+import transform from "./imageProcessors/transform.naoko";
+import stack from "./imageProcessors/stack.naoko";
+import vote from "./fun/vote.naoko";
+import { commands3D } from "../logic/3DRenderer.naoko";
 
 export const getCommands = async () => {
   let commands = [

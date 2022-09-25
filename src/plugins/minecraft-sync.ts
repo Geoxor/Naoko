@@ -1,11 +1,11 @@
 import { GEOXOR_GUILD_ID } from "../constants";
-import { User } from "../shaii/Database.shaii";
+import { User } from "../naoko/Database.naoko";
 import { defineCommand } from "../types";
-import { definePlugin } from "../shaii/Plugin.shaii";
-import config from "../shaii/Config.shaii";
+import { definePlugin } from "../naoko/Plugin.naoko";
+import config from "../naoko/Config.naoko";
 import { RCONClient } from 'rcon.js';
-import Logger from "../shaii/Logger.shaii";
-import Shaii from "../shaii/Shaii.shaii";
+import Logger from "../naoko/Logger.naoko";
+import Naoko from "../naoko/Naoko.naoko";
 
 
 class MinecraftSynchronizer {
@@ -45,7 +45,7 @@ class MinecraftSynchronizer {
     const users = await User.find().where("minecraft_username").ne(null);
 
     await Promise.all(users.map(user => {
-      const discordMember = Shaii.bot.guilds.cache.get(GEOXOR_GUILD_ID)?.members.cache.get(user.discord_id);
+      const discordMember = Naoko.bot.guilds.cache.get(GEOXOR_GUILD_ID)?.members.cache.get(user.discord_id);
       if (!discordMember) return;
 
       const role = discordMember.roles.hoist;
@@ -70,7 +70,7 @@ class MinecraftSynchronizer {
     this.client.command(`lp group ${rolename} meta setsuffix ${weight} "&${hex}[${displayname}] &7"`)
   };
 
-  public say = (text: string) => this.client.command(`say Shaii: ${text}`);
+  public say = (text: string) => this.client.command(`say Naoko: ${text}`);
 
   public setRole = async (username: string, role: string) => {
     console.log(`Setting user: ${username} to minecraft role: ${role}`);

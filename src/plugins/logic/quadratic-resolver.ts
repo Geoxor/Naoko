@@ -1,4 +1,4 @@
-import logger from "../../shaii/Logger.shaii";
+import logger from "../../naoko/Logger.naoko";
 
 export class D2Polynom {
   a: number;
@@ -66,9 +66,8 @@ export class D2Polynom {
   public solve() {
     if (!this.roots) this.roots = this.calcRoots();
 
-    let answer = `The equation ${this.toString()} has ${this.roots.length} solution${
-      ["", "s"][+(this.roots.length > 1)]
-    } in R`;
+    let answer = `The equation ${this.toString()} has ${this.roots.length} solution${["", "s"][+(this.roots.length > 1)]
+      } in R`;
 
     switch (this.roots.length) {
       case 0:

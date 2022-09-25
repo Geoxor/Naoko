@@ -1,6 +1,6 @@
 import { SLURS } from "../constants";
-import { randomChoice, weightedRandomChoice } from "../logic/logic.shaii";
-import { definePlugin } from "../shaii/Plugin.shaii";
+import { randomChoice, weightedRandomChoice } from "../logic/logic.naoko";
+import { definePlugin } from "../naoko/Plugin.naoko";
 import { defineCommand } from "../types";
 import { D2Polynom, extractFactors } from "./logic/quadratic-resolver";
 
@@ -29,7 +29,7 @@ const solve = defineCommand({
         return "The equation where to find keqing has 1 solution in R: touch grass";
       case "lily":
         return "i forgor :skull:";
-      case "shaii":
+      case "naoko":
         return "https://cdn.discordapp.com/attachments/933655392972595200/941029796996063252/TurnAroundBut.mp4";
       case "niko":
         return "I understand why did u leave\nNiko is motherfucker\nNah cya";

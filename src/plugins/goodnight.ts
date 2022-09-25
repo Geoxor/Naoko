@@ -1,12 +1,12 @@
 import Discord, { GuildMember, MessageEmbed } from "discord.js";
 import { SHAII_LOGO } from "../constants";
 import { SELF_MUTED_ROLE_ID } from "../constants";
-import { durationToMilliseconds, msToFullTime } from "../logic/logic.shaii";
-import { User } from "../shaii/Database.shaii";
-import logger from "../shaii/Logger.shaii";
-import Shaii from "../shaii/Shaii.shaii";
+import { durationToMilliseconds, msToFullTime } from "../logic/logic.naoko";
+import { User } from "../naoko/Database.naoko";
+import logger from "../naoko/Logger.naoko";
+import Naoko from "../naoko/Naoko.naoko";
 import { defineCommand, IMessage } from "../types";
-import { definePlugin } from "../shaii/Plugin.shaii";
+import { definePlugin } from "../naoko/Plugin.naoko";
 
 const gn = defineCommand({
   name: "gn",
@@ -63,7 +63,7 @@ function sendMuteEmbed(
     .setTimestamp()
     .addField("Duration", msToFullTime(parseInt(duration)), true)
     .addField("Reason", reason, true)
-    .setFooter(Shaii.version, SHAII_LOGO)
+    .setFooter(Naoko.version, SHAII_LOGO)
     .setColor("#FF0000");
 
   return message.reply({ embeds: [embed] });
@@ -80,7 +80,7 @@ export function sendUnmuteEmbed(
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
     .setTimestamp()
     .addField("Reason", reason || "No reason given", true)
-    .setFooter(Shaii.version, SHAII_LOGO)
+    .setFooter(Naoko.version, SHAII_LOGO)
     .setColor("#00FF00");
 
   return message.channel.send({ embeds: [embed] });

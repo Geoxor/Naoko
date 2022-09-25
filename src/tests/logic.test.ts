@@ -8,7 +8,7 @@ import {
   isValidHttpUrl,
   msToTime,
   textToUwufy,
-} from "../logic/logic.shaii";
+} from "../logic/logic.naoko";
 
 describe("⚡ UwU-ifier (textToUwufy)", () => {
   it("can encode a normal string", async () => {

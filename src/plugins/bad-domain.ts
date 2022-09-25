@@ -1,4 +1,4 @@
-import { definePlugin } from "../shaii/Plugin.shaii";
+import { definePlugin } from "../naoko/Plugin.naoko";
 import badDomains from "./bad-domain/domains.json";
 export default definePlugin({
   name: "@geoxor/bad-domain",

@@ -1,4 +1,4 @@
 {
-  "ignore": ["shaii.json"],
-  "exec": "ts-node -T ./src/shaii.ts"
+  "ignore": ["naoko.json"],
+  "exec": "ts-node -T ./src/naoko.ts"
 }
