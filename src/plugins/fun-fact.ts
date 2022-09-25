@@ -16,7 +16,10 @@ export default definePlugin({
       const embed = new Discord.MessageEmbed()
         .setColor("#d2185e")
         .setAuthor(`Fun Facts by azur`)
-        .setThumbnail(`https://cdn.discordapp.com/attachments/806300597338767450/879888079832375326/book.gif`)
+        .setThumbnail(randomChoice([
+          'https://wiki.hypixel.net/images/0/0a/SkyBlock_items_enchanted_book_and_quill.gif',
+          'https://wiki.hypixel.net/images/4/4e/SkyBlock_items_enchanted_book.gif'
+        ]))
         .addFields({
           name: "Fun fact:",
           value: `${randomChoice(facts)}`,
