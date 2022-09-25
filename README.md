@@ -1,31 +1,4 @@
 # 🌸 Naoko General Purpose Bot
-
-<img align="left" src="https://media.discordapp.net/attachments/550913067517607946/634231448928387072/OC_Naoko_CHIBICHARM2.png?width=200&height=236">
-
-## ⚡ Plugins
-
-Plugins are runtime-loadable type-safe flexible components that have access to all of the bot's events
-
-### Example
-
-Let's say you wanna make a plugin that when someone pings naoko she automatically
-replies to them with a random answer from an array of strings:
-
-```ts
-// plugins/reply-on-mentions.ts
-
-export default definePlugin({
-  name: "@geoxor/reply-on-mentions",
-  events: {
-    messageCreate: (message) => {
-      if (message.mentions.first() === SHAII) {
-        message.reply(randomItem(["hello", "you're annoying", "don't talk to me again!"]));
-      }
-    },
-  },
-});
-```
-
 ## 🗃 Installation
 
 1. Make a new bot through the developer portal so that you have a token for use in `config.naoko.json`
@@ -43,7 +16,7 @@ sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev
 
 2. _TODO: set up mongo on linux_
 3. Use node.js 16.6.0 `nvm install 16.6.0 && nvm use 16.6.0`
-4. `CXX=gcc-10 npm ci` to install dependencies
+4. `npm i` to install dependencies
 
 ### Windows
 
@@ -60,5 +33,3 @@ Once all these are set up:
    Set url to mongodb (mongodb://127.0.0.1:27017 if hosting locally)
 2. In `constants/index.ts` replace guild & channel IDs with those of your test guild
 3. `npm run dev`
-
-GG
