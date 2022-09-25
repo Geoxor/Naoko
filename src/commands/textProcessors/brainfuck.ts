@@ -1,5 +1,4 @@
 import { Readable } from "stream";
-import { SLURS } from "../../constants";
 import { randomChoice, textToBrainfuck } from "../../logic/logic";
 import { defineCommand } from "../../types";
 
@@ -9,7 +8,7 @@ export default defineCommand({
   usage: "brainfuck <sentence>",
   description: "Translates your sentence to brainfuck esoteric language",
   execute: async (message) => {
-    if (message.args.length === 0) return `What to you want to translate ${randomChoice(SLURS)}`;
+    if (message.args.length === 0) return `What to you want to translate`;
     const response: string = textToBrainfuck(message.args.join(" "));
     if (response.length > 2000) {
       return {

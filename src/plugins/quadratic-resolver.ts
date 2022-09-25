@@ -1,4 +1,3 @@
-import { SLURS } from "../constants";
 import { randomChoice, weightedRandomChoice } from "../logic/logic";
 import { definePlugin } from "../naoko/Plugin";
 import { defineCommand } from "../types";
@@ -10,7 +9,7 @@ const solve = defineCommand({
   usage: "solve <polynom>",
   description: "Solve your degree-2 polynom",
   execute: async (message) => {
-    if (message.args.length === 0) return `What do you want to solve ${randomChoice(SLURS)}`;
+    if (message.args.length === 0) return `What do you want to solve`;
 
     // some easter eggs :tro:
     switch (message.args.join(" ").toLowerCase()) {
@@ -42,7 +41,7 @@ const solve = defineCommand({
     if (!a || !b)
       return weightedRandomChoice(
         new Map()
-          .set(0.99, `I can only solve polynoms of degree 2 ${randomChoice(SLURS)}`)
+          .set(0.99, `I can only solve polynoms of degree 2`)
           .set(0.01, "https://www.youtube.com/watch?v=dQw4w9WgXcQ") // Troll rickroll
       );
     return new D2Polynom(a, b, c).solve();

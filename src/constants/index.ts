@@ -22,24 +22,6 @@ export const VOTE_TIME = 30000;
 
 export const restrictedChannels: string[] = ["845328432715923487"];
 
-export const SLURS = [
-  "idiot",
-  "baka",
-  "mennn",
-  "cunt",
-  "noob",
-  "scrub",
-  "dumbass",
-  "fucker",
-  "you dumb fucking twat",
-  "asshat",
-  "bobbyfucker",
-  "neanderthal",
-  "python dev",
-  "developerl",
-  "soydev",
-];
-
 export const IPV4_REGEX = /((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)/g;
 
 export const INVENTORY_ICON = "https://cdn.discordapp.com/attachments/806300597338767450/872917164091396126/unknown.png";

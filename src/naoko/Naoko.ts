@@ -12,7 +12,6 @@ import {
   GEOXOR_GUILD_ID,
   GHOSTS_ROLE_ID,
   SHAII_ID,
-  SLURS,
 } from "../constants";
 import { highlight, markdown, randomChoice } from "../logic/logic";
 import commandMiddleware from "../middleware/commandMiddleware";
@@ -323,7 +322,7 @@ class Naoko {
 
             // If it doesn't exist we respond
             if (!command) {
-              const commandDoesntExistString = `That command doesn't exist ${randomChoice(SLURS)}`;
+              const commandDoesntExistString = `That command doesn't exist`;
               const closestCommand = this.getClosestCommand(message.command);
 
               if (closestCommand)

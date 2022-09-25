@@ -1,4 +1,3 @@
-import { SLURS } from "../constants";
 import { CAKES, PIES } from "../plugins/baking-const/baking";
 import { randomChoice } from "../logic/logic";
 import { definePlugin } from "../naoko/Plugin";
@@ -10,7 +9,7 @@ const bake = defineCommand({
   usage: "bake <what-to-bake>",
   description: "Bake something",
   execute: async (message) => {
-    if (message.args.length === 0) return `What do you want to bake ${randomChoice(SLURS)}`;
+    if (message.args.length === 0) return `What do you want to bake`;
 
     // the baked goods + easter eggs
     switch (message.args.join(" ").toLowerCase()) {

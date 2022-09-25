@@ -1,4 +1,3 @@
-import { SLURS } from "../../constants";
 import { randomChoice } from "../../logic/logic";
 import { defineCommand } from "../../types";
 
@@ -8,7 +7,7 @@ export default defineCommand({
   usage: "say <sentence>",
   description: "Say your stupid message",
   execute: async (message) => {
-    if (message.args.length === 0) return `What do you want to say ${randomChoice(SLURS)}`;
+    if (message.args.length === 0) return `What do you want to say`;
     message.delete().catch(() => { });
     return message.args.join(" ");
   },

@@ -1,4 +1,3 @@
-import { SLURS } from "../../constants";
 import { randomChoice } from "../../logic/logic";
 import { textify } from "../../logic/textProcessors";
 import { defineCommand } from "../../types";
@@ -23,9 +22,9 @@ export default defineCommand({
       if (pipeline.length === 0) return "Pipeline can't be empty";
       if (pipeline.length > 10) return "Pipeline can't be longer than 10 iterators";
     });
-    if (userSentence.length === 0) return `What do you want to textify ${randomChoice(SLURS)}`;
+    if (userSentence.length === 0) return `What do you want to textify`;
     const sentence = userSentence.join(" ");
-    if (sentence.length > 2000) return `wtf your sentence is too big ${randomChoice(SLURS)}`;
+    if (sentence.length > 2000) return `wtf your sentence is too big`;
     return textify(pipeline, sentence);
   },
 });
