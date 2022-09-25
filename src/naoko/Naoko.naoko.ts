@@ -20,7 +20,7 @@ import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware.naoko"
 import moderationMiddleware from "../middleware/moderationMiddleware.naoko";
 import restrictedChannelMiddleware from "../middleware/restrictedChannelMiddleware.naoko";
 import { giveGhostsRole, hasGhostsRole, userMiddleware } from "../middleware/userMiddleware.naoko";
-import { DISCORD_EVENTS, Plugin } from "../naoko/Plugin.naoko";
+import { DISCORD_EVENTS, Plugin } from "./Plugin.naoko";
 import { ICommand } from "../types";
 import config from "./Config.naoko";
 import { User } from "./Database.naoko";
