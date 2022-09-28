@@ -8,16 +8,14 @@ export default definePlugin({
   version: "1.0.0",
   events: {
     messageCreate: (message) => {
-      if (
-        message.content.startsWith("<@" + SHAII_ID)
-      ) {
-        // Reply with this when they purely ping her with no question
-        if (!message.content.substring(`<@!${SHAII_ID}>`.length).trim()) {
-          message.reply("what tf do you want");
-          return;
-        }
-        message.reply(randomChoice(answers));
-      }
+      if (!message.channel.isText()) return
+      if (!message.inGuild()) return;
+      if (message.guild.channels.cache.get(message.channelId)!.name === "general") return
+      if (!message.content.startsWith("<@" + SHAII_ID)) return;
+
+      // Reply with this when they purely ping her with no question
+      !message.content.substring(`<@!${SHAII_ID}>`.length).trim() ? message.reply("what tf do you want") : message.reply(randomChoice(answers))
+
       return;
     },
   },
