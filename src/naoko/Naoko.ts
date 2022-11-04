@@ -361,7 +361,16 @@ class Naoko {
                 }`
               );
             } catch (error: any) {
-              await message.reply(markdown(error)).catch(() => { });
+              logger.error(`Command ${command.name} failed to execute with error: ${error}`);
+              await message.reply({
+                 embeds:[
+                    {
+                        title: ":warning: Something went wrong while executing this command",
+                        description: `Looks like something isn't right. Please try again, and if the problem persists, please let us know in a [github issue](https://github.com/Geoxor/Naoko/issues). \n\n Error: \`\`\`${error}\`\`\``,
+                        color: 0xff0000
+                    }
+                 ]
+              });
             }
 
             // Delete the processing message if it exists

@@ -26,6 +26,11 @@ export default defineCommand({
         inline: true,
         name: "Version",
         value: Naoko.plugins.map((plugin) => plugin.version).join("\n"),
+      })
+      .addFields({
+        inline: true,
+        name: "Enabled?",
+        value: Naoko.plugins.map((plugin) => plugin.state === 1 ? '✅' : '❌').join("\n"),
       });
 
     return { embeds: [embed] };
