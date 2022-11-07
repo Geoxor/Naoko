@@ -37,10 +37,12 @@ export default defineCommand({
 
       for (let i = 0; i < categories.length; i++) {
         const category = categories[i];
-        embedFields.push({
-          name: `${category} (${commandCountInCategory(category)})`,
-          value: commandsStringFromCategory(category).length > 0 ? commandsStringFromCategory(category) : "No commands in this category",
-        });
+        if (commandsStringFromCategory(category).length > 0){
+          embedFields.push({
+            name: `${category} (${commandCountInCategory(category)})`,
+            value: commandsStringFromCategory(category),
+          });
+        }
       }
       helpEmbed.addFields(embedFields);
     } else {
