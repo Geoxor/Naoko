@@ -8,7 +8,7 @@ export interface IMessage extends Discord.Message {
   databaseUser: DatabaseUser;
 }
 
-export type CommandExecuteRespones = string | Discord.ReplyMessageOptions | void
+export type CommandExecuteRespones = string | Discord.MessageReplyOptions | void
 
 export type CommandExecute = (
   message: IMessage

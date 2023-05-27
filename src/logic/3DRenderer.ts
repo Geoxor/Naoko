@@ -1,11 +1,10 @@
-// @ts-ignore this has broken types :whyyyyyyyyyyy:
-import fileType from "file-type";
+import { fileTypeFromBuffer } from 'file-type';
 import { GifFrame, GifUtil } from "gifwrap";
 import Jimp from "jimp";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { createCanvas, NodeCanvasElement } from "node-canvas-webgl";
 import * as THREE from "three";
-import comicSans from "../assets/comic_sans_font.json";
+import comicSans from "../assets/comic_sans_font.json" assert { type: 'json' };
 import cache from "../naoko/Cache";
 import { logger } from "../naoko/Logger";
 import { Coords, GeometrySceneOptions } from "../types";
@@ -208,7 +207,7 @@ export const commands3D = {
   },
 };
 
-export class SceneProcessor {
+export abstract class SceneProcessor {
   public camera: THREE.Camera;
   public scene: THREE.Scene;
   public renderer: THREE.WebGLRenderer;
@@ -242,9 +241,7 @@ export class SceneProcessor {
    * Updates the scene to the new positions
    * @author Geoxor, Bluskript, Bustean
    */
-  protected async update() {
-    throw new Error("Update must be implemented");
-  }
+  protected abstract update(): Promise<void>|void;
 
   /**
    * Renders a webgl scene
@@ -318,8 +315,8 @@ export class MediaMaterial {
       map: await this.createTextureFromBuffer(texture),
     });
 
-    const type = await fileType(texture);
-    this.animated = type.mime === "image/gif";
+    const type = await fileTypeFromBuffer(texture);
+    this.animated = type!.mime === "image/gif";
 
     if (this.animated) {
       this.frames = (await GifUtil.read(texture)).frames;

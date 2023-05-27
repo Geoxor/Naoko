@@ -10,7 +10,7 @@ export default defineCommand({
   category: "MODERATION",
   usage: "unban <user_id> <reason>",
   description: "Unbans a user",
-  permissions: ["BAN_MEMBERS"],
+  permissions: ["BanMembers"],
   execute: async (message) => {
     if (message.args.length === 0) return "Please enter the ID of the user you want to unban";
     const targetUser = await Naoko.bot.users.fetch(message.args[0]);
@@ -21,14 +21,14 @@ export default defineCommand({
     const reason = message.args.join(" ");
 
     // Create the result embed
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.EmbedBuilder()
       .setTitle(`Unban - ${targetUser.tag}`)
       .setDescription(`ID: ${targetUser.id}, <@${targetUser.id}>`)
       .setThumbnail(targetUser.avatarURL() || message.author.defaultAvatarURL)
-      .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
+      .setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL() || message.author.defaultAvatarURL })
       .setTimestamp()
-      .addField("Reason", reason || "No reason given", true)
-      .setFooter(Naoko.version, SHAII_LOGO)
+      .addFields({ name: "Reason", value: reason || "No reason given", inline: true})
+      .setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
       .setColor("#00FF00");
 
     targetUser

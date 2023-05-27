@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { version } from "../../../package.json";
+import packageJson from "../../../package.json" assert { type: 'json' };
 import { SHAII_LOGO } from "../../constants";
 import Naoko from "../../naoko/Naoko";
 import { defineCommand } from "../../types";
@@ -13,8 +13,8 @@ export default defineCommand({
   usage: "plugins",
   description: "See loaded plugins",
   execute: () => {
-    const embed = new Discord.MessageEmbed()
-      .setAuthor(`Naoko v${version}`, SHAII_LOGO)
+    const embed = new Discord.EmbedBuilder()
+      .setAuthor({ name: `Naoko v${packageJson.version}`, iconURL: SHAII_LOGO })
       .setThumbnail(PLUGIN_ICON)
       .setColor("#FF00B6")
       .addFields({

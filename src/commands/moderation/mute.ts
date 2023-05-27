@@ -1,4 +1,4 @@
-import Discord, { MessageEmbed } from "discord.js";
+import Discord, { EmbedBuilder } from "discord.js";
 import { MUTED_ROLE_ID, SHAII_LOGO } from "../../constants";
 import { durationToMilliseconds, msToFullTime } from "../../logic/logic";
 import { User } from "../../naoko/Database";
@@ -12,12 +12,12 @@ export default defineCommand({
   category: "MODERATION",
   usage: "mute <@user> <duration> <reason>",
   description: "Mute a user",
-  permissions: ["MANAGE_ROLES"],
+  permissions: ["ManageRoles"],
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to mute";
     if (targetUser.id === message.author.id) return "You can't mute yourself";
-    if (targetUser.permissions.has("ADMINISTRATOR") || targetUser.permissions.has("MODERATE_MEMBERS"))
+    if (targetUser.permissions.has("Administrator") || targetUser.permissions.has("ModerateMembers"))
       return "You can't mute other admins";
     if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
@@ -51,15 +51,17 @@ function sendMuteEmbed(
   duration: string,
   reason: string
 ): Promise<Discord.Message> {
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.EmbedBuilder()
     .setTitle(`Mute - ${targetUser.user.tag}`)
     .setDescription(`ID: ${targetUser.user.id}, <@${targetUser.user.id}>`)
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
-    .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
+    .setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL() || message.author.defaultAvatarURL })
     .setTimestamp()
-    .addField("Duration", msToFullTime(parseInt(duration)), true)
-    .addField("Reason", reason, true)
-    .setFooter(Naoko.version, SHAII_LOGO)
+    .addFields([
+      { name: "Duration", value: msToFullTime(parseInt(duration)), inline: true },
+      { name: "Reason", value: reason, inline: true },
+    ])
+    .setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
     .setColor("#FF0000");
 
   targetUser
@@ -74,13 +76,13 @@ export function sendUnmuteEmbed(
   targetUser: Discord.GuildMember,
   reason?: string
 ): Promise<Discord.Message> {
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle(`Unmute - ${targetUser.user.tag}`)
     .setDescription(`<@${targetUser.user.id}>, you have been unmuted.`)
     .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
     .setTimestamp()
-    .addField("Reason", reason || "No reason given", true)
-    .setFooter(Naoko.version, SHAII_LOGO)
+    .addFields({ name: "Reason", value: reason || "No reason given", inline: true})
+    .setFooter({ text: Naoko.version, iconURL: SHAII_LOGO})
     .setColor("#00FF00");
 
   return message.channel.send({ embeds: [embed] });

@@ -1,5 +1,5 @@
 import Discord, { Client, User } from "discord.js";
-import { version } from "../../../package.json";
+import packageJson from "../../../package.json" assert { type: 'json' };
 import { markdown, msToFullTime, timeSince } from "../../logic/logic";
 import { User as UserDb } from "../../naoko/Database";
 import { ActionHistory, defineCommand, History, IMessage } from "../../types";
@@ -21,9 +21,15 @@ export default defineCommand({
       }
     }
 
-    const embed = new Discord.MessageEmbed()
-      .setAuthor(`Naoko v${version}`, message.client.user?.displayAvatarURL())
-      .setTitle(`Who is: ${user.username}#${user.discriminator}`)
+    let discriminator = '';
+    // User with the '0' Discriminator have a new username
+    if (user.discriminator !== '0') {
+      discriminator = '#' + user.discriminator;
+    }
+
+    const embed = new Discord.EmbedBuilder()
+      .setAuthor({ name: `Naoko v${packageJson.version}`, iconURL: message.client.user?.displayAvatarURL() })
+      .setTitle(`Who is: ${user.username}${discriminator}`)
       .setDescription(user.toString())
       .setColor("#FF00B6")
       .setThumbnail(user.avatarURL() || user.defaultAvatarURL)
@@ -32,44 +38,44 @@ export default defineCommand({
   },
 });
 
-async function collectFields(message: IMessage, user: User): Promise<Discord.EmbedFieldData[]> {
-  const fields: Discord.EmbedFieldData[] = [];
-  fields.push({ name: "ID:", value: `${user.id}` });
-  fields.push({ name: "Account created:", value: user.createdAt.toUTCString() });
-  fields.push({ name: "Account age:", value: msToFullTime(Date.now() - user.createdTimestamp) });
+async function collectFields(message: IMessage, user: User): Promise<Discord.EmbedField[]> {
+  const fields: Discord.EmbedField[] = [];
+  fields.push({ name: "ID:", value: `${user.id}`, inline: false });
+  fields.push({ name: "Account created:", value: user.createdAt.toUTCString(), inline: false });
+  fields.push({ name: "Account age:", value: msToFullTime(Date.now() - user.createdTimestamp), inline: false });
 
   try {
     const member = await message.guild?.members.fetch(user);
     if (member && member.joinedTimestamp && member.joinedAt) {
-      fields.push({ name: "Server joined:", value: member.joinedAt.toUTCString() });
-      fields.push({ name: "Server join age:", value: msToFullTime(Date.now() - member.joinedTimestamp) });
+      fields.push({ name: "Server joined:", value: member.joinedAt.toUTCString(), inline: false });
+      fields.push({ name: "Server join age:", value: msToFullTime(Date.now() - member.joinedTimestamp), inline: false });
     }
   } catch {
-    fields.push({ name: "Server joined:", value: "User is not in this server" });
+    fields.push({ name: "Server joined:", value: "User is not in this server", inline: false });
   }
 
   const dbUser = await UserDb.findOne({ discord_id: user.id });
   if (dbUser) {
     const banHistory = actionHistoryToField(dbUser.ban_history, message.client);
-    if (banHistory) fields.push({ name: "Ban History", value: banHistory });
+    if (banHistory) fields.push({ name: "Ban History", value: banHistory, inline: false });
 
     const bonkHistory = actionHistoryToField(dbUser.bonk_history, message.client);
-    if (bonkHistory) fields.push({ name: "Bonk History", value: bonkHistory });
+    if (bonkHistory) fields.push({ name: "Bonk History", value: bonkHistory, inline: false });
 
     const kickHistory = actionHistoryToField(dbUser.kick_history, message.client);
-    if (kickHistory) fields.push({ name: "Kick History", value: kickHistory });
+    if (kickHistory) fields.push({ name: "Kick History", value: kickHistory, inline: false });
 
     const muteHistory = actionHistoryToField(dbUser.mute_history, message.client);
-    if (muteHistory) fields.push({ name: "Mute History", value: muteHistory });
+    if (muteHistory) fields.push({ name: "Mute History", value: muteHistory, inline: false });
 
     const usernameHistory = historyToField(dbUser.username_history);
-    if (usernameHistory) fields.push({ name: "Username History", value: usernameHistory });
+    if (usernameHistory) fields.push({ name: "Username History", value: usernameHistory, inline: false });
 
     const nicknameHistory = historyToField(dbUser.nickname_history);
-    if (nicknameHistory) fields.push({ name: "Nickname History", value: nicknameHistory });
+    if (nicknameHistory) fields.push({ name: "Nickname History", value: nicknameHistory, inline: false });
 
     const statusHistory = historyToField(dbUser.status_history);
-    if (statusHistory) fields.push({ name: "Status History", value: statusHistory });
+    if (statusHistory) fields.push({ name: "Status History", value: statusHistory, inline: false });
   }
 
   return fields;

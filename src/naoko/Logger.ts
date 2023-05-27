@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import MultiProgress from "multi-progress";
-import quotes from "../assets/quotes.json";
+import quotes from "../assets/quotes.json" assert { type: 'json' };
 import { getCurrentMemoryHeap, randomChoice } from "../logic/logic";
 
 /**

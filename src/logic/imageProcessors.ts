@@ -5,6 +5,8 @@ import { logger } from "../naoko/Logger";
 import { ImageProcessors } from "../types";
 import { commands3D } from "./3DRenderer";
 import { bipolarRandom, encodeFramesToGif, getRGBAUintArray } from "./logic";
+import { fileURLToPath } from 'url';
+import { join } from 'path';
 
 // This is so we cache the template files in RAM, performance++;
 let trolleyImage: Jimp;
@@ -13,12 +15,14 @@ let wastedImage: Jimp;
 let vignetteImage: Jimp;
 let fuckyouImage: Jimp;
 let pointingHandImage: Jimp;
-Jimp.read("./src/assets/images/trolleyTemplate.png").then(async (image) => (trolleyImage = image));
-Jimp.read("./src/assets/images/bobbyTemplate.png").then(async (image) => (bobbyImage = image));
-Jimp.read("./src/assets/images/wasted.png").then(async (image) => (wastedImage = image));
-Jimp.read("./src/assets/images/vignette.png").then(async (image) => (vignetteImage = image));
-Jimp.read("./src/assets/images/fuckyou.png").then(async (image) => (fuckyouImage = image));
-Jimp.read("./src/assets/images/finger.png").then(async (image) => (pointingHandImage = image));
+
+const absolutePath = fileURLToPath(new URL('../assets/images', import.meta.url));
+Jimp.read(join(absolutePath, 'trolleyTemplate.png')).then((image) => (trolleyImage = image)).catch(() => console.error('trolley'));
+Jimp.read(join(absolutePath, 'bobbyTemplate.png')).then((image) => (bobbyImage = image)).catch(() => console.error('bobby'));
+Jimp.read(join(absolutePath, 'wasted.png')).then((image) => (wastedImage = image)).catch(() => console.error('wasted'));
+Jimp.read(join(absolutePath, 'vignette.png')).then((image) => (vignetteImage = image)).catch(() => console.error('vignette'));
+Jimp.read(join(absolutePath, 'fuckyou.png')).then((image) => (fuckyouImage = image)).catch((e) => console.error('fuckyou', e));
+Jimp.read(join(absolutePath, 'finger.png')).then((image) => (pointingHandImage = image)).catch(() => console.error('finger'));
 
 export const imageProcessors: ImageProcessors = {
   autocrop,
@@ -298,16 +302,18 @@ export async function haah(texture: Buffer) {
   const textureImage = await Jimp.read(texture);
   const { width, height } = textureImage.bitmap;
 
+  const halfWidth = Math.floor(width / 2);
+
   const right = textureImage
     .clone()
     .flip(true, false)
-    .crop(width / 2, 0, width / 2, height);
+    .crop(halfWidth, 0, halfWidth, height);
 
-  const left = textureImage.crop(0, 0, width / 2, height);
+  const left = textureImage.crop(0, 0, halfWidth, height);
 
   const image = await Jimp.create(width, height);
 
-  image.blit(left, 0, 0).blit(right, width / 2, 0);
+  image.blit(left, 0, 0).blit(right, halfWidth, 0);
   return await image.getBufferAsync("image/png");
 }
 

@@ -1,5 +1,6 @@
 import fs from "fs";
 import { logger } from "./Logger";
+import { fileURLToPath } from "node:url";
 
 interface IConfig {
   prefix: string;
@@ -19,7 +20,7 @@ interface IConfig {
 class Config {
   // Initializes the config with default path
   private path: string = "../config.naoko.json";
-  private config: IConfig = require(this.path);
+  private config: IConfig = ({} as any)/* = JSON.parse(readFileSync(this.path).toString())*/;
 
   /**
    * Creates a new config object and loads the config.naoko.json file
@@ -109,7 +110,8 @@ class Config {
    * @author N1kO23
    */
   public save(): void {
-    fs.writeFileSync(this.path, JSON.stringify(this.config, null, 2));
+    const absolutePath = fileURLToPath(new URL(this.path, import.meta.url));
+    fs.writeFileSync(absolutePath, JSON.stringify(this.config, null, 2));
   }
 
   /**
@@ -118,7 +120,9 @@ class Config {
    */
   public load(): void {
     try {
-      const conf = require(this.path);
+      const absolutePath = fileURLToPath(new URL(this.path, import.meta.url));
+      const conf = JSON.parse(fs.readFileSync(absolutePath).toString());
+
       this.validateConfig(conf);
       this.config = conf;
     } catch (e: any) {

@@ -6,7 +6,7 @@ console.clear();
 
 // Cosmetic Imports
 import chalk from "chalk";
-import { version } from "../package.json";
+import packageJson from "../package.json" assert { type: 'json' };
 import { logger } from "./naoko/Logger";
 
 // Print log
@@ -17,7 +17,7 @@ logger.print(
         -@@%%@@-        
   :====:-@@@@@@=:====:  
 *@@@@@@@@*+##@#+@@@@@@@*
- #@@@#@%##%.++=#%@*@@@#  by Geoxor & Friends v${version}
+ #@@@#@%##%.++=#%@*@@@#  by Geoxor & Friends v${packageJson.version}
   -*@@%***-  :%@@@@@*-   .▄▄ ·   ▄  .▄  ▄▄▄· ▪   ▪  
      :#@@%+-%+****:      ▐█ ▀.  ██▪ ▐█ ▐█ ▀█ ██  ██ 
     -@@@@%@-@@%@@@@-     ▄▀▀▀█▄ ██▀ ▐█ ▄█▀▀█ ▐█· ▐█·

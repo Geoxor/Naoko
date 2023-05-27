@@ -21,15 +21,17 @@ export default defineCommand({
       const animeMeta = await anilistQuery(anime.anilist);
 
       // prepare an embed to send to the user
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.EmbedBuilder()
         .setColor("#FF90E0")
         .setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}\n${animeMeta.externalLinks[0].url}`)
         .setThumbnail(animeMeta.coverImage.large)
         .setDescription(animeMeta.description.replace(/<br>/g, ""))
-        .addField("Episode", anime.episode?.toString() || "Unknown", true)
-        .addField("Anilist", anime.anilist?.toString() || "Unknown", true)
-        .addField("Confidence", `${~~(anime.similarity * 100)}%` || "Unknown", true)
-        .addField("Timestamp", `${anime.from.toString()}-${anime.to.toString()}` || "Unknown", true)
+        .addFields([
+          { name: "Episode", value: anime.episode?.toString() || "Unkown", inline: true },
+          { name: "Anilist", value: anime.anilist?.toString() || "Unkown", inline: true },
+          { name: "Confidence", value: `${~~(anime.similarity * 100)}%` || "Unknown", inline: true },
+          { name: "Timestamp", value: `${anime.from.toString()}-${anime.to.toString()}` || "Unknown", inline: true },
+        ])
         .setImage(anime.image);
 
       return { embeds: [embed] };

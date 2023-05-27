@@ -13,7 +13,7 @@ export default defineCommand({
     try {
       const animeMeta = await anilistSearch(message.args.join(" "));
       // prepare an embed to send to the user
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.EmbedBuilder()
         .setColor("#FF90E0")
         .setThumbnail(animeMeta.coverImage.large)
         .setDescription(animeMeta.description.replace(/<br>/g, ""));

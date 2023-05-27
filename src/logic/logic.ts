@@ -1,18 +1,18 @@
 import axios from "axios";
 import Discord, { MessageMentions } from "discord.js";
-// @ts-ignore this has broken types :whyyyyyyyyyyy:
-import fileType from "file-type";
+import { fileTypeFromBuffer } from 'file-type';
 import fs from "fs";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
-import { applyPalette, GIFEncoder, quantize } from "gifenc";
+import gifenc from "gifenc";
 import Jimp from "jimp";
 import path from "path";
 import { logger } from "../naoko/Logger";
 import { defineCommand, IAnilistAnime, IAnime, ICommand, ImageProcessorFn, IMessage } from "../types";
-const replaceLast = require("replace-last");
+// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
+import replaceLast from 'replace-last';
 
 const defaultImageOptions: Discord.ImageURLOptions = {
-  format: "png",
+  extension: "png",
   size: 2048,
 };
 
@@ -106,12 +106,12 @@ export async function encodeFramesToGif(
   height: number,
   delay: number
 ) {
-  const gif = GIFEncoder();
-  const palette = quantize(frames[0], 256);
+  const gif = gifenc.GIFEncoder();
+  const palette = gifenc.quantize(frames[0], 256);
   const bar = logger.progress("Encoding  - ", frames.length);
   for (let i = 0; i < frames.length; i++) {
     const frame = frames[i];
-    const idx = applyPalette(frame, palette);
+    const idx = gifenc.applyPalette(frame, palette);
     gif.writeFrame(idx, width, height, { transparent: true, delay, palette });
     logger.setProgressValue(bar, i / frames.length);
   }
@@ -160,11 +160,11 @@ export async function parseBufferFromMessage(message: IMessage): Promise<Buffer>
  * @author Bluskript
  */
 export function imageProcess(process: ImageProcessorFn) {
-  return async (message: IMessage): Promise<string | Discord.ReplyMessageOptions> => {
+  return async (message: IMessage): Promise<string | Discord.MessageReplyOptions> => {
     const buffer = await parseBufferFromMessage(message);
     const resultBuffer = await process(buffer, message.args.join(" "));
-    const mimetype = await fileType(resultBuffer);
-    const attachment = new Discord.MessageAttachment(resultBuffer, `shit.${mimetype.ext}`);
+    const mimetype = await fileTypeFromBuffer(resultBuffer);
+    const attachment = new Discord.AttachmentBuilder(resultBuffer, { name: `shit.${mimetype?.ext}` });
     return { files: [attachment] };
   };
 }
@@ -658,11 +658,13 @@ export async function getBufferFromUrl(url: string) {
  * @author Geoxor
  */
 export async function getLastAttachmentInChannel(message: IMessage) {
-  const messages = await message.channel.messages.fetch();
+  // Cast this as a Message Collection
+  const messages = (await message.channel.messages.fetch() as Discord.Collection<string, Discord.Message>);
   const lastMessage = messages
     .sort((a, b) => b.createdTimestamp - a.createdTimestamp)
-    .filter((m) => m.attachments.size > 0)
+    .filter((m: Discord.Message) => m.attachments.size > 0)
     .first();
+  // @ts-expect-error TODO: Check what the "correct" way of getting a attachment buffer is
   return lastMessage?.attachments.first()?.attachment;
 }
 
@@ -674,10 +676,10 @@ export async function getLastAttachmentInChannel(message: IMessage) {
  */
 export function removeMentions(messageContent: string): string {
   return messageContent
-    .replace(MessageMentions.CHANNELS_PATTERN, "")
-    .replace(MessageMentions.EVERYONE_PATTERN, "")
-    .replace(MessageMentions.ROLES_PATTERN, "")
-    .replace(MessageMentions.USERS_PATTERN, "");
+    .replace(MessageMentions.ChannelsPattern, "")
+    .replace(MessageMentions.EveryonePattern, "")
+    .replace(MessageMentions.RolesPattern, "")
+    .replace(MessageMentions.UsersPattern, "");
 }
 
 /**

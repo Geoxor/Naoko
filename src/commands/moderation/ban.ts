@@ -5,23 +5,27 @@ import { User } from "../../naoko/Database";
 import { logger } from "../../naoko/Logger";
 import { defineCommand, IMessage } from "../../types";
 
-export const sendToGeneral = (message: string | Discord.MessagePayload | Discord.MessageOptions) => {
-  const general = Naoko.bot.guilds.cache.get(GEOXOR_GUILD_ID)!.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel;
+export const sendToGeneral = (message: string | Discord.MessagePayload | Discord.MessageCreateOptions) => {
+  const general = Naoko.bot.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel;
   return general.send(message);
 }
 
 export const ban = async (target: GuildMember, message?: IMessage, reason?: string) => {
   if (message && (target.id === message.author.id)) return "You can't ban yourself";
-  if (target.permissions.has("ADMINISTRATOR")) return "You can't ban other admins";
+  if (target.permissions.has("Administrator")) return "You can't ban other admins";
 
   // Create the result embed
   const embed = {
-    embeds: [new Discord.MessageEmbed()
+    embeds: [new Discord.EmbedBuilder()
       .setTitle(`Ban - ${target.user.tag}`)
       .setDescription(`ID: ${target.user.id}, <@${target.user.id}>`)
       .setThumbnail(target.user.avatarURL() || (message ? message.author.defaultAvatarURL : SHAII_LOGO))
       .setTimestamp()
-      .addField("Reason", (reason || message?.args.join(" ") || "No reason given") + `- at ${Date.now()}`, true)
+      .addFields({ 
+        name: "Reason",
+        value: (reason || message?.args.join(" ") || "No reason given") + `- at ${Date.now()}`,
+        inline: true,
+      })
       .setColor("#FF0000")]
   }
 
@@ -43,7 +47,7 @@ export default defineCommand({
   category: "MODERATION",
   usage: "ban <@user> <reason>",
   description: "Bans a user",
-  permissions: ["BAN_MEMBERS"],
+  permissions: ["BanMembers"],
   execute: async (message) => {
     const target = message.mentions.members?.first();
     if (!target) return "Please mention the user you want to ban";

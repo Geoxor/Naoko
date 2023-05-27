@@ -2,7 +2,7 @@ import { EmojiIdentifierResolvable } from "discord.js";
 
 export const SHAII_ID = "870496144881492069";
 export const GEOXOR_GUILD_ID = "385387666415550474";
-export const TESTING_GUILD_ID = "911762334538670160";
+export const TESTING_GUILD_ID = "558316518602178561";
 export const GEOXOR_GENERAL_CHANNEL_ID = "1018685216317001738";
 export const GEOXOR_STAFF_CHANNEL_ID = "553776591910600714";
 export const DOWNVOTE_EMOJI_ID = "823666555123662888";
@@ -18,7 +18,6 @@ export const MUTED_ROLE_ID = "737011597217628231";
 export const SELF_MUTED_ROLE_ID = "967503006100750406";
 export const GHOSTS_ROLE_ID = "736285344659669003";
 export const GEOBOTS_ROLE_ID = "720006137151488121";
-export const VOTE_TIME = 30000;
 
 export const restrictedChannels: string[] = ["845328432715923487"];
 

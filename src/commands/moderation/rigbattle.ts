@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Discord from "discord.js";
 import Waifu from "../../naoko/Waifu";
 import WaifuBattle from "../../naoko/WaifuBattle";
@@ -9,7 +10,7 @@ export default defineCommand({
   name: "rigbattle",
   usage: "rigbattle <waifu_name>",
   description: "Battle with predefined waifu for testing purpose",
-  permissions: ["ADMINISTRATOR"],
+  permissions: ["Administrator"],
   execute: async (message) => {
     if (!(message.channel instanceof Discord.TextChannel)) return "Can't start battles in here!";
     const result = await rigChooseWaifu(message.args.join(" "));

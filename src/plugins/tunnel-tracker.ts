@@ -1,3 +1,4 @@
+import { ChannelType } from 'discord.js';
 import { definePlugin } from "../naoko/Plugin";
 
 export default definePlugin({
@@ -6,7 +7,7 @@ export default definePlugin({
   events: {
     messageCreate: (message) => {
       if (
-        message.channel.type == "GUILD_PUBLIC_THREAD" &&
+        message.channel.type == ChannelType.PublicThread &&
         message.channel.id === "923126477610962964" &&
         message.attachments.size !== 0
       ) {

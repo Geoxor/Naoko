@@ -1,10 +1,7 @@
 import fs from "fs";
-// @ts-ignore gotta use this garbage npm package cus built-in
-// three.js shit doesn't work (good job cunts)
-// and import the actual shit for types cus FUCK YOU THREE.JS
-import { OBJLoader } from "three-obj-mtl-loader";
-import _types from "three/examples/jsm/loaders/OBJLoader";
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { logger } from "./Logger";
+import { fileURLToPath } from 'node:url';
 
 // This is so we cache the template files in RAM, performance++;
 class Cache {
@@ -12,19 +9,25 @@ class Cache {
   public objects: { [key: string]: THREE.Group } = {};
 
   constructor() {
-    this.files = fs.readdirSync("./src/assets/models/");
+    this.loadFiles().catch(console.error);
+  }
+
+  async loadFiles(): Promise<void> {
+    const absolutePath = fileURLToPath(new URL('../assets/models', import.meta.url));
+    this.files = fs.readdirSync(absolutePath);
 
     // Load 3D Objects
     for (let i = 0; i < this.files.length; i++) {
       const { name, buffer } = this.loadFile(this.files[i]);
-      this.objects[name] = (new OBJLoader() as _types.OBJLoader).parse(buffer.toString());
+      this.objects[name] = new OBJLoader().parse(buffer.toString());
       logger.print(`Loaded ${name}.obj`);
     }
   }
 
   loadFile(path: string) {
     const name = path.split("/")[path.split("/").length - 1].replace(".obj", "");
-    const buffer = fs.readFileSync(`./src/assets/models/${path}`);
+    const absolutePath = fileURLToPath(new URL('../assets/models', import.meta.url));
+    const buffer = fs.readFileSync(`${absolutePath}/${path}`);
     return { name, buffer };
   }
 }

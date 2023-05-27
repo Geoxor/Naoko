@@ -1,4 +1,4 @@
-import Discord, { Client, Guild, GuildMember, Intents } from "discord.js";
+import Discord, { GuildMember } from "discord.js";
 import { MUTED_ROLE_ID, SELF_MUTED_ROLE_ID } from "../constants";
 import { User } from "../naoko/Database";
 import { logger } from "../naoko/Logger";
@@ -16,7 +16,7 @@ const gm = defineCommand({
     const guild = message.client.guilds.cache.get(GEOXOR_GUILD_ID);
     const member = await guild!.members.fetch(message.author.id);
     if (message.author) {
-      if (message.channel.type == "DM" && hasSelfMute(member) && !hasActualMute(member)) {
+      if (message.channel.type == Discord.ChannelType.DM && hasSelfMute(member) && !hasActualMute(member)) {
         const targetUser = member;
         if (!targetUser) throw new Error("No User");
 

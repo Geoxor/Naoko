@@ -10,24 +10,24 @@ export default defineCommand({
   usage: "kick <@user> <reason>",
   category: "UTILITY",
   description: "Kicks a user",
-  permissions: ["KICK_MEMBERS"],
+  permissions: ["KickMembers"],
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to kick";
     if (targetUser.id === message.author.id) return "You can't kick yourself";
-    if (targetUser.permissions.has("ADMINISTRATOR")) return "You can't kick other admins";
+    if (targetUser.permissions.has("Administrator")) return "You can't kick other admins";
 
     const reason = message.args.join(" ");
 
     // Create the result embed
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.EmbedBuilder()
       .setTitle(`Kick - ${targetUser.user.tag}`)
       .setDescription(`ID: ${targetUser.user.id}, <@${targetUser.user.id}>`)
       .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
-      .setAuthor(message.author.tag, message.author.avatarURL() || message.author.defaultAvatarURL)
+      .setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL() || message.author.defaultAvatarURL })
       .setTimestamp()
-      .addField("Reason", reason || "No reason given", true)
-      .setFooter(Naoko.version, SHAII_LOGO)
+      .addFields({ name: "Reason", value: reason || "No reason given", inline: true })
+      .setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
       .setColor("#FF4500");
 
     targetUser

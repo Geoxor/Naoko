@@ -9,7 +9,7 @@ export default defineCommand({
   category: "MODERATION",
   usage: "unmute <@user> [reason]",
   description: "Unmute a user",
-  permissions: ["MANAGE_ROLES"],
+  permissions: ["ManageRoles"],
   execute: async (message) => {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to unmute";

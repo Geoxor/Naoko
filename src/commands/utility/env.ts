@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { version } from "../../../package.json";
+import packageJson from "../../../package.json" assert { type: 'json' };
 import { LINUX_LOGO, SHAII_LOGO, WINDOWS_LOGO } from "../../constants";
 import { msToTime } from "../../logic/logic";
 import { systemInfo } from "../../naoko/Naoko";
@@ -14,7 +14,7 @@ export default defineCommand({
   usage: "env",
   description: "Show environment details",
 
-  execute: (message) => {
+  execute: () => {
     // Leave these in here because systeminfo takes 10 hours to fetch data
     // and putting these out there will cause it to be undefined
     const { distro, platform, release } = systemInfo.os;
@@ -24,8 +24,8 @@ export default defineCommand({
     const vram = systemInfo.graphics.controllers?.[0]?.vram;
     const totalRam = systemInfo.memLayout.reduce((acc, mem) => acc + mem.size, 0);
 
-    const embed = new Discord.MessageEmbed()
-      .setAuthor(`Naoko v${version}`, SHAII_LOGO)
+    const embed = new Discord.EmbedBuilder()
+      .setAuthor({ name: `Naoko v${packageJson.version}`, iconURL: SHAII_LOGO })
       .setColor("#FF00B6")
       .setThumbnail(platform === "win32" || platform === "win64" ? WINDOWS_LOGO : LINUX_LOGO)
       .addFields(

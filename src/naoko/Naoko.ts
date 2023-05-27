@@ -1,11 +1,10 @@
-import Discord, { GuildTextBasedChannel, Intents, TextChannel } from "discord.js";
+import Discord, { ChannelType, GuildTextBasedChannel, Partials, TextChannel } from "discord.js";
 import fs from "fs";
 import levenshtein from "js-levenshtein";
 import path from "path";
-import { ban } from "../commands/moderation/ban";
 import si from "systeminformation";
-import { version } from "../../package.json";
-import welcomeMessages from "../assets/welcome_messages.json";
+import packageJson from "../../package.json" assert { type: 'json' };
+import welcomeMessages from "../assets/welcome_messages.json" assert { type: 'json' };
 import { getCommands } from "../commands";
 import {
   GEOXOR_GENERAL_CHANNEL_ID,
@@ -24,6 +23,8 @@ import { ICommand } from "../types";
 import { config } from "./Config";
 import { User } from "./Database";
 import { logger } from "./Logger";
+import { GatewayIntentBits } from 'discord.js';
+import { fileURLToPath } from 'node:url';
 
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
@@ -41,24 +42,22 @@ const SEVEN_DAYS = 604800000;
 class Naoko {
   public commands: Discord.Collection<string, ICommand> = new Discord.Collection();
   public geoxorGuild: Discord.Guild | undefined;
-  public version: string = require("../../package.json").version;
-  public plugins: Plugin[] = fs
-    .readdirSync("./src/plugins")
-    .filter((file) => file.endsWith(".ts"))
-    .map((file) => require(path.join("../plugins/" + file)).default);
+  public version: string = packageJson.version;
+  public plugins: Plugin[] = []; 
   public bot: Discord.Client = new Discord.Client({
     intents: [
-      Intents.FLAGS.GUILDS,
-      Intents.FLAGS.GUILD_PRESENCES,
-      Intents.FLAGS.GUILD_MEMBERS,
-      Intents.FLAGS.GUILD_MESSAGES,
-      Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-      Intents.FLAGS.GUILD_VOICE_STATES,
-      Intents.FLAGS.DIRECT_MESSAGES,
-      Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-      Intents.FLAGS.DIRECT_MESSAGE_TYPING,
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildPresences,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildVoiceStates,
+      GatewayIntentBits.DirectMessages,
+      GatewayIntentBits.DirectMessageReactions,
+      GatewayIntentBits.DirectMessageTyping,
     ],
-    partials: ["CHANNEL"],
+    partials: [Partials.Channel],
   });
   constructor() {
     this.loadCommands();
@@ -69,7 +68,7 @@ class Naoko {
     }
     this.bot.on("guildMemberRemove", (member) => {
       const channel = this.geoxorGuild?.channels.cache.get("823403109522866217");
-      if (channel && channel.type === "GUILD_TEXT") {
+      if (channel && channel.type === ChannelType.GuildText) {
         channel.send(`User ${member.user.username}#${member.user.discriminator} left the server`).catch();
       }
     });
@@ -166,8 +165,8 @@ class Naoko {
     });
     this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
       // Get their custom status
-      const newStatus = newPresence.activities.find((activity) => activity.type === "CUSTOM")?.state;
-      const oldStatus = oldPresence?.activities.find((activity) => activity.type === "CUSTOM")?.state;
+      const newStatus = newPresence.activities.find((activity) => activity.type === Discord.ActivityType.Custom)?.state;
+      const oldStatus = oldPresence?.activities.find((activity) => activity.type === Discord.ActivityType.Custom)?.state;
 
       if (!newStatus || !newPresence.user) return;
 
@@ -206,6 +205,15 @@ class Naoko {
     logger.print("Naoko logging in...");
   }
 
+  private async loadPlugins() {
+    const absolutePath = fileURLToPath(new URL('../plugins', import.meta.url));
+    const pluginPromises = fs
+      .readdirSync(absolutePath)
+      .filter((file) => file.endsWith(".ts"))
+      .map((file) => import(path.join(absolutePath, file)));
+    this.plugins = (await Promise.all(pluginPromises)).map((mod) => mod.default);
+  }
+
   public getClosestCommand(searchString: string): ICommand | undefined {
     let closest: { command: ICommand | undefined; distance: number } = {
       command: undefined,
@@ -235,6 +243,8 @@ class Naoko {
    * Loads all the command files from ./commands
    */
   private async loadCommands() {
+    await this.loadPlugins();
+
     logger.print("Loading commands...");
 
     // Get commands from built-in commands
@@ -268,7 +278,7 @@ class Naoko {
   }
 
   private updateActivity() {
-    this.bot.user?.setActivity(`${config.prefix}help v${version}`, { type: "LISTENING" });
+    this.bot.user?.setActivity(`${config.prefix}help v${packageJson.version}`, { type: Discord.ActivityType.Listening });
   }
 
   private joinThreads() {
@@ -362,6 +372,7 @@ class Naoko {
               );
             } catch (error: any) {
               logger.error(`Command ${command.name} failed to execute with error: ${error}`);
+              console.error(error);
               await message.reply({
                  embeds:[
                     {
@@ -382,14 +393,16 @@ class Naoko {
             // Send the result
             message
               .reply(result)
-              .catch(() => message.channel.send(result!))
-              .catch((error) =>
-                error.code === 500
-                  ? message.reply({
-                    embeds: [new Discord.MessageEmbed().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
-                  })
-                  : message.reply(markdown(error))
-              );
+              .catch(() =>  {
+                message.channel.send(result!)
+                  .catch((error) =>
+                    error.code === 500
+                      ? message.reply({
+                        embeds: [new Discord.EmbedBuilder().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
+                      })
+                      : message.reply(markdown(error))
+                  );
+              });
           });
         });
       });

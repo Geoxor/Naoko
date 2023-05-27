@@ -6,7 +6,7 @@ export default defineCommand({
   name: "logs",
   usage: "logs",
   category: "UTILITY",
-  permissions: ["ADMINISTRATOR"],
+  permissions: ["Administrator"],
   description: "Shows latest console logs.",
   execute: async (message) => markdown(logger.getLogHistory().substring(0, 1990)),
 });

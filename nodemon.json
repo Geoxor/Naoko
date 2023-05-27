@@ -1,4 +1,4 @@
 {
   "ignore": ["naoko.json"],
-  "exec": "ts-node -T ./src/naoko.ts"
+  "exec": "yarn run start"
 }

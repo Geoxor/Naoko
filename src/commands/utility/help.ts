@@ -1,8 +1,6 @@
-import { Readable } from "stream";
 import naoko from "../../naoko/Naoko";
 import { defineCommand } from "../../types";
-import { MessageEmbed } from "discord.js";
-import { logger } from "../../naoko/Logger";
+import { EmbedBuilder } from "discord.js";
 
 function commandsStringFromCategory(category: string): string {
   const commands = Array.from(naoko.commands.filter((command) => command.category === category));
@@ -27,7 +25,7 @@ export default defineCommand({
     const helpString = [];
 
     const categories = ["ECONOMY", "FUN", "IMAGE_PROCESSORS", "MODERATION", "MUSIC", "UTILITY"];
-    const helpEmbed = new MessageEmbed();
+    const helpEmbed = new EmbedBuilder();
     
     let embedFields = [];
     

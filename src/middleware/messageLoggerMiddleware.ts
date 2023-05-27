@@ -9,15 +9,15 @@ export function logEdit(
   newMessage: Discord.Message | Discord.PartialMessage,
   next: (oldMessage: Discord.Message | Discord.PartialMessage, newMessage: Discord.Message | Discord.PartialMessage) => any
 ): void {
-  if (oldMessage.channel.type == "DM") return;
+  if (oldMessage.channel.type == Discord.ChannelType.DM) return;
   if (oldMessage.content == newMessage.content) return;
   if (oldMessage.author?.id === SHAII_ID) return;
   if (oldMessage.guild?.id !== GEOXOR_GUILD_ID) return;
 
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.EmbedBuilder()
     .setColor("#fff06e")
     .setTitle(`Message edited in #${oldMessage.channel.name}`)
-    .setAuthor(oldMessage.author!.username, oldMessage.author?.avatarURL() || oldMessage.author?.defaultAvatarURL)
+    .setAuthor({ name: oldMessage.author!.username, iconURL: oldMessage.author?.avatarURL() || oldMessage.author?.defaultAvatarURL })
     .setThumbnail(`${oldMessage.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${oldMessage.author?.id}>` },
@@ -42,13 +42,13 @@ export function logDelete(
   message: Discord.Message | Discord.PartialMessage,
   next?: (message: Discord.Message | Discord.PartialMessage) => any
 ) {
-  if (message.channel.type == "DM") return;
+  if (message.channel.type == Discord.ChannelType.DM) return;
   if (message.author?.id === SHAII_ID) return;
 
-  const embed = new Discord.MessageEmbed()
+  const embed = new Discord.EmbedBuilder()
     .setColor("#eb4034")
     .setTitle(`Message deleted in #${message.channel.name}`)
-    .setAuthor(message.author!.username, message.author?.avatarURL() || message.author?.defaultAvatarURL)
+    .setAuthor({ name: message.author!.username, iconURL: message.author?.avatarURL() || message.author?.defaultAvatarURL })
     .setThumbnail(`${message.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${message.author?.id}>` },

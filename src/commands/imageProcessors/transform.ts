@@ -1,6 +1,5 @@
 import Discord from "discord.js";
-// @ts-ignore this has broken types :whyyyyyyyyyyy:
-import fileType from "file-type";
+import { fileTypeFromBuffer } from 'file-type';
 import { transform } from "../../logic/imageProcessors";
 import { parseBufferFromMessage } from "../../logic/logic";
 import { defineCommand } from "../../types";
@@ -17,8 +16,8 @@ export default defineCommand({
     if (pipeline.length > 10) return "Pipeline can't be longer than 10 iterators";
     const buffer = await parseBufferFromMessage(message);
     const resultbuffer = await transform(pipeline, buffer);
-    const mimetype = await fileType(resultbuffer);
-    const attachment = new Discord.MessageAttachment(resultbuffer, `shit.${mimetype.ext}`);
+    const mimetype = await fileTypeFromBuffer(resultbuffer);
+    const attachment = new Discord.AttachmentBuilder(resultbuffer, { name: `shit.${mimetype?.ext}` });
     return { files: [attachment] };
   },
 });

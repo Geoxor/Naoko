@@ -26,21 +26,21 @@ const report = defineCommand({
       content = attachments.join("\n");
     }
 
-    const embed = new Discord.MessageEmbed()
+    const embed = new Discord.EmbedBuilder()
       .setAuthor({
         name: message.author.username,
         iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
       })
       .setTitle(`Report ${targetUser.user.username}`)
       .setDescription(`ID: ${targetUser.id}`)
-      .addField("Reason", reason)
-      .setFooter("Report abuse will be punished")
+      .addFields([{ name: "Reason", value: reason}])
+      .setFooter({ text: "Report abuse will be punished" })
       .setColor("#FFAF2F");
 
     const out = { content: content || "No file was attached.", embeds: [embed] };
     // This is kinda scuff
     await (
-      message.client.guilds.cache.get(GEOXOR_GUILD_ID)!.channels.cache.get(GEOXOR_STAFF_CHANNEL_ID) as Discord.TextChannel
+      message.client.channels.cache.get(GEOXOR_STAFF_CHANNEL_ID) as Discord.TextChannel
     ).send(out);
     return out;
   },
