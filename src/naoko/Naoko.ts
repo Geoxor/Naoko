@@ -17,7 +17,7 @@ import commandMiddleware from "../middleware/commandMiddleware";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware";
 import moderationMiddleware from "../middleware/moderationMiddleware";
 import restrictedChannelMiddleware from "../middleware/restrictedChannelMiddleware";
-import { giveGhostsRole, hasGhostsRole, userMiddleware } from "../middleware/userMiddleware";
+import { userMiddleware } from "../middleware/userMiddleware";
 import { DISCORD_EVENTS, Plugin } from "./Plugin";
 import { ICommand } from "../types";
 import { config } from "./Config";
@@ -25,7 +25,9 @@ import { User } from "./Database";
 import { logger } from "./Logger";
 import { GatewayIntentBits } from 'discord.js';
 import { fileURLToPath } from 'node:url';
+import { singleton } from '@triptyk/tsyringe';
 
+// TODO: Move this to the ENV Command
 export let systemInfo: si.Systeminformation.StaticData;
 logger.print("Fetching environment information...");
 si.getStaticData().then((info) => {
@@ -33,18 +35,18 @@ si.getStaticData().then((info) => {
   systemInfo = info;
 });
 
-const SEVEN_DAYS = 604800000;
-
 /**
  * Naoko multi purpose Discord bot
  * @author Geoxor, Cimok
  */
-class Naoko {
-  public commands: Discord.Collection<string, ICommand> = new Discord.Collection();
-  public geoxorGuild: Discord.Guild | undefined;
-  public version: string = packageJson.version;
-  public plugins: Plugin[] = []; 
-  public bot: Discord.Client = new Discord.Client({
+@singleton()
+export default class Naoko {
+  public static version = packageJson.version;
+
+  public static commands: Discord.Collection<string, ICommand> = new Discord.Collection();
+  public static plugins: Plugin[] = []; 
+
+  public static bot: Discord.Client = new Discord.Client({
     intents: [
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildPresences,
@@ -59,20 +61,30 @@ class Naoko {
     ],
     partials: [Partials.Channel],
   });
-  constructor() {
-    this.loadCommands();
+
+  public async run(): Promise<void> {
+    await this.loadPlugins();
+    await this.loadCommands();
+    await this.registerEventListener();
+
+    logger.print("Naoko logging in...");
+    await Naoko.bot.login(config.token);
+  }
+
+  private async registerEventListener() {
     for (const event of DISCORD_EVENTS) {
-      this.bot.on(event as string, (data) => {
-        this.plugins.forEach((plugin) => plugin.send(event, [data]));
+      Naoko.bot.on(event as string, (data) => {
+        Naoko.plugins.forEach((plugin) => plugin.send(event, [data]));
       });
     }
-    this.bot.on("guildMemberRemove", (member) => {
-      const channel = this.geoxorGuild?.channels.cache.get("823403109522866217");
+    Naoko.bot.on("guildMemberRemove", (member) => {
+      // TODO: Magic number to Constant
+      const channel = Naoko.bot.channels.cache.get("823403109522866217");
       if (channel && channel.type === ChannelType.GuildText) {
         channel.send(`User ${member.user.username}#${member.user.discriminator} left the server`).catch();
       }
     });
-    this.bot.on("voiceStateUpdate", (oldState, newState) => {
+    Naoko.bot.on("voiceStateUpdate", (oldState, newState) => {
       const LOG_CHANNEL = "755597803102928966";
       const pingVoiceChannel = (channelId: string) => `<#${channelId}>`;
 
@@ -101,16 +113,13 @@ class Naoko {
         }).catch();
       }
     });
-
-    this.bot.on("ready", () => {
-      logger.print("Instantiated Discord client instance");
-      logger.print(`Logged in as ${this.bot.user!.tag}!`);
-      logger.print(`Currently in ${this.bot.guilds.cache.size} servers`);
+    Naoko.bot.on("ready", () => {
+      logger.print(`Logged in as ${Naoko.bot.user!.tag}!`);
+      logger.print(`Currently in ${Naoko.bot.guilds.cache.size} servers`);
       this.updateActivity();
       this.joinThreads();
-      this.geoxorGuild = this.bot.guilds.cache.get(GEOXOR_GUILD_ID);
     });
-    this.bot.on("messageCreate", async (message) => {
+    Naoko.bot.on("messageCreate", async (message) => {
       // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
       try {
         this.onMessageCreate(message);
@@ -118,52 +127,52 @@ class Naoko {
         console.log(error);
       }
     });
-    this.bot.on("messageDelete", async (message) => {
+    Naoko.bot.on("messageDelete", async (message) => {
       if (message.guild?.id === GEOXOR_GUILD_ID) {
         logDelete(message);
       }
     });
-    this.bot.on("messageUpdate", async (oldMessage, newMessage) => {
+    Naoko.bot.on("messageUpdate", async (oldMessage, newMessage) => {
       logEdit(oldMessage, newMessage, (oldMessage, newMessage) => { });
       userMiddleware(newMessage as Discord.Message, (newMessage) => {
         moderationMiddleware(newMessage, (newMessage) => { });
       });
     });
-    this.bot.on("guildMemberRemove", async (member) => {
+    Naoko.bot.on("guildMemberRemove", async (member) => {
       if (member.id === SHAII_ID) return;
-      let user = await User.findOneOrCreate(member);
+      const user = await User.findOneOrCreate(member);
       user.updateRoles(Array.from(member.roles.cache.keys()));
     });
-    this.bot.on("guildMemberAdd", async (member) => {
+    Naoko.bot.on("guildMemberAdd", async (member) => {
       if (member.guild.id === GEOXOR_GUILD_ID) {
-        if (!hasGhostsRole(member) && member.guild.id === GEOXOR_GUILD_ID) {
-          giveGhostsRole(member).catch(() => {
-            logger.error("Couldn't give Ghosts role to the member.");
-          });
-        }
-        try {
-          (member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID)! as TextChannel)
-            .send(`<@${member.id}> ${randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name)}`)
-            .then((m) => m.react("👋"));
-        } catch {
-          logger.error(`The channel <#${GEOXOR_GENERAL_CHANNEL_ID}> doesn't exist`);
+        await member.roles.add(GHOSTS_ROLE_ID);
+
+        const generalChannel = await member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID);
+        if (generalChannel && generalChannel.isTextBased()) {
+          const welcomeMessage = randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name);
+          const message = await generalChannel.send(`<@${member.id}> ${welcomeMessage}`);
+          await message.react("👋");
         }
       }
 
       let user = await User.findOneOrCreate(member);
+      const addedRoles: string[] = [];
       for (const roleId of user.roles) {
-        const role = member.guild.roles.cache.find((role) => role.id === roleId);
+        const role = member.guild.roles.cache.get(roleId);
         if (role) {
-          member.roles
-            .add(role)
-            .then(() => logger.print(`Added return role ${roleId} to ${member.user.username}`))
-            .catch((error) => {
-              logger.error(error as string);
-            });
+          try {
+            await member.roles.add(role);
+            addedRoles.push(role.name);
+          } catch(error) {
+            console.log(`Could not give member old role: "${role.name}"`, error);
+          }
         }
       }
+      if (addedRoles.length > 0) {
+        logger.print(`Added ${addedRoles.length} old roles to ${member.displayName}. List: ${addedRoles.join(', ')}`);
+      }
     });
-    this.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
+    Naoko.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
       // Get their custom status
       const newStatus = newPresence.activities.find((activity) => activity.type === Discord.ActivityType.Custom)?.state;
       const oldStatus = oldPresence?.activities.find((activity) => activity.type === Discord.ActivityType.Custom)?.state;
@@ -171,7 +180,7 @@ class Naoko {
       if (!newStatus || !newPresence.user) return;
 
       // This stops it from acting when the user's status updates for another reason such as
-      // spotify changing tunes or not, we don't care about thoes events we just care
+      // spotify changing tunes or not, we don't care about those events we just care
       // about their custom status
       if (newStatus === oldStatus) return;
 
@@ -188,7 +197,7 @@ class Naoko {
         User.pushHistory("status_history", newPresence.user.id, newStatus);
       }
     });
-    this.bot.on("guildMemberUpdate", async (oldMember, newMember) => {
+    Naoko.bot.on("guildMemberUpdate", async (oldMember, newMember) => {
       if (oldMember.user.username !== newMember.user.username) {
         logger.print(`Updated username history for ${oldMember.id} '${newMember.user.username}'`);
         User.pushHistory("username_history", oldMember.id, newMember.user.username);
@@ -198,28 +207,28 @@ class Naoko {
         User.pushHistory("nickname_history", oldMember.id, newMember.nickname);
       }
     });
-    this.bot.on("threadCreate", (thread) => {
+    Naoko.bot.on("threadCreate", (thread) => {
       thread.join();
     });
-    this.bot.login(config.token);
-    logger.print("Naoko logging in...");
   }
 
   private async loadPlugins() {
+    logger.print("Loading plugins...");
+
     const absolutePath = fileURLToPath(new URL('../plugins', import.meta.url));
     const pluginPromises = fs
       .readdirSync(absolutePath)
       .filter((file) => file.endsWith(".ts"))
       .map((file) => import(path.join(absolutePath, file)));
-    this.plugins = (await Promise.all(pluginPromises)).map((mod) => mod.default);
+    Naoko.plugins = (await Promise.all(pluginPromises)).map((mod) => mod.default);
   }
 
-  public getClosestCommand(searchString: string): ICommand | undefined {
+  private getClosestCommand(searchString: string): ICommand | undefined {
     let closest: { command: ICommand | undefined; distance: number } = {
       command: undefined,
       distance: 4, // ld: levenshtein distance
     };
-    for (const [name, command] of this.commands.entries()) {
+    for (const [name, command] of Naoko.commands.entries()) {
       const currentCommandDistance = levenshtein(name, searchString);
 
       if (currentCommandDistance < closest.distance) {
@@ -243,15 +252,13 @@ class Naoko {
    * Loads all the command files from ./commands
    */
   private async loadCommands() {
-    await this.loadPlugins();
-
     logger.print("Loading commands...");
 
     // Get commands from built-in commands
     const commandSources = await getCommands();
 
     // Get commands from plugins
-    const pluginCommands = this.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin) as (
+    const pluginCommands = Naoko.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin) as (
       | ICommand
       | ICommand[]
     )[];
@@ -272,27 +279,27 @@ class Naoko {
 
     // Register the commands
     for (const command of commandSources) {
-      this.commands.set(command.name, command);
+      Naoko.commands.set(command.name, command);
       logger.print(`┖ Imported command ${command.name}`);
     }
   }
 
   private updateActivity() {
-    this.bot.user?.setActivity(`${config.prefix}help v${packageJson.version}`, { type: Discord.ActivityType.Listening });
+    Naoko.bot.user?.setActivity(`${config.prefix}help v${packageJson.version}`, { type: Discord.ActivityType.Listening });
   }
 
-  private joinThreads() {
-    const channels = this.bot.channels.cache.values();
-    for (let channel of channels) {
+  private async joinThreads() {
+    const channels = Naoko.bot.channels.cache.values();
+    for (const channel of channels) {
       if (channel.isThread()) {
         if (channel.ownerId === SHAII_ID) {
-          channel
-            .delete()
-            .then(() => logger.print(`Deleted residual battle thread ${channel.id}`))
-            .catch(() => { });
+          await channel.delete();
+          logger.print(`Deleted residual battle thread ${channel.id}`)
           continue;
         }
-        channel.join().then(() => logger.print(`Joined thread ${channel.id}`));
+
+        await channel.join();
+        logger.print(`Joined thread ${channel.id}`);
       }
     }
   }
@@ -319,8 +326,8 @@ class Naoko {
         restrictedChannelMiddleware(message, (message) => {
           commandMiddleware(message, async (message) => {
             const command =
-              this.commands.get(message.command) ||
-              this.commands.find((command) => command.aliases.includes(message.command));
+              Naoko.commands.get(message.command) ||
+              Naoko.commands.find((command) => command.aliases.includes(message.command));
 
             const clearTyping = () => {
               if (processingMessage) {
@@ -409,5 +416,3 @@ class Naoko {
     });
   }
 }
-
-export default new Naoko();

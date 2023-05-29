@@ -22,11 +22,9 @@ export default defineCommand({
   aliases: ["h"],
   description: "The command you just did",
   execute: (message) => {
-    const helpString = [];
-
     const categories = ["ECONOMY", "FUN", "IMAGE_PROCESSORS", "MODERATION", "MUSIC", "UTILITY"];
     const helpEmbed = new EmbedBuilder();
-    
+ 
     let embedFields = [];
     
     if (message.args.length === 0) {

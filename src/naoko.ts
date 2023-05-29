@@ -1,5 +1,4 @@
-// Documentation
-// https://deploy-preview-680--discordjs-guide.netlify.app/additional-info/changes-in-v13.html
+import 'reflect-metadata';
 
 // Clear the console
 console.clear();
@@ -8,6 +7,8 @@ console.clear();
 import chalk from "chalk";
 import packageJson from "../package.json" assert { type: 'json' };
 import { logger } from "./naoko/Logger";
+import Naoko from './naoko/Naoko.js';
+import { container } from '@triptyk/tsyringe';
 
 // Print log
 logger.print(
@@ -29,6 +30,12 @@ logger.print(
 // Say inspirational anime quote
 logger.inspiration();
 
-// Create naoko
-import "./naoko/Naoko";
+(async () => {
+  const naoko = container.resolve(Naoko);
+
+  await naoko.run();
+})().catch((error) => {
+  console.error('Naoko startup error!', error);
+});
+
 import "./naoko/Database";
