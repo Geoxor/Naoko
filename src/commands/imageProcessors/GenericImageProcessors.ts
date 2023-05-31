@@ -16,7 +16,7 @@ abstract class AbstractGenericImageProcessors extends AbstractCommand {
     return { files: [attachment] };
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     const commandName = this.getProcessorName();
     return {
       name: commandName,

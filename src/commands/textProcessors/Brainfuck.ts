@@ -18,7 +18,7 @@ class Bainfuck extends AbstractCommand {
     return response;
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "brainfuck",
       category: "TEXT_PROCESSORS",

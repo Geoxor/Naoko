@@ -72,7 +72,7 @@ class Vote extends AbstractCommand {
     return reaction.emoji.name === Vote.DOWNVOTE_EMOJI_ALT || reaction.emoji.name === Vote.UPVOTE_EMOJI_ALT;
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "vote",
       category: "FUN",

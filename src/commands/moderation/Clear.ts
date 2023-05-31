@@ -20,7 +20,7 @@ class Clear extends AbstractCommand {
     }
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "clear",
       category: "MODERATION",

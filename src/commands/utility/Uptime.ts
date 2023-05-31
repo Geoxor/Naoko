@@ -10,7 +10,7 @@ class Uptime extends AbstractCommand {
     return msToFullTime(Naoko.bot.uptime || 0);
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: 'uptime',
       category: 'UTILITY',

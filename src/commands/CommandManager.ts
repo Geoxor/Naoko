@@ -12,8 +12,8 @@ export default class CommandManager {
     // TODO: Also Check in Plugins
     return this.commands.find((command) => {
       return (
-        command.getCommandData().name === commandName ||
-        command.getCommandData().aliases?.includes(commandName)
+        command.commandData.name === commandName ||
+        command.commandData.aliases?.includes(commandName)
       );
     });
   }
@@ -24,7 +24,7 @@ export default class CommandManager {
       distance: 4, // ld: levenshtein distance
     };
     for (const command of this.commands) {
-      const name = command.getCommandData().name;
+      const name = command.commandData.name;
       const currentCommandDistance = levenshtein(name, searchString);
 
       if (currentCommandDistance < closest.distance) {

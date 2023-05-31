@@ -99,7 +99,7 @@ class WhoIs extends AbstractCommand {
     return markdown(historyString.substring(0, 512));
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "whois",
       category: "MODERATION",

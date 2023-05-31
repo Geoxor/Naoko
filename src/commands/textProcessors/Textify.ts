@@ -23,7 +23,7 @@ class Textify extends AbstractCommand {
     return textify(pipeline, sentence);
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "textify",
       usage: "textify <...processor_names> <text>",

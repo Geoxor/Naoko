@@ -70,7 +70,7 @@ class DickSize extends AbstractCommand {
     return Math.min(~~(1 / (1 - x) + 30 * x), 1_000_000);
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "dicksize",
       category: "FUN",

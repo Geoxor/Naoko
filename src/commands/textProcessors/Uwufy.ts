@@ -10,7 +10,7 @@ class Uwufy extends AbstractCommand {
     return textToUwufy(message.args.join(" "));
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "uwufy",
       category: "TEXT_PROCESSORS",

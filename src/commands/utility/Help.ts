@@ -1,10 +1,10 @@
-import { CommandCategories, CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse, IMessage } from "../../types";
 import { EmbedBuilder } from "discord.js";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import { delay, inject, injectable } from '@triptyk/tsyringe';
 import CommandManager from '../CommandManager';
 import command from '../../decorators/command';
-import { COMMAND_CATEGORIES, COMMAND_CATEGORIES_RAW } from '../../constants';
+import { COMMAND_CATEGORIES } from '../../constants';
 
 // Help has circular Dependency (Help -> naokoCommands -> CommandManager -> Help)
 // We must use a delay and the @injectable here for it to work.
@@ -32,7 +32,7 @@ class Help extends AbstractCommand {
         const category = categories[i];
         if (this.commandsStringFromCategory(category.categoryName).length > 0){
           embedFields.push({
-            name: `${category} (${this.commandCountInCategory(category.categoryName)})`,
+            name: `${category.categoryName} (${this.commandCountInCategory(category.categoryName)})`,
             value: this.commandsStringFromCategory(category.categoryName),
           });
         }
@@ -47,7 +47,7 @@ class Help extends AbstractCommand {
       } else {
         const command = this.commandManager.getCommand(filterQuery.toLowerCase());
         if (command) {
-          const commandData = command.getCommandData();
+          const commandData = command.commandData;
 
           helpEmbed.setTitle(commandData.name);
           helpEmbed.setDescription(commandData.name);
@@ -81,20 +81,20 @@ class Help extends AbstractCommand {
 
   private commandsStringFromCategory(category: string): string {
     const allCommands = this.commandManager.getAll();
-    const commands = allCommands.filter((command) => command.getCommandData().category === category);
+    const commands = allCommands.filter((command) => command.commandData.category === category);
     let commandsString = "";
     for (let z = 0; z < commands.length; z++) {
-      commandsString += `\`${commands[z].getCommandData().name}\`` + (commands.length - 1 === z ? "" : ", ");
+      commandsString += `\`${commands[z].commandData.name}\`` + (commands.length - 1 === z ? "" : ", ");
     }
     return commandsString;
   }
 
   private commandCountInCategory(category: string): number {
     const allCommands = this.commandManager.getAll();
-    return allCommands.filter((command) => command.getCommandData().category === category).length;
+    return allCommands.filter((command) => command.commandData.category === category).length;
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "help",
       category: "UTILITY",

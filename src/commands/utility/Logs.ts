@@ -10,7 +10,7 @@ class Logs extends AbstractCommand {
     return markdown(logger.getLogHistory().substring(0, 1990));
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "logs",
       usage: "logs",

@@ -11,7 +11,7 @@ class Ping extends AbstractCommand {
     await timestampMessage.edit(`🏓 Pong! Latency is ${latency}ms. API Latency is ${~~Naoko.bot.ws.ping}ms`);
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "ping",
       category: "UTILITY",

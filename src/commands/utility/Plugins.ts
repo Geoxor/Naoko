@@ -34,7 +34,7 @@ class Plugins extends AbstractCommand {
     return { embeds: [embed] };
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "plugins",
       category: "UTILITY",

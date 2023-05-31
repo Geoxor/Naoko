@@ -57,7 +57,7 @@ class Ban extends AbstractCommand {
     return responseMessage;
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "ban",
       aliases: ["yeet"],

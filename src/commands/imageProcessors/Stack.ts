@@ -30,7 +30,7 @@ class Stack extends AbstractCommand {
     return { files: [attachment] };
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "stack",
       category: "IMAGE_PROCESSORS",

@@ -36,7 +36,7 @@ export default abstract class AbstractCommand {
   /**
    * The handler associated with this command
    */
-  abstract execute(message: IMessage): Promise<CommandExecuteResponse> | CommandExecuteResponse;
+  public abstract execute(message: IMessage): Promise<CommandExecuteResponse> | CommandExecuteResponse;
   
-  abstract getCommandData(): CommandData;
+  public abstract get commandData(): CommandData;
 }

@@ -88,7 +88,7 @@ class Mute extends AbstractCommand {
     return message.reply({ embeds: [embed] });
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "mute",
       aliases: ["stfu", "to", "timeout", "shut"],

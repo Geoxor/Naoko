@@ -38,7 +38,7 @@ class Trace extends AbstractCommand {
     }
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "trace",
       category: "FUN",

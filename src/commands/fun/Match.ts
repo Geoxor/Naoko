@@ -36,7 +36,7 @@ class Match extends AbstractCommand {
     return matcher.substring(0, matcher.length >> 1) + matchee.substring(matchee.length >> 1);
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "match",
       category: "FUN",

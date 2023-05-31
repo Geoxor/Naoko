@@ -26,7 +26,7 @@ class Unmute extends AbstractCommand {
     sendUnmuteEmbed(message, targetUser, reason);
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "unmute",
       category: "MODERATION",

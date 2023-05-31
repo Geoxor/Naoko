@@ -30,7 +30,7 @@ class Anime extends AbstractCommand {
     return { embeds: [embed] };
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "anime",
       category: "FUN",

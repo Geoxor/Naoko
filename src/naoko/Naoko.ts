@@ -1,6 +1,5 @@
 import Discord, { ChannelType, GuildTextBasedChannel, Partials } from "discord.js";
 import fs from "fs";
-import levenshtein from "js-levenshtein";
 import path from "path";
 import packageJson from "../../package.json" assert { type: 'json' };
 import welcomeMessages from "../assets/welcome_messages.json" assert { type: 'json' };
@@ -279,14 +278,14 @@ export default class Naoko {
                 return message
                   .reply(
                     "That command doesn't exist!\n" +
-                    `There's this however ${highlight(config.prefix + closestCommand.getCommandData().usage)}`
+                    `There's this however ${highlight(config.prefix + closestCommand.commandData.usage)}`
                   );
               }
 
               return message.reply("That command doesn't exist");
             }
 
-            const commandData = command?.getCommandData();
+            const commandData = command?.commandData;
 
             // Notify the user their shit's processing
             if (commandData.requiresProcessing) {

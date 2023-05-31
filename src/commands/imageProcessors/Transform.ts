@@ -17,7 +17,8 @@ class Transform extends AbstractCommand {
     const attachment = new Discord.AttachmentBuilder(resultBuffer, { name: `shit.${mimetype?.ext}` });
     return { files: [attachment] };
   }
-  getCommandData(): CommandData {
+
+  get commandData(): CommandData {
     return {
       name: "transform",
       aliases: ["tf"],

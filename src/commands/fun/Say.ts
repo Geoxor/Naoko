@@ -9,7 +9,8 @@ class Say extends AbstractCommand {
     message.delete().catch(() => { });
     return message.args.join(" ");
   }
-  getCommandData(): CommandData {
+
+  get commandData(): CommandData {
     return {
       name: "say",
       category: "FUN",

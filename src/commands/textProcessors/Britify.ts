@@ -10,7 +10,7 @@ class Bitify extends AbstractCommand {
     return textToBritify(message.args.join(" "));
   }
 
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "britify",
       usage: "britify <sentence>",

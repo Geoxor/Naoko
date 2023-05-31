@@ -9,7 +9,7 @@ class Spongify extends AbstractCommand {
     if (message.args.length === 0) return `What do you want to SpOnGiFy`;
     return textToSpongify(message.args.join(" "), randomChoice([true, false]));
   }
-  getCommandData(): CommandData {
+  get commandData(): CommandData {
     return {
       name: "spongify",
       category: "TEXT_PROCESSORS",
