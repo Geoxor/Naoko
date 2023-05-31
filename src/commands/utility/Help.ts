@@ -30,10 +30,12 @@ class Help extends AbstractCommand {
 
       for (let i = 0; i < categories.length; i++) {
         const category = categories[i];
-        embedFields.push({
-          name: `${category.categoryEmoji} ${category.categoryName} (${this.commandCountInCategory(category.categoryName)})`,
-          value: this.commandsStringFromCategory(category.categoryName).length > 0 ? this.commandsStringFromCategory(category.categoryName) : "No commands in this category",
-        });
+        if (this.commandsStringFromCategory(category.categoryName).length > 0){
+          embedFields.push({
+            name: `${category} (${this.commandCountInCategory(category.categoryName)})`,
+            value: this.commandsStringFromCategory(category.categoryName),
+          });
+        }
       }
       helpEmbed.addFields(embedFields);
     } else {
