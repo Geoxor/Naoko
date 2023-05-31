@@ -1,11 +1,9 @@
-import Discord, { ChannelType, GuildTextBasedChannel, Partials, TextChannel } from "discord.js";
+import Discord, { ChannelType, GuildTextBasedChannel, Partials } from "discord.js";
 import fs from "fs";
 import levenshtein from "js-levenshtein";
 import path from "path";
-import si from "systeminformation";
 import packageJson from "../../package.json" assert { type: 'json' };
 import welcomeMessages from "../assets/welcome_messages.json" assert { type: 'json' };
-import { getCommands } from "../commands";
 import {
   GEOXOR_GENERAL_CHANNEL_ID,
   GEOXOR_GUILD_ID,
@@ -26,14 +24,7 @@ import { logger } from "./Logger";
 import { GatewayIntentBits } from 'discord.js';
 import { fileURLToPath } from 'node:url';
 import { singleton } from '@triptyk/tsyringe';
-
-// TODO: Move this to the ENV Command
-export let systemInfo: si.Systeminformation.StaticData;
-logger.print("Fetching environment information...");
-si.getStaticData().then((info) => {
-  logger.print("Environment info fetched");
-  systemInfo = info;
-});
+import CommandManager from '../commands/CommandManager';
 
 /**
  * Naoko multi purpose Discord bot
@@ -62,9 +53,12 @@ export default class Naoko {
     partials: [Partials.Channel],
   });
 
+  constructor(
+    private commandManager: CommandManager,
+  ) {}
+
   public async run(): Promise<void> {
     await this.loadPlugins();
-    await this.loadCommands();
     await this.registerEventListener();
 
     logger.print("Naoko logging in...");
@@ -223,65 +217,8 @@ export default class Naoko {
     Naoko.plugins = (await Promise.all(pluginPromises)).map((mod) => mod.default);
   }
 
-  private getClosestCommand(searchString: string): ICommand | undefined {
-    let closest: { command: ICommand | undefined; distance: number } = {
-      command: undefined,
-      distance: 4, // ld: levenshtein distance
-    };
-    for (const [name, command] of Naoko.commands.entries()) {
-      const currentCommandDistance = levenshtein(name, searchString);
-
-      if (currentCommandDistance < closest.distance) {
-        closest.command = command;
-        closest.distance = currentCommandDistance;
-      }
-    }
-
-    if (!closest.command || closest.distance > 3) {
-      return;
-    }
-
-    return closest.command;
-  }
-
   public hasGhostRole(member: Discord.GuildMember): boolean {
     return member.roles.cache.has("736285344659669003");
-  }
-
-  /**
-   * Loads all the command files from ./commands
-   */
-  private async loadCommands() {
-    logger.print("Loading commands...");
-
-    // Get commands from built-in commands
-    const commandSources = await getCommands();
-
-    // Get commands from plugins
-    const pluginCommands = Naoko.plugins.map((plugin) => plugin.command).filter((plugin) => !!plugin) as (
-      | ICommand
-      | ICommand[]
-    )[];
-
-    // Iterate through each plugin
-    for (let i = 0; i < pluginCommands.length; i++) {
-      const command = pluginCommands[i];
-
-      // If theres multiple commands in 1 plugin add each
-      if (command instanceof Array) {
-        command.forEach((command) => commandSources.push(command));
-        continue;
-      }
-
-      // Else add the single command
-      commandSources.push(command);
-    }
-
-    // Register the commands
-    for (const command of commandSources) {
-      Naoko.commands.set(command.name, command);
-      logger.print(`┖ Imported command ${command.name}`);
-    }
   }
 
   private updateActivity() {
@@ -325,9 +262,7 @@ export default class Naoko {
 
         restrictedChannelMiddleware(message, (message) => {
           commandMiddleware(message, async (message) => {
-            const command =
-              Naoko.commands.get(message.command) ||
-              Naoko.commands.find((command) => command.aliases.includes(message.command));
+            const command = this.commandManager.getCommand(message.command);
 
             const clearTyping = () => {
               if (processingMessage) {
@@ -339,30 +274,31 @@ export default class Naoko {
 
             // If it doesn't exist we respond
             if (!command) {
-              const commandDoesntExistString = `That command doesn't exist`;
-              const closestCommand = this.getClosestCommand(message.command);
-
-              if (closestCommand)
+              const closestCommand = this.commandManager.getClosestCommand(message.command);
+              if (closestCommand) {
                 return message
                   .reply(
-                    `${commandDoesntExistString}\nThere's this however ${highlight(config.prefix + closestCommand.usage)}`
-                  )
-                  .catch(() => { });
+                    "That command doesn't exist!\n" +
+                    `There's this however ${highlight(config.prefix + closestCommand.getCommandData().usage)}`
+                  );
+              }
 
-              return message.reply(`${commandDoesntExistString}`).catch(() => { });
+              return message.reply("That command doesn't exist");
             }
 
+            const commandData = command?.getCommandData();
+
             // Notify the user their shit's processing
-            if (command.requiresProcessing) {
+            if (commandData.requiresProcessing) {
               var processingMessage = await message.channel.send("Processing...").catch(() => { });
               var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
             }
 
             // Check permissions
-            if (command.permissions) {
-              for (const perm of command.permissions) {
+            if (commandData.permissions) {
+              for (const perm of commandData.permissions) {
                 if (!message.member?.permissions.has(perm)) {
-                  if (command.requiresProcessing) clearTyping();
+                  if (commandData.requiresProcessing) clearTyping();
                   return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => { });
                 }
               }
@@ -374,11 +310,11 @@ export default class Naoko {
               var result = await command.execute(message);
               let timeEnd = Date.now();
               logger.print(
-                `${timeEnd - timeStart}ms - Executed command: ${command.name} - User: ${message.author.username} - Guild: ${message.guild?.name || "dm"
+                `${timeEnd - timeStart}ms - Executed command: ${commandData.name} - User: ${message.author.username} - Guild: ${message.guild?.name || "dm"
                 }`
               );
             } catch (error: any) {
-              logger.error(`Command ${command.name} failed to execute with error: ${error}`);
+              logger.error(`Command ${commandData.name} failed to execute with error: ${error}`);
               console.error(error);
               await message.reply({
                  embeds:[

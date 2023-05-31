@@ -300,17 +300,6 @@ export function weightedRandomChoice<T>(l: Map<number, T>): T {
 }
 
 /**
- * Combines 2 user's names to create a ship name
- * @param matcher first half of the shipname
- * @param matchee second half of the shiipname
- * @returns {string} the ship name
- * @author Geoxor
- */
-export function getShipName(matcher: string, matchee: string) {
-  return matcher.substring(0, matcher.length >> 1) + matchee.substring(matchee.length >> 1);
-}
-
-/**
  * Capitalizes the first character of a string
  * @param string the string to capitalize
  * @author Bluskript
@@ -342,10 +331,6 @@ export function getWaifuNameFromFileName(filename: string) {
  * Gets a random number between 1 and 1.000.000 with an exponential factor
  * @author MaidMarija
  */
-export function randomDickSize(): number {
-  const x = Math.random();
-  return Math.min(~~(1 / (1 - x) + 30 * x), 1_000_000);
-}
 
 /**
  * Wraps a string in discord markdown

@@ -2,6 +2,7 @@ import { logger } from "../naoko/Logger";
 import { TextProcessors } from "../types";
 import { textToBrainfuck, textToBritify, textToSpongify, textToUwufy } from "./logic";
 
+// TODO: make this a service class
 export const textProcessors: TextProcessors = {
   brainfuck,
   britify,

@@ -3,15 +3,13 @@ import { SHAII_LOGO } from "../../constants";
 import { User } from "../../naoko/Database";
 import { logger } from "../../naoko/Logger";
 import Naoko from "../../naoko/Naoko";
-import { defineCommand } from "../../types";
+import { CommandExecuteResponse, IMessage } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
+import command from '../../decorators/command';
 
-export default defineCommand({
-  name: "kick",
-  usage: "kick <@user> <reason>",
-  category: "UTILITY",
-  description: "Kicks a user",
-  permissions: ["KickMembers"],
-  execute: async (message) => {
+@command()
+class Kick extends AbstractCommand {
+  async execute(message: IMessage): Promise<CommandExecuteResponse> {
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to kick";
     if (targetUser.id === message.author.id) return "You can't kick yourself";
@@ -42,7 +40,16 @@ export default defineCommand({
     // Keep track of the kick
     await User.kick(message.author.id, targetUser.id, reason).catch(() => logger.error("Kick database update failed"));
 
-    // Get fucked
     return { embeds: [embed] };
-  },
-});
+  }
+
+  getCommandData(): CommandData {
+    return {
+      name: "kick",
+      usage: "kick <@user> <reason>",
+      category: "MODERATION",
+      description: "Kicks a user",
+      permissions: ["KickMembers"],
+    }
+  }
+}

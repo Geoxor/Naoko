@@ -163,7 +163,7 @@ export const commands3D = {
   async trollcart(texture: Buffer) {
     const scene = await GeometryScene.create({
       rotation: { x: 0.0, y: 0.05 },
-      camera: { z: 6 },
+      camera: { z: 6, y: 1 },
       shading: true,
       geometry: cache.objects.trolley,
       texture,

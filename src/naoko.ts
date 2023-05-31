@@ -3,12 +3,14 @@ import 'reflect-metadata';
 // Clear the console
 console.clear();
 
-// Cosmetic Imports
 import chalk from "chalk";
 import packageJson from "../package.json" assert { type: 'json' };
 import { logger } from "./naoko/Logger";
 import Naoko from './naoko/Naoko.js';
 import { container } from '@triptyk/tsyringe';
+import { fileURLToPath } from 'node:url';
+import "./naoko/Database";
+import { glob } from 'glob';
 
 // Print log
 logger.print(
@@ -30,12 +32,11 @@ logger.print(
 // Say inspirational anime quote
 logger.inspiration();
 
-(async () => {
-  const naoko = container.resolve(Naoko);
+// Get the absolute path to this file
+const absolutePath = fileURLToPath(new URL('./', import.meta.url));
+const files = await glob([absolutePath + '{commands,plugins}/**/**.ts', absolutePath + '{commands,plugins}/**.ts']);
+// Import them so all commands get registered inside the container
+await Promise.all(files.map((file) => import(file)));
 
-  await naoko.run();
-})().catch((error) => {
-  console.error('Naoko startup error!', error);
-});
-
-import "./naoko/Database";
+const naoko = container.resolve(Naoko);
+await naoko.run();

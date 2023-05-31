@@ -2,17 +2,15 @@ import Discord from "discord.js";
 import packageJson from "../../../package.json" assert { type: 'json' };
 import { SHAII_LOGO } from "../../constants";
 import Naoko from "../../naoko/Naoko";
-import { defineCommand } from "../../types";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
+import command from '../../decorators/command';
 
 const PLUGIN_ICON = "https://cdn.discordapp.com/attachments/911762334979084368/923234119553519636/unknown.png";
 
-export default defineCommand({
-  name: "plugins",
-  category: "UTILITY",
-  aliases: ["plug"],
-  usage: "plugins",
-  description: "See loaded plugins",
-  execute: () => {
+@command()
+class Plugins extends AbstractCommand {
+  execute(): CommandExecuteResponse | Promise<CommandExecuteResponse> {
     const embed = new Discord.EmbedBuilder()
       .setAuthor({ name: `Naoko v${packageJson.version}`, iconURL: SHAII_LOGO })
       .setThumbnail(PLUGIN_ICON)
@@ -34,5 +32,15 @@ export default defineCommand({
       });
 
     return { embeds: [embed] };
-  },
-});
+  }
+
+  getCommandData(): CommandData {
+    return {
+      name: "plugins",
+      category: "UTILITY",
+      aliases: ["plug"],
+      usage: "plugins",
+      description: "See loaded plugins",
+    }
+  };
+}

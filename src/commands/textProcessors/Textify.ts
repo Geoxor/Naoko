@@ -1,15 +1,10 @@
-import { randomChoice } from "../../logic/logic";
 import { textify } from "../../logic/textProcessors";
-import { defineCommand } from "../../types";
+import { CommandExecuteResponse, IMessage } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
 
-export default defineCommand({
-  name: "textify",
-  usage: "textify <...processor_names> <text>",
-  category: "TEXT_PROCESSORS",
-  description: "Transform a sentence with a pipeline",
-  requiresProcessing: true,
-  execute: async (message) => {
-    // can be IMPROVED
+class Textify extends AbstractCommand {
+  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    // TODO: can be IMPROVED
     let pipeline: string[] = [];
     let userSentence: string[] = [];
     let isArgCommand: boolean = true;
@@ -26,5 +21,15 @@ export default defineCommand({
     const sentence = userSentence.join(" ");
     if (sentence.length > 2000) return `wtf your sentence is too big`;
     return textify(pipeline, sentence);
-  },
-});
+  }
+
+  getCommandData(): CommandData {
+    return {
+      name: "textify",
+      usage: "textify <...processor_names> <text>",
+      category: "TEXT_PROCESSORS",
+      description: "Transform a sentence with a pipeline",
+      requiresProcessing: true,
+    }
+  }
+}

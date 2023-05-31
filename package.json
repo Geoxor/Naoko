@@ -43,6 +43,7 @@
     "file-type": "^18.4.0",
     "get-image-colors": "^4.0.1",
     "gifenc": "^1.0.3",
+    "glob": "^10.2.6",
     "jimp": "^0.22.8",
     "js-levenshtein": "^1.1.6",
     "mongoose": "^7.2.1",

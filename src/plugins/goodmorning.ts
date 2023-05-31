@@ -3,7 +3,7 @@ import { MUTED_ROLE_ID, SELF_MUTED_ROLE_ID } from "../constants";
 import { User } from "../naoko/Database";
 import { logger } from "../naoko/Logger";
 import { defineCommand } from "../types";
-import { sendUnmuteEmbed } from "../commands/moderation/mute";
+import { sendUnmuteEmbed } from "../commands/moderation/Mute";
 import { definePlugin } from "../naoko/Plugin";
 import { GEOXOR_GUILD_ID } from "../constants";
 
