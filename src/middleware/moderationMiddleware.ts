@@ -16,7 +16,7 @@ export default async function (message: IMessage, next: (message: IMessage) => a
       const idxString = `[${i + 1}/${checks.length}]`;
       const isFailed = checkFn(message);
       if (isFailed) {
-        await message.delete().catch(() => { });
+        await message.delete();
         return logger.error(`${idxString} Check ${checkFn.name} failed for ${message.author.username}`);
       }
     }

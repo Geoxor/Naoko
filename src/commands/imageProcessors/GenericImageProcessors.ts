@@ -7,6 +7,7 @@ import { autocrop, deepfry, expert, fisheye, flip, fuckyou, grayscale, haah, inv
 import { commands3D } from "../../logic/3DRenderer";
 import command from '../../decorators/command';
 
+// TODO: Register aliase for all functions and then dynamicly call the ImageProcessingService
 abstract class AbstractGenericImageProcessors extends AbstractCommand {
   async execute(message: IMessage): Promise<CommandExecuteResponse> {
     const buffer = await parseBufferFromMessage(message);

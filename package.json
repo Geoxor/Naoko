@@ -2,7 +2,7 @@
   "name": "naoko",
   "version": "2.1.4",
   "description": "Naoko is Geoxor's Discord Bot",
-  "main": "./src/naoko.ts",
+  "exports": "./src/naoko.ts",
   "scripts": {
     "test": "ts-mocha -p ./tsconfig.json ./src/tests/logic.test.ts",
     "start": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/naoko.ts",

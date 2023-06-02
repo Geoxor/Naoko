@@ -1,15 +1,26 @@
-import { injectAll, singleton } from '@triptyk/tsyringe';
+import { container, injectAll, singleton } from '@triptyk/tsyringe';
 import AbstractCommand from './AbstractCommand';
 import levenshtein from 'js-levenshtein';
+import { PluginManager } from '../plugins/PluginManager';
 
 @singleton()
 export default class CommandManager {
   constructor(
     @injectAll('naokoCommand') private commands: AbstractCommand[],
-  ) {}
+    pluginManager: PluginManager,
+  ) {
+    const plugins = pluginManager.getAll();
+    for (const plugin of plugins) {
+      if (!plugin.pluginData.commands || plugin.pluginData.enabled === false) {
+        continue;
+      }
+      for (const commandConstructor of plugin.pluginData.commands) {
+        this.commands.push(container.resolve(commandConstructor));
+      }
+    }
+  }
 
   public getCommand(commandName: string): AbstractCommand | undefined {
-    // TODO: Also Check in Plugins
     return this.commands.find((command) => {
       return (
         command.commandData.name === commandName ||

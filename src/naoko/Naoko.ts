@@ -1,6 +1,4 @@
 import Discord, { ChannelType, GuildTextBasedChannel, Partials } from "discord.js";
-import fs from "fs";
-import path from "path";
 import packageJson from "../../package.json" assert { type: 'json' };
 import welcomeMessages from "../assets/welcome_messages.json" assert { type: 'json' };
 import {
@@ -16,14 +14,13 @@ import moderationMiddleware from "../middleware/moderationMiddleware";
 import restrictedChannelMiddleware from "../middleware/restrictedChannelMiddleware";
 import { userMiddleware } from "../middleware/userMiddleware";
 import { DISCORD_EVENTS, Plugin } from "./Plugin";
-import { ICommand } from "../types";
 import { config } from "./Config";
 import { User } from "./Database";
 import { logger } from "./Logger";
 import { GatewayIntentBits } from 'discord.js';
-import { fileURLToPath } from 'node:url';
 import { singleton } from '@triptyk/tsyringe';
 import CommandManager from '../commands/CommandManager';
+import { PluginManager } from "../plugins/PluginManager";
 
 /**
  * Naoko multi purpose Discord bot
@@ -32,9 +29,6 @@ import CommandManager from '../commands/CommandManager';
 @singleton()
 export default class Naoko {
   public static version = packageJson.version;
-
-  public static commands: Discord.Collection<string, ICommand> = new Discord.Collection();
-  public static plugins: Plugin[] = []; 
 
   public static bot: Discord.Client = new Discord.Client({
     intents: [
@@ -54,22 +48,18 @@ export default class Naoko {
 
   constructor(
     private commandManager: CommandManager,
+    private pluginManager: PluginManager,
   ) {}
 
   public async run(): Promise<void> {
-    await this.loadPlugins();
     await this.registerEventListener();
+    this.pluginManager.registerEventListener(this.bot);
 
     logger.print("Naoko logging in...");
     await Naoko.bot.login(config.token);
   }
 
   private async registerEventListener() {
-    for (const event of DISCORD_EVENTS) {
-      Naoko.bot.on(event as string, (data) => {
-        Naoko.plugins.forEach((plugin) => plugin.send(event, [data]));
-      });
-    }
     Naoko.bot.on("guildMemberRemove", (member) => {
       // TODO: Magic number to Constant
       const channel = Naoko.bot.channels.cache.get("823403109522866217");
@@ -203,17 +193,6 @@ export default class Naoko {
     Naoko.bot.on("threadCreate", (thread) => {
       thread.join();
     });
-  }
-
-  private async loadPlugins() {
-    logger.print("Loading plugins...");
-
-    const absolutePath = fileURLToPath(new URL('../plugins', import.meta.url));
-    const pluginPromises = fs
-      .readdirSync(absolutePath)
-      .filter((file) => file.endsWith(".ts"))
-      .map((file) => import(path.join(absolutePath, file)));
-    Naoko.plugins = (await Promise.all(pluginPromises)).map((mod) => mod.default);
   }
 
   public hasGhostRole(member: Discord.GuildMember): boolean {

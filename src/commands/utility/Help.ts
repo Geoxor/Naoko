@@ -9,7 +9,6 @@ import { COMMAND_CATEGORIES } from '../../constants';
 // Help has circular Dependency (Help -> naokoCommands -> CommandManager -> Help)
 // We must use a delay and the @injectable here for it to work.
 @command()
-@injectable()
 class Help extends AbstractCommand {
   constructor(
     @inject(delay(() => CommandManager)) private commandManager: CommandManager,
