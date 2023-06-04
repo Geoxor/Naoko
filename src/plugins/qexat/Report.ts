@@ -1,22 +1,24 @@
 import Discord from "discord.js";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
-import { IMessage, CommandExecuteResponse } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import { GEOXOR_GUILD_ID, GEOXOR_STAFF_CHANNEL_ID } from "../../constants";
-import commandMiddleware from "../../middleware/commandMiddleware";
-import { userMiddleware } from "../../middleware/userMiddleware.js";
 import plugin from "../../decorators/plugin";
-import { injectable } from "@triptyk/tsyringe";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 class ReportCommand extends AbstractCommand {
-  public async execute(message: IMessage): Promise<CommandExecuteResponse> {
-    if (message.args.length === 0) return "You need an user to report and a reason.";
-    let targetUser = message.client.guilds.cache.get(GEOXOR_GUILD_ID)!.members.cache.get(message.args[0]);
-    if (!targetUser) return `User with ID ${message.args[0]} is not in the guild.`;
+  public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const args = payload.get('args');
+
+    if (args.length === 0) return "You need an user to report and a reason.";
+    let targetUser = message.client.guilds.cache.get(GEOXOR_GUILD_ID)!.members.cache.get(args[0]);
+    if (!targetUser) return `User with ID ${args[0]} is not in the guild.`;
     if (targetUser.id === message.author.id) return "You cannot report yourself.";
-    message.args.shift();
-    if (message.args.length === 0) return "You cannot report an user without reason.";
-    const reason = message.args.join(" ");
+    args.shift();
+
+    if (args.length === 0) return "You cannot report an user without reason.";
+    const reason = args.join(" ");
     let attachments: string[] = [];
     let content;
 
@@ -56,38 +58,12 @@ class ReportCommand extends AbstractCommand {
 
 @plugin()
 class Report extends AbstractPlugin {
-  constructor(
-    private reportCommand: ReportCommand,
-  ) {
-    super();
-  }
-
   public get pluginData(): PluginData {
     return {
       name: "@qexat/report",
       version: "1.0.0",
       commands: [ReportCommand],
       enabled: false,
-      events: {
-        messageCreate: this.messageCreate,
-      },
-    }
-  }
-
-  private async messageCreate(message: Discord.Message) {
-    if (!(message.channel instanceof Discord.DMChannel)) return;
-
-    userMiddleware(message, (message) => {
-      commandMiddleware(message, async (message) => {
-        // ignore if the command is not report
-        if (message.command !== "report") return;
-        try {
-          const result = await this.reportCommand.execute(message);
-          return message.reply(result!);
-        } catch (err) {
-          console.error(err);
-        }
-      });
-    });
+    };
   }
 }

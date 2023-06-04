@@ -5,6 +5,7 @@ import { delay, inject, injectable } from '@triptyk/tsyringe';
 import CommandManager from '../CommandManager';
 import command from '../../decorators/command';
 import { COMMAND_CATEGORIES } from '../../constants';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 // Help has circular Dependency (Help -> naokoCommands -> CommandManager -> Help)
 // We must use a delay and the @injectable here for it to work.
@@ -16,14 +17,15 @@ class Help extends AbstractCommand {
     super();
   }
 
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+  execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
     const categories = COMMAND_CATEGORIES;
     const helpEmbed = new EmbedBuilder();
 
     let embedFields = [];
 
     // TODO: Refactor this
-    if (message.args.length === 0) {
+    if (args.length === 0) {
       helpEmbed.setTitle("Listing all available commands");
       helpEmbed.setColor("#fca103");
 
@@ -38,7 +40,7 @@ class Help extends AbstractCommand {
       }
       helpEmbed.addFields(embedFields);
     } else {
-      const filterQuery = message.args.join("_");
+      const filterQuery = args.join("_");
       if (categories.find((category) => category.categoryName === filterQuery.toLocaleUpperCase())) {
         helpEmbed.setTitle(`Listing all available commands in ${filterQuery.toUpperCase()}`);
         helpEmbed.setColor("#fca103");

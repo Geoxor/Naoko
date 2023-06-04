@@ -1,22 +1,26 @@
 import Discord from "discord.js";
 import { SHAII_LOGO } from "../../constants";
+import command from '../../decorators/command';
 import { User } from "../../naoko/Database";
 import { logger } from "../../naoko/Logger";
 import Naoko from "../../naoko/Naoko";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
-import command from '../../decorators/command';
 
 @command()
 class Unban extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
-    if (message.args.length === 0) return "Please enter the ID of the user you want to unban";
-    const targetUser = await Naoko.bot.users.fetch(message.args[0]);
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+    const message = payload.get('message');
+
+    if (args.length === 0) return "Please enter the ID of the user you want to unban";
+    const targetUser = await Naoko.bot.users.fetch(args[0]);
     if (!targetUser) return "Please enter a valid user ID";
     if (targetUser.id === message.author.id) return "You can't unban yourself";
 
-    message.args.shift(); // remove the user ID
-    const reason = message.args.join(" ");
+    args.shift(); // remove the user ID
+    const reason = args.join(" ");
 
     // Create the result embed
     const embed = new Discord.EmbedBuilder()

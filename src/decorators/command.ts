@@ -1,5 +1,5 @@
 import { container, injectable } from '@triptyk/tsyringe';
-import AbstractCommand from 'src/commands/AbstractCommand';
+import AbstractCommand from '../commands/AbstractCommand';
 
 type constructor<T = AbstractCommand> = {
   new (...args: any[]): T;

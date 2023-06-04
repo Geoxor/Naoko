@@ -1,17 +1,21 @@
 import Discord from "discord.js";
-import { anilistQuery, traceAnime } from "../../logic/logic";
-import { CommandExecuteResponse, IMessage } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import { anilistQuery, traceAnime } from "../../logic/logic";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
 
 @command()
 class Trace extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
-    // Check if they sent shit
-    const url = message.args[0] || message.attachments.first()?.url;
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+    const message = payload.get('message');
 
-    // Reply if not
-    if (!url) return "Please attach an image or a url in your command";
+    // Check if they sent shit
+    const url = args[0] || message.attachments.first()?.url;
+    if (!url) {
+      return "Please attach an image or a url in your command";
+    }
 
     // Get the anime
     try {
@@ -45,6 +49,6 @@ class Trace extends AbstractCommand {
       usage: "trace <image_url>",
       description: "Attempts to find what anime a screenshot or GIF is from",
       requiresProcessing: true,
-    }
+    };
   }
 }

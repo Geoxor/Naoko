@@ -3,9 +3,12 @@ import { CommandExecuteResponse, IMessage } from "../../types";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
 import plugin from "../../decorators/plugin";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 class AmethystInfoCommand extends AbstractCommand {
-  public execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+  public execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+
     const embed = new Discord.EmbedBuilder()
       .setFooter({
         text: `Used by ${message.author.username} Plugin made by otiskujawa.`,

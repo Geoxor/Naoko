@@ -1,19 +1,22 @@
-import command from '../../decorators/command';
 import { MUTED_ROLE_ID } from "../../constants";
+import command from '../../decorators/command';
 import { User } from "../../naoko/Database";
 import { logger } from "../../naoko/Logger";
-import { CommandExecuteResponse, IMessage, defineCommand } from "../../types";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import { sendUnmuteEmbed } from "./Mute";
 
 @command()
 class Unmute extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to unmute";
     if (targetUser.id === message.author.id) return "You can't unmute yourself";
 
-    const reason = message.args.join(" ");
+    const reason = payload.get('args').join(" ");
 
     // Unget rekt
     await targetUser.roles.remove(MUTED_ROLE_ID);

@@ -1,5 +1,5 @@
 import plugin from "../../decorators/plugin";
-import { GEOXOR_GENERAL_CHANNEL_ID, SHAII_ID } from "../../constants";
+import { GEOXOR_GENERAL_CHANNEL_ID } from "../../constants";
 import { randomChoice } from "../../logic/logic";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import answers from "./mention-replies-answers.json" assert { type: 'json' };
@@ -26,7 +26,7 @@ class MentionReplies extends AbstractPlugin {
       return;
     }
 
-    message.content.substring(`<@${naokoId}>`.length).trim()
+    message.content.trim() === `<@${naokoId}>`
       ? await message.reply("what tf do you want") // Reply with this when they purely ping her with no question
       : await message.reply(randomChoice(answers))
   }

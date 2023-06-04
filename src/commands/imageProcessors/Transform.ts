@@ -1,17 +1,26 @@
 import Discord from "discord.js";
 import { fileTypeFromBuffer } from 'file-type';
-import { transform } from "../../logic/imageProcessors";
-import { parseBufferFromMessage } from "../../logic/logic";
-import { CommandExecuteResponse, IMessage } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import { transform } from "../../logic/imageProcessors";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
+import MessageImageParser from "../../service/MessageImageParser";
 
 @command()
 class Transform extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
-    const pipeline = message.args;
+  constructor(
+    private messageImageParser: MessageImageParser,
+  ) {
+    super();
+  }
+
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const pipeline = payload.get('args');
+
     if (pipeline.length > 10) return "Pipeline can't be longer than 10 elements";
-    const buffer = await parseBufferFromMessage(message);
+    const buffer = await this.messageImageParser.parseBufferFromMessage(message, pipeline);
     const resultBuffer = await transform(pipeline, buffer);
     const mimetype = await fileTypeFromBuffer(resultBuffer);
     const attachment = new Discord.AttachmentBuilder(resultBuffer, { name: `shit.${mimetype?.ext}` });

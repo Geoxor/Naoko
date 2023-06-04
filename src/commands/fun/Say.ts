@@ -1,13 +1,20 @@
 import command from '../../decorators/command';
-import { CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
+import MessageCreatePayload from '../../pipeline/messageCreate/MessageCreatePayload';
 
 @command()
 class Say extends AbstractCommand {
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    if (message.args.length === 0) return `What do you want to say?`;
-    message.delete().catch(() => { });
-    return message.args.join(" ");
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+    const message = payload.get('message');
+
+    if (args.length === 0) {
+      return `What do you want to say?`;
+    }
+
+    await message.delete();
+    return args.join(" ");
   }
 
   get commandData(): CommandData {

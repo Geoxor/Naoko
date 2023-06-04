@@ -1,11 +1,15 @@
 import plugin from "../../decorators/plugin";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
-import { IMessage, CommandExecuteResponse } from "../../types";
+import { CommandExecuteResponse } from "../../types";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 class AvatarCommand extends AbstractCommand {
-  public execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    const otherUser = message.mentions.users.first() || message.client.users.cache.get(message.args[0]) || message.author;
+  public execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const args = payload.get('args');
+
+    const otherUser = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.author;
     let avatar;
 
     if (message.guild) {

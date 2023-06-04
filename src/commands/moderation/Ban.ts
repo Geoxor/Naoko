@@ -1,13 +1,17 @@
-import Discord, { GuildMember } from "discord.js";
+import Discord, { GuildMember, Message } from "discord.js";
 import { SHAII_LOGO } from "../../constants";
-import { User } from "../../naoko/Database";
-import { CommandExecuteResponse, IMessage } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import { User } from "../../naoko/Database";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
 
 @command()
 class Ban extends AbstractCommand {
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+  execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const args = payload.get('args');
+
     const target = message.mentions.members?.first();
     if (!target) {
       return "Please mention the user you want to ban";
@@ -20,12 +24,12 @@ class Ban extends AbstractCommand {
       return "You can't ban other admins";
     }
 
-    const reason = message?.args.join(" ") || 'No reason given';
+    const reason = args.join(" ") || 'No reason given';
 
     this.doBan(target, message, reason).catch();
   }
 
-  private async doBan(target: GuildMember, message: IMessage, reason: string) {
+  private async doBan(target: GuildMember, message: Message, reason: string) {
     // Create the result embed
     const responseMessage = {
       embeds: [new Discord.EmbedBuilder()

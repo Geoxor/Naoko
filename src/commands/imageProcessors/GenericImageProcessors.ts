@@ -1,17 +1,30 @@
-import AbstractCommand, { CommandData } from '../AbstractCommand';
-import { CommandExecuteResponse, IMessage } from "../../types";
-import { parseBufferFromMessage } from '../../logic/logic';
-import { fileTypeFromBuffer } from 'file-type';
 import Discord from 'discord.js';
-import { autocrop, deepfry, expert, fisheye, flip, fuckyou, grayscale, haah, invert, pat, scale, shy, squish, stretch, trolley, vignette, wasted } from '../../logic/imageProcessors';
-import { commands3D } from "../../logic/3DRenderer";
+import { fileTypeFromBuffer } from 'file-type';
 import command from '../../decorators/command';
+import { commands3D } from "../../logic/3DRenderer";
+import { autocrop, deepfry, expert, fisheye, flip, fuckyou, grayscale, haah, invert, pat, scale, shy, squish, stretch, trolley, vignette, wasted } from '../../logic/imageProcessors';
+import MessageCreatePayload from '../../pipeline/messageCreate/MessageCreatePayload';
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
+import MessageImageParser from '../../service/MessageImageParser';
+import { singleton } from '@triptyk/tsyringe';
 
 // TODO: Register aliase for all functions and then dynamicly call the ImageProcessingService
-abstract class AbstractGenericImageProcessors extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
-    const buffer = await parseBufferFromMessage(message);
-    const resultBuffer = await this.doProcess(buffer, message.args.join(" "));
+// This class is not Abstract because Dependency injection would not work
+@singleton()
+class AbstractGenericImageProcessors extends AbstractCommand {
+  constructor(
+    private messageImageParser: MessageImageParser,
+  ) {
+    super();
+  }
+
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const args = payload.get('args');
+
+    const buffer = await this.messageImageParser.parseBufferFromMessage(message, args);
+    const resultBuffer = await this.doProcess(buffer, args.join(" "));
     const mimetype = await fileTypeFromBuffer(resultBuffer);
     const attachment = new Discord.AttachmentBuilder(resultBuffer, { name: `shit.${mimetype?.ext}` });
     return { files: [attachment] };
@@ -28,8 +41,12 @@ abstract class AbstractGenericImageProcessors extends AbstractCommand {
     };
   }
 
-  abstract getProcessorName(): string;
-  abstract doProcess(buffer: Buffer, ...args: any): Buffer | Promise<Buffer>;
+  getProcessorName(): string {
+    throw new Error('Not implemented');
+  }
+  doProcess(buffer: Buffer, ...args: any): Buffer | Promise<Buffer> {
+    throw new Error('Not implemented')
+  }
 }
 
 // ImageProcessing

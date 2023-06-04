@@ -2,11 +2,15 @@ import { DiscordAPIError, TextChannel } from "discord.js";
 import { CommandExecuteResponse, IMessage } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 @command()
 class Clear extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
-    let count = parseFloat(message.args[0]) + 1;
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+    const message = payload.get('message');
+
+    let count = parseFloat(args[0]) + 1;
     count = count > 100 ? 100 : count;
     // Will return if count is not a string.
     if (isNaN(count)) return `⚠️ when not number`;

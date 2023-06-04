@@ -1,10 +1,11 @@
 import Discord from "discord.js";
 import { fileTypeFromBuffer } from 'file-type';
-import { stack } from "../../logic/imageProcessors";
-import { parseBufferFromMessage, preProcessBuffer } from "../../logic/logic";
-import { CommandExecuteResponse, IMessage } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import { stack } from "../../logic/imageProcessors";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
+import MessageImageParser from "../../service/MessageImageParser";
 
 // TODO: Refactor this to the main image processors
 // so we can easily override the frames for diff
@@ -19,12 +20,20 @@ const stacks: {
 
 @command()
 class Stack extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
-    const processorFunctionName = message.args[0];
+  constructor(
+    private messageImageParser: MessageImageParser,
+  ) {
+    super();
+  }
+
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const args = payload.get('args');
+
+    const processorFunctionName = args[0];
     if (!processorFunctionName) return "Please enter the name of an image processor function";
-    const buffer = await parseBufferFromMessage(message);
-    const preProcessed = await preProcessBuffer(buffer);
-    const resultBuffer = await stack(processorFunctionName, preProcessed, stacks[processorFunctionName]);
+    const buffer = await this.messageImageParser.parseBufferFromMessage(message, args);
+    const resultBuffer = await stack(processorFunctionName, buffer, stacks[processorFunctionName]);
     const mimetype = await fileTypeFromBuffer(resultBuffer);
     const attachment = new Discord.AttachmentBuilder(resultBuffer, { name: `shit.${mimetype?.ext}` });
     return { files: [attachment] };

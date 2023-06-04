@@ -6,16 +6,18 @@ import Naoko from "../../naoko/Naoko";
 import { CommandExecuteResponse, IMessage } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 @command()
 class Kick extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const reason = payload.get('args').join(' ');
+
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to kick";
     if (targetUser.id === message.author.id) return "You can't kick yourself";
     if (targetUser.permissions.has("Administrator")) return "You can't kick other admins";
-
-    const reason = message.args.join(" ");
 
     // Create the result embed
     const embed = new Discord.EmbedBuilder()

@@ -1,15 +1,18 @@
 import Discord from "discord.js";
 import { anilistSearch } from "../../logic/logic";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 @command()
 class Anime extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+
     let animeMeta;
     try {
-      animeMeta = await anilistSearch(message.args.join(" "));
+      animeMeta = await anilistSearch(args.join(" "));
     } catch (error: any) {
       return error.response?.data?.error || error.response?.statusText || "Couldn't find anime..";
     }

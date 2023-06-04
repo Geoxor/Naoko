@@ -1,26 +1,38 @@
-import { textify } from "../../logic/textProcessors";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import command from "../../decorators/command";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import TextProcessingService from "../../service/TextProcessingService";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 
+@command()
 class Textify extends AbstractCommand {
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    // TODO: can be IMPROVED
-    let pipeline: string[] = [];
-    let userSentence: string[] = [];
-    let isArgCommand: boolean = true;
-    message.args.forEach((arg) => {
-      isArgCommand
-        ? ["brainfuck", "britify", "spongify", "uwufy"].includes(arg)
-          ? pipeline.push(arg)
-          : ((isArgCommand = false), userSentence.push(arg))
-        : userSentence.push(arg);
-      if (pipeline.length === 0) return "Pipeline can't be empty";
-      if (pipeline.length > 10) return "Pipeline can't be longer than 10 iterators";
-    });
-    if (userSentence.length === 0) return `What do you want to textify`;
-    const sentence = userSentence.join(" ");
-    if (sentence.length > 2000) return `wtf your sentence is too big`;
-    return textify(pipeline, sentence);
+  constructor(
+    private textProcessingService: TextProcessingService,
+  ) {
+    super();
+  }
+
+  execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+
+    const pipeline = [];
+    while (true) {
+      const arg = args.shift() || '';
+      if (this.textProcessingService.isTextProcessor(arg)) {
+        pipeline.push(arg);
+      } else {
+        args.unshift(arg);
+        break;
+      }
+    }
+
+    if (pipeline.length === 0) return 'Pipeline cannot be empty';
+    if (pipeline.length > 10) return "Pipeline can't be longer than 10 iterators";
+
+    const userSentence = args.join(' ');
+    if (userSentence.length === 0) return "What do you want to textify?";
+
+    return this.textProcessingService.textify(pipeline, userSentence);
   }
 
   get commandData(): CommandData {

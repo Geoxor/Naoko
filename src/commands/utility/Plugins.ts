@@ -5,10 +5,9 @@ import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
 import { PluginManager } from "../../plugins/PluginManager";
-import { delay, inject, injectable } from "@triptyk/tsyringe";
+import { delay, inject } from "@triptyk/tsyringe";
 
 @command()
-@injectable()
 class Plugins extends AbstractCommand {
   private static PLUGIN_ICON = "https://cdn.discordapp.com/attachments/911762334979084368/923234119553519636/unknown.png";
 

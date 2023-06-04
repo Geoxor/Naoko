@@ -1,8 +1,9 @@
 import Discord from "discord.js";
 import { GEOXOR_GUILD_ID } from "../../constants";
-import { CommandExecuteResponse, IMessage } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
 
 @command()
 class Vote extends AbstractCommand {
@@ -14,10 +15,13 @@ class Vote extends AbstractCommand {
   private static DOWNVOTE_EMOJI_ALT = '⬇️';
   private static UPVOTE_EMOJI_ALT = '⬆️';
 
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
-    const voteContext = message.args.join(" ").trim();
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
 
-    if (!voteContext) return "Please write what your vote is about";
+    const voteContext = payload.get('args').join(" ");
+    if (!voteContext) {
+      return "Please write what your vote is about";
+    }
 
     const embed = new Discord.EmbedBuilder()
       .setColor("#ff00b6")
@@ -25,7 +29,7 @@ class Vote extends AbstractCommand {
       .setAuthor({ name: `${message.author.username} asks...`, iconURL: message.author.avatarURL() || message.author.defaultAvatarURL })
       .setFooter({ text: `Vote with the reactions bellow, results in ${Vote.VOTE_TIME / 1000} seconds` });
 
-    // Check if were in the Geoxor guild, Emojis missing in other guild
+    // Check if were in the Geoxor guild because Emojis missing in other guilds
     const isGeoxorGuild = message.guild?.id === GEOXOR_GUILD_ID;
 
     const vote = await message.channel.send({ embeds: [embed] });

@@ -1,5 +1,5 @@
 import { container, injectable } from '@triptyk/tsyringe';
-import AbstractPlugin from 'src/plugins/AbstractPlugin';
+import AbstractPlugin from '../plugins/AbstractPlugin';
 
 type constructor<T = AbstractPlugin> = {
   new (...args: any[]): T;

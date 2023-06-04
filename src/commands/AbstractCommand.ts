@@ -1,5 +1,6 @@
 import { PermissionResolvable } from 'discord.js';
-import { CommandCategories, CommandExecuteResponse, IMessage } from '../types';
+import { CommandCategories, CommandExecuteResponse } from '../types';
+import MessageCreatePayload from '../pipeline/messageCreate/MessageCreatePayload';
 
 export type CommandData = {
   /**
@@ -36,7 +37,7 @@ export default abstract class AbstractCommand {
   /**
    * The handler associated with this command
    */
-  public abstract execute(message: IMessage): Promise<CommandExecuteResponse> | CommandExecuteResponse;
+  public abstract execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> | CommandExecuteResponse;
   
   public abstract get commandData(): CommandData;
 }

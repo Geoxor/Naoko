@@ -7,20 +7,15 @@ import {
   GHOSTS_ROLE_ID,
   SHAII_ID,
 } from "../constants";
-import { highlight, markdown, randomChoice } from "../logic/logic";
-import commandMiddleware from "../middleware/commandMiddleware";
+import { randomChoice } from "../logic/logic";
 import { logDelete, logEdit } from "../middleware/messageLoggerMiddleware";
-import moderationMiddleware from "../middleware/moderationMiddleware";
-import restrictedChannelMiddleware from "../middleware/restrictedChannelMiddleware";
-import { userMiddleware } from "../middleware/userMiddleware";
-import { DISCORD_EVENTS, Plugin } from "./Plugin";
 import { config } from "./Config";
 import { User } from "./Database";
 import { logger } from "./Logger";
 import { GatewayIntentBits } from 'discord.js';
 import { singleton } from '@triptyk/tsyringe';
-import CommandManager from '../commands/CommandManager';
 import { PluginManager } from "../plugins/PluginManager";
+import MessageCreatePipelineManager from "../pipeline/messageCreate/MessageCreatePipelineManager";
 
 /**
  * Naoko multi purpose Discord bot
@@ -47,13 +42,13 @@ export default class Naoko {
   });
 
   constructor(
-    private commandManager: CommandManager,
     private pluginManager: PluginManager,
+    private messageCreatePipeline: MessageCreatePipelineManager,
   ) {}
 
   public async run(): Promise<void> {
     await this.registerEventListener();
-    this.pluginManager.registerEventListener(this.bot);
+    this.pluginManager.registerEventListener(Naoko.bot);
 
     logger.print("Naoko logging in...");
     await Naoko.bot.login(config.token);
@@ -68,7 +63,8 @@ export default class Naoko {
       }
     });
     Naoko.bot.on("voiceStateUpdate", (oldState, newState) => {
-      const LOG_CHANNEL = "755597803102928966";
+      // TODO: Move this into a logging Plugin
+      const LOG_CHANNEL = "755597803102928966"; // magic number to constant
       const pingVoiceChannel = (channelId: string) => `<#${channelId}>`;
 
       const logChannel = newState.guild.channels.cache.get(LOG_CHANNEL) as GuildTextBasedChannel;
@@ -103,34 +99,34 @@ export default class Naoko {
       this.joinThreads();
     });
     Naoko.bot.on("messageCreate", async (message) => {
-      // TODO: Make this automatically pass EVERY event to all the plugins instead of only here
-      try {
-        this.onMessageCreate(message);
-      } catch (error) {
-        console.log(error);
-      }
+      await this.messageCreatePipeline.handleMessageCreate(message);
     });
     Naoko.bot.on("messageDelete", async (message) => {
+      // TODO: Refactor this to Loggin plugin
       if (message.guild?.id === GEOXOR_GUILD_ID) {
         logDelete(message);
       }
     });
     Naoko.bot.on("messageUpdate", async (oldMessage, newMessage) => {
-      logEdit(oldMessage, newMessage, (oldMessage, newMessage) => { });
-      userMiddleware(newMessage as Discord.Message, (newMessage) => {
-        moderationMiddleware(newMessage, (newMessage) => { });
-      });
+      // TODO: Refactor this to Loggin plugin
+      logEdit(oldMessage, newMessage, () => { });
+      // TODO: Refactor this to Modaration plugin, It should do the same spam check
+      //userMiddleware(newMessage as Discord.Message, (newMessage) => {
+        //moderationMiddleware(newMessage, (newMessage) => { });
+      //});
     });
     Naoko.bot.on("guildMemberRemove", async (member) => {
+      // TODO: Refactor this to memorise role plugin
       if (member.id === SHAII_ID) return;
       const user = await User.findOneOrCreate(member);
       user.updateRoles(Array.from(member.roles.cache.keys()));
     });
     Naoko.bot.on("guildMemberAdd", async (member) => {
+      // TODO: Refactor this to moderation role plugin
       if (member.guild.id === GEOXOR_GUILD_ID) {
         await member.roles.add(GHOSTS_ROLE_ID);
 
-        const generalChannel = await member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID);
+        const generalChannel = member.guild.channels.cache.get(GEOXOR_GENERAL_CHANNEL_ID);
         if (generalChannel && generalChannel.isTextBased()) {
           const welcomeMessage = randomChoice(welcomeMessages).replace(/::GUILD_NAME/g, member.guild.name);
           const message = await generalChannel.send(`<@${member.id}> ${welcomeMessage}`);
@@ -138,6 +134,7 @@ export default class Naoko {
         }
       }
 
+      // TODO: Refactor this to memorise role plugin
       let user = await User.findOneOrCreate(member);
       const addedRoles: string[] = [];
       for (const roleId of user.roles) {
@@ -156,6 +153,7 @@ export default class Naoko {
       }
     });
     Naoko.bot.on("presenceUpdate", async (oldPresence, newPresence) => {
+      // TODO: Refactor this to Loggin plugin
       // Get their custom status
       const newStatus = newPresence.activities.find((activity) => activity.type === Discord.ActivityType.Custom)?.state;
       const oldStatus = oldPresence?.activities.find((activity) => activity.type === Discord.ActivityType.Custom)?.state;
@@ -181,6 +179,7 @@ export default class Naoko {
       }
     });
     Naoko.bot.on("guildMemberUpdate", async (oldMember, newMember) => {
+      // TODO: Refactor this to Loggin plugin
       if (oldMember.user.username !== newMember.user.username) {
         logger.print(`Updated username history for ${oldMember.id} '${newMember.user.username}'`);
         User.pushHistory("username_history", oldMember.id, newMember.user.username);
@@ -191,6 +190,7 @@ export default class Naoko {
       }
     });
     Naoko.bot.on("threadCreate", (thread) => {
+      // TODO: Refactor this to Moderation plugin
       thread.join();
     });
   }
@@ -207,6 +207,8 @@ export default class Naoko {
     const channels = Naoko.bot.channels.cache.values();
     for (const channel of channels) {
       if (channel.isThread()) {
+        // TODO: This was part of the Waifu battles. It can either be deleted 
+        // or refactored in its one plugin, if we want the battle things again. I kinda liked them
         if (channel.ownerId === SHAII_ID) {
           await channel.delete();
           logger.print(`Deleted residual battle thread ${channel.id}`)
@@ -217,116 +219,5 @@ export default class Naoko {
         logger.print(`Joined thread ${channel.id}`);
       }
     }
-  }
-
-  private onMessageCreate(message: Discord.Message) {
-    userMiddleware(message, (message) => {
-      moderationMiddleware(message, (message) => {
-        // If some users joined while legacy Naoko was kicked, adds to them the ghost role if they talk in chat
-        if (message.member && message.guild?.id === GEOXOR_GUILD_ID) {
-          if (!this.hasGhostRole(message.member)) {
-            message.member.roles.add(GHOSTS_ROLE_ID).catch(() => {
-              logger.error("This role does not exist in the server.");
-            });
-          }
-        }
-
-        // For channels that have "images" in their name we simply force delete any messages that don't have that in there
-        if (
-          message.guild?.channels.cache.get(message.channel.id)?.name.includes("images") &&
-          message.attachments.size === 0
-        )
-          return message.delete().catch(() => { });
-
-        restrictedChannelMiddleware(message, (message) => {
-          commandMiddleware(message, async (message) => {
-            const command = this.commandManager.getCommand(message.command);
-
-            const clearTyping = () => {
-              if (processingMessage) {
-                processingMessage.delete().catch(() => { });
-                // @ts-ignore
-                clearInterval(typingInterval);
-              }
-            };
-
-            // If it doesn't exist we respond
-            if (!command) {
-              const closestCommand = this.commandManager.getClosestCommand(message.command);
-              if (closestCommand) {
-                return message
-                  .reply(
-                    "That command doesn't exist!\n" +
-                    `There's this however ${highlight(config.prefix + closestCommand.commandData.usage)}`
-                  );
-              }
-
-              return message.reply("That command doesn't exist");
-            }
-
-            const commandData = command?.commandData;
-
-            // Notify the user their shit's processing
-            if (commandData.requiresProcessing) {
-              var processingMessage = await message.channel.send("Processing...").catch(() => { });
-              var typingInterval = setInterval(() => message.channel.sendTyping(), 4000);
-            }
-
-            // Check permissions
-            if (commandData.permissions) {
-              for (const perm of commandData.permissions) {
-                if (!message.member?.permissions.has(perm)) {
-                  if (commandData.requiresProcessing) clearTyping();
-                  return message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => { });
-                }
-              }
-            }
-
-            // Get the result to send from the command
-            try {
-              let timeStart = Date.now();
-              var result = await command.execute(message);
-              let timeEnd = Date.now();
-              logger.print(
-                `${timeEnd - timeStart}ms - Executed command: ${commandData.name} - User: ${message.author.username} - Guild: ${message.guild?.name || "dm"
-                }`
-              );
-            } catch (error: any) {
-              logger.error(`Command ${commandData.name} failed to execute with error: ${error}`);
-              console.error(error);
-              await message.reply({
-                 embeds:[
-                    {
-                        title: ":warning: Something went wrong while executing this command",
-                        description: `Looks like something isn't right. Please try again, and if the problem persists, please let us know in a [github issue](https://github.com/Geoxor/Naoko/issues). \n\n Error: \`\`\`${error}\`\`\``,
-                        color: 0xff0000
-                    }
-                 ]
-              });
-            }
-
-            // Delete the processing message if it exists
-            clearTyping();
-
-            // If the command returns void we just return
-            if (!result) return;
-
-            // Send the result
-            message
-              .reply(result)
-              .catch(() =>  {
-                message.channel.send(result!)
-                  .catch((error) =>
-                    error.code === 500
-                      ? message.reply({
-                        embeds: [new Discord.EmbedBuilder().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
-                      })
-                      : message.reply(markdown(error))
-                  );
-              });
-          });
-        });
-      });
-    });
   }
 }

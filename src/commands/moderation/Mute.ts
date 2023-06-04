@@ -1,4 +1,4 @@
-import Discord, { EmbedBuilder } from "discord.js";
+import Discord, { EmbedBuilder, Message } from "discord.js";
 import { MUTED_ROLE_ID, SHAII_LOGO } from "../../constants";
 import { durationToMilliseconds, msToFullTime } from "../../logic/logic";
 import { User } from "../../naoko/Database";
@@ -7,9 +7,10 @@ import Naoko from "../../naoko/Naoko";
 import { CommandExecuteResponse, IMessage } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 export function sendUnmuteEmbed(
-  message: IMessage,
+  message: Message,
   targetUser: Discord.GuildMember,
   reason?: string
 ): Promise<Discord.Message> {
@@ -27,7 +28,10 @@ export function sendUnmuteEmbed(
 
 @command()
 class Mute extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const args = payload.get('args');
+
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to mute";
     if (targetUser.id === message.author.id) return "You can't mute yourself";
@@ -35,9 +39,9 @@ class Mute extends AbstractCommand {
       return "You can't mute other admins";
     if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
-    let duration = message.args[0];
+    let duration = args[0];
     if (!duration || !duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) return "You must specify a valid duration";
-    const reason = message.args.slice(1).join(" ") || "No reason given";
+    const reason = args.slice(1).join(" ") || "No reason given";
 
     let msDuration = durationToMilliseconds(duration);
     if (msDuration === "") return `${duration} is not a valid duration`;
@@ -56,7 +60,7 @@ class Mute extends AbstractCommand {
   }
 
   async sendMuteEmbed(
-    message: IMessage,
+    message: Message,
     targetUser: Discord.GuildMember,
     duration: string,
     reason: string

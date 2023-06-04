@@ -1,20 +1,24 @@
-import Discord, { Client, User } from "discord.js";
+import Discord, { Client, Message, User } from "discord.js";
 import packageJson from "../../../package.json" assert { type: 'json' };
+import command from '../../decorators/command';
 import { markdown, msToFullTime, timeSince } from "../../logic/logic";
 import { User as UserDb } from "../../naoko/Database";
-import { ActionHistory, CommandExecuteResponse, History, IMessage } from "../../types";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { ActionHistory, CommandExecuteResponse, History } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
-import command from '../../decorators/command';
 
 @command()
 class WhoIs extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const args = payload.get('args');
+
     let user = message.mentions.users.first() || message.author;
-    if (message.args[0] !== undefined && !message.mentions.users.first()) {
+    if (args[0] !== undefined && !message.mentions.users.first()) {
       try {
-        user = await message.client.users.fetch(message.args[0]);
+        user = await message.client.users.fetch(args[0]);
       } catch (e) {
-        await message.reply(`I couldn't find a user with \`${message.args[0]}\``);
+        await message.reply(`I couldn't find a user with \`${args[0]}\``);
         return;
       }
     }
@@ -35,7 +39,7 @@ class WhoIs extends AbstractCommand {
     await message.reply({ embeds: [embed], allowedMentions: { users: [] } });
   }
 
-  async collectFields(message: IMessage, user: User): Promise<Discord.EmbedField[]> {
+  async collectFields(message: Message, user: User): Promise<Discord.EmbedField[]> {
     const fields: Discord.EmbedField[] = [];
     fields.push({ name: "ID:", value: `${user.id}`, inline: false });
     fields.push({ name: "Account created:", value: user.createdAt.toUTCString(), inline: false });

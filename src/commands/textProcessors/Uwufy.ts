@@ -1,13 +1,22 @@
 import command from '../../decorators/command';
-import { textToUwufy } from "../../logic/logic";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import MessageCreatePayload from '../../pipeline/messageCreate/MessageCreatePayload';
+import TextProcessingService from '../../service/TextProcessingService';
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 
 @command()
 class Uwufy extends AbstractCommand {
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    if (message.args.length === 0) return "b-baka!! you need to give me s-something! uwu";
-    return textToUwufy(message.args.join(" "));
+  constructor(
+    private textProcessingService: TextProcessingService,
+  ) {
+    super();
+  }
+
+  execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+
+    if (args.length === 0) return "b-baka!! you need to give me s-something! uwu";
+    return this.textProcessingService.uwufy(args.join(" "));
   }
 
   get commandData(): CommandData {

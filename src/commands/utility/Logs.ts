@@ -1,12 +1,12 @@
 import { markdown } from "../../logic/logic";
 import { logger } from "../../naoko/Logger";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
 
 @command()
 class Logs extends AbstractCommand {
-  execute(): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+  execute(): CommandExecuteResponse {
     return markdown(logger.getLogHistory().substring(0, 1990));
   }
 

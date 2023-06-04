@@ -1,11 +1,14 @@
 import Discord from "discord.js";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 @command()
 class Match extends AbstractCommand {
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+  execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+
     if (!message.mentions.members?.size) return "Tag the person you want to match with!";
 
     let matcher: Discord.User;

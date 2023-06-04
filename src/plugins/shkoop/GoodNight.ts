@@ -1,4 +1,4 @@
-import Discord, { GuildMember } from "discord.js";
+import Discord, { GuildMember, Message } from "discord.js";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import plugin from "../../decorators/plugin";
 import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
@@ -8,19 +8,23 @@ import { durationToMilliseconds, msToFullTime } from "../../logic/logic";
 import { logger } from "../../naoko/Logger";
 import Naoko from "../../naoko/Naoko";
 import { User } from '../../naoko/Database';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 class GoodNightCommand extends AbstractCommand {
-  public async execute(message: IMessage): Promise<CommandExecuteResponse> {
+  public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+    const args = payload.get('args');
+
     const targetUser = message.member;
     if (!targetUser) throw new Error("No User");
 
-    let duration = message.args[0];
+    let duration = args[0];
     if (!duration) {
       duration = "6h";
     } else if (!duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) {
       return "You must specify a valid duration";
     }
-    const reason = message.args.slice(1).join(" ") || "No reason given";
+    const reason = args.slice(1).join(" ") || "No reason given";
 
     let msDuration = durationToMilliseconds(duration);
     if (parseInt(msDuration) > 1209600000) {
@@ -43,7 +47,7 @@ class GoodNightCommand extends AbstractCommand {
   }
 
   async sendMuteEmbed(
-    message: IMessage,
+    message: Message,
     targetUser: Discord.GuildMember,
     duration: string,
     reason: string
@@ -84,7 +88,9 @@ class GoodNightCommand extends AbstractCommand {
 }
 
 class GoodMorningCommand extends AbstractCommand {
-  public async execute(message: IMessage): Promise<CommandExecuteResponse> {
+  public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+
     const guild = message.client.guilds.cache.get(GEOXOR_GUILD_ID);
     const member = await guild!.members.fetch(message.author.id);
     if (message.channel.type == Discord.ChannelType.DM && this.hasSelfMute(member) && !this.hasActualMute(member)) {
@@ -104,7 +110,7 @@ class GoodMorningCommand extends AbstractCommand {
   }
 
   sendUnmuteEmbed(
-    message: IMessage,
+    message: Message,
     targetUser: Discord.GuildMember,
     reason?: string
   ): Promise<Discord.Message> {

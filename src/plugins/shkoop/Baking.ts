@@ -3,6 +3,7 @@ import plugin from "../../decorators/plugin";
 import { randomChoice } from "../../logic/logic";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import { IMessage, CommandExecuteResponse } from "../../types";
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 class Bake extends AbstractCommand {
   private static CAKES = [
@@ -21,11 +22,14 @@ class Bake extends AbstractCommand {
     "https://cdn.discordapp.com/attachments/634839969822801998/964236237554745425/beryy.jpeg",
   ];
 
-  public execute(message: IMessage): CommandExecuteResponse {
-    if (message.args.length === 0) return `What do you want to bake`;
+  public execute(payload: MessageCreatePayload): CommandExecuteResponse {
+    const arg = payload.get('args')[0];
+    if (!arg) {
+      return `What do you want to bake?`;
+    }
 
     // the baked goods + easter eggs
-    switch (message.args.join(" ").toLowerCase()) {
+    switch (arg) {
       case "cake":
         return `${randomChoice(Bake.CAKES)}`;
       case "pie":
@@ -37,12 +41,11 @@ class Bake extends AbstractCommand {
 
   public get commandData(): CommandData {
     return {
-
       name: "bake",
       category: "FUN",
       usage: "bake <what-to-bake>",
       description: "Bake something",
-    }
+    };
   }
 }
 

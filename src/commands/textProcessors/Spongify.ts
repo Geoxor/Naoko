@@ -1,14 +1,24 @@
-import { randomChoice, textToSpongify } from "../../logic/logic";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import TextProcessingService from "../../service/TextProcessingService";
 
 @command()
 class Spongify extends AbstractCommand {
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    if (message.args.length === 0) return `What do you want to SpOnGiFy`;
-    return textToSpongify(message.args.join(" "), randomChoice([true, false]));
+  constructor(
+    private textProcessingService: TextProcessingService,
+  ) {
+    super();
   }
+
+  execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+ 
+    if (args.length === 0) return "What do you want to SpOnGiFy?";
+    return this.textProcessingService.spongify(args.join(" "));
+  }
+
   get commandData(): CommandData {
     return {
       name: "spongify",
@@ -18,3 +28,4 @@ class Spongify extends AbstractCommand {
     }
   }
 }
+

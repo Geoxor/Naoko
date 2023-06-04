@@ -1,11 +1,14 @@
 import { Readable } from "stream";
-import { CommandExecuteResponse, IMessage } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from '../AbstractCommand';
 
 @command()
 class DickSize extends AbstractCommand {
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+  execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
+
     const target = message.mentions.users?.first();
     if (target && message.author.id !== target.id) {
       return this.calculateDickSizeBattle(message.author.username, target.username)

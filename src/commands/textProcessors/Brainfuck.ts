@@ -1,14 +1,22 @@
 import { Readable } from "stream";
-import { textToBrainfuck } from "../../logic/logic";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import TextProcessingService from "../../service/TextProcessingService";
 
 @command()
 class Bainfuck extends AbstractCommand {
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    if (message.args.length === 0) return `What to you want to translate`;
-    const response: string = textToBrainfuck(message.args.join(" "));
+  constructor(
+    private textProcessingService: TextProcessingService,
+  ) {
+    super();
+  }
+
+  execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+    if (args.length === 0) return `What to you want to translate`;
+    const response: string = this.textProcessingService.brainfuck(args.join(" "));
     if (response.length > 2000) {
       return {
         content: "Bro the result is too big gonna put it in a file",

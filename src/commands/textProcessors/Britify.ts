@@ -1,13 +1,21 @@
-import { textToBritify } from "../../logic/logic";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import TextProcessingService from "../../service/TextProcessingService";
 
 @command()
-class Bitify extends AbstractCommand {
-  execute(message: IMessage): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    if (message.args.length === 0) return "Tell me whad u wan' in bri'ish cunt";
-    return textToBritify(message.args.join(" "));
+class Britify extends AbstractCommand {
+  constructor(
+    private textProcessingService: TextProcessingService,
+  ) {
+    super();
+  }
+
+  execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+    const args = payload.get('args');
+    if (args.length === 0) return "Tell me whad u wan' in bri'ish cunt";
+    return this.textProcessingService.britify(args.join(" "));
   }
 
   get commandData(): CommandData {

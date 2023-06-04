@@ -27,8 +27,7 @@ export function logEdit(
         name: `Link`,
         value: `https://canary.discord.com/channels/${newMessage.guildId}/${newMessage.channelId}/${newMessage.id}`,
       }
-    )
-    .setTimestamp();
+    ).setTimestamp();
 
   const logChannel = oldMessage.client.channels.cache.get(config.chatLogChannel) as Discord.TextChannel;
 

@@ -1,11 +1,13 @@
 import Naoko from "../../naoko/Naoko";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from '../AbstractCommand';
 import command from '../../decorators/command';
+import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 
 @command()
 class Ping extends AbstractCommand {
-  async execute(message: IMessage): Promise<CommandExecuteResponse> {
+  async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
+    const message = payload.get('message');
     const timestampMessage = await message.channel.send("🏓 Getting ping...");
     const latency = timestampMessage.createdTimestamp - message.createdTimestamp;
     await timestampMessage.edit(`🏓 Pong! Latency is ${latency}ms. API Latency is ${~~Naoko.bot.ws.ping}ms`);
