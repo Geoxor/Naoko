@@ -2,7 +2,7 @@ import Discord, { GuildMember, Message } from "discord.js";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import plugin from "../../decorators/plugin";
 import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
-import { IMessage, CommandExecuteResponse } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import { GEOXOR_GUILD_ID, MUTED_ROLE_ID, SHAII_LOGO } from "../../constants";
 import { durationToMilliseconds, msToFullTime } from "../../logic/logic";
 import { logger } from "../../naoko/Logger";
@@ -43,7 +43,7 @@ class GoodNightCommand extends AbstractCommand {
     );
 
     // Send the embed
-    await this.sendMuteEmbed(message, targetUser, msDuration, reason);
+    return this.sendMuteEmbed(message, targetUser, msDuration, reason);
   }
 
   async sendMuteEmbed(
@@ -51,8 +51,8 @@ class GoodNightCommand extends AbstractCommand {
     targetUser: Discord.GuildMember,
     duration: string,
     reason: string
-  ): Promise<Discord.Message> {
-    const embed = new Discord.EmbedBuilder()
+  ) {
+    return new Discord.EmbedBuilder()
       .setTitle(`Mute - ${targetUser.user.tag}`)
       .setDescription(`ID: ${targetUser.user.id}, <@${targetUser.user.id}>`)
       .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
@@ -64,8 +64,6 @@ class GoodNightCommand extends AbstractCommand {
         { name: 'Reason', value: reason, inline: true },
       ]).setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
       .setColor("#FF0000");
-
-    return message.reply({ embeds: [embed] });
   }
 
   hasSelfMute(member: Discord.GuildMember): boolean {
@@ -161,7 +159,7 @@ class GoodNight extends AbstractPlugin {
 
   public get pluginData(): PluginData {
     return {
-      name: "@shkoop/GoodNight",
+      name: "@shkoop/goodnight",
       version: "1.0.0",
       commands: [GoodNightCommand, GoodMorningCommand],
     }

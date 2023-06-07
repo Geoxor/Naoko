@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import MultiProgress from "multi-progress";
 import quotes from "../assets/quotes.json" assert { type: 'json' };
-import { getCurrentMemoryHeap, randomChoice } from "../logic/logic";
+import { randomChoice } from "../logic/logic";
 
 /**
  * Main logging wrapper that creates beautiful colors and emojis
@@ -45,8 +45,8 @@ class Logger {
    * @author Geoxor
    */
   public print(log: string): void {
-    this.pushToLogHistory(`${getCurrentMemoryHeap()}  [${this.time()}] ${this.emoji}  ${log}`);
-    console.log(chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji}  ${log}`));
+    this.pushToLogHistory(`${this.getCurrentMemoryHeap()}  [${this.time()}] ${this.emoji}  ${log}`);
+    console.log(chalk.hex(this.color)(`  ${this.getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji}  ${log}`));
   }
 
   /**
@@ -55,9 +55,9 @@ class Logger {
    * @author Geoxor
    */
   public error(log: string): void {
-    this.pushToLogHistory(`${getCurrentMemoryHeap()}  [${this.time()}] ${this.errorEmoji}  ${log}`);
+    this.pushToLogHistory(`${this.getCurrentMemoryHeap()}  [${this.time()}] ${this.errorEmoji}  ${log}`);
     console.log(
-      chalk.hex(this.errorColor)(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`)
+      chalk.hex(this.errorColor)(`  ${this.getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`)
     );
   }
 
@@ -66,7 +66,7 @@ class Logger {
    */
   public progress(name: string, tickCount: number) {
     return this.multiProgress.newBar(
-      `  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji} ${chalk.hex(this.color)(name)}${chalk.hex(
+      `  ${this.getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji} ${chalk.hex(this.color)(name)}${chalk.hex(
         this.color
       )("[:bar]")} :etas :percent `,
       {
@@ -81,6 +81,14 @@ class Logger {
   public setProgressValue(bar: ProgressBar, value: number) {
     bar.update(value);
     bar.tick();
+  }
+
+  private getCurrentMemoryHeap() {
+    const mem = process.memoryUsage();
+    const used = mem.heapUsed / 1000 / 1000;
+    const total = mem.heapTotal / 1000 / 1000;
+
+    return `${used.toFixed(2)}/${total.toFixed(2)}MB`;
   }
 }
 

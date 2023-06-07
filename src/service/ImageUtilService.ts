@@ -4,15 +4,18 @@ import { ImageURLOptions, Message } from "discord.js";
 import Jimp from "jimp";
 // @ts-expect-error
 import replaceLast from 'replace-last';
+// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
+import gifenc from "gifenc";
+import { logger } from "../naoko/Logger";
 
 @singleton()
-export default class MessageImageParser {
+export default class ImageUtilService {
   private readonly DEFAULT_IMAGE_OPTIONS: ImageURLOptions = { extension: "png", size: 512 };
 
   /**
    * Gets an image url from attachments > stickers > first emoji > mentioned user avatar > author avatar > default avatar
    */
-  public getMostRelevantImageURL(message: Message, args: string[]) {
+  private getMostRelevantImageURL(message: Message, args: string[]) {
     return (
       message.attachments.first()?.url ||
       message.stickers.first()?.url ||
@@ -52,9 +55,7 @@ export default class MessageImageParser {
 
   private async getImageURLFromMessage(message: Message, args: string[]): Promise<string> {
     const arg = args[this.findIndexOfURL(args)];
-    const userMention = message.mentions.users.first();
-
-    if (this.isValidHttpUrl(arg)) {
+    if (arg && this.isValidHttpUrl(arg)) {
       if (arg.startsWith("https://tenor") && !arg.endsWith(".gif")) {
         return arg + ".gif";
       }
@@ -62,18 +63,25 @@ export default class MessageImageParser {
     }
 
     // If theres a reply
-    if (message.reference) {
-      const reference = await message.fetchReference();
-      const referenceArgs = reference.content.trim().split(/ +/);
-      return replaceLast(this.getMostRelevantImageURL(message, referenceArgs), ".webp", ".png");
+    if (message.reference && message.reference.messageId) {
+      try {
+        const reference = await message.channel.messages.fetch(message.reference.messageId);
+        if (reference) {
+          const referenceArgs = reference.content.trim().split(/ +/);
+          return replaceLast(this.getMostRelevantImageURL(reference, referenceArgs), ".webp", ".png");
+        }
+      } catch {
+        logger.print('Failed to fetch reference from message ($message.)')
+      }
     }
 
     // this is a hack...
+    const userMention = message.mentions.users.first();
     if (!/[0-9]{18}$/g.test(arg) || userMention || message.content.includes("<:")) {
       return this.getMostRelevantImageURL(message, args);
     }
 
-    const user = await message.client.users.fetch(arg);
+    const user = await message.client.users.fetch('153274351561605120');
     return user.displayAvatarURL(this.DEFAULT_IMAGE_OPTIONS);
   }
 
@@ -107,5 +115,45 @@ export default class MessageImageParser {
     }
 
     return url.protocol === "http:" || url.protocol === "https:";
+  }
+
+  async getRGBAUintArray(image: Jimp) {
+    const texels = 4; /** Red Green Blue and Alpha */
+    const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
+    for (let y = 0; y < image.bitmap.height; y++) {
+      for (let x = 0; x < image.bitmap.width; x++) {
+        let color = image.getPixelColor(x, y);
+        let r = (color >> 24) & 255;
+        let g = (color >> 16) & 255;
+        let b = (color >> 8) & 255;
+        let a = (color >> 0) & 255;
+        const stride = texels * (x + y * image.bitmap.width);
+        data[stride] = r;
+        data[stride + 1] = g;
+        data[stride + 2] = b;
+        data[stride + 3] = a;
+      }
+    }
+    return data;
+  }
+
+  async encodeFramesToGif(
+    frames: Uint8ClampedArray[] | Uint8Array[],
+    width: number,
+    height: number,
+    delay: number
+  ) {
+    const gif = gifenc.GIFEncoder();
+    const palette = gifenc.quantize(frames[0], 256);
+    const bar = logger.progress("Encoding  - ", frames.length);
+    for (let i = 0; i < frames.length; i++) {
+      const frame = frames[i];
+      const idx = gifenc.applyPalette(frame, palette);
+      gif.writeFrame(idx, width, height, { transparent: true, delay, palette });
+      logger.setProgressValue(bar, i / frames.length);
+    }
+
+    gif.finish();
+    return Buffer.from(gif.bytes());
   }
 }

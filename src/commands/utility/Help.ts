@@ -29,16 +29,20 @@ class Help extends AbstractCommand {
       helpEmbed.setTitle("Listing all available commands");
       helpEmbed.setColor("#fca103");
 
+      let totalCommands = 0;
       for (let i = 0; i < categories.length; i++) {
         const category = categories[i];
-        if (this.commandsStringFromCategory(category.categoryName).length > 0){
+        const countInCategory = this.commandCountInCategory(category.categoryName);
+        totalCommands += countInCategory;
+        if (countInCategory > 0){
           embedFields.push({
-            name: `${category.categoryName} (${this.commandCountInCategory(category.categoryName)})`,
+            name: `${category.categoryName} (${countInCategory})`,
             value: this.commandsStringFromCategory(category.categoryName),
           });
         }
       }
       helpEmbed.addFields(embedFields);
+      helpEmbed.setFooter({ text: `${totalCommands} commands in total`})
     } else {
       const filterQuery = args.join("_");
       if (categories.find((category) => category.categoryName === filterQuery.toLocaleUpperCase())) {
@@ -75,24 +79,41 @@ class Help extends AbstractCommand {
       }
     }
 
-    return {
-      embeds: [helpEmbed],
-    };
+    return helpEmbed;
   }
 
   private commandsStringFromCategory(category: string): string {
     const allCommands = this.commandManager.getAll();
     const commands = allCommands.filter((command) => command.commandData.category === category);
-    let commandsString = "";
-    for (let z = 0; z < commands.length; z++) {
-      commandsString += `\`${commands[z].commandData.name}\`` + (commands.length - 1 === z ? "" : ", ");
+
+    const commandNames = [];
+    for (const command of commands) {
+      commandNames.push(command.commandData.name);
+      if (command.commandData.aliases) {
+        commandNames.push(...command.commandData.aliases);
+      }
     }
-    return commandsString;
+
+    if (commandNames.length === 0) {
+      return '';
+    }
+
+    const commandsString = commandNames.join('`, `');
+    return '`' + commandsString + '`';
   }
 
   private commandCountInCategory(category: string): number {
     const allCommands = this.commandManager.getAll();
-    return allCommands.filter((command) => command.commandData.category === category).length;
+    const commands = allCommands.filter((command) => command.commandData.category === category);
+
+    let count = 0;
+    for (const command of commands) {
+      count++;
+      if (command.commandData.aliases) {
+        count += command.commandData.aliases.length;
+      }
+    }
+    return count;
   }
 
   get commandData(): CommandData {
@@ -100,7 +121,6 @@ class Help extends AbstractCommand {
       name: "help",
       category: "UTILITY",
       usage: "help",
-      aliases: ["h"],
       description: "The command you just did",
     }
   }

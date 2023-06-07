@@ -8,9 +8,39 @@ import comicSans from "../assets/comic_sans_font.json" assert { type: 'json' };
 import cache from "../naoko/Cache";
 import { logger } from "../naoko/Logger";
 import { Coords, GeometrySceneOptions } from "../types";
-import { encodeFramesToGif, getRGBAUintArray } from "./logic";
+// @ts-ignore this doesn't have types :whyyyyyyyyyyy:
+import gifenc from "gifenc";
+import { Awaitable } from 'discord.js';
 
-export const commands3D = {
+export default class ThreeDProcessorService {
+  private processors: Record<string, (buffer: Buffer) => Awaitable<Buffer>>;
+
+  constructor() {
+    this.processors = {
+      prism: this.prism.bind(this),
+      wtf: this.wtf.bind(this),
+      cube: this.cube.bind(this),
+      donut: this.donut.bind(this),
+      sphere: this.sphere.bind(this),
+      cylinder: this.cylinder.bind(this),
+      text: this.text.bind(this),
+      cart: this.cart.bind(this),
+      car: this.car.bind(this),
+      miku: this.miku.bind(this),
+      amogus: this.amogus.bind(this),
+      trackmania: this.trackmania.bind(this),
+      troll: this.troll.bind(this),
+      trollmask: this.trollmask.bind(this),
+      trollcart: this.trollcart.bind(this),
+      geoxor: this.geoxor.bind(this),
+      helicopter: this.helicopter.bind(this),
+    };
+  }
+
+  public getProcessors() {
+    return this.processors;
+  }
+
   async prism(texture: Buffer) {
     const scene = await GeometryScene.create({
       rotation: { x: 0 },
@@ -19,7 +49,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async wtf(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -30,7 +60,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async cube(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -40,7 +70,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async donut(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -51,7 +81,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async sphere(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -61,7 +91,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async cylinder(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -71,7 +101,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async text(texture: Buffer, text?: string) {
     const loader = new THREE.FontLoader();
@@ -92,7 +122,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async cart(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -103,7 +133,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async car(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -114,7 +144,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async miku(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -125,7 +155,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async amogus(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -136,7 +166,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async trackmania(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -147,7 +177,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async troll(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -158,7 +188,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async trollcart(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -169,7 +199,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async trollmask(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -180,7 +210,7 @@ export const commands3D = {
       texture,
     });
     return scene.render();
-  },
+  }
 
   async geoxor(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -192,7 +222,7 @@ export const commands3D = {
     });
 
     return scene.render();
-  },
+  }
 
   async helicopter(texture: Buffer) {
     const scene = await GeometryScene.create({
@@ -204,10 +234,10 @@ export const commands3D = {
     });
 
     return scene.render();
-  },
-};
+  }
+}
 
-export abstract class SceneProcessor {
+abstract class SceneProcessor {
   public camera: THREE.Camera;
   public scene: THREE.Scene;
   public renderer: THREE.WebGLRenderer;
@@ -241,7 +271,7 @@ export abstract class SceneProcessor {
    * Updates the scene to the new positions
    * @author Geoxor, Bluskript, Bustean
    */
-  protected abstract update(): Promise<void>|void;
+  protected abstract update(): Promise<void> | void;
 
   /**
    * Renders a webgl scene
@@ -272,7 +302,7 @@ export abstract class SceneProcessor {
  * Creates a texture that can also be animated
  * @author Bluskript & Geoxor
  */
-export class MediaMaterial {
+class MediaMaterial {
   public texture: THREE.Texture | undefined;
   public material: THREE.MeshStandardMaterial | undefined;
   public idx: number = 0;
@@ -342,7 +372,7 @@ export class MediaMaterial {
   }
 }
 
-export class GeometryScene extends SceneProcessor {
+class GeometryScene extends SceneProcessor {
   public sceneObject: THREE.Mesh | THREE.Object3D | undefined;
   public rotation: Coords;
   public geometry: THREE.BufferGeometry | THREE.Object3D;
@@ -414,4 +444,44 @@ export class GeometryScene extends SceneProcessor {
       this.scene.add(this.sceneObject);
     }
   }
+}
+
+async function getRGBAUintArray(image: Jimp) {
+  const texels = 4; /** Red Green Blue and Alpha */
+  const data = new Uint8Array(texels * image.bitmap.width * image.bitmap.height);
+  for (let y = 0; y < image.bitmap.height; y++) {
+    for (let x = 0; x < image.bitmap.width; x++) {
+      let color = image.getPixelColor(x, y);
+      let r = (color >> 24) & 255;
+      let g = (color >> 16) & 255;
+      let b = (color >> 8) & 255;
+      let a = (color >> 0) & 255;
+      const stride = texels * (x + y * image.bitmap.width);
+      data[stride] = r;
+      data[stride + 1] = g;
+      data[stride + 2] = b;
+      data[stride + 3] = a;
+    }
+  }
+  return data;
+}
+
+async function encodeFramesToGif(
+  frames: Uint8ClampedArray[] | Uint8Array[],
+  width: number,
+  height: number,
+  delay: number
+) {
+  const gif = gifenc.GIFEncoder();
+  const palette = gifenc.quantize(frames[0], 256);
+  const bar = logger.progress("Encoding  - ", frames.length);
+  for (let i = 0; i < frames.length; i++) {
+    const frame = frames[i];
+    const idx = gifenc.applyPalette(frame, palette);
+    gif.writeFrame(idx, width, height, { transparent: true, delay, palette });
+    logger.setProgressValue(bar, i / frames.length);
+  }
+
+  gif.finish();
+  return Buffer.from(gif.bytes());
 }

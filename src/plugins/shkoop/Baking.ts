@@ -53,7 +53,7 @@ class Bake extends AbstractCommand {
 class Baking extends AbstractPlugin {
   public get pluginData(): PluginData {
     return {
-      name: "@shkoop/Baking",
+      name: "@shkoop/baking",
       version: "1.0.0",
       commands: [Bake],
     };

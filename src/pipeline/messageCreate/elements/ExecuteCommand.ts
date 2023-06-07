@@ -1,9 +1,9 @@
-import { DiscordAPIError, EmbedBuilder, Message, TextBasedChannel } from "discord.js";
+import { DiscordAPIError, EmbedBuilder, Message, TextBasedChannel, codeBlock } from "discord.js";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
 import { logger } from "../../../naoko/Logger";
 import { singleton } from "@triptyk/tsyringe";
-import { CommandExecuteResponse, IMessage } from "../../../types";
+import { CommandExecuteResponse } from "../../../types";
 
 @singleton()
 export default class ExecuteCommand extends AbstractPipelineElement {
@@ -60,6 +60,9 @@ export default class ExecuteCommand extends AbstractPipelineElement {
     }
 
     try {
+      if (result instanceof EmbedBuilder) {
+        result = { embeds: [result] };
+      }
       await message.reply(result);
     } catch (error) {
       if ((error as DiscordAPIError).code === 500) {
@@ -68,7 +71,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
         })
         return false;
       }
-      await message.reply('```' + error + '```');
+      await message.reply(codeBlock(String(error)));
       return false;
     }
 

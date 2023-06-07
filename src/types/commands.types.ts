@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { EmbedBuilder } from "discord.js";
 import { DatabaseUser } from "./database.types";
 import { COMMAND_CATEGORIES_RAW } from "../constants";
 
@@ -8,7 +8,7 @@ export interface IMessage extends Discord.Message {
   databaseUser: DatabaseUser;
 }
 
-export type CommandExecuteResponse = string | Discord.MessageReplyOptions | void
+export type CommandExecuteResponse = string | Discord.MessageReplyOptions | EmbedBuilder | void
 
 export type CommandExecute = (
   message: IMessage

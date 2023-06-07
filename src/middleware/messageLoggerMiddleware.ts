@@ -1,6 +1,5 @@
-import Discord from "discord.js";
+import Discord, { codeBlock } from "discord.js";
 import { GEOXOR_GUILD_ID, SHAII_ID } from "../constants";
-import { markdown } from "../logic/logic";
 import { config } from "../naoko/Config";
 import { logger } from "../naoko/Logger";
 
@@ -21,8 +20,8 @@ export function logEdit(
     .setThumbnail(`${oldMessage.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${oldMessage.author?.id}>` },
-      { name: `From`, value: markdown(oldMessage.content?.substring(0, 480)) },
-      { name: `To`, value: markdown(newMessage.content?.substring(0, 480)) },
+      { name: `From`, value: codeBlock(oldMessage.content?.substring(0, 480) || 'N/A') },
+      { name: `To`, value: codeBlock(newMessage.content?.substring(0, 480) || 'N/A') },
       {
         name: `Link`,
         value: `https://canary.discord.com/channels/${newMessage.guildId}/${newMessage.channelId}/${newMessage.id}`,
@@ -51,7 +50,7 @@ export function logDelete(
     .setThumbnail(`${message.author?.avatarURL()}`)
     .addFields(
       { name: `Message Author`, value: `<@${message.author?.id}>` },
-      { name: `Message Content`, value: markdown(message.content?.substring(0, 960)) },
+      { name: `Message Content`, value: codeBlock(message.content?.substring(0, 960) || 'N/A') },
       {
         name: `Link`,
         value: `https://canary.discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`,

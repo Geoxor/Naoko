@@ -39,7 +39,7 @@ class AmethystInfoCommand extends AbstractCommand {
 class Amethyst extends AbstractPlugin {
   public get pluginData(): PluginData {
     return {
-      name: "@otiskujawa/Amethyst",
+      name: "@otiskujawa/amethyst",
       version: "1.0.0",
       commands: [AmethystInfoCommand],
     }

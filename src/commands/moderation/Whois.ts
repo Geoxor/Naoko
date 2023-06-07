@@ -1,7 +1,7 @@
-import Discord, { Client, Message, User } from "discord.js";
+import Discord, { Client, Message, User, codeBlock } from "discord.js";
 import packageJson from "../../../package.json" assert { type: 'json' };
 import command from '../../decorators/command';
-import { markdown, msToFullTime, timeSince } from "../../logic/logic";
+import { msToFullTime, timeSince } from "../../logic/logic";
 import { User as UserDb } from "../../naoko/Database";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import { ActionHistory, CommandExecuteResponse, History } from "../../types";
@@ -85,22 +85,34 @@ class WhoIs extends AbstractCommand {
   actionHistoryToField(history: ActionHistory[], client: Client): string | undefined {
     if (history.length === 0) return;
 
-    const historyString = history.reduce((acc, action) => {
+    let historyString = '';
+    for (const action of history) {
       const actor = client.users.cache.get(action.casted_by)!.username || action.casted_by;
-      return `${timeSince(action.timestamp)} ago - ${action.reason || "No reason given"} - by ${actor}\n${acc}`;
-    }, "");
+      const newHistoryString = `${timeSince(action.timestamp)} ago - ${action.reason || "No reason given"} - by ${actor}`;
+      if ((newHistoryString + historyString).length > 500) {
+        break;
+      }
 
-    return markdown(historyString.substring(0, 512));
+      historyString += "\n" + newHistoryString;
+    }
+
+    return codeBlock(historyString);
   }
 
   historyToField(history: History[]): string | undefined {
     if (history.length === 0) return;
 
-    const historyString = history.reduce((acc, action) => {
-      return `${timeSince(action.timestamp)} ago - ${action.value.replace(/`/g, "\\`")}\n${acc}`;
-    }, "");
+    let historyString = '';
+    for (const action of history) {
+      const newHistoryString = `${timeSince(action.timestamp)} ago - ${action.value.replace(/`/g, "\\`")}`;
+      if ((newHistoryString + historyString).length > 500) {
+        break;
+      }
 
-    return markdown(historyString.substring(0, 512));
+      historyString += "\n" + newHistoryString;
+    }
+
+    return codeBlock(historyString);
   }
 
   get commandData(): CommandData {
