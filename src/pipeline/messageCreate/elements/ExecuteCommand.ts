@@ -1,12 +1,18 @@
 import { DiscordAPIError, EmbedBuilder, Message, TextBasedChannel, codeBlock } from "discord.js";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
-import { logger } from "../../../naoko/Logger";
 import { singleton } from "@triptyk/tsyringe";
 import { CommandExecuteResponse } from "../../../types";
+import Logger from "../../../naoko/Logger";
 
 @singleton()
 export default class ExecuteCommand extends AbstractPipelineElement {
+  constructor(
+    private logger: Logger,
+  ) {
+    super();
+  }
+
   private typingLocks: Map<string, NodeJS.Timer> = new Map()
 
   async execute(payload: MessageCreatePayload): Promise<boolean> {
@@ -34,7 +40,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
     try {
       result = await command.execute(payload);
     } catch (error: any) {
-      logger.error(`Command ${commandData.name} failed to execute with error: ${error}`);
+      this.logger.error(`Command ${commandData.name} failed to execute with error: ${error}`);
       console.error(error);
       await message.reply({
         embeds: [
@@ -50,7 +56,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
     await this.clearTyping(processingMessage, typingLock);
 
     const executionTime = Date.now() - timeStart;
-    logger.print(
+    this.logger.print(
       `${executionTime}ms - Command: ${commandData.name} - User: ${message.author.username} - Guild: ${message.guild?.name || "dm"}`
     );
 
@@ -97,7 +103,9 @@ export default class ExecuteCommand extends AbstractPipelineElement {
       return;
     }
 
-    await processingMessage.delete();
+    try {
+      await processingMessage.delete();
+    } catch {}
 
     const globalLock = this.typingLocks.get(processingMessage.channel.id);
     if (globalLock === typingLock) {

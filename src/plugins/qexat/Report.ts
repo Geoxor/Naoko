@@ -1,11 +1,13 @@
 import Discord from "discord.js";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
-import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
 import { CommandExecuteResponse } from "../../types";
 import { GEOXOR_GUILD_ID, GEOXOR_STAFF_CHANNEL_ID } from "../../constants";
 import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
+import { singleton } from "@triptyk/tsyringe";
 
+@singleton()
 class ReportCommand extends AbstractCommand {
   public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
     const message = payload.get('message');
@@ -50,7 +52,7 @@ class ReportCommand extends AbstractCommand {
     return {
       name: "report",
       description: "Report an user",
-      usage: "report <user_id> <reason>",
+      usage: "<user_id> <reason>",
       category: "UTILITY",
     }
   }

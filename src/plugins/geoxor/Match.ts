@@ -1,19 +1,19 @@
-import Discord from "discord.js";
-import { CommandExecuteResponse } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
-import command from '../../decorators/command';
+import { User } from "discord.js";
+import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
+import AbstractPlugin, { PluginData } from "../AbstractPlugin";
+import { singleton } from "@triptyk/tsyringe";
 
-@command()
-class Match extends AbstractCommand {
+@singleton()
+class MatchCommand extends AbstractCommand {
   execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
     const message = payload.get('message');
 
     if (!message.mentions.members?.size) return "Tag the person you want to match with!";
 
-    let matcher: Discord.User;
-    let matchee: Discord.User;
-
+    let matcher, matchee: User;
     // Check if they mentions 2 users or not
     if (message.mentions.users?.size >= 2) {
       matcher = message.mentions.users.at(0)!;
@@ -43,8 +43,19 @@ class Match extends AbstractCommand {
     return {
       name: "match",
       category: "FUN",
-      usage: "match <@user | user_id> ?<@user | user_id>",
+      usage: "<@user> [<@user>]",
       description: "See how much you and another user match!",
     }
+  }
+}
+
+@plugin()
+class Match extends AbstractPlugin {
+  public get pluginData(): PluginData {
+    return {
+      name: '@geoxor/match',
+      version: '1.0.0',
+      commands: [MatchCommand],
+    };
   }
 }

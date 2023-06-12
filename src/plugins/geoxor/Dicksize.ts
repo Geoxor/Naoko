@@ -1,11 +1,11 @@
 import { Readable } from "stream";
-import command from '../../decorators/command';
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
+import AbstractPlugin, { PluginData } from "../AbstractPlugin";
+import plugin from "../../decorators/plugin";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
 
-@command()
-class DickSize extends AbstractCommand {
+class DickSizeCommand extends AbstractCommand {
   execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
     const message = payload.get('message');
 
@@ -46,12 +46,10 @@ class DickSize extends AbstractCommand {
       };
     }
 
-    return `
-        8${"=".repeat(dickSize)}D ${dickSize}cm ${challenger}
-        8${"=".repeat(enemyDickSize)}D ${enemyDickSize}cm ${target}
-        diff: ${Math.abs(dickSize - enemyDickSize)}cm
-        ${resultLastLine}
-      `;
+    return `8${"=".repeat(dickSize)}D ${dickSize}cm ${challenger}\n` +
+        `8${"=".repeat(enemyDickSize)}D ${enemyDickSize}cm ${target}\n` +
+        `diff: ${Math.abs(dickSize - enemyDickSize)}cm\n` +
+        `${resultLastLine}`;
   }
 
   private calculateSingleDickSize() {
@@ -77,8 +75,19 @@ class DickSize extends AbstractCommand {
     return {
       name: "dicksize",
       category: "FUN",
-      usage: "dicksize ?<@user | user_id>",
+      usage: "[<@user>]",
       description: "Tells you your dicksize or battle against someone else's dicksize!",
+    }
+  }
+}
+
+@plugin()
+class DickSize extends AbstractPlugin {
+  public get pluginData(): PluginData {
+    return {
+      name: "@geoxor/dick-size",
+      version: "1.0.0",
+      commands: [DickSizeCommand],
     }
   }
 }

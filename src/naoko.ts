@@ -5,12 +5,14 @@ console.clear();
 
 import chalk from "chalk";
 import packageJson from "../package.json" assert { type: 'json' };
-import { logger } from "./naoko/Logger";
 import Naoko from './naoko/Naoko.js';
 import { container } from '@triptyk/tsyringe';
 import { fileURLToPath } from 'node:url';
 import "./naoko/Database";
 import { glob } from 'glob';
+import Logger from './naoko/Logger';
+
+const logger = container.resolve(Logger);
 
 // Print log
 logger.print(

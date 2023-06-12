@@ -1,10 +1,12 @@
 import Discord from "discord.js";
-import { CommandExecuteResponse, IMessage } from "../../types";
+import { CommandExecuteResponse } from "../../types";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
-import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
 import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
+import { singleton } from "@triptyk/tsyringe";
 
+@singleton()
 class AmethystInfoCommand extends AbstractCommand {
   public execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
     const message = payload.get('message');
@@ -21,15 +23,14 @@ class AmethystInfoCommand extends AbstractCommand {
       .addFields({ name: "GitHub", value: "https://github.com/Geoxor/amethyst" })
       .setImage("https://camo.githubusercontent.com/1dfc85269fc7d15c0cd1bb5cc466fc596c55fe9423aad87c725460711ef7da01/68747470733a2f2f6d656469612e646973636f72646170702e6e65742f6174746163686d656e74732f3636373436343433313536323635333730362f313032353733323035363132343233353832362f69636f6e2e706e673f77696474683d313932266865696768743d313932");
 
-    return { embeds: [embed] };
+    return embed;
   }
 
   public get commandData(): CommandData {
     return {
       name: "amethyst",
-      aliases: ["amethyst", "ame"],
       category: "UTILITY",
-      usage: "amethyst",
+      usage: "",
       description: "Create an embed with information about amethyst",
     }
   }

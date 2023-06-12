@@ -1,8 +1,8 @@
 import plugin from "../../decorators/plugin";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
-import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
 import { CommandExecuteResponse } from "../../types";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 class AvatarCommand extends AbstractCommand {
   public execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
@@ -23,7 +23,7 @@ class AvatarCommand extends AbstractCommand {
     return {
       name: "avatar",
       category: "UTILITY",
-      usage: "avatar <@user | user_id>",
+      usage: "[<@user> | <user-id>]",
       description: "Get the avatar of a user or yours",
     };
   }

@@ -1,10 +1,12 @@
-import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
+import { singleton } from "@triptyk/tsyringe";
 import plugin from "../../decorators/plugin";
-import { randomChoice } from "../../logic/logic";
-import AbstractPlugin, { PluginData } from "../AbstractPlugin";
-import { IMessage, CommandExecuteResponse } from "../../types";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import CommonUtils from "../../service/CommonUtils";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
+import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 
+@singleton()
 class Bake extends AbstractCommand {
   private static CAKES = [
     "https://cdn.discordapp.com/attachments/634839969822801998/964236192646320148/cake_1.jpg",
@@ -21,6 +23,12 @@ class Bake extends AbstractCommand {
     "https://cdn.discordapp.com/attachments/634839969822801998/964236237252743198/apple.jpg",
     "https://cdn.discordapp.com/attachments/634839969822801998/964236237554745425/beryy.jpeg",
   ];
+  
+  constructor(
+    private commonUtils: CommonUtils,
+  ) {
+    super();
+  }
 
   public execute(payload: MessageCreatePayload): CommandExecuteResponse {
     const arg = payload.get('args')[0];
@@ -31,9 +39,9 @@ class Bake extends AbstractCommand {
     // the baked goods + easter eggs
     switch (arg) {
       case "cake":
-        return `${randomChoice(Bake.CAKES)}`;
+        return `${this.commonUtils.randomChoice(Bake.CAKES)}`;
       case "pie":
-        return `${randomChoice(Bake.PIES)}`;
+        return `${this.commonUtils.randomChoice(Bake.PIES)}`;
       case "OFC":
         return "https://cdn.discordapp.com/attachments/963948583806205962/963971146074705920/shit.png";
     }
@@ -43,7 +51,7 @@ class Bake extends AbstractCommand {
     return {
       name: "bake",
       category: "FUN",
-      usage: "bake <what-to-bake>",
+      usage: "<what-to-bake>",
       description: "Bake something",
     };
   }

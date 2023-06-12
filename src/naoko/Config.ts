@@ -1,5 +1,4 @@
 import fs from "fs";
-import { logger } from "./Logger";
 import { fileURLToPath } from "node:url";
 
 interface IConfig {
@@ -126,7 +125,7 @@ class Config {
       this.validateConfig(conf);
       this.config = conf;
     } catch (e: any) {
-      logger.error(e);
+      console.error(e);
     }
   }
 }

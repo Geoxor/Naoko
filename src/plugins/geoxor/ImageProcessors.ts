@@ -1,16 +1,16 @@
 import { AttachmentBuilder, Awaitable } from "discord.js";
 import { fileTypeFromBuffer } from "file-type";
-import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../types";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import ImageProcessorService from "../../service/ImageProcessorService";
 import Jimp from "jimp";
-import { logger } from "../../naoko/Logger";
 import ThreeDProcessorService from "../../service/3dProcessorService";
 import ImageUtilService from "../../service/ImageUtilService";
 import plugin from "../../decorators/plugin";
 import { singleton } from "@triptyk/tsyringe";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
+import Logger from "../../naoko/Logger";
 
 @singleton()
 class Transform extends AbstractCommand {
@@ -18,6 +18,7 @@ class Transform extends AbstractCommand {
     private messageImageParser: ImageUtilService,
     private imageProcessorService: ImageProcessorService,
     private threeDProcessorService: ThreeDProcessorService,
+    private logger: Logger,
   ) {
     super();
   }
@@ -42,12 +43,12 @@ class Transform extends AbstractCommand {
     };
 
     const functions = pipeline.map((name) => allImageProcessors[name]).filter((processor) => !!processor);
-    const bar = logger.progress("Pipelines - ", functions.length);
+    const bar = this.logger.progress("Pipelines - ", functions.length);
     for (let i = 0; i < functions.length; i++) {
       const start = Date.now();
       const method = functions[i];
       fuckedBuffer = await method(fuckedBuffer);
-      logger.setProgressValue(bar, i / functions.length);
+      this.logger.setProgressValue(bar, i / functions.length);
 
       // This is to avoid exp thread blocking
       if (Date.now() - start > 10000) return fuckedBuffer;
@@ -58,9 +59,9 @@ class Transform extends AbstractCommand {
   public get commandData(): CommandData {
     return {
       name: "transform",
-      usage: "transform <...processor_names> <image | url | reply | user_id>",
+      usage: "<processor_name>... [(<url> | <user_id>)]",
       category: "IMAGE_PROCESSORS",
-      description: "Transform an image with a pipeline",
+      description: "Transform an image with a pipeline." + ImageProcessors.IMAGE_DETECTION_INFO,
       requiresProcessing: true,
     }
   }
@@ -77,6 +78,7 @@ class Stack extends AbstractCommand {
   constructor(
     private messageImageParser: ImageUtilService,
     private imageProcessors: ImageProcessorService,
+    private logger: Logger,
   ) {
     super();
   }
@@ -111,7 +113,7 @@ class Stack extends AbstractCommand {
     const bufferFrames: Buffer[] = [buffer];
     const renderedFrames: Uint8Array[] = [firstFrame];
 
-    const bar = logger.progress("Stacks - ", iterations);
+    const bar = this.logger.progress("Stacks - ", iterations);
 
     for (let i = 0; i < iterations; i++) {
       // Iterate through the frames one frame behind
@@ -124,7 +126,7 @@ class Stack extends AbstractCommand {
       // of the first starting frame
       renderedFrames[i + 1] = await this.messageImageParser.getRGBAUintArray(await Jimp.read(bufferFrames[i]));
 
-      logger.setProgressValue(bar, i / iterations);
+      this.logger.setProgressValue(bar, i / iterations);
     }
 
     return await this.messageImageParser.encodeFramesToGif(renderedFrames, width, height, ~~(1000 / 60));
@@ -134,8 +136,9 @@ class Stack extends AbstractCommand {
     return {
       name: "stack",
       category: "IMAGE_PROCESSORS",
-      usage: `stack <processor_name> <image | url | reply | user_id>`,
-      description: "Stack an image processor and make a gif out of it",
+      usage: `<processor_name> [(<url> | <user_id>)]`,
+      description: "Stack an image processor and make a gif out of it." + ImageProcessors.IMAGE_DETECTION_INFO,
+
       requiresProcessing: true,
     }
   }
@@ -181,9 +184,9 @@ class SingleImageProcessor extends AbstractCommand {
 
     return {
       name: processorNames.shift()!,
-      usage: `<image | url | reply | user_id>`,
+      usage: `[(<url> | <user_id>)]`,
       category: "IMAGE_PROCESSORS",
-      description: 'Edit an image using a processor function',
+      description: 'Edit an image using a processor function. ' + ImageProcessors.IMAGE_DETECTION_INFO,
       requiresProcessing: true,
       aliases: processorNames,
     }
@@ -192,6 +195,9 @@ class SingleImageProcessor extends AbstractCommand {
 
 @plugin()
 class ImageProcessors extends AbstractPlugin {
+  public static readonly IMAGE_DETECTION_INFO = 'The image will automaticly detected from replied message,' +
+                                                ' attached image, sticker, emoji, user avatar or url';
+
   public get pluginData(): PluginData {
     return {
       name: '@geoxor/image-processors',

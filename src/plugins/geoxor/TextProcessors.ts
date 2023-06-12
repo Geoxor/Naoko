@@ -1,11 +1,11 @@
 import { Readable } from "stream";
-import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
 import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import TextProcessingService from "../../service/TextProcessingService";
 import { CommandExecuteResponse } from "../../types";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import { singleton } from "@triptyk/tsyringe";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 @singleton()
 class SingleTextProcessors extends AbstractCommand {
@@ -68,7 +68,7 @@ class SingleTextProcessors extends AbstractCommand {
       name: "uwufy",
       aliases: ['brainfuck', 'britify', 'spongify'],
       category: "TEXT_PROCESSORS",
-      usage: "uwufy <sentence>",
+      usage: "<sentence>...",
       description: "Transforms your sentence",
     }
   }
@@ -108,7 +108,7 @@ class Textify extends AbstractCommand {
   get commandData(): CommandData {
     return {
       name: "textify",
-      usage: "textify <...processor_names> <text>",
+      usage: "<processor-name>... <text>",
       category: "TEXT_PROCESSORS",
       description: "Transform a sentence with a pipeline",
       requiresProcessing: true,

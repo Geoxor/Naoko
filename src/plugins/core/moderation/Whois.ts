@@ -1,14 +1,19 @@
 import Discord, { Client, Message, User, codeBlock } from "discord.js";
-import packageJson from "../../../package.json" assert { type: 'json' };
-import command from '../../decorators/command';
-import { msToFullTime, timeSince } from "../../logic/logic";
-import { User as UserDb } from "../../naoko/Database";
-import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
-import { ActionHistory, CommandExecuteResponse, History } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
+import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse, ActionHistory, History } from "../../../types";
+import Naoko from "../../../naoko/Naoko";
+import AbstractCommand, { CommandData } from "../../AbstractCommand";
+import { User as UserDb } from '../../../naoko/Database';
+import TimeFormattingService from "../../../service/TimeFormattingService";
+import { singleton } from "@triptyk/tsyringe";
 
-@command()
-class WhoIs extends AbstractCommand {
+@singleton()
+export class WhoIs extends AbstractCommand {
+  constructor(
+    private timeFormatter: TimeFormattingService,
+  ) {
+    super();
+  }
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
     const message = payload.get('message');
     const args = payload.get('args');
@@ -30,8 +35,8 @@ class WhoIs extends AbstractCommand {
     }
 
     const embed = new Discord.EmbedBuilder()
-      .setAuthor({ name: `Naoko v${packageJson.version}`, iconURL: message.client.user?.displayAvatarURL() })
-      .setTitle(`Who is: ${user.username}${discriminator}`)
+      .setAuthor({ name: `Naoko v${Naoko.version}`, iconURL: message.client.user?.displayAvatarURL() })
+      .setTitle(`Who is: ${user.username}${discriminator}?`)
       .setDescription(user.toString())
       .setColor("#FF00B6")
       .setThumbnail(user.avatarURL() || user.defaultAvatarURL)
@@ -43,13 +48,21 @@ class WhoIs extends AbstractCommand {
     const fields: Discord.EmbedField[] = [];
     fields.push({ name: "ID:", value: `${user.id}`, inline: false });
     fields.push({ name: "Account created:", value: user.createdAt.toUTCString(), inline: false });
-    fields.push({ name: "Account age:", value: msToFullTime(Date.now() - user.createdTimestamp), inline: false });
+    fields.push({ 
+      name: "Account age:",
+      value: this.timeFormatter.msToFullTime(Date.now() - user.createdTimestamp),
+      inline: false,
+    });
 
     try {
       const member = await message.guild?.members.fetch(user);
       if (member && member.joinedTimestamp && member.joinedAt) {
         fields.push({ name: "Server joined:", value: member.joinedAt.toUTCString(), inline: false });
-        fields.push({ name: "Server join age:", value: msToFullTime(Date.now() - member.joinedTimestamp), inline: false });
+        fields.push({ 
+          name: "Server join age:",
+          value: this.timeFormatter.msToFullTime(Date.now() - member.joinedTimestamp),
+          inline: false,
+        });
       }
     } catch {
       fields.push({ name: "Server joined:", value: "User is not in this server", inline: false });
@@ -88,7 +101,7 @@ class WhoIs extends AbstractCommand {
     let historyString = '';
     for (const action of history) {
       const actor = client.users.cache.get(action.casted_by)!.username || action.casted_by;
-      const newHistoryString = `${timeSince(action.timestamp)} ago - ${action.reason || "No reason given"} - by ${actor}`;
+      const newHistoryString = `${this.timeFormatter.timeSince(action.timestamp)} ago - ${action.reason || "No reason given"} - by ${actor}`;
       if ((newHistoryString + historyString).length > 500) {
         break;
       }
@@ -104,7 +117,7 @@ class WhoIs extends AbstractCommand {
 
     let historyString = '';
     for (const action of history) {
-      const newHistoryString = `${timeSince(action.timestamp)} ago - ${action.value.replace(/`/g, "\\`")}`;
+      const newHistoryString = `${this.timeFormatter.timeSince(action.timestamp)} ago - ${action.value.replace(/`/g, "\\`")}`;
       if ((newHistoryString + historyString).length > 500) {
         break;
       }
@@ -119,9 +132,8 @@ class WhoIs extends AbstractCommand {
     return {
       name: "whois",
       category: "MODERATION",
-      aliases: ["who"],
-      usage: "whois <@user | user_id)>",
-      description: "Get information about a user",
+      usage: "[(<@user> | <user-id>)]",
+      description: "Show information about a user",
     }
   }
 }

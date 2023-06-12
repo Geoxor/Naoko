@@ -1,5 +1,5 @@
 import Discord from 'discord.js';
-import AbstractCommand from '../commands/AbstractCommand';
+import AbstractCommand from './AbstractCommand';
 
 type CommandConstructor<T = AbstractCommand> = {
   new (...args: any[]): T;

@@ -1,14 +1,20 @@
 import chalk from "chalk";
 import MultiProgress from "multi-progress";
 import quotes from "../assets/quotes.json" assert { type: 'json' };
-import { randomChoice } from "../logic/logic";
+import { singleton } from "@triptyk/tsyringe";
+import CommonUtils from "../service/CommonUtils";
 
 /**
  * Main logging wrapper that creates beautiful colors and emojis
  * for logging what the bot is currently doing
  * @author Geoxor
  */
-class Logger {
+@singleton()
+export default class Logger {
+  constructor(
+    private commonUtils: CommonUtils,
+  ) {}
+
   private emoji: string = "🌸";
   private color: string = "#FF90E0";
   private errorColor: string = "#FF0";
@@ -16,7 +22,7 @@ class Logger {
   public logHistory: string[] = [];
   public multiProgress: MultiProgress = new MultiProgress(process.stdout);
 
-  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${randomChoice(quotes)}\n`));
+  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${this.commonUtils.randomChoice(quotes)}\n`));
 
   protected pushToLogHistory(string: string) {
     if (this.logHistory.length > 20) this.logHistory.shift();
@@ -91,5 +97,3 @@ class Logger {
     return `${used.toFixed(2)}/${total.toFixed(2)}MB`;
   }
 }
-
-export const logger = new Logger();

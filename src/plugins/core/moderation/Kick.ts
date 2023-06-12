@@ -1,15 +1,14 @@
-import Discord from "discord.js";
-import { SHAII_LOGO } from "../../constants";
-import { User } from "../../naoko/Database";
-import { logger } from "../../naoko/Logger";
-import Naoko from "../../naoko/Naoko";
-import { CommandExecuteResponse, IMessage } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
-import command from '../../decorators/command';
-import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import Discord from 'discord.js';
+import { SHAII_LOGO } from "../../../constants";
+import { User } from '../../../naoko/Database';
+import Naoko from "../../../naoko/Naoko";
+import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../../types";
+import AbstractCommand, { CommandData } from '../../AbstractCommand';
+import { singleton } from '@triptyk/tsyringe';
 
-@command()
-class Kick extends AbstractCommand {
+@singleton()
+export class Kick extends AbstractCommand {
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
     const message = payload.get('message');
     const reason = payload.get('args').join(' ');
@@ -33,14 +32,13 @@ class Kick extends AbstractCommand {
     targetUser
       .send({ embeds: [embed] })
       .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`)
-        .then(() => setTimeout(() => message.delete()
-          .catch(), 5000)));
+        .then(() => setTimeout(() => message.delete().catch(), 5000)));
 
     // Kick him
     await targetUser.kick(reason);
 
     // Keep track of the kick
-    await User.kick(message.author.id, targetUser.id, reason).catch(() => logger.error("Kick database update failed"));
+    await User.kick(message.author.id, targetUser.id, reason);
 
     return { embeds: [embed] };
   }
@@ -48,7 +46,7 @@ class Kick extends AbstractCommand {
   get commandData(): CommandData {
     return {
       name: "kick",
-      usage: "kick <@user> <reason>",
+      usage: "<@user> <reason>",
       category: "MODERATION",
       description: "Kicks a user",
       permissions: ["KickMembers"],

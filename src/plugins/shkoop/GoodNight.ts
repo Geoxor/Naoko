@@ -1,16 +1,25 @@
 import Discord, { GuildMember, Message } from "discord.js";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import plugin from "../../decorators/plugin";
-import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
 import { CommandExecuteResponse } from "../../types";
 import { GEOXOR_GUILD_ID, MUTED_ROLE_ID, SHAII_LOGO } from "../../constants";
-import { durationToMilliseconds, msToFullTime } from "../../logic/logic";
-import { logger } from "../../naoko/Logger";
 import Naoko from "../../naoko/Naoko";
 import { User } from '../../naoko/Database';
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
+import Logger from "../../naoko/Logger";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
+import TimeFormattingService from "../../service/TimeFormattingService";
+import { singleton } from "@triptyk/tsyringe";
 
+@singleton()
 class GoodNightCommand extends AbstractCommand {
+  constructor(
+    private logger: Logger,
+    private timeFormatter: TimeFormattingService,
+  ) {
+    super();
+  }
+
   public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
     const message = payload.get('message');
     const args = payload.get('args');
@@ -26,10 +35,10 @@ class GoodNightCommand extends AbstractCommand {
     }
     const reason = args.slice(1).join(" ") || "No reason given";
 
-    let msDuration = durationToMilliseconds(duration);
+    let msDuration = this.timeFormatter.durationToMilliseconds(duration);
     if (parseInt(msDuration) > 1209600000) {
       (duration = "14d"), (msDuration = "1209600000");
-      logger.error("Duration entered is too big: it has been brought to 14 days");
+      this.logger.error("Duration entered is too big: it has been brought to 14 days");
     }
 
     // Get rekt
@@ -38,9 +47,7 @@ class GoodNightCommand extends AbstractCommand {
     await this.selfMute(targetUser);
 
     // Keep track of the mute
-    await User.mute(message.author.id, targetUser.id, duration, reason).catch(() =>
-      logger.error("Mute database update failed")
-    );
+    await User.mute(message.author.id, targetUser.id, duration, reason);
 
     // Send the embed
     return this.sendMuteEmbed(message, targetUser, msDuration, reason);
@@ -60,7 +67,7 @@ class GoodNightCommand extends AbstractCommand {
       .setTimestamp()
       .addFields([
         { name: 'Explanation', value: 'To be unmuted at any time, just dm the bot ~gm' },
-        { name: 'Duration', value: msToFullTime(parseInt(duration)), inline: true },
+        { name: 'Duration', value: this.timeFormatter.msToFullTime(parseInt(duration)), inline: true },
         { name: 'Reason', value: reason, inline: true },
       ]).setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
       .setColor("#FF0000");
@@ -85,6 +92,7 @@ class GoodNightCommand extends AbstractCommand {
   }
 }
 
+@singleton()
 class GoodMorningCommand extends AbstractCommand {
   public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
     const message = payload.get('message');
@@ -147,7 +155,7 @@ class GoodMorningCommand extends AbstractCommand {
     return {
       name: "gm",
       category: "UTILITY",
-      usage: "gm",
+      usage: "",
       description: "Unmute after using ~gn",
     };
   }

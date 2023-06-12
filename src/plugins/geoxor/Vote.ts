@@ -1,12 +1,14 @@
-import Discord from "discord.js";
+import Discord from 'discord.js';
 import { GEOXOR_GUILD_ID } from "../../constants";
-import command from '../../decorators/command';
+import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../types";
-import AbstractCommand, { CommandData } from '../AbstractCommand';
+import AbstractCommand, { CommandData } from "../AbstractCommand";
+import AbstractPlugin, { PluginData } from "../AbstractPlugin";
+import { singleton } from '@triptyk/tsyringe';
 
-@command()
-class Vote extends AbstractCommand {
+@singleton()
+class VoteCommand extends AbstractCommand {
   private static VOTE_TIME = 30000;
 
   private static DOWNVOTE_EMOJI_ID = "823666555123662888";
@@ -27,22 +29,22 @@ class Vote extends AbstractCommand {
       .setColor("#ff00b6")
       .setTitle(voteContext)
       .setAuthor({ name: `${message.author.username} asks...`, iconURL: message.author.avatarURL() || message.author.defaultAvatarURL })
-      .setFooter({ text: `Vote with the reactions bellow, results in ${Vote.VOTE_TIME / 1000} seconds` });
+      .setFooter({ text: `Vote with the reactions bellow, results in ${VoteCommand.VOTE_TIME / 1000} seconds` });
 
     // Check if were in the Geoxor guild because Emojis missing in other guilds
     const isGeoxorGuild = message.guild?.id === GEOXOR_GUILD_ID;
 
     const vote = await message.channel.send({ embeds: [embed] });
-    const collector = vote.createReactionCollector({ time: Vote.VOTE_TIME });
+    const collector = vote.createReactionCollector({ time: VoteCommand.VOTE_TIME });
     if (isGeoxorGuild) {
       await Promise.all([
-        vote.react(Vote.DOWNVOTE_EMOJI_ID),
-        vote.react(Vote.UPVOTE_EMOJI_ID),
+        vote.react(VoteCommand.DOWNVOTE_EMOJI_ID),
+        vote.react(VoteCommand.UPVOTE_EMOJI_ID),
       ]);
     } else {
       await Promise.all([
-        vote.react(Vote.DOWNVOTE_EMOJI_ALT),
-        vote.react(Vote.UPVOTE_EMOJI_ALT),
+        vote.react(VoteCommand.DOWNVOTE_EMOJI_ALT),
+        vote.react(VoteCommand.UPVOTE_EMOJI_ALT),
       ]);
     }
 
@@ -51,11 +53,11 @@ class Vote extends AbstractCommand {
     collector.on("end", (collected) => {
       let downvotes, upvotes;
       if (isGeoxorGuild) {
-        downvotes = collected.get(Vote.DOWNVOTE_EMOJI_ID);
-        upvotes = collected.get(Vote.UPVOTE_EMOJI_ID);
+        downvotes = collected.get(VoteCommand.DOWNVOTE_EMOJI_ID);
+        upvotes = collected.get(VoteCommand.UPVOTE_EMOJI_ID);
       } else {
-        downvotes = collected.get(Vote.DOWNVOTE_EMOJI_ALT);
-        upvotes = collected.get(Vote.UPVOTE_EMOJI_ALT);
+        downvotes = collected.get(VoteCommand.DOWNVOTE_EMOJI_ALT);
+        upvotes = collected.get(VoteCommand.UPVOTE_EMOJI_ALT);
       }
 
       if (downvotes && upvotes) {
@@ -71,17 +73,28 @@ class Vote extends AbstractCommand {
 
   private reactionFilter(reaction: Discord.MessageReaction, isGeoxorGuild: boolean): boolean {
     if (isGeoxorGuild) {
-      return reaction.emoji.id === Vote.DOWNVOTE_EMOJI_ID || reaction.emoji.id === Vote.UPVOTE_EMOJI_ID;
+      return reaction.emoji.id === VoteCommand.DOWNVOTE_EMOJI_ID || reaction.emoji.id === VoteCommand.UPVOTE_EMOJI_ID;
     }
-    return reaction.emoji.name === Vote.DOWNVOTE_EMOJI_ALT || reaction.emoji.name === Vote.UPVOTE_EMOJI_ALT;
+    return reaction.emoji.name === VoteCommand.DOWNVOTE_EMOJI_ALT || reaction.emoji.name === VoteCommand.UPVOTE_EMOJI_ALT;
   }
 
   get commandData(): CommandData {
     return {
       name: "vote",
       category: "FUN",
-      usage: "vote <topic>",
+      usage: "<topic>",
       description: "Creates a vote",
+    }
+  }
+}
+
+@plugin()
+class Vote extends AbstractPlugin {
+  public get pluginData(): PluginData {
+    return {
+      name: '@geoxor/vote',
+      version: "1.0.0",
+      commands: [VoteCommand],
     }
   }
 }

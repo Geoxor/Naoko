@@ -1,11 +1,11 @@
 import { singleton } from "@triptyk/tsyringe";
-import AbstractCommand, { CommandData } from "../../commands/AbstractCommand";
 import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../types";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import AnimeService from "../../service/AnimeService";
 import { EmbedBuilder } from "discord.js";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 @singleton()
 class AnimeSearch extends AbstractCommand {
@@ -16,11 +16,14 @@ class AnimeSearch extends AbstractCommand {
   }
 
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const args = payload.get('args');
+    const arg = payload.get('args').join(" ");
+    if (!arg) {
+      return "What are you looking for?";
+    }
 
     let animeMeta;
     try {
-      animeMeta = await this.animeService.anilistSearch(args.join(" "));
+      animeMeta = await this.animeService.anilistSearch(arg);
     } catch (error: any) {
       return error.response?.data?.error || error.response?.statusText || "Couldn't find anime..";
     }
@@ -45,7 +48,7 @@ class AnimeSearch extends AbstractCommand {
     return {
       name: "anime",
       category: "FUN",
-      usage: "anime <search_string>",
+      usage: "<search_string>",
       description: "Looks up an anime on Anilist",
       requiresProcessing: true,
     }
@@ -97,7 +100,7 @@ class Trace extends AbstractCommand {
     return {
       name: "trace",
       category: "FUN",
-      usage: "trace <image_url>",
+      usage: "<image_url>",
       description: "Attempts to find what anime a screenshot or GIF is from",
       requiresProcessing: true,
     };

@@ -6,12 +6,13 @@ import { createCanvas, NodeCanvasElement } from "node-canvas-webgl";
 import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json" assert { type: 'json' };
 import cache from "../naoko/Cache";
-import { logger } from "../naoko/Logger";
 import { Coords, GeometrySceneOptions } from "../types";
+import { singleton } from '@triptyk/tsyringe';
+import { Awaitable } from 'discord.js';
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import gifenc from "gifenc";
-import { Awaitable } from 'discord.js';
 
+@singleton()
 export default class ThreeDProcessorService {
   private processors: Record<string, (buffer: Buffer) => Awaitable<Buffer>>;
 
@@ -251,9 +252,6 @@ abstract class SceneProcessor {
     public fps: number = 25,
     shading: boolean = false
   ) {
-    this.width = width;
-    this.height = height;
-    this.fps = fps;
     this.canvas = createCanvas(this.width, this.height);
     this.scene = new THREE.Scene();
     this.light = new THREE.AmbientLight(shading ? 0xaaaaaa : 0xffffff);
@@ -280,13 +278,11 @@ abstract class SceneProcessor {
   public async render() {
     const frameCount = 5 * this.fps;
     const renderedFrames: ImageData[] = [];
-    const bar = logger.progress("Rendering - ", frameCount);
 
     for (let i = 0; i < frameCount; i++) {
       await this.update();
       this.renderer.render(this.scene, this.camera);
       renderedFrames.push((this.canvas.__ctx__ as CanvasRenderingContext2D).getImageData(0, 0, this.width, this.height));
-      logger.setProgressValue(bar, i / frameCount);
     }
 
     return await encodeFramesToGif(
@@ -374,28 +370,24 @@ class MediaMaterial {
 
 class GeometryScene extends SceneProcessor {
   public sceneObject: THREE.Mesh | THREE.Object3D | undefined;
-  public rotation: Coords;
-  public geometry: THREE.BufferGeometry | THREE.Object3D;
   public media: MediaMaterial | undefined;
 
   private constructor(
-    geometry: THREE.BufferGeometry | THREE.Object3D,
-    rotation: Coords,
+    public geometry: THREE.BufferGeometry | THREE.Object3D,
+    public rotation: Coords,
     width?: number,
     height?: number,
     fps?: number,
     shading: boolean = false
   ) {
     super(width, height, fps, shading);
-    this.geometry = geometry;
-    this.rotation = rotation;
   }
 
   /**
    * Updates the scene for the next tick
    */
   protected async update() {
-    if (!this.sceneObject) return logger.error("Returning");
+    if (!this.sceneObject) return;
     this.sceneObject.rotation.x += this.rotation.x ?? 0.05;
     this.sceneObject.rotation.y += this.rotation.y ?? 0.05;
     this.sceneObject.rotation.z += this.rotation.z ?? 0.0;
@@ -474,12 +466,10 @@ async function encodeFramesToGif(
 ) {
   const gif = gifenc.GIFEncoder();
   const palette = gifenc.quantize(frames[0], 256);
-  const bar = logger.progress("Encoding  - ", frames.length);
   for (let i = 0; i < frames.length; i++) {
     const frame = frames[i];
     const idx = gifenc.applyPalette(frame, palette);
     gif.writeFrame(idx, width, height, { transparent: true, delay, palette });
-    logger.setProgressValue(bar, i / frames.length);
   }
 
   gif.finish();

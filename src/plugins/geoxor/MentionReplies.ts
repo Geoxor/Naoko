@@ -1,12 +1,18 @@
 import plugin from "../../decorators/plugin";
 import { GEOXOR_GENERAL_CHANNEL_ID } from "../../constants";
-import { randomChoice } from "../../logic/logic";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import answers from "./mention-replies-answers.json" assert { type: 'json' };
 import Discord from 'discord.js';
+import CommonUtils from "../../service/CommonUtils";
 
 @plugin()
 class MentionReplies extends AbstractPlugin {
+  constructor(
+    private commonUtils: CommonUtils,
+  ) {
+    super();
+  }
+
   public get pluginData(): PluginData {
     return {
       name: "@geoxor/mention-replies",
@@ -28,7 +34,6 @@ class MentionReplies extends AbstractPlugin {
 
     message.content.trim() === `<@${naokoId}>`
       ? await message.reply("what tf do you want") // Reply with this when they purely ping her with no question
-      : await message.reply(randomChoice(answers))
+      : await message.reply(this.commonUtils.randomChoice(answers))
   }
 }
-

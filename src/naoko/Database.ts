@@ -2,10 +2,8 @@ import Discord from "discord.js";
 import mongoose from "mongoose";
 import { ActionHistory, HistoryTypes, IBattleUserRewards, IUser } from "../types";
 import { config } from "./Config";
-import { logger } from "./Logger";
 mongoose
   .connect(config.mongo)
-  .then(() => logger.print("MongoDB Connected"))
   .catch((err: any) => console.error("MongoDB Connection Error:", err));
 const { Schema } = mongoose;
 
@@ -107,14 +105,14 @@ schema.statics.mute = async function (
 
   mutee.mute_history.push(mute);
 
-  return mutee.save().catch((err: any) => logger.error(err));
+  return mutee.save();
 };
 
 schema.statics.unmute = async function (unmuter_id: string, unmutee_id: string, reason: string = "No reason given") {
   const unmutee = await User.findOne({ discord_id: unmutee_id });
   if (!unmutee) return;
 
-  return unmutee.save().catch((err: any) => logger.error(err));
+  return unmutee.save();
 };
 
 schema.statics.kick = async function (kicker_id: string, kickee_id: string, reason: string = "No reason given") {
@@ -129,7 +127,7 @@ schema.statics.kick = async function (kicker_id: string, kickee_id: string, reas
 
   kickee.kick_history.push(kick);
 
-  return kickee.save().catch((err: any) => logger.error(err));
+  return kickee.save();
 };
 
 schema.statics.ban = async function (baner_id: string, banee_id: string, reason: string = "No reason given") {
@@ -144,7 +142,7 @@ schema.statics.ban = async function (baner_id: string, banee_id: string, reason:
 
   banee.ban_history.push(ban);
 
-  return banee.save().catch((err: any) => logger.error(err));
+  return banee.save();
 };
 
 schema.statics.unban = async function (unbanner_id: string, unbannee_id: string, reason: string = "No reason given") {
@@ -153,7 +151,7 @@ schema.statics.unban = async function (unbanner_id: string, unbannee_id: string,
 
   unbannee.is_banned = false;
 
-  return unbannee.save().catch((err: any) => logger.error(err));
+  return unbannee.save();
 };
 
 schema.statics.pushHistory = async function (historyType: HistoryTypes, user_id: string, value: string) {
@@ -161,7 +159,7 @@ schema.statics.pushHistory = async function (historyType: HistoryTypes, user_id:
   if (!user) return;
   user[historyType].push({ timestamp: Date.now(), value });
   if (user[historyType].length > 50) user[historyType].shift();
-  return user.save().catch((err: any) => logger.error(err));
+  return user.save();
 };
 
 // @ts-ignore

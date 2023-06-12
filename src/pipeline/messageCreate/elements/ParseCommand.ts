@@ -3,12 +3,12 @@ import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
 import { config } from "../../../naoko/Config";
 import { singleton } from "@triptyk/tsyringe";
-import CommandManager from "../../../commands/CommandManager";
+import { PluginManager } from "../../../plugins/PluginManager";
 
 @singleton()
 export default class ParseCommand extends AbstractPipelineElement {
   constructor(
-    private commandManager: CommandManager,
+    private pluginManager: PluginManager,
   ) {
     super();
   }
@@ -23,9 +23,9 @@ export default class ParseCommand extends AbstractPipelineElement {
     const args = this.removeMentions(message.content).slice(config.prefix.length).trim().split(/ +/);
     const commandName = args.shift() || '';
 
-    const command = this.commandManager.getCommand(commandName);
+    const command = this.pluginManager.getCommand(commandName);
     if (!command) {
-      const closestCommand = this.commandManager.getClosestCommand(commandName);
+      const closestCommand = this.pluginManager.getClosestCommand(commandName);
       if (closestCommand) {
         await message
           .reply(

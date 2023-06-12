@@ -1,6 +1,5 @@
 import fs from "fs";
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { logger } from "./Logger";
 import { fileURLToPath } from 'node:url';
 
 // This is so we cache the template files in RAM, performance++;
@@ -20,7 +19,6 @@ class Cache {
     for (let i = 0; i < this.files.length; i++) {
       const { name, buffer } = this.loadFile(this.files[i]);
       this.objects[name] = new OBJLoader().parse(buffer.toString());
-      logger.print(`Loaded ${name}.obj`);
     }
   }
 

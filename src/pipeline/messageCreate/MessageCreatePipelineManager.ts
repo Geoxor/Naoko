@@ -1,6 +1,5 @@
 import { singleton } from "@triptyk/tsyringe";
 import { Message } from "discord.js";
-import { logger } from "../../naoko/Logger";
 import MessageCreatePayload from "./MessageCreatePayload";
 import AbstractPipelineElement from "../AbstractPipelineElement";
 import EnsureGhostRole from "./elements/EnsureGhostRole";
@@ -9,12 +8,14 @@ import LoadDbUser from "./elements/LoadDbUser";
 import RestrictedChannel from "./elements/RestrictedChannel";
 import ParseCommand from "./elements/ParseCommand";
 import ExecuteCommand from "./elements/ExecuteCommand";
+import Logger from "../../naoko/Logger";
 
 @singleton()
 export default class MessageCreatePipelineManager {
   private pipeline: AbstractPipelineElement[];
 
   constructor(
+    private logger: Logger,
     ensureGhostRole: EnsureGhostRole,
     checkForSpam: CheckForSpam,
     restrictedChannel: RestrictedChannel,
@@ -39,11 +40,11 @@ export default class MessageCreatePipelineManager {
       try {
         const canContinue = await element.execute(payload);
         if (!canContinue) {
-          logger.print(`MessageCreatePipeline ended after ${element.constructor.name}`);
+          this.logger.print(`MessageCreatePipeline ended after ${element.constructor.name}`);
           return;
         }
       } catch (error) {
-        logger.error(`Error in messageCreatePipeline. Element: ${element.constructor.name}, Error: "${error}"`);
+        this.logger.error(`Error in messageCreatePipeline. Element: ${element.constructor.name}, Error: "${error}"`);
         return;
       }
     }

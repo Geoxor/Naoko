@@ -6,10 +6,14 @@ import Jimp from "jimp";
 import replaceLast from 'replace-last';
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import gifenc from "gifenc";
-import { logger } from "../naoko/Logger";
+import Logger from "../naoko/Logger";
 
 @singleton()
 export default class ImageUtilService {
+  constructor(
+    private logger: Logger,
+  ) {}
+
   private readonly DEFAULT_IMAGE_OPTIONS: ImageURLOptions = { extension: "png", size: 512 };
 
   /**
@@ -71,7 +75,7 @@ export default class ImageUtilService {
           return replaceLast(this.getMostRelevantImageURL(reference, referenceArgs), ".webp", ".png");
         }
       } catch {
-        logger.print('Failed to fetch reference from message ($message.)')
+        this.logger.print('Failed to fetch reference from message ($message.)')
       }
     }
 
@@ -145,12 +149,12 @@ export default class ImageUtilService {
   ) {
     const gif = gifenc.GIFEncoder();
     const palette = gifenc.quantize(frames[0], 256);
-    const bar = logger.progress("Encoding  - ", frames.length);
+    const bar = this.logger.progress("Encoding  - ", frames.length);
     for (let i = 0; i < frames.length; i++) {
       const frame = frames[i];
       const idx = gifenc.applyPalette(frame, palette);
       gif.writeFrame(idx, width, height, { transparent: true, delay, palette });
-      logger.setProgressValue(bar, i / frames.length);
+      this.logger.setProgressValue(bar, i / frames.length);
     }
 
     gif.finish();

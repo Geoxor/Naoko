@@ -3,21 +3,21 @@ import { CommandCategories, CommandExecuteResponse } from '../types';
 import MessageCreatePayload from '../pipeline/messageCreate/MessageCreatePayload';
 
 export type CommandData = {
-  /**
-   * The name of the command
-   */
   name: string;
-  /**
-   * The description of the command
-   */
   description: string;
   /**
-   * The syntactic way the command should be used as
+   * The syntactic way the command should be used as. Example: "<user> [<reason>]"
+   * Argument names MUST be all lowercase kebab-case
+   * More examples:
+   * - <argument1> <argument2>
+   * - [<optional-argument>]
+   * - (<either-this-argument> | <or-this-argument>)
+   * - <argument> <repeating-argument>...
+   * - <@user> [<reason>]
+   *
+   * Do NOT include the command name at the start
    */
   usage: string;
-  /**
-   * The category type the command belongs to, e.g. "FUN" or "MODERATION"
-   */
   category: CommandCategories;
   /**
    * Alternative ways to call this command

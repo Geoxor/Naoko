@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import AbstractPipelinePayload from "../AbstractPipelinePayload";
 import { DatabaseUser } from "../../types";
-import AbstractCommand from "../../commands/AbstractCommand";
+import AbstractCommand from "../../plugins/AbstractCommand";
 
 type Payload = {
   message: Message,
