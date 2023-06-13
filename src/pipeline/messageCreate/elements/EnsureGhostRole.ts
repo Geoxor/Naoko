@@ -6,14 +6,12 @@ import { singleton } from "@triptyk/tsyringe";
 
 @singleton()
 export default class EnsureGhostRole extends AbstractPipelineElement {
-  constructor(
-   private logger: Logger,
-  ) {
+  constructor(private logger: Logger) {
     super();
   }
 
   async execute(payload: MessageCreatePayload): Promise<boolean> {
-    const message = payload.get('message');
+    const message = payload.get("message");
 
     if (message.member && message.guild?.id === GEOXOR_GUILD_ID) {
       if (!message.member.roles.cache.has(GHOSTS_ROLE_ID)) {

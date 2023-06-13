@@ -5,20 +5,18 @@ import { CommandExecuteResponse } from "../../types";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import { PluginManager } from "../PluginManager";
 import Naoko from "../../naoko/Naoko";
-import Discord, { EmbedBuilder, PermissionsBitField, bold, inlineCode } from 'discord.js';
+import Discord, { EmbedBuilder, PermissionsBitField, bold, inlineCode } from "discord.js";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 @singleton()
 class Help extends AbstractCommand {
-  constructor(
-    @inject(delay(() => PluginManager)) private pluginManager: PluginManager,
-  ) {
+  constructor(@inject(delay(() => PluginManager)) private pluginManager: PluginManager) {
     super();
   }
 
   execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    const args = payload.get('args');
+    const args = payload.get("args");
     if (args.length === 0) {
       return this.createFullHelpEmbed();
     }
@@ -53,7 +51,7 @@ class Help extends AbstractCommand {
     }
 
     helpEmbed.addFields(embedFields);
-    helpEmbed.setFooter({ text: `${totalCommands} commands in total` })
+    helpEmbed.setFooter({ text: `${totalCommands} commands in total` });
     return helpEmbed;
   }
 
@@ -79,18 +77,22 @@ class Help extends AbstractCommand {
       helpEmbed.setTitle(`Command: ${commandName}`);
       helpEmbed.setDescription(commandData.description);
       helpEmbed.setColor("#fca103");
-      helpEmbed.setImage(NAOKO_LOGO)
+      helpEmbed.setImage(NAOKO_LOGO);
       if (commandData.usage) {
         helpEmbed.addFields({ name: "Usage", value: `\`${commandName} ${commandData.usage}\`` });
       } else {
-        helpEmbed.addFields({ name: "Usage", value: 'This command does not accept any parameter' });
+        helpEmbed.addFields({ name: "Usage", value: "This command does not accept any parameter" });
       }
       helpEmbed.addFields({ name: "Category", value: commandData.category, inline: true });
-      helpEmbed.addFields({ name: "Requires processing?", value: commandData.requiresProcessing ? '✅' : '❌', inline: true });
+      helpEmbed.addFields({
+        name: "Requires processing?",
+        value: commandData.requiresProcessing ? "✅" : "❌",
+        inline: true,
+      });
 
       if (commandData.permissions) {
         const permissions = new PermissionsBitField(commandData.permissions);
-        helpEmbed.addFields({ name: "Permissions", value: permissions.toArray().join(', '), inline: true });
+        helpEmbed.addFields({ name: "Permissions", value: permissions.toArray().join(", "), inline: true });
       }
 
       return helpEmbed;
@@ -100,7 +102,7 @@ class Help extends AbstractCommand {
     helpEmbed.setColor("#fca103");
     helpEmbed.addFields({
       name: commandName + " not found",
-      value: "Try using `help` to list all commands"
+      value: "Try using `help` to list all commands",
     });
     return helpEmbed;
   }
@@ -118,10 +120,10 @@ class Help extends AbstractCommand {
     }
 
     if (commandNames.length === 0) {
-      return '';
+      return "";
     }
 
-    const commandsString = commandNames.join('`, `');
+    const commandsString = commandNames.join("`, `");
     return inlineCode(commandsString);
   }
 
@@ -145,24 +147,23 @@ class Help extends AbstractCommand {
       category: "UTILITY",
       usage: "[(<category> | <command>)]",
       description: "Show the list of all commands, info about a specific command or category",
-    }
+    };
   }
 }
 
 @singleton()
 class PluginList extends AbstractCommand {
-  private static readonly PLUGIN_ICON = "https://cdn.discordapp.com/attachments/911762334979084368/923234119553519636/unknown.png";
+  private static readonly PLUGIN_ICON =
+    "https://cdn.discordapp.com/attachments/911762334979084368/923234119553519636/unknown.png";
 
-  constructor(
-    @inject(delay(() => PluginManager)) private pluginManager: PluginManager,
-  ) {
+  constructor(@inject(delay(() => PluginManager)) private pluginManager: PluginManager) {
     super();
   }
 
   execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    const plugins = this.pluginManager.getAll(false).sort((a, b) => a.pluginData.name > b.pluginData.name ? 1 : -1);
+    const plugins = this.pluginManager.getAll(false).sort((a, b) => (a.pluginData.name > b.pluginData.name ? 1 : -1));
 
-    const pluginName = payload.get('args')[0];
+    const pluginName = payload.get("args")[0];
     if (pluginName) {
       return this.getPluginInfoEmbed(pluginName, plugins);
     }
@@ -181,9 +182,9 @@ class PluginList extends AbstractCommand {
       return `No plugin named ${pluginName} found!`;
     }
 
-    const description = 
+    const description =
       `${bold("Version:")} ${plugin.pluginData.version} - ` +
-      `${bold("Enabled:")} ${plugin.pluginData.enabled !== false ? '✅' : '❌'}`;
+      `${bold("Enabled:")} ${plugin.pluginData.enabled !== false ? "✅" : "❌"}`;
 
     const embed = new Discord.EmbedBuilder()
       .setAuthor({ name: `Naoko v${Naoko.version}`, iconURL: NAOKO_LOGO })
@@ -196,21 +197,23 @@ class PluginList extends AbstractCommand {
     const commandNameList = [];
     for (const command of commands) {
       commandNameList.push(command.commandData.name);
-      commandNameList.push(...command.commandData.aliases || []);
+      commandNameList.push(...(command.commandData.aliases || []));
     }
     if (commandNameList) {
-      const commandList = commandNameList.map((name) => `- ${name}`).join("\n")
-      embed.addFields({ name: "Commands", value: commandList, inline: true })
+      const commandList = commandNameList.map((name) => `- ${name}`).join("\n");
+      embed.addFields({ name: "Commands", value: commandList, inline: true });
     }
 
     if (plugin.pluginData.events) {
-      const eventList = Object.keys(plugin.pluginData.events).map((event) => `- ${event}`).join("\n");
-      embed.addFields({ name: "Event listener" , value: eventList, inline: true})
+      const eventList = Object.keys(plugin.pluginData.events)
+        .map((event) => `- ${event}`)
+        .join("\n");
+      embed.addFields({ name: "Event listener", value: eventList, inline: true });
     }
 
     if (plugin.pluginData.timers) {
       const timerList = plugin.pluginData.timers.map((timer) => `- interval: ${timer.interval}ms`).join("\n");
-      embed.addFields({ name: "Timer" , value: timerList, inline: true })
+      embed.addFields({ name: "Timer", value: timerList, inline: true });
     }
 
     return embed;
@@ -234,7 +237,7 @@ class PluginList extends AbstractCommand {
       .addFields({
         inline: true,
         name: "Enabled?",
-        value: plugins.map((plugin) => plugin.pluginData.enabled !== false ? '✅' : '❌').join("\n"),
+        value: plugins.map((plugin) => (plugin.pluginData.enabled !== false ? "✅" : "❌")).join("\n"),
       });
 
     return embed;
@@ -246,17 +249,17 @@ class PluginList extends AbstractCommand {
       category: "UTILITY",
       usage: "[<plugin>]",
       description: "List all plugins or more info about a plugin",
-    }
-  };
+    };
+  }
 }
 
 @plugin()
 class Plugins extends AbstractPlugin {
   public get pluginData(): PluginData {
     return {
-      name: '@core/plugins',
+      name: "@core/plugins",
       version: "1.0.0",
       commands: [PluginList, Help],
-    }
+    };
   }
 }

@@ -1,6 +1,6 @@
-import Discord, { ChannelType } from 'discord.js';
-import AbstractPlugin, { PluginData } from '../AbstractPlugin';
-import plugin from '../../decorators/plugin';
+import Discord, { ChannelType } from "discord.js";
+import AbstractPlugin, { PluginData } from "../AbstractPlugin";
+import plugin from "../../decorators/plugin";
 
 @plugin()
 class TunnerTracker extends AbstractPlugin {
@@ -14,7 +14,7 @@ class TunnerTracker extends AbstractPlugin {
       events: {
         messageCreate: this.messageCreate,
       },
-    }
+    };
   }
 
   private async messageCreate(message: Discord.Message) {
@@ -27,4 +27,3 @@ class TunnerTracker extends AbstractPlugin {
     }
   }
 }
-

@@ -9,14 +9,12 @@ import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 @singleton()
 class AnimeSearch extends AbstractCommand {
-  constructor(
-    private animeService: AnimeService,
-  ) {
+  constructor(private animeService: AnimeService) {
     super();
   }
 
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const arg = payload.get('args').join(" ");
+    const arg = payload.get("args").join(" ");
     if (!arg) {
       return "What are you looking for?";
     }
@@ -51,21 +49,19 @@ class AnimeSearch extends AbstractCommand {
       usage: "<search_string>",
       description: "Looks up an anime on Anilist",
       requiresProcessing: true,
-    }
+    };
   }
 }
 
 @singleton()
 class Trace extends AbstractCommand {
-  constructor(
-    private animeService: AnimeService,
-  ) {
+  constructor(private animeService: AnimeService) {
     super();
   }
 
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const args = payload.get('args');
-    const message = payload.get('message');
+    const args = payload.get("args");
+    const message = payload.get("message");
 
     // Check if they sent shit
     const url = args[0] || message.attachments.first()?.url;
@@ -81,7 +77,7 @@ class Trace extends AbstractCommand {
       // prepare an embed to send to the user
       return new EmbedBuilder()
         .setColor("#FF90E0")
-        .setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}\n${animeMeta.externalLinks[0]?.url || ''}`)
+        .setTitle(`${animeMeta.title.romaji}\n${animeMeta.title.native}\n${animeMeta.externalLinks[0]?.url || ""}`)
         .setThumbnail(animeMeta.coverImage.large)
         .setDescription(animeMeta.description.replace(/<br>/g, ""))
         .addFields([
@@ -111,9 +107,9 @@ class Trace extends AbstractCommand {
 class Anime extends AbstractPlugin {
   public get pluginData(): PluginData {
     return {
-      name: '@geoxor/anime',
-      version: '1.0.0',
+      name: "@geoxor/anime",
+      version: "1.0.0",
       commands: [AnimeSearch, Trace],
-    }
+    };
   }
 }

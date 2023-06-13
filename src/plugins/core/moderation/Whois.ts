@@ -3,21 +3,19 @@ import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreateP
 import { CommandExecuteResponse, ActionHistory, History } from "../../../types";
 import Naoko from "../../../naoko/Naoko";
 import AbstractCommand, { CommandData } from "../../AbstractCommand";
-import { User as UserDb } from '../../../naoko/Database';
+import { User as UserDb } from "../../../naoko/Database";
 import TimeFormattingService from "../../../service/TimeFormattingService";
 import { singleton } from "@triptyk/tsyringe";
 
 @singleton()
 export class WhoIs extends AbstractCommand {
-  constructor(
-    private timeFormatter: TimeFormattingService,
-  ) {
+  constructor(private timeFormatter: TimeFormattingService) {
     super();
   }
 
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
-    const args = payload.get('args');
+    const message = payload.get("message");
+    const args = payload.get("args");
 
     let user = message.mentions.users.first() || message.author;
     if (args[0] !== undefined && !message.mentions.users.first()) {
@@ -29,10 +27,10 @@ export class WhoIs extends AbstractCommand {
       }
     }
 
-    let discriminator = '';
+    let discriminator = "";
     // User with the '0' Discriminator have a new username
-    if (user.discriminator !== '0') {
-      discriminator = '#' + user.discriminator;
+    if (user.discriminator !== "0") {
+      discriminator = "#" + user.discriminator;
     }
 
     const embed = new Discord.EmbedBuilder()
@@ -49,7 +47,7 @@ export class WhoIs extends AbstractCommand {
     const fields: Discord.EmbedField[] = [];
     fields.push({ name: "ID:", value: `${user.id}`, inline: false });
     fields.push({ name: "Account created:", value: user.createdAt.toUTCString(), inline: false });
-    fields.push({ 
+    fields.push({
       name: "Account age:",
       value: this.timeFormatter.msToFullTime(Date.now() - user.createdTimestamp),
       inline: false,
@@ -59,7 +57,7 @@ export class WhoIs extends AbstractCommand {
       const member = await message.guild?.members.fetch(user);
       if (member && member.joinedTimestamp && member.joinedAt) {
         fields.push({ name: "Server joined:", value: member.joinedAt.toUTCString(), inline: false });
-        fields.push({ 
+        fields.push({
           name: "Server join age:",
           value: this.timeFormatter.msToFullTime(Date.now() - member.joinedTimestamp),
           inline: false,
@@ -99,10 +97,12 @@ export class WhoIs extends AbstractCommand {
   actionHistoryToField(history: ActionHistory[], client: Client): string | undefined {
     if (history.length === 0) return;
 
-    let historyString = '';
+    let historyString = "";
     for (const action of history) {
       const actor = client.users.cache.get(action.casted_by)!.username || action.casted_by;
-      const newHistoryString = `${this.timeFormatter.timeSince(action.timestamp)} ago - ${action.reason || "No reason given"} - by ${actor}`;
+      const newHistoryString = `${this.timeFormatter.timeSince(action.timestamp)} ago - ${
+        action.reason || "No reason given"
+      } - by ${actor}`;
       if ((newHistoryString + historyString).length > 500) {
         break;
       }
@@ -116,9 +116,12 @@ export class WhoIs extends AbstractCommand {
   historyToField(history: History[]): string | undefined {
     if (history.length === 0) return;
 
-    let historyString = '';
+    let historyString = "";
     for (const action of history) {
-      const newHistoryString = `${this.timeFormatter.timeSince(action.timestamp)} ago - ${action.value.replace(/`/g, "\\`")}`;
+      const newHistoryString = `${this.timeFormatter.timeSince(action.timestamp)} ago - ${action.value.replace(
+        /`/g,
+        "\\`"
+      )}`;
       if ((newHistoryString + historyString).length > 500) {
         break;
       }
@@ -136,6 +139,6 @@ export class WhoIs extends AbstractCommand {
       category: "MODERATION",
       usage: "[(<@user> | <user-id>)]",
       description: "Show information about a user",
-    }
+    };
   }
 }

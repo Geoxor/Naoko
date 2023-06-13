@@ -13,7 +13,7 @@ import { singleton } from "@triptyk/tsyringe";
 @singleton()
 class Ping extends AbstractCommand {
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
+    const message = payload.get("message");
     const timestampMessage = await message.channel.send("🏓 Getting ping...");
     const latency = timestampMessage.createdTimestamp - message.createdTimestamp;
     await timestampMessage.edit(`🏓 Pong! Latency is ${latency}ms. API Latency is ${~~message.client.ws.ping}ms`);
@@ -31,23 +31,21 @@ class Ping extends AbstractCommand {
 
 @singleton()
 class Uptime extends AbstractCommand {
-  constructor(
-    private timeFormatter: TimeFormattingService,
-  ) {
+  constructor(private timeFormatter: TimeFormattingService) {
     super();
   }
 
   execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    const client = payload.get('message').client;
+    const client = payload.get("message").client;
     return this.timeFormatter.msToFullTime(client.uptime);
   }
 
   get commandData(): CommandData {
     return {
-      name: 'uptime',
-      category: 'UTILITY',
-      usage: '',
-      description: 'Returns the bots uptime',
+      name: "uptime",
+      category: "UTILITY",
+      usage: "",
+      description: "Returns the bots uptime",
     };
   }
 }
@@ -56,9 +54,7 @@ class Uptime extends AbstractCommand {
 class Env extends AbstractCommand {
   private systemInfo: si.Systeminformation.StaticData | null = null;
 
-  constructor(
-    private timeFormatter: TimeFormattingService,
-  ) {
+  constructor(private timeFormatter: TimeFormattingService) {
     super();
   }
 
@@ -70,7 +66,7 @@ class Env extends AbstractCommand {
   }
 
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const client = payload.get('message').client;
+    const client = payload.get("message").client;
     const systemInfo = await this.getSystemInfo();
 
     // Leave these in here because systeminfo takes 10 hours to fetch data
@@ -92,7 +88,7 @@ class Env extends AbstractCommand {
         { name: "CPU", value: `x${cores} ${cpuManufacturer} ${brand}` },
         { name: "RAM", value: `${~~(totalRam / 1024 / 1024 / 1024)}GB` },
         { name: "Motherboard", value: `${moboManufacturer} ${model}` },
-        { name: "Uptime", value: this.timeFormatter.msToFullTime(client.uptime || 0) },
+        { name: "Uptime", value: this.timeFormatter.msToFullTime(client.uptime || 0) }
       );
     if (gpuModel && vram) {
       embed.addFields({ name: "GPU", value: `${gpuModel} ${vram}MB` });
@@ -118,6 +114,6 @@ class Environment extends AbstractPlugin {
       name: "@geoxor/environment",
       version: "1.0.0",
       commands: [Uptime, Env, Ping],
-    }
+    };
   }
 }

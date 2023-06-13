@@ -1,8 +1,20 @@
 import { singleton } from "@triptyk/tsyringe";
-import { ActivityType, ChannelType, EmbedBuilder, GuildMember, Message, PartialGuildMember, PartialMessage, Presence, VoiceState, codeBlock, inlineCode } from "discord.js";
+import {
+  ActivityType,
+  ChannelType,
+  EmbedBuilder,
+  GuildMember,
+  Message,
+  PartialGuildMember,
+  PartialMessage,
+  Presence,
+  VoiceState,
+  codeBlock,
+  inlineCode,
+} from "discord.js";
 import plugin from "../../decorators/plugin";
-import Config from '../../naoko/Config';
-import { User } from '../../naoko/Database';
+import Config from "../../naoko/Config";
+import { User } from "../../naoko/Database";
 import Logger from "../../naoko/Logger";
 import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
@@ -10,9 +22,7 @@ import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 
 @singleton()
 class LogsCommand extends AbstractCommand {
-  constructor(
-    private logger: Logger,
-  ) {
+  constructor(private logger: Logger) {
     super();
   }
 
@@ -33,16 +43,13 @@ class LogsCommand extends AbstractCommand {
 
 @plugin()
 class Logging extends AbstractPlugin {
-  constructor(
-    private logger: Logger,
-    private config: Config,
-  ) {
+  constructor(private logger: Logger, private config: Config) {
     super();
   }
 
   public get pluginData(): PluginData {
     return {
-      name: '@core/logging',
+      name: "@core/logging",
       version: "1.0.0",
       commands: [LogsCommand],
       events: {
@@ -72,10 +79,10 @@ class Logging extends AbstractPlugin {
           name: `Link`,
           value: `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`,
         }
-      ).setTimestamp();
+      )
+      .setTimestamp();
 
-    const logChannel = this.config.getChannel('GEOXOR_CHAT_LOG_CHANNEL_ID', message.client);
-
+    const logChannel = this.config.getChannel("GEOXOR_CHAT_LOG_CHANNEL_ID", message.client);
 
     await logChannel.send({ embeds: [embed], allowedMentions: { parse: [] } });
     this.logger.print(`Message deleted in #${message.channel.name} by ${message.author?.username}`);
@@ -95,12 +102,7 @@ class Logging extends AbstractPlugin {
 
   private async logMessageUpdate(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage) {
     const author = oldMessage.author || newMessage.author;
-    if (
-      !author ||
-      oldMessage.channel.type == ChannelType.DM ||
-      oldMessage.content == newMessage.content ||
-      author.bot
-    ) {
+    if (!author || oldMessage.channel.type == ChannelType.DM || oldMessage.content == newMessage.content || author.bot) {
       return;
     }
 
@@ -110,22 +112,23 @@ class Logging extends AbstractPlugin {
       .setAuthor({ name: author.username, iconURL: author.displayAvatarURL() })
       .addFields(
         { name: `Message Author`, value: `<@${author?.id}>` },
-        { name: `From`, value: codeBlock(oldMessage.content?.substring(0, 1000) || 'N/A') },
-        { name: `To`, value: codeBlock(newMessage.content?.substring(0, 1000) || 'N/A') },
+        { name: `From`, value: codeBlock(oldMessage.content?.substring(0, 1000) || "N/A") },
+        { name: `To`, value: codeBlock(newMessage.content?.substring(0, 1000) || "N/A") },
         {
           name: `Link`,
           value: `https://canary.discord.com/channels/${newMessage.guildId}/${newMessage.channelId}/${newMessage.id}`,
         }
-      ).setTimestamp();
+      )
+      .setTimestamp();
 
-    const logChannel = this.config.getChannel('GEOXOR_CHAT_LOG_CHANNEL_ID', oldMessage.client)
+    const logChannel = this.config.getChannel("GEOXOR_CHAT_LOG_CHANNEL_ID", oldMessage.client);
 
     await logChannel.send({ embeds: [embed] });
     this.logger.print(`Message edited at #${oldMessage.channel.name} by ${author.username}`);
   }
 
   private async voiceStateUpdate(oldState: VoiceState, newState: VoiceState) {
-    const logChannel = this.config.getChannel('GEOXOR_VOICE_CHAT_LOG_CHANNEL_ID', oldState.client);
+    const logChannel = this.config.getChannel("GEOXOR_VOICE_CHAT_LOG_CHANNEL_ID", oldState.client);
 
     const member = oldState.member || newState.member;
     if (!member || member.user.bot) return;
@@ -138,7 +141,7 @@ class Logging extends AbstractPlugin {
       return;
     }
 
-    if ((oldState?.channelId && newState?.channelId) && oldState?.channelId !== newState?.channelId) {
+    if (oldState?.channelId && newState?.channelId && oldState?.channelId !== newState?.channelId) {
       await logChannel.send({
         content: `User: ${member} moved from <#${oldState.channelId}> => <#${newState.channelId}>`,
         allowedMentions: { parse: [] },
@@ -156,7 +159,7 @@ class Logging extends AbstractPlugin {
   }
 
   private async logGuildMemberRemove(member: GuildMember | PartialGuildMember) {
-    const channel = this.config.getChannel('GEOXOR_LEAVE_LOG_CHANNEL_ID', member.client);
+    const channel = this.config.getChannel("GEOXOR_LEAVE_LOG_CHANNEL_ID", member.client);
     await channel.send(`User ${member.user.username} (${inlineCode(member.id)}) left the server`);
   }
 

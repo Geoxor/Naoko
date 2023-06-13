@@ -10,7 +10,7 @@ type Anime = {
   similarity: number;
   video: string;
   image: string;
-}
+};
 
 export type AnilistAnime = {
   id: number;
@@ -19,17 +19,17 @@ export type AnilistAnime = {
   title: Title;
   externalLinks: ExternalLinks[];
   bannerImage?: string;
-}
+};
 export type CoverImage = {
   large: string;
-}
+};
 export type Title = {
   romaji: string;
   native: string;
-}
+};
 export type ExternalLinks = {
   url: string;
-}
+};
 
 @singleton()
 export default class AnimeService {

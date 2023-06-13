@@ -1,9 +1,9 @@
-import Discord from 'discord.js';
-import AbstractCommand from './AbstractCommand';
+import Discord from "discord.js";
+import AbstractCommand from "./AbstractCommand";
 
 type CommandConstructor<T = AbstractCommand> = {
   new (...args: any[]): T;
-}
+};
 
 export type DiscordEventHandler<K extends keyof Discord.ClientEvents> = (
   ...args: Discord.ClientEvents[K]
@@ -14,10 +14,10 @@ export type PluginTimer = {
   /**
    * Time in MS
    */
-  interval: number,
+  interval: number;
 
-  handler: () => void | Promise<void>,
-}
+  handler: () => void | Promise<void>;
+};
 
 export type PluginData = {
   /**
@@ -37,8 +37,8 @@ export type PluginData = {
   timers?: PluginTimer[];
   events?: PluginEvents;
   commands?: CommandConstructor[];
-  enabled?: boolean,
-}
+  enabled?: boolean;
+};
 
 export default abstract class AbstractPlugin {
   constructor() {

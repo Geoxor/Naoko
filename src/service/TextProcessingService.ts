@@ -5,7 +5,7 @@ type TextProcessingFunction = (sentence: string) => Awaitable<string>;
 
 @singleton()
 export default class TextProcessingService {
-  private functions: Record<string, TextProcessingFunction>
+  private functions: Record<string, TextProcessingFunction>;
 
   constructor() {
     // Create a hashmap with all TextFunctions for the textify method
@@ -14,7 +14,7 @@ export default class TextProcessingService {
       britify: this.britify.bind(this),
       spongify: this.spongify.bind(this),
       uwufy: this.uwufy.bind(this),
-    }
+    };
   }
 
   isTextProcessor(name: string): boolean {

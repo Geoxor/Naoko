@@ -7,15 +7,15 @@ import { singleton } from "@triptyk/tsyringe";
 @singleton()
 export class Clear extends AbstractCommand {
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const args = payload.get('args');
-    const message = payload.get('message');
+    const args = payload.get("args");
+    const message = payload.get("message");
 
     let count = Number(args[0]);
     if (isNaN(count) || count <= 1) {
       return `⚠️ ${args[0]} is not a valid number!`;
     }
 
-    const channel = (message.channel as TextChannel);
+    const channel = message.channel as TextChannel;
     let deletedCount = 0;
     try {
       // Count MUST be between 2 and 100
@@ -41,6 +41,6 @@ export class Clear extends AbstractCommand {
       description: "Bulk delete messages. Can delete all messages that are up to 2 weeks old",
       permissions: ["ManageMessages"],
       requiresProcessing: true,
-    }
+    };
   }
 }

@@ -1,6 +1,6 @@
-import { PermissionResolvable } from 'discord.js';
-import { CommandCategories, CommandExecuteResponse } from '../types';
-import MessageCreatePayload from '../pipeline/messageCreate/MessageCreatePayload';
+import { PermissionResolvable } from "discord.js";
+import { CommandCategories, CommandExecuteResponse } from "../types";
+import MessageCreatePayload from "../pipeline/messageCreate/MessageCreatePayload";
 
 export type CommandData = {
   name: string;
@@ -31,13 +31,13 @@ export type CommandData = {
    * This will send 'processing...' if set to true, (useful for commands that take long to complete asynchronous tasks)
    */
   requiresProcessing?: boolean;
-}
+};
 
 export default abstract class AbstractCommand {
   /**
    * The handler associated with this command
    */
   public abstract execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> | CommandExecuteResponse;
-  
+
   public abstract get commandData(): CommandData;
 }

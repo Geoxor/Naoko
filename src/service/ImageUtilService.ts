@@ -3,16 +3,14 @@ import axios from "axios";
 import { ImageURLOptions, Message } from "discord.js";
 import Jimp from "jimp";
 // @ts-expect-error
-import replaceLast from 'replace-last';
+import replaceLast from "replace-last";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import gifenc from "gifenc";
 import Logger from "../naoko/Logger";
 
 @singleton()
 export default class ImageUtilService {
-  constructor(
-    private logger: Logger,
-  ) {}
+  constructor(private logger: Logger) {}
 
   private readonly DEFAULT_IMAGE_OPTIONS: ImageURLOptions = { extension: "png", size: 512 };
 
@@ -75,7 +73,7 @@ export default class ImageUtilService {
           return replaceLast(this.getMostRelevantImageURL(reference, referenceArgs), ".webp", ".png");
         }
       } catch {
-        this.logger.print('Failed to fetch reference from message ($message.)')
+        this.logger.print("Failed to fetch reference from message ($message.)");
       }
     }
 
@@ -85,7 +83,7 @@ export default class ImageUtilService {
       return this.getMostRelevantImageURL(message, args);
     }
 
-    const user = await message.client.users.fetch('153274351561605120');
+    const user = await message.client.users.fetch("153274351561605120");
     return user.displayAvatarURL(this.DEFAULT_IMAGE_OPTIONS);
   }
 
@@ -141,12 +139,7 @@ export default class ImageUtilService {
     return data;
   }
 
-  async encodeFramesToGif(
-    frames: Uint8ClampedArray[] | Uint8Array[],
-    width: number,
-    height: number,
-    delay: number
-  ) {
+  async encodeFramesToGif(frames: Uint8ClampedArray[] | Uint8Array[], width: number, height: number, delay: number) {
     const gif = gifenc.GIFEncoder();
     const palette = gifenc.quantize(frames[0], 256);
     const bar = this.logger.progress("Encoding  - ", frames.length);

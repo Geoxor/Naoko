@@ -3,7 +3,7 @@ import { NAOKO_LOGO } from "../../../constants";
 import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../../types";
 import Naoko from "../../../naoko/Naoko";
-import { User } from '../../../naoko/Database';
+import { User } from "../../../naoko/Database";
 import AbstractCommand, { CommandData } from "../../AbstractCommand";
 import Logger from "../../../naoko/Logger";
 import { singleton } from "@triptyk/tsyringe";
@@ -11,8 +11,8 @@ import { singleton } from "@triptyk/tsyringe";
 @singleton()
 export class Ban extends AbstractCommand {
   execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
-    const args = payload.get('args');
+    const message = payload.get("message");
+    const args = payload.get("args");
 
     const target = message.mentions.members?.first();
     if (!target) {
@@ -26,7 +26,7 @@ export class Ban extends AbstractCommand {
       return "You can't ban other admins";
     }
 
-    const reason = args.join(" ") || 'No reason given';
+    const reason = args.join(" ") || "No reason given";
 
     this.doBan(target, message, reason).catch();
   }
@@ -34,26 +34,28 @@ export class Ban extends AbstractCommand {
   private async doBan(target: GuildMember, message: Message, reason: string) {
     // Create the result embed
     const responseMessage = {
-      embeds: [new Discord.EmbedBuilder()
-        .setTitle(`Ban - ${target.user.username}`)
-        .setDescription(`ID: ${target.user.id}, <@${target.user.id}>`)
-        .setThumbnail(target.user.avatarURL() || (message ? message.author.defaultAvatarURL : NAOKO_LOGO))
-        .setTimestamp()
-        .addFields({
-          name: "Reason",
-          value: reason + `- at ${Date.now()}`,
-          inline: true,
-        })
-        .setColor("#FF0000")],
-    }
+      embeds: [
+        new Discord.EmbedBuilder()
+          .setTitle(`Ban - ${target.user.username}`)
+          .setDescription(`ID: ${target.user.id}, <@${target.user.id}>`)
+          .setThumbnail(target.user.avatarURL() || (message ? message.author.defaultAvatarURL : NAOKO_LOGO))
+          .setTimestamp()
+          .addFields({
+            name: "Reason",
+            value: reason + `- at ${Date.now()}`,
+            inline: true,
+          })
+          .setColor("#FF0000"),
+      ],
+    };
 
     try {
       await target.send(responseMessage);
     } catch {
       const embed = new Discord.EmbedBuilder()
-        .setTitle('DM Failed')
+        .setTitle("DM Failed")
         .setDescription(`I couldn't DM ${target}. They probably have they DM's closed`)
-        .setColor('DarkRed');
+        .setColor("DarkRed");
       responseMessage.embeds.push(embed);
     }
 
@@ -71,21 +73,19 @@ export class Ban extends AbstractCommand {
       usage: "<@user> [<reason>]",
       description: "Bans a user",
       permissions: ["BanMembers"],
-    }
+    };
   }
 }
 
 @singleton()
 export class Unban extends AbstractCommand {
-  constructor(
-    private logger: Logger,
-  ) {
+  constructor(private logger: Logger) {
     super();
   }
 
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const args = payload.get('args');
-    const message = payload.get('message');
+    const args = payload.get("args");
+    const message = payload.get("message");
 
     if (args.length === 0) return "Please enter the ID of the user you want to unban";
     const targetUser = await message.client.users.fetch(args[0]);
@@ -113,8 +113,7 @@ export class Unban extends AbstractCommand {
     }
 
     setTimeout(() => {
-      message.delete()
-        .catch((error) => this.logger.error(`Failed to delete unban message ${error}`));
+      message.delete().catch((error) => this.logger.error(`Failed to delete unban message ${error}`));
     }, 5000);
 
     // Get unfucked
@@ -133,7 +132,7 @@ export class Unban extends AbstractCommand {
       usage: "<user-id> [<reason>]",
       description: "Unbans a user",
       permissions: ["BanMembers"],
-      aliases: ['pardon'],
+      aliases: ["pardon"],
     };
   }
 }

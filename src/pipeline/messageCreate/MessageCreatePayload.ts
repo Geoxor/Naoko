@@ -4,11 +4,11 @@ import { DatabaseUser } from "../../types";
 import AbstractCommand from "../../plugins/AbstractCommand";
 
 type Payload = {
-  message: Message,
-  dbUser?: DatabaseUser,
-  commandName?: string,
-  args?: string[],
-  comand?: AbstractCommand,
-}
+  message: Message;
+  dbUser?: DatabaseUser;
+  commandName?: string;
+  args?: string[];
+  comand?: AbstractCommand;
+};
 
 export default class MessageCreatePayload extends AbstractPipelinePayload<Payload> {}

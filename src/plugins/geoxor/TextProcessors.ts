@@ -9,25 +9,23 @@ import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 @singleton()
 class SingleTextProcessors extends AbstractCommand {
-  constructor(
-    private textProcessingService: TextProcessingService,
-  ) {
+  constructor(private textProcessingService: TextProcessingService) {
     super();
   }
 
   public execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    const commandName = payload.get('commandName');
-    const args = payload.get('args');
+    const commandName = payload.get("commandName");
+    const args = payload.get("args");
     if (args.length === 0) {
       return this.getMissingSenteceText(commandName);
     }
 
-    const response = this.transformText(args.join(' '), commandName);
+    const response = this.transformText(args.join(" "), commandName);
 
     if (response.length > 2000) {
       return {
         content: "Bro the result is too big gonna put it in a file",
-        files: [{ name: `shit.${commandName === 'brainfuck' ? 'bf' : 'txt'}`, attachment: Readable.from(response) }],
+        files: [{ name: `shit.${commandName === "brainfuck" ? "bf" : "txt"}`, attachment: Readable.from(response) }],
       };
     }
     return response;
@@ -35,13 +33,13 @@ class SingleTextProcessors extends AbstractCommand {
 
   private transformText(sentence: string, commandName: string): string {
     switch (commandName) {
-      case 'uwufy':
+      case "uwufy":
         return this.textProcessingService.uwufy(sentence);
-      case 'brainfuck':
+      case "brainfuck":
         return this.textProcessingService.brainfuck(sentence);
-      case 'britify':
+      case "britify":
         return this.textProcessingService.britify(sentence);
-      case 'spongify':
+      case "spongify":
         return this.textProcessingService.spongify(sentence);
       default:
         throw new Error(`No textProcessor defined for ${commandName}`);
@@ -50,14 +48,14 @@ class SingleTextProcessors extends AbstractCommand {
 
   private getMissingSenteceText(commandName: string): string {
     switch (commandName) {
-      case 'uwufy':
+      case "uwufy":
         return "b-baka!! you need to give me s-something! uwu";
-      case 'brainfuck':
-        return 'What to you want to translate?';
-      case 'britify':
+      case "brainfuck":
+        return "What to you want to translate?";
+      case "britify":
         return "Tell me whad u wan' in bri'ish cunt?";
-      case 'spongify':
-        return 'What do you want to SpOnGiFy?';
+      case "spongify":
+        return "What do you want to SpOnGiFy?";
       default:
         throw new Error(`No missing sentence defined for ${commandName}`);
     }
@@ -66,28 +64,26 @@ class SingleTextProcessors extends AbstractCommand {
   public get commandData(): CommandData {
     return {
       name: "uwufy",
-      aliases: ['brainfuck', 'britify', 'spongify'],
+      aliases: ["brainfuck", "britify", "spongify"],
       category: "TEXT_PROCESSORS",
       usage: "<sentence>...",
       description: "Transforms your sentence",
-    }
+    };
   }
 }
 
 @singleton()
 class Textify extends AbstractCommand {
-  constructor(
-    private textProcessingService: TextProcessingService,
-  ) {
+  constructor(private textProcessingService: TextProcessingService) {
     super();
   }
 
   execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    const args = payload.get('args');
+    const args = payload.get("args");
 
     const pipeline = [];
     while (true) {
-      const arg = args.shift() || '';
+      const arg = args.shift() || "";
       if (this.textProcessingService.isTextProcessor(arg)) {
         pipeline.push(arg);
       } else {
@@ -96,10 +92,10 @@ class Textify extends AbstractCommand {
       }
     }
 
-    if (pipeline.length === 0) return 'Pipeline cannot be empty';
+    if (pipeline.length === 0) return "Pipeline cannot be empty";
     if (pipeline.length > 10) return "Pipeline can't be longer than 10 iterators";
 
-    const userSentence = args.join(' ');
+    const userSentence = args.join(" ");
     if (userSentence.length === 0) return "What do you want to textify?";
 
     return this.textProcessingService.textify(pipeline, userSentence);
@@ -112,7 +108,7 @@ class Textify extends AbstractCommand {
       category: "TEXT_PROCESSORS",
       description: "Transform a sentence with a pipeline",
       requiresProcessing: true,
-    }
+    };
   }
 }
 

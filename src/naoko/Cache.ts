@@ -1,6 +1,6 @@
 import fs from "fs";
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { fileURLToPath } from 'node:url';
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { fileURLToPath } from "node:url";
 
 // This is so we cache the template files in RAM, performance++;
 class Cache {
@@ -12,7 +12,7 @@ class Cache {
   }
 
   async loadFiles(): Promise<void> {
-    const absolutePath = fileURLToPath(new URL('../assets/models', import.meta.url));
+    const absolutePath = fileURLToPath(new URL("../assets/models", import.meta.url));
     this.files = fs.readdirSync(absolutePath);
 
     // Load 3D Objects
@@ -24,7 +24,7 @@ class Cache {
 
   loadFile(path: string) {
     const name = path.split("/")[path.split("/").length - 1].replace(".obj", "");
-    const absolutePath = fileURLToPath(new URL('../assets/models', import.meta.url));
+    const absolutePath = fileURLToPath(new URL("../assets/models", import.meta.url));
     const buffer = fs.readFileSync(`${absolutePath}/${path}`);
     return { name, buffer };
   }

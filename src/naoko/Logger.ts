@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import MultiProgress from "multi-progress";
-import quotes from "../assets/quotes.json" assert { type: 'json' };
+import quotes from "../assets/quotes.json" assert { type: "json" };
 import { singleton } from "@triptyk/tsyringe";
 import CommonUtils from "../service/CommonUtils";
 
@@ -11,9 +11,7 @@ import CommonUtils from "../service/CommonUtils";
  */
 @singleton()
 export default class Logger {
-  constructor(
-    private commonUtils: CommonUtils,
-  ) {}
+  constructor(private commonUtils: CommonUtils) {}
 
   private emoji: string = "🌸";
   private color: string = "#FF90E0";

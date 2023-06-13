@@ -10,8 +10,8 @@ import { singleton } from "@triptyk/tsyringe";
 @singleton()
 class ReportCommand extends AbstractCommand {
   public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
-    const args = payload.get('args');
+    const message = payload.get("message");
+    const args = payload.get("args");
 
     if (args.length === 0) return "You need an user to report and a reason.";
     let targetUser = message.client.guilds.cache.get(GEOXOR_GUILD_ID)!.members.cache.get(args[0]);
@@ -42,9 +42,7 @@ class ReportCommand extends AbstractCommand {
 
     const out = { content: content || "No file was attached.", embeds: [embed] };
     // This is kinda scuff
-    await (
-      message.client.channels.cache.get(GEOXOR_STAFF_CHANNEL_ID) as Discord.TextChannel
-    ).send(out);
+    await (message.client.channels.cache.get(GEOXOR_STAFF_CHANNEL_ID) as Discord.TextChannel).send(out);
     return out;
   }
 
@@ -54,7 +52,7 @@ class ReportCommand extends AbstractCommand {
       description: "Report an user",
       usage: "<user_id> <reason>",
       category: "UTILITY",
-    }
+    };
   }
 }
 

@@ -23,9 +23,11 @@ export const MUTED_ROLE_ID = "737011597217628231";
 export const GHOSTS_ROLE_ID = "736285344659669003";
 export const GEOBOTS_ROLE_ID = "720006137151488121";
 
-export const WINDOWS_LOGO = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Windows_logo_-_2012.png/438px-Windows_logo_-_2012.png";
+export const WINDOWS_LOGO =
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Windows_logo_-_2012.png/438px-Windows_logo_-_2012.png";
 export const LINUX_LOGO = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/405px-Tux.svg.png";
-export const NAOKO_LOGO = "https://cdn.discordapp.com/avatars/870496144881492069/fcb2aa2c14ca602c662f5d6a2c511bc8.webp?size=256";
+export const NAOKO_LOGO =
+  "https://cdn.discordapp.com/avatars/870496144881492069/fcb2aa2c14ca602c662f5d6a2c511bc8.webp?size=256";
 
 export const HISTORY_TYPES = ["nickname_history", "username_history", "status_history"] as const;
 

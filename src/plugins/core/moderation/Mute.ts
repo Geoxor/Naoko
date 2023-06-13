@@ -1,26 +1,23 @@
-import Discord, { EmbedBuilder, Message } from 'discord.js';
-import { NAOKO_LOGO, MUTED_ROLE_ID } from '../../../constants';
-import Naoko from '../../../naoko/Naoko';
-import MessageCreatePayload from '../../../pipeline/messageCreate/MessageCreatePayload';
-import { CommandExecuteResponse } from '../../../types';
-import { User } from '../../../naoko/Database';
-import AbstractCommand, { CommandData } from '../../AbstractCommand';
-import TimeFormattingService from '../../../service/TimeFormattingService';
-import Logger from '../../../naoko/Logger';
-import { singleton } from '@triptyk/tsyringe';
+import Discord, { EmbedBuilder, Message } from "discord.js";
+import { NAOKO_LOGO, MUTED_ROLE_ID } from "../../../constants";
+import Naoko from "../../../naoko/Naoko";
+import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreatePayload";
+import { CommandExecuteResponse } from "../../../types";
+import { User } from "../../../naoko/Database";
+import AbstractCommand, { CommandData } from "../../AbstractCommand";
+import TimeFormattingService from "../../../service/TimeFormattingService";
+import Logger from "../../../naoko/Logger";
+import { singleton } from "@triptyk/tsyringe";
 
 @singleton()
 export class Mute extends AbstractCommand {
-  constructor(
-    private timeFormatter: TimeFormattingService,
-    private logger: Logger,
-  ) {
+  constructor(private timeFormatter: TimeFormattingService, private logger: Logger) {
     super();
   }
 
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
-    const args = payload.get('args');
+    const message = payload.get("message");
+    const args = payload.get("args");
 
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to mute";
@@ -30,7 +27,8 @@ export class Mute extends AbstractCommand {
     if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
     let duration = args[0];
-    if (!duration || !duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m)) return "You must specify a valid duration, e.g. 1H, 30m or 3d";
+    if (!duration || !duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m))
+      return "You must specify a valid duration, e.g. 1H, 30m or 3d";
     const reason = args.slice(1).join(" ") || "No reason given";
 
     let msDuration = this.timeFormatter.durationToMilliseconds(duration);
@@ -75,8 +73,7 @@ export class Mute extends AbstractCommand {
     }
 
     setTimeout(() => {
-      message.delete()
-        .catch((error) => this.logger.error(`Failed to delete message ${error}`));
+      message.delete().catch((error) => this.logger.error(`Failed to delete message ${error}`));
     }, 5000);
 
     return message.reply({ embeds: [embed] });
@@ -90,43 +87,39 @@ export class Mute extends AbstractCommand {
       usage: "<@user> <duration> [<reason>]",
       description: "Mute an user",
       permissions: ["ManageRoles"],
-    }
+    };
   }
 }
 
 @singleton()
 export class Unmute extends AbstractCommand {
-  constructor(
-    private logger: Logger,
-  ) {
+  constructor(private logger: Logger) {
     super();
   }
 
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
+    const message = payload.get("message");
 
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to unmute";
     if (targetUser.id === message.author.id) return "You can't unmute yourself";
 
-    const reason = payload.get('args').join(" ");
+    const reason = payload.get("args").join(" ");
 
     // Unget rekt
     await targetUser.roles.remove(MUTED_ROLE_ID);
     await targetUser.timeout(0 && Date.now(), reason);
 
     // Keep track of the unmute
-    await User.unmute(message.author.id, targetUser.id, reason).catch(() => this.logger.error("Unmute database update failed"));
+    await User.unmute(message.author.id, targetUser.id, reason).catch(() =>
+      this.logger.error("Unmute database update failed")
+    );
 
     // Send the embed
     await this.sendUnmuteEmbed(message, targetUser, reason);
   }
 
-  sendUnmuteEmbed(
-    message: Message,
-    targetUser: Discord.GuildMember,
-    reason?: string
-  ): Promise<Discord.Message> {
+  sendUnmuteEmbed(message: Message, targetUser: Discord.GuildMember, reason?: string): Promise<Discord.Message> {
     const embed = new EmbedBuilder()
       .setTitle(`Unmute - ${targetUser.user.username}`)
       .setDescription(`<@${targetUser.user.id}>, you have been unmuted.`)
@@ -146,6 +139,6 @@ export class Unmute extends AbstractCommand {
       usage: "<@user> [<reason>]",
       description: "Unmute an user",
       permissions: ["ManageRoles"],
-    }
+    };
   }
 }

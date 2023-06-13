@@ -1,17 +1,17 @@
-import Discord from 'discord.js';
+import Discord from "discord.js";
 import { NAOKO_LOGO } from "../../../constants";
-import { User } from '../../../naoko/Database';
+import { User } from "../../../naoko/Database";
 import Naoko from "../../../naoko/Naoko";
 import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../../types";
-import AbstractCommand, { CommandData } from '../../AbstractCommand';
-import { singleton } from '@triptyk/tsyringe';
+import AbstractCommand, { CommandData } from "../../AbstractCommand";
+import { singleton } from "@triptyk/tsyringe";
 
 @singleton()
 export class Kick extends AbstractCommand {
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
-    const reason = payload.get('args').join(' ');
+    const message = payload.get("message");
+    const reason = payload.get("args").join(" ");
 
     const targetUser = message.mentions.members?.first();
     if (!targetUser) return "Please mention the user you want to kick";
@@ -31,8 +31,11 @@ export class Kick extends AbstractCommand {
 
     targetUser
       .send({ embeds: [embed] })
-      .catch(() => message.reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`)
-        .then(() => setTimeout(() => message.delete().catch(), 5000)));
+      .catch(() =>
+        message
+          .reply(`I couldn't DM ${targetUser.user.username} the embed, probably has DMs disabled`)
+          .then(() => setTimeout(() => message.delete().catch(), 5000))
+      );
 
     // Kick him
     await targetUser.kick(reason);
@@ -50,6 +53,6 @@ export class Kick extends AbstractCommand {
       category: "MODERATION",
       description: "Kicks a user",
       permissions: ["KickMembers"],
-    }
+    };
   }
 }

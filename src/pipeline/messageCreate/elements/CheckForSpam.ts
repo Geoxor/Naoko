@@ -6,15 +6,12 @@ import SpamCheckService from "../../../service/SpamCheckService";
 
 @singleton()
 export default class CheckForSpam extends AbstractPipelineElement {
-  constructor(
-    private logger: Logger,
-    private spamChecker: SpamCheckService,
-  ) {
+  constructor(private logger: Logger, private spamChecker: SpamCheckService) {
     super();
   }
 
   async execute(payload: MessageCreatePayload): Promise<boolean> {
-    const message = payload.get('message');
+    const message = payload.get("message");
     const content = message.content.toLowerCase();
 
     // Don't check in DM's
@@ -35,12 +32,11 @@ export default class CheckForSpam extends AbstractPipelineElement {
   isDiscordInvite(content: string) {
     return (
       content.includes("discord.gg") &&
-      !(content.includes("discord.gg/geoxor") &&
-      (content.match(/discord.gg/g) || []).length == 1)
+      !(content.includes("discord.gg/geoxor") && (content.match(/discord.gg/g) || []).length == 1)
     );
   }
 
   isFreeNitro(content: string) {
-    return (content.includes("nitro") && content.includes("http"));
+    return content.includes("nitro") && content.includes("http");
   }
 }

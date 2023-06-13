@@ -1,7 +1,5 @@
 export default abstract class AbstractPipelinePayload<Data = Record<string, unknown>> {
-  constructor(
-    private data: Data,
-  ) {}
+  constructor(private data: Data) {}
 
   public set<K extends keyof Data>(key: K, value: NonNullable<Data[K]>): void {
     this.data[key] = value;

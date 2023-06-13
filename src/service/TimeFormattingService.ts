@@ -2,7 +2,6 @@ import { singleton } from "@triptyk/tsyringe";
 
 @singleton()
 export default class TimeFormattingService {
-
   timeSince(date: number) {
     const seconds = ~~((Date.now() - date) / 1000);
 

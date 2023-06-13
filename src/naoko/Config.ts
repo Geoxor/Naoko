@@ -1,7 +1,13 @@
 import { Client, TextBasedChannel } from "discord.js";
 import fs from "fs";
 import { fileURLToPath } from "node:url";
-import { GEOXOR_GENERAL_CHANNEL_ID, GEOXOR_STAFF_CHANNEL_ID, GEOXOR_CHAT_LOG_CHANNEL_ID, GEOXOR_LEAVE_LOG_CHANNEL_ID, GEOXOR_VOICE_CHAT_LOG_CHANNEL_ID } from "../constants";
+import {
+  GEOXOR_GENERAL_CHANNEL_ID,
+  GEOXOR_STAFF_CHANNEL_ID,
+  GEOXOR_CHAT_LOG_CHANNEL_ID,
+  GEOXOR_LEAVE_LOG_CHANNEL_ID,
+  GEOXOR_VOICE_CHAT_LOG_CHANNEL_ID,
+} from "../constants";
 import { singleton } from "@triptyk/tsyringe";
 
 interface ConfigType {
@@ -9,8 +15,8 @@ interface ConfigType {
   token: string;
   mongo: string;
   debug?: {
-    overwriteChannel?: string,
-  }
+    overwriteChannel?: string;
+  };
 }
 
 /**
@@ -21,7 +27,7 @@ interface ConfigType {
 export default class Config {
   // Initializes the config with default path
   private path: string = "../config.naoko.json";
-  private config: ConfigType = ({} as any)/* = JSON.parse(readFileSync(this.path).toString())*/;
+  private config: ConfigType = {} as any /* = JSON.parse(readFileSync(this.path).toString())*/;
 
   private static readonly CHANNELS = {
     GEOXOR_GENERAL_CHANNEL_ID: GEOXOR_GENERAL_CHANNEL_ID,
@@ -49,12 +55,14 @@ export default class Config {
     return this.config.mongo;
   }
 
-  public getChannel(name: keyof typeof Config.CHANNELS , client: Client): TextBasedChannel {
+  public getChannel(name: keyof typeof Config.CHANNELS, client: Client): TextBasedChannel {
     const channelId = this.config.debug?.overwriteChannel ? this.config.debug?.overwriteChannel : Config.CHANNELS[name];
 
     const channel = client.channels.cache.get(channelId);
     if (!channel || !channel.isTextBased()) {
-      throw new Error(`Could not find channel with Id: ${channelId}. If your on testing be sure to use debug.overwriteChannel config option`)
+      throw new Error(
+        `Could not find channel with Id: ${channelId}. If your on testing be sure to use debug.overwriteChannel config option`
+      );
     }
     return channel;
   }

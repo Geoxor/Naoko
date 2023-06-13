@@ -23,15 +23,13 @@ class Bake extends AbstractCommand {
     "https://cdn.discordapp.com/attachments/634839969822801998/964236237252743198/apple.jpg",
     "https://cdn.discordapp.com/attachments/634839969822801998/964236237554745425/beryy.jpeg",
   ];
-  
-  constructor(
-    private commonUtils: CommonUtils,
-  ) {
+
+  constructor(private commonUtils: CommonUtils) {
     super();
   }
 
   public execute(payload: MessageCreatePayload): CommandExecuteResponse {
-    const arg = payload.get('args')[0];
+    const arg = payload.get("args")[0];
     if (!arg) {
       return `What do you want to bake?`;
     }
@@ -67,4 +65,3 @@ class Baking extends AbstractPlugin {
     };
   }
 }
-

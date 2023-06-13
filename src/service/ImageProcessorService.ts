@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 @singleton()
 export default class ImageProcessorService {
   private assetCache: Record<string, Jimp> = {};
-  private processors: Record<string, (buffer: Buffer) => Awaitable<Buffer>>
+  private processors: Record<string, (buffer: Buffer) => Awaitable<Buffer>>;
 
   constructor() {
     this.processors = {
@@ -30,7 +30,7 @@ export default class ImageProcessorService {
       scale: this.scale.bind(this),
       haah: this.haah.bind(this),
       fisheye: this.fishEye.bind(this),
-    }
+    };
   }
 
   public getProcessors() {
@@ -39,7 +39,7 @@ export default class ImageProcessorService {
 
   private async loadAsset(assetName: string): Promise<Jimp> {
     if (!this.assetCache[assetName]) {
-      const assetPath = fileURLToPath(new URL('../assets/images', import.meta.url));
+      const assetPath = fileURLToPath(new URL("../assets/images", import.meta.url));
       this.assetCache[assetName] = await Jimp.read(join(assetPath, assetName));
     }
     return this.assetCache[assetName];
@@ -69,7 +69,7 @@ export default class ImageProcessorService {
   }
 
   async trolley(texture: Buffer) {
-    const trolleyImage = await this.loadAsset('trolleyTemplate.png');
+    const trolleyImage = await this.loadAsset("trolleyTemplate.png");
     const trolley = trolleyImage.clone();
     const image = await Jimp.read(texture);
     const size = 48;
@@ -79,7 +79,7 @@ export default class ImageProcessorService {
   }
 
   async expert(texture: Buffer) {
-    const bobbyImage = await this.loadAsset('bobbyTemplate.png');
+    const bobbyImage = await this.loadAsset("bobbyTemplate.png");
     const bobby = bobbyImage.clone();
     const image = await Jimp.read(texture);
     const size = 66;
@@ -89,7 +89,7 @@ export default class ImageProcessorService {
   }
 
   async wasted(texture: Buffer) {
-    const wastedImage = await this.loadAsset('wasted.png');
+    const wastedImage = await this.loadAsset("wasted.png");
     let wasted = wastedImage.clone();
     let image = await Jimp.read(texture);
     // Stretch the wasted template to match the image
@@ -108,7 +108,7 @@ export default class ImageProcessorService {
   }
 
   async fuckYou(texture: Buffer) {
-    const fuckyouImage = await this.loadAsset('fuckyou.png');
+    const fuckyouImage = await this.loadAsset("fuckyou.png");
     let fuckyou = fuckyouImage.clone();
     const image = await Jimp.read(texture);
     // Stretch the fuckyou template to match the image
@@ -127,7 +127,7 @@ export default class ImageProcessorService {
   }
 
   async vignette(texture: Buffer) {
-    const vignetteImage = await this.loadAsset('vignette.png');
+    const vignetteImage = await this.loadAsset("vignette.png");
     let vignette = vignetteImage.clone();
     let image = await Jimp.read(texture);
     // Stretch the vignette template to match the image
@@ -138,7 +138,7 @@ export default class ImageProcessorService {
   }
 
   async shy(texture: Buffer) {
-    const pointingHandImage = await this.loadAsset('finger.png');
+    const pointingHandImage = await this.loadAsset("finger.png");
     let image = await Jimp.read(texture);
     let pointingRight = pointingHandImage.clone();
     let pointingLeft = pointingHandImage.clone().mirror(true, false);
@@ -192,10 +192,7 @@ export default class ImageProcessorService {
 
     const halfWidth = Math.floor(width / 2);
 
-    const right = textureImage
-      .clone()
-      .flip(true, false)
-      .crop(halfWidth, 0, halfWidth, height);
+    const right = textureImage.clone().flip(true, false).crop(halfWidth, 0, halfWidth, height);
 
     const left = textureImage.crop(0, 0, halfWidth, height);
 

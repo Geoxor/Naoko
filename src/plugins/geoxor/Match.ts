@@ -9,7 +9,7 @@ import { singleton } from "@triptyk/tsyringe";
 @singleton()
 class MatchCommand extends AbstractCommand {
   execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
+    const message = payload.get("message");
 
     if (!message.mentions.members?.size) return "Tag the person you want to match with!";
 
@@ -45,7 +45,7 @@ class MatchCommand extends AbstractCommand {
       category: "FUN",
       usage: "<@user> [<@user>]",
       description: "See how much you and another user match!",
-    }
+    };
   }
 }
 
@@ -53,8 +53,8 @@ class MatchCommand extends AbstractCommand {
 class Match extends AbstractPlugin {
   public get pluginData(): PluginData {
     return {
-      name: '@geoxor/match',
-      version: '1.0.0',
+      name: "@geoxor/match",
+      version: "1.0.0",
       commands: [MatchCommand],
     };
   }

@@ -9,7 +9,7 @@ export default class RestrictedChannel extends AbstractPipelineElement {
   private readonly RESTRICTED_CHANNELS = [GEOXOR_GENERAL_CHANNEL_ID];
 
   execute(payload: MessageCreatePayload): Awaitable<boolean> {
-    const message = payload.get('message');
+    const message = payload.get("message");
 
     // Do not allow Commands in RestrictedChannels
     // Not Geoxor's guild or in a restricted channel -> Continue
@@ -19,8 +19,8 @@ export default class RestrictedChannel extends AbstractPipelineElement {
 
     // Check if user is a mod, admin or has admin perms if not, return
     if (
-        message.member.roles.cache.some((role) => role.id === MOD_ROLE_ID || role.id === ADMIN_ROLE_ID) ||
-        message.member.permissions.has('Administrator')
+      message.member.roles.cache.some((role) => role.id === MOD_ROLE_ID || role.id === ADMIN_ROLE_ID) ||
+      message.member.permissions.has("Administrator")
     ) {
       return true;
     }

@@ -7,32 +7,28 @@ import { Kick } from "./Kick";
 import { Mute, Unmute } from "./Mute";
 import { WhoIs } from "./Whois";
 import { GEOXOR_GUILD_ID, GHOSTS_ROLE_ID, GEOXOR_GENERAL_CHANNEL_ID } from "../../../constants";
-import welcomeMessages from "../../../assets/welcome_messages.json" assert { type: 'json' };
+import welcomeMessages from "../../../assets/welcome_messages.json" assert { type: "json" };
 import CommonUtils from "../../../service/CommonUtils";
 import SpamCheckService from "../../../service/SpamCheckService";
 import Logger from "../../../naoko/Logger";
 
 @plugin()
 class Moderation extends AbstractPlugin {
-  constructor(
-    private commonUtils: CommonUtils,
-    private spamChecker: SpamCheckService,
-    private logger: Logger,
-  ) {
-    super()
+  constructor(private commonUtils: CommonUtils, private spamChecker: SpamCheckService, private logger: Logger) {
+    super();
   }
 
   public get pluginData(): PluginData {
     return {
-      name: '@core/moderation',
+      name: "@core/moderation",
       version: "1.0.0",
       commands: [Ban, Unban, Clear, Kick, Mute, Unmute, WhoIs],
       events: {
         guildMemberAdd: this.addGhostRole,
         threadCreate: this.autoJoinThreads,
         messageUpdate: this.checkUpdatedMessage,
-      }
-    }
+      },
+    };
   }
 
   private async addGhostRole(member: GuildMember) {
@@ -54,7 +50,7 @@ class Moderation extends AbstractPlugin {
   }
 
   private async checkUpdatedMessage(_oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage) {
-    const spamResult = this.spamChecker.checkForSpam(newMessage.content || '');
+    const spamResult = this.spamChecker.checkForSpam(newMessage.content || "");
     if (spamResult.isSpam) {
       this.logger.error(`SpamCheck ${spamResult.failedCheck} failed for ${newMessage.author?.username}`);
       await newMessage.delete();

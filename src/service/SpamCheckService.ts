@@ -1,9 +1,9 @@
 import { singleton } from "@triptyk/tsyringe";
 
 type SpamCheckResult = {
-  isSpam: boolean,
-  failedCheck: string | null,
-}
+  isSpam: boolean;
+  failedCheck: string | null;
+};
 
 @singleton()
 export default class SpamCheckService {
@@ -22,12 +22,11 @@ export default class SpamCheckService {
   private isDiscordInvite(content: string) {
     return (
       content.includes("discord.gg") &&
-      !(content.includes("discord.gg/geoxor") &&
-      (content.match(/discord.gg/g) || []).length == 1)
+      !(content.includes("discord.gg/geoxor") && (content.match(/discord.gg/g) || []).length == 1)
     );
   }
 
   private isFreeNitro(content: string) {
-    return (content.includes("nitro") && content.includes("http"));
+    return content.includes("nitro") && content.includes("http");
   }
 }

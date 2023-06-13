@@ -7,17 +7,15 @@ import Logger from "../../../naoko/Logger";
 
 @singleton()
 export default class ExecuteCommand extends AbstractPipelineElement {
-  constructor(
-    private logger: Logger,
-  ) {
+  constructor(private logger: Logger) {
     super();
   }
 
-  private typingLocks: Map<string, NodeJS.Timer> = new Map()
+  private typingLocks: Map<string, NodeJS.Timer> = new Map();
 
   async execute(payload: MessageCreatePayload): Promise<boolean> {
-    const message = payload.get('message');
-    const command = payload.get('comand');
+    const message = payload.get("message");
+    const command = payload.get("comand");
     const commandData = command.commandData;
     const timeStart = Date.now();
 
@@ -25,7 +23,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
     if (commandData.permissions && message.inGuild()) {
       for (const perm of commandData.permissions) {
         if (!message.member?.permissions.has(perm)) {
-          await message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => { });
+          await message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => {});
           return false;
         }
       }
@@ -57,7 +55,9 @@ export default class ExecuteCommand extends AbstractPipelineElement {
 
     const executionTime = Date.now() - timeStart;
     this.logger.print(
-      `${executionTime}ms - Command: ${commandData.name} - User: ${message.author.username} - Guild: ${message.guild?.name || "dm"}`
+      `${executionTime}ms - Command: ${commandData.name} - User: ${message.author.username} - Guild: ${
+        message.guild?.name || "dm"
+      }`
     );
 
     // If the command returns void we just return
@@ -74,7 +74,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
       if ((error as DiscordAPIError).code === 500) {
         await message.reply({
           embeds: [new EmbedBuilder().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
-        })
+        });
         return false;
       }
       await message.reply(codeBlock(String(error)));

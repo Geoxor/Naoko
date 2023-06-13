@@ -1,14 +1,12 @@
 import { GuildMember, PartialGuildMember } from "discord.js";
 import plugin from "../../decorators/plugin";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
-import { User } from '../../naoko/Database.js';
+import { User } from "../../naoko/Database.js";
 import Logger from "../../naoko/Logger";
 
 @plugin()
 class MemorizeRoles extends AbstractPlugin {
-  constructor(
-    private logger: Logger,
-  ) {
+  constructor(private logger: Logger) {
     super();
   }
 
@@ -49,7 +47,7 @@ class MemorizeRoles extends AbstractPlugin {
     }
 
     if (addedRoles.length > 0) {
-      this.logger.print(`Added ${addedRoles.length} old roles to ${member.displayName}. Roles: ${addedRoles.join(', ')}`);
+      this.logger.print(`Added ${addedRoles.length} old roles to ${member.displayName}. Roles: ${addedRoles.join(", ")}`);
     }
   }
 }

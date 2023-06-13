@@ -18,14 +18,14 @@ class Transform extends AbstractCommand {
     private messageImageParser: ImageUtilService,
     private imageProcessorService: ImageProcessorService,
     private threeDProcessorService: ThreeDProcessorService,
-    private logger: Logger,
+    private logger: Logger
   ) {
     super();
   }
 
   public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
-    const pipeline = payload.get('args');
+    const message = payload.get("message");
+    const pipeline = payload.get("args");
 
     if (pipeline.length > 10) return "Pipeline can't be longer than 10 elements";
     const buffer = await this.messageImageParser.parseBufferFromMessage(message, pipeline);
@@ -63,7 +63,7 @@ class Transform extends AbstractCommand {
       category: "IMAGE_PROCESSORS",
       description: "Transform an image with a pipeline." + ImageProcessors.IMAGE_DETECTION_INFO,
       requiresProcessing: true,
-    }
+    };
   }
 }
 
@@ -78,14 +78,14 @@ class Stack extends AbstractCommand {
   constructor(
     private messageImageParser: ImageUtilService,
     private imageProcessors: ImageProcessorService,
-    private logger: Logger,
+    private logger: Logger
   ) {
     super();
   }
 
   public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
-    const args = payload.get('args');
+    const message = payload.get("message");
+    const args = payload.get("args");
 
     const processorFunctionName = args[0];
     if (!processorFunctionName) {
@@ -93,7 +93,11 @@ class Stack extends AbstractCommand {
     }
 
     const buffer = await this.messageImageParser.parseBufferFromMessage(message, args);
-    const resultBuffer = await this.createStack(processorFunctionName, buffer, this.DEFAULT_STACK_COUNT[processorFunctionName]);
+    const resultBuffer = await this.createStack(
+      processorFunctionName,
+      buffer,
+      this.DEFAULT_STACK_COUNT[processorFunctionName]
+    );
 
     const mimetype = await fileTypeFromBuffer(resultBuffer);
     const attachment = new AttachmentBuilder(resultBuffer, { name: `shit.${mimetype?.ext}` });
@@ -140,7 +144,7 @@ class Stack extends AbstractCommand {
       description: "Stack an image processor and make a gif out of it." + ImageProcessors.IMAGE_DETECTION_INFO,
 
       requiresProcessing: true,
-    }
+    };
   }
 }
 
@@ -149,15 +153,15 @@ class SingleImageProcessor extends AbstractCommand {
   constructor(
     private messageImageParser: ImageUtilService,
     private imageProcessorService: ImageProcessorService,
-    private threeDProcessorService: ThreeDProcessorService,
+    private threeDProcessorService: ThreeDProcessorService
   ) {
     super();
   }
 
   public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
-    const commandName = payload.get('commandName');
-    const args = payload.get('args');
+    const message = payload.get("message");
+    const commandName = payload.get("commandName");
+    const args = payload.get("args");
 
     const allImageProcessors: Record<string, (buffer: Buffer) => Awaitable<Buffer>> = {
       ...this.imageProcessorService.getProcessors(),
@@ -186,23 +190,23 @@ class SingleImageProcessor extends AbstractCommand {
       name: processorNames.shift()!,
       usage: `[(<url> | <user_id>)]`,
       category: "IMAGE_PROCESSORS",
-      description: 'Edit an image using a processor function. ' + ImageProcessors.IMAGE_DETECTION_INFO,
+      description: "Edit an image using a processor function. " + ImageProcessors.IMAGE_DETECTION_INFO,
       requiresProcessing: true,
       aliases: processorNames,
-    }
+    };
   }
 }
 
 @plugin()
 class ImageProcessors extends AbstractPlugin {
-  public static readonly IMAGE_DETECTION_INFO = 'The image will automaticly detected from replied message,' +
-                                                ' attached image, sticker, emoji, user avatar or url';
+  public static readonly IMAGE_DETECTION_INFO =
+    "The image will automaticly detected from replied message," + " attached image, sticker, emoji, user avatar or url";
 
   public get pluginData(): PluginData {
     return {
-      name: '@geoxor/image-processors',
-      version: '1.0.0',
+      name: "@geoxor/image-processors",
+      version: "1.0.0",
       commands: [SingleImageProcessor, Stack, Transform],
-    }
+    };
   }
 }

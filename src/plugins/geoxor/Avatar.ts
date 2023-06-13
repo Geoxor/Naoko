@@ -6,8 +6,8 @@ import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 class AvatarCommand extends AbstractCommand {
   public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
-    const args = payload.get('args');
+    const message = payload.get("message");
+    const args = payload.get("args");
 
     let otherUser = message.mentions.users.first() || message.author;
     try {
@@ -42,4 +42,3 @@ class Avatar extends AbstractPlugin {
     };
   }
 }
-

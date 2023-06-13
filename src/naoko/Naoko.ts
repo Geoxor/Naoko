@@ -1,8 +1,8 @@
 import Discord, { Partials } from "discord.js";
-import packageJson from "../../package.json" assert { type: 'json' };
+import packageJson from "../../package.json" assert { type: "json" };
 import { NAOKO_ID } from "../constants";
-import { GatewayIntentBits } from 'discord.js';
-import { singleton } from '@triptyk/tsyringe';
+import { GatewayIntentBits } from "discord.js";
+import { singleton } from "@triptyk/tsyringe";
 import { PluginManager } from "../plugins/PluginManager";
 import MessageCreatePipelineManager from "../pipeline/messageCreate/MessageCreatePipelineManager";
 import Logger from "./Logger";
@@ -36,7 +36,7 @@ export default class Naoko {
     private pluginManager: PluginManager,
     private messageCreatePipeline: MessageCreatePipelineManager,
     private logger: Logger,
-    private config: Config,
+    private config: Config
   ) {}
 
   public async run(): Promise<void> {
@@ -60,18 +60,20 @@ export default class Naoko {
   }
 
   private updateActivity() {
-    Naoko.bot.user?.setActivity(`${this.config.prefix}help v${packageJson.version}`, { type: Discord.ActivityType.Listening });
+    Naoko.bot.user?.setActivity(`${this.config.prefix}help v${packageJson.version}`, {
+      type: Discord.ActivityType.Listening,
+    });
   }
 
   private async joinThreads() {
     const channels = Naoko.bot.channels.cache.values();
     for (const channel of channels) {
       if (channel.isThread()) {
-        // TODO: This was part of the Waifu battles. It can either be deleted 
+        // TODO: This was part of the Waifu battles. It can either be deleted
         // or refactored in its one plugin, if we want the battle things again. I kinda liked them
         if (channel.ownerId === NAOKO_ID) {
           await channel.delete();
-          this.logger.print(`Deleted residual battle thread ${channel.id}`)
+          this.logger.print(`Deleted residual battle thread ${channel.id}`);
           continue;
         }
 

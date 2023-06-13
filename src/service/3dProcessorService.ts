@@ -1,14 +1,14 @@
-import { fileTypeFromBuffer } from 'file-type';
+import { fileTypeFromBuffer } from "file-type";
 import { GifFrame, GifUtil } from "gifwrap";
 import Jimp from "jimp";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import { createCanvas, NodeCanvasElement } from "node-canvas-webgl";
 import * as THREE from "three";
-import comicSans from "../assets/comic_sans_font.json" assert { type: 'json' };
+import comicSans from "../assets/comic_sans_font.json" assert { type: "json" };
 import cache from "../naoko/Cache";
 import { Coords, GeometrySceneOptions } from "../types";
-import { singleton } from '@triptyk/tsyringe';
-import { Awaitable } from 'discord.js';
+import { singleton } from "@triptyk/tsyringe";
+import { Awaitable } from "discord.js";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import gifenc from "gifenc";
 
@@ -458,12 +458,7 @@ async function getRGBAUintArray(image: Jimp) {
   return data;
 }
 
-async function encodeFramesToGif(
-  frames: Uint8ClampedArray[] | Uint8Array[],
-  width: number,
-  height: number,
-  delay: number
-) {
+async function encodeFramesToGif(frames: Uint8ClampedArray[] | Uint8Array[], width: number, height: number, delay: number) {
   const gif = gifenc.GIFEncoder();
   const palette = gifenc.quantize(frames[0], 256);
   for (let i = 0; i < frames.length; i++) {

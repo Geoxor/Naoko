@@ -1,11 +1,11 @@
-import Discord from 'discord.js';
+import Discord from "discord.js";
 import { GEOXOR_GUILD_ID } from "../../constants";
 import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
-import { singleton } from '@triptyk/tsyringe';
+import { singleton } from "@triptyk/tsyringe";
 
 @singleton()
 class VoteCommand extends AbstractCommand {
@@ -14,13 +14,13 @@ class VoteCommand extends AbstractCommand {
   private static DOWNVOTE_EMOJI_ID = "823666555123662888";
   private static UPVOTE_EMOJI_ID = "834402501397577729";
 
-  private static DOWNVOTE_EMOJI_ALT = '⬇️';
-  private static UPVOTE_EMOJI_ALT = '⬆️';
+  private static DOWNVOTE_EMOJI_ALT = "⬇️";
+  private static UPVOTE_EMOJI_ALT = "⬆️";
 
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
+    const message = payload.get("message");
 
-    const voteContext = payload.get('args').join(" ");
+    const voteContext = payload.get("args").join(" ");
     if (!voteContext) {
       return "Please write what your vote is about";
     }
@@ -28,7 +28,10 @@ class VoteCommand extends AbstractCommand {
     const embed = new Discord.EmbedBuilder()
       .setColor("#ff00b6")
       .setTitle(voteContext)
-      .setAuthor({ name: `${message.author.username} asks...`, iconURL: message.author.avatarURL() || message.author.defaultAvatarURL })
+      .setAuthor({
+        name: `${message.author.username} asks...`,
+        iconURL: message.author.avatarURL() || message.author.defaultAvatarURL,
+      })
       .setFooter({ text: `Vote with the reactions bellow, results in ${VoteCommand.VOTE_TIME / 1000} seconds` });
 
     // Check if were in the Geoxor guild because Emojis missing in other guilds
@@ -37,15 +40,9 @@ class VoteCommand extends AbstractCommand {
     const vote = await message.channel.send({ embeds: [embed] });
     const collector = vote.createReactionCollector({ time: VoteCommand.VOTE_TIME });
     if (isGeoxorGuild) {
-      await Promise.all([
-        vote.react(VoteCommand.DOWNVOTE_EMOJI_ID),
-        vote.react(VoteCommand.UPVOTE_EMOJI_ID),
-      ]);
+      await Promise.all([vote.react(VoteCommand.DOWNVOTE_EMOJI_ID), vote.react(VoteCommand.UPVOTE_EMOJI_ID)]);
     } else {
-      await Promise.all([
-        vote.react(VoteCommand.DOWNVOTE_EMOJI_ALT),
-        vote.react(VoteCommand.UPVOTE_EMOJI_ALT),
-      ]);
+      await Promise.all([vote.react(VoteCommand.DOWNVOTE_EMOJI_ALT), vote.react(VoteCommand.UPVOTE_EMOJI_ALT)]);
     }
 
     collector.on("collect", (reaction) => this.reactionFilter(reaction, isGeoxorGuild) || reaction.remove());
@@ -84,7 +81,7 @@ class VoteCommand extends AbstractCommand {
       category: "FUN",
       usage: "<topic>",
       description: "Creates a vote",
-    }
+    };
   }
 }
 
@@ -92,9 +89,9 @@ class VoteCommand extends AbstractCommand {
 class Vote extends AbstractPlugin {
   public get pluginData(): PluginData {
     return {
-      name: '@geoxor/vote',
+      name: "@geoxor/vote",
       version: "1.0.0",
       commands: [VoteCommand],
-    }
+    };
   }
 }

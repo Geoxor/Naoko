@@ -8,7 +8,7 @@ export interface History {
   value: string;
 }
 
-export type HistoryTypes = typeof HISTORY_TYPES[number];
+export type HistoryTypes = (typeof HISTORY_TYPES)[number];
 
 export interface ActionHistory {
   timestamp: number;

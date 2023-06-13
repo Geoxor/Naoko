@@ -14,12 +14,6 @@
     "rootDirs": ["./src"],
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "./src",
-    "./src/assets/*",
-    "./src/config.naoko.json"
-  ],
-  "exclude": [
-    "src/setup.naoko.ts"
-  ]
+  "include": ["./src", "./src/assets/*", "./src/config.naoko.json"],
+  "exclude": ["src/setup.naoko.ts"]
 }

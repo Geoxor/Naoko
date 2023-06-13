@@ -6,9 +6,7 @@ import { container } from "@triptyk/tsyringe";
 
 const config = container.resolve(Config);
 
-mongoose
-  .connect(config.mongo)
-  .catch((err: any) => console.error("MongoDB Connection Error:", err));
+mongoose.connect(config.mongo).catch((err: any) => console.error("MongoDB Connection Error:", err));
 const { Schema } = mongoose;
 
 const DB_NUMBER = { type: "Number", default: 0 };

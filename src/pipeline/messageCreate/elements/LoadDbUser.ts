@@ -6,9 +6,9 @@ import MessageCreatePayload from "../MessageCreatePayload";
 @singleton()
 export default class LoadDbUser extends AbstractPipelineElement {
   async execute(payload: MessageCreatePayload): Promise<boolean> {
-    const message = payload.get('message');
+    const message = payload.get("message");
     if (message.member) {
-      payload.set('dbUser', await User.findOneOrCreate(message.member!));
+      payload.set("dbUser", await User.findOneOrCreate(message.member!));
     }
 
     return true;

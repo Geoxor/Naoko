@@ -7,11 +7,11 @@ import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 class DickSizeCommand extends AbstractCommand {
   execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
-    const message = payload.get('message');
+    const message = payload.get("message");
 
     const target = message.mentions.users?.first();
     if (target && message.author.id !== target.id) {
-      return this.calculateDickSizeBattle(message.author.username, target.username)
+      return this.calculateDickSizeBattle(message.author.username, target.username);
     }
 
     return this.calculateSingleDickSize();
@@ -39,17 +39,19 @@ class DickSizeCommand extends AbstractCommand {
             name: "battle.txt",
             attachment: Readable.from(
               `${challenger}'s long dong:\n 8${"=".repeat(dickSize)}D\n\n` +
-              `${target}'s long dong:\n 8${"=".repeat(enemyDickSize)}D\n`
+                `${target}'s long dong:\n 8${"=".repeat(enemyDickSize)}D\n`
             ),
           },
         ],
       };
     }
 
-    return `8${"=".repeat(dickSize)}D ${dickSize}cm ${challenger}\n` +
-        `8${"=".repeat(enemyDickSize)}D ${enemyDickSize}cm ${target}\n` +
-        `diff: ${Math.abs(dickSize - enemyDickSize)}cm\n` +
-        `${resultLastLine}`;
+    return (
+      `8${"=".repeat(dickSize)}D ${dickSize}cm ${challenger}\n` +
+      `8${"=".repeat(enemyDickSize)}D ${enemyDickSize}cm ${target}\n` +
+      `diff: ${Math.abs(dickSize - enemyDickSize)}cm\n` +
+      `${resultLastLine}`
+    );
   }
 
   private calculateSingleDickSize() {
@@ -77,7 +79,7 @@ class DickSizeCommand extends AbstractCommand {
       category: "FUN",
       usage: "[<@user>]",
       description: "Tells you your dicksize or battle against someone else's dicksize!",
-    }
+    };
   }
 }
 
@@ -88,6 +90,6 @@ class DickSize extends AbstractPlugin {
       name: "@geoxor/dick-size",
       version: "1.0.0",
       commands: [DickSizeCommand],
-    }
+    };
   }
 }

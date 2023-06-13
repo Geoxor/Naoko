@@ -1,18 +1,16 @@
-import { container, injectAll, singleton } from '@triptyk/tsyringe';
-import AbstractPlugin from './AbstractPlugin';
-import { Client } from 'discord.js';
-import AbstractCommand from './AbstractCommand';
-import levenshtein from 'js-levenshtein';
+import { container, injectAll, singleton } from "@triptyk/tsyringe";
+import AbstractPlugin from "./AbstractPlugin";
+import { Client } from "discord.js";
+import AbstractCommand from "./AbstractCommand";
+import levenshtein from "js-levenshtein";
 
 @singleton()
 export class PluginManager {
-  constructor(
-    @injectAll('naokoPlugin') private plugins: AbstractPlugin[],
-  ) {}
+  constructor(@injectAll("naokoPlugin") private plugins: AbstractPlugin[]) {}
 
   public getAll(onlyEnabled = true): AbstractPlugin[] {
     if (onlyEnabled) {
-      return this.plugins.filter((plugin) => plugin.pluginData.enabled !== false)
+      return this.plugins.filter((plugin) => plugin.pluginData.enabled !== false);
     }
     return this.plugins;
   }
@@ -37,10 +35,7 @@ export class PluginManager {
 
   public getCommand(commandName: string, onlyEnabled = true): AbstractCommand | null {
     for (const command of this.getAllCommands(onlyEnabled)) {
-      if (
-        command.commandData.name === commandName ||
-        command.commandData.aliases?.includes(commandName)
-      ) {
+      if (command.commandData.name === commandName || command.commandData.aliases?.includes(commandName)) {
         return command;
       }
     }
