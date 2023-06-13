@@ -35,7 +35,7 @@ logger.inspiration();
 
 // Get the absolute path to this file
 const absolutePath = fileURLToPath(new URL("./", import.meta.url));
-const files = await glob([absolutePath + "{commands,plugins}/**/**.ts", absolutePath + "{commands,plugins}/**.ts"]);
+const files = await glob([absolutePath + "plugins/**/**.ts", absolutePath + "plugins/**.ts"]);
 // Import them so all commands get registered inside the container
 await Promise.all(files.map((file) => import(file)));
 
