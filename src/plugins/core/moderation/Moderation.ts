@@ -1,4 +1,4 @@
-import { AnyThreadChannel, GuildMember } from "discord.js";
+import { AnyThreadChannel, GuildMember, Message, PartialMessage } from "discord.js";
 import plugin from "../../../decorators/plugin";
 import AbstractPlugin, { PluginData } from "../../AbstractPlugin";
 import { Ban, Unban } from "./Ban";
@@ -9,11 +9,15 @@ import { WhoIs } from "./Whois";
 import { GEOXOR_GUILD_ID, GHOSTS_ROLE_ID, GEOXOR_GENERAL_CHANNEL_ID } from "../../../constants";
 import welcomeMessages from "../../../assets/welcome_messages.json" assert { type: 'json' };
 import CommonUtils from "../../../service/CommonUtils";
+import SpamCheckService from "../../../service/SpamCheckService";
+import Logger from "../../../naoko/Logger";
 
 @plugin()
 class Moderation extends AbstractPlugin {
   constructor(
     private commonUtils: CommonUtils,
+    private spamChecker: SpamCheckService,
+    private logger: Logger,
   ) {
     super()
   }
@@ -26,6 +30,7 @@ class Moderation extends AbstractPlugin {
       events: {
         guildMemberAdd: this.addGhostRole,
         threadCreate: this.autoJoinThreads,
+        messageUpdate: this.checkUpdatedMessage,
       }
     }
   }
@@ -46,5 +51,13 @@ class Moderation extends AbstractPlugin {
 
   private async autoJoinThreads(thread: AnyThreadChannel) {
     await thread.join();
+  }
+
+  private async checkUpdatedMessage(_oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage) {
+    const spamResult = this.spamChecker.checkForSpam(newMessage.content || '');
+    if (spamResult.isSpam) {
+      this.logger.error(`SpamCheck ${spamResult.failedCheck} failed for ${newMessage.author?.username}`);
+      await newMessage.delete();
+    }
   }
 }

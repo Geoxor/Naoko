@@ -1,7 +1,11 @@
 import Discord from "discord.js";
 import mongoose from "mongoose";
 import { ActionHistory, HistoryTypes, IBattleUserRewards, IUser } from "../types";
-import { config } from "./Config";
+import Config from "./Config";
+import { container } from "@triptyk/tsyringe";
+
+const config = container.resolve(Config);
+
 mongoose
   .connect(config.mongo)
   .catch((err: any) => console.error("MongoDB Connection Error:", err));
@@ -57,7 +61,7 @@ export interface IUserFunctions {
 }
 schema.methods.updateRoles = function (roles: string[]) {
   this.roles = roles;
-  // return this.save().catch();
+  return this.save();
 };
 
 schema.methods.addBattleRewards = function (rewards: IBattleUserRewards) {

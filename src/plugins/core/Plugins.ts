@@ -1,5 +1,5 @@
 import { inject, delay, singleton } from "@triptyk/tsyringe";
-import { COMMAND_CATEGORIES, SHAII_LOGO } from "../../constants";
+import { COMMAND_CATEGORIES, NAOKO_LOGO } from "../../constants";
 import plugin from "../../decorators/plugin";
 import { CommandExecuteResponse } from "../../types";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
@@ -79,7 +79,7 @@ class Help extends AbstractCommand {
       helpEmbed.setTitle(`Command: ${commandName}`);
       helpEmbed.setDescription(commandData.description);
       helpEmbed.setColor("#fca103");
-      helpEmbed.setImage(SHAII_LOGO)
+      helpEmbed.setImage(NAOKO_LOGO)
       if (commandData.usage) {
         helpEmbed.addFields({ name: "Usage", value: `\`${commandName} ${commandData.usage}\`` });
       } else {
@@ -186,7 +186,7 @@ class PluginList extends AbstractCommand {
       `${bold("Enabled:")} ${plugin.pluginData.enabled !== false ? '✅' : '❌'}`;
 
     const embed = new Discord.EmbedBuilder()
-      .setAuthor({ name: `Naoko v${Naoko.version}`, iconURL: SHAII_LOGO })
+      .setAuthor({ name: `Naoko v${Naoko.version}`, iconURL: NAOKO_LOGO })
       .setThumbnail(PluginList.PLUGIN_ICON)
       .setTitle(`Plugin: ${plugin.pluginData.name}`)
       .setDescription(description)
@@ -218,7 +218,7 @@ class PluginList extends AbstractCommand {
 
   private getAllPluginsEmbed(plugins: AbstractPlugin[]) {
     const embed = new Discord.EmbedBuilder()
-      .setAuthor({ name: `Naoko v${Naoko.version}`, iconURL: SHAII_LOGO })
+      .setAuthor({ name: `Naoko v${Naoko.version}`, iconURL: NAOKO_LOGO })
       .setThumbnail(PluginList.PLUGIN_ICON)
       .setColor("#FF00B6")
       .addFields({

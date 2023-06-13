@@ -14,6 +14,7 @@ export class WhoIs extends AbstractCommand {
   ) {
     super();
   }
+
   async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
     const message = payload.get('message');
     const args = payload.get('args');
@@ -131,6 +132,7 @@ export class WhoIs extends AbstractCommand {
   get commandData(): CommandData {
     return {
       name: "whois",
+      aliases: ["profile"],
       category: "MODERATION",
       usage: "[(<@user> | <user-id>)]",
       description: "Show information about a user",

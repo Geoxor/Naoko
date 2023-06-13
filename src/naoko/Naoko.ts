@@ -1,13 +1,12 @@
 import Discord, { Partials } from "discord.js";
 import packageJson from "../../package.json" assert { type: 'json' };
-import { SHAII_ID } from "../constants";
-import { config } from "./Config";
-import { User } from "./Database";
+import { NAOKO_ID } from "../constants";
 import { GatewayIntentBits } from 'discord.js';
 import { singleton } from '@triptyk/tsyringe';
 import { PluginManager } from "../plugins/PluginManager";
 import MessageCreatePipelineManager from "../pipeline/messageCreate/MessageCreatePipelineManager";
 import Logger from "./Logger";
+import Config from "./Config";
 
 /**
  * Naoko multi purpose Discord bot
@@ -37,6 +36,7 @@ export default class Naoko {
     private pluginManager: PluginManager,
     private messageCreatePipeline: MessageCreatePipelineManager,
     private logger: Logger,
+    private config: Config,
   ) {}
 
   public async run(): Promise<void> {
@@ -44,7 +44,7 @@ export default class Naoko {
     this.pluginManager.registerEventListener(Naoko.bot);
 
     this.logger.print("Naoko logging in...");
-    await Naoko.bot.login(config.token);
+    await Naoko.bot.login(this.config.token);
   }
 
   private async registerEventListener() {
@@ -60,7 +60,7 @@ export default class Naoko {
   }
 
   private updateActivity() {
-    Naoko.bot.user?.setActivity(`${config.prefix}help v${packageJson.version}`, { type: Discord.ActivityType.Listening });
+    Naoko.bot.user?.setActivity(`${this.config.prefix}help v${packageJson.version}`, { type: Discord.ActivityType.Listening });
   }
 
   private async joinThreads() {
@@ -69,7 +69,7 @@ export default class Naoko {
       if (channel.isThread()) {
         // TODO: This was part of the Waifu battles. It can either be deleted 
         // or refactored in its one plugin, if we want the battle things again. I kinda liked them
-        if (channel.ownerId === SHAII_ID) {
+        if (channel.ownerId === NAOKO_ID) {
           await channel.delete();
           this.logger.print(`Deleted residual battle thread ${channel.id}`)
           continue;

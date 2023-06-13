@@ -1,5 +1,5 @@
 import Discord from 'discord.js';
-import { SHAII_LOGO } from "../../../constants";
+import { NAOKO_LOGO } from "../../../constants";
 import { User } from '../../../naoko/Database';
 import Naoko from "../../../naoko/Naoko";
 import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreatePayload";
@@ -26,7 +26,7 @@ export class Kick extends AbstractCommand {
       .setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL() || message.author.defaultAvatarURL })
       .setTimestamp()
       .addFields({ name: "Reason", value: reason || "No reason given", inline: true })
-      .setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
+      .setFooter({ text: Naoko.version, iconURL: NAOKO_LOGO })
       .setColor("#FF4500");
 
     targetUser

@@ -1,5 +1,5 @@
 import Discord, { GuildMember, Message } from "discord.js";
-import { SHAII_LOGO } from "../../../constants";
+import { NAOKO_LOGO } from "../../../constants";
 import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../../types";
 import Naoko from "../../../naoko/Naoko";
@@ -37,7 +37,7 @@ export class Ban extends AbstractCommand {
       embeds: [new Discord.EmbedBuilder()
         .setTitle(`Ban - ${target.user.username}`)
         .setDescription(`ID: ${target.user.id}, <@${target.user.id}>`)
-        .setThumbnail(target.user.avatarURL() || (message ? message.author.defaultAvatarURL : SHAII_LOGO))
+        .setThumbnail(target.user.avatarURL() || (message ? message.author.defaultAvatarURL : NAOKO_LOGO))
         .setTimestamp()
         .addFields({
           name: "Reason",
@@ -103,7 +103,7 @@ export class Unban extends AbstractCommand {
       .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() || message.author.defaultAvatarURL })
       .setTimestamp()
       .addFields({ name: "Reason", value: reason || "No reason given", inline: true })
-      .setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
+      .setFooter({ text: Naoko.version, iconURL: NAOKO_LOGO })
       .setColor("#00FF00");
 
     try {

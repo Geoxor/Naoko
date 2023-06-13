@@ -5,13 +5,16 @@ import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayl
 import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 class AvatarCommand extends AbstractCommand {
-  public execute(payload: MessageCreatePayload): CommandExecuteResponse | Promise<CommandExecuteResponse> {
+  public async execute(payload: MessageCreatePayload): Promise<CommandExecuteResponse> {
     const message = payload.get('message');
     const args = payload.get('args');
 
-    const otherUser = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.author;
-    let avatar;
+    let otherUser = message.mentions.users.first() || message.author;
+    try {
+      otherUser = await message.client.users.fetch(args[0]);
+    } catch {}
 
+    let avatar;
     if (message.guild) {
       const member = message.guild.members.cache.get(otherUser.id);
       if (member && member.avatar) avatar = member.avatarURL({ size: 256 });

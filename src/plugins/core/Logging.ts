@@ -1,13 +1,12 @@
-import { ActivityType, ChannelType, EmbedBuilder, GuildMember, GuildTextBasedChannel, Message, PartialGuildMember, PartialMessage, Presence, TextChannel, VoiceState, codeBlock, inlineCode } from "discord.js";
-import { CommandExecuteResponse } from "../../types";
-import AbstractPlugin, { PluginData } from "../AbstractPlugin";
-import plugin from "../../decorators/plugin";
-import { GEOXOR_CHAT_LOG_CHANNEL_ID, GEOXOR_LEAVE_LOG_CHANNEL_ID, GEOXOR_VOICE_CHAT_LOG_CHANNEL_ID, SHAII_ID } from "../../constants";
-import { config } from '../../naoko/Config';
-import { User } from '../../naoko/Database'
-import AbstractCommand, { CommandData } from "../AbstractCommand";
-import Logger from "../../naoko/Logger";
 import { singleton } from "@triptyk/tsyringe";
+import { ActivityType, ChannelType, EmbedBuilder, GuildMember, Message, PartialGuildMember, PartialMessage, Presence, VoiceState, codeBlock, inlineCode } from "discord.js";
+import plugin from "../../decorators/plugin";
+import Config from '../../naoko/Config';
+import { User } from '../../naoko/Database';
+import Logger from "../../naoko/Logger";
+import { CommandExecuteResponse } from "../../types";
+import AbstractCommand, { CommandData } from "../AbstractCommand";
+import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 
 @singleton()
 class LogsCommand extends AbstractCommand {
@@ -36,6 +35,7 @@ class LogsCommand extends AbstractCommand {
 class Logging extends AbstractPlugin {
   constructor(
     private logger: Logger,
+    private config: Config,
   ) {
     super();
   }
@@ -74,7 +74,8 @@ class Logging extends AbstractPlugin {
         }
       ).setTimestamp();
 
-    const logChannel = message.client.channels.cache.get(GEOXOR_CHAT_LOG_CHANNEL_ID) as TextChannel;
+    const logChannel = this.config.getChannel('GEOXOR_CHAT_LOG_CHANNEL_ID', message.client);
+
 
     await logChannel.send({ embeds: [embed], allowedMentions: { parse: [] } });
     this.logger.print(`Message deleted in #${message.channel.name} by ${message.author?.username}`);
@@ -94,11 +95,8 @@ class Logging extends AbstractPlugin {
 
   private async logMessageUpdate(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage) {
     const author = oldMessage.author || newMessage.author;
-    if (!author) {
-      return;
-    }
-
     if (
+      !author ||
       oldMessage.channel.type == ChannelType.DM ||
       oldMessage.content == newMessage.content ||
       author.bot
@@ -106,7 +104,6 @@ class Logging extends AbstractPlugin {
       return;
     }
 
-    // TODO: Discord markdown supports Diffs. We can use them here for cool diffs
     const embed = new EmbedBuilder()
       .setColor("#fff06e")
       .setTitle(`Message edited in #${oldMessage.channel.name}`)
@@ -121,14 +118,14 @@ class Logging extends AbstractPlugin {
         }
       ).setTimestamp();
 
-    const logChannel = oldMessage.client.channels.cache.get(config.chatLogChannel) as TextChannel;
+    const logChannel = this.config.getChannel('GEOXOR_CHAT_LOG_CHANNEL_ID', oldMessage.client)
 
     await logChannel.send({ embeds: [embed] });
     this.logger.print(`Message edited at #${oldMessage.channel.name} by ${author.username}`);
   }
 
   private async voiceStateUpdate(oldState: VoiceState, newState: VoiceState) {
-    const logChannel = newState.guild.channels.cache.get(GEOXOR_VOICE_CHAT_LOG_CHANNEL_ID) as GuildTextBasedChannel;
+    const logChannel = this.config.getChannel('GEOXOR_VOICE_CHAT_LOG_CHANNEL_ID', oldState.client);
 
     const member = oldState.member || newState.member;
     if (!member || member.user.bot) return;
@@ -159,7 +156,7 @@ class Logging extends AbstractPlugin {
   }
 
   private async logGuildMemberRemove(member: GuildMember | PartialGuildMember) {
-    const channel = member.client.channels.cache.get(GEOXOR_LEAVE_LOG_CHANNEL_ID) as GuildTextBasedChannel;
+    const channel = this.config.getChannel('GEOXOR_LEAVE_LOG_CHANNEL_ID', member.client);
     await channel.send(`User ${member.user.username} (${inlineCode(member.id)}) left the server`);
   }
 

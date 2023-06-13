@@ -1,5 +1,5 @@
 import Discord, { EmbedBuilder, Message } from 'discord.js';
-import { SHAII_LOGO, MUTED_ROLE_ID } from '../../../constants';
+import { NAOKO_LOGO, MUTED_ROLE_ID } from '../../../constants';
 import Naoko from '../../../naoko/Naoko';
 import MessageCreatePayload from '../../../pipeline/messageCreate/MessageCreatePayload';
 import { CommandExecuteResponse } from '../../../types';
@@ -65,7 +65,7 @@ export class Mute extends AbstractCommand {
         { name: "Duration", value: this.timeFormatter.msToFullTime(parseInt(duration)), inline: true },
         { name: "Reason", value: reason, inline: true },
       ])
-      .setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
+      .setFooter({ text: Naoko.version, iconURL: NAOKO_LOGO })
       .setColor("#FF0000");
 
     try {
@@ -133,7 +133,7 @@ export class Unmute extends AbstractCommand {
       .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
       .setTimestamp()
       .addFields({ name: "Reason", value: reason || "No reason given", inline: true })
-      .setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
+      .setFooter({ text: Naoko.version, iconURL: NAOKO_LOGO })
       .setColor("#00FF00");
 
     return message.channel.send({ embeds: [embed] });

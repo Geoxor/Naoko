@@ -5,6 +5,7 @@ services:
     image: node:18
     build:
       context: "."
+      dockerfile: "./Dockerfile"
     volumes:
       - "./:/app"
 

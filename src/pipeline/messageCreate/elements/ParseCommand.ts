@@ -1,7 +1,7 @@
 import { MessageMentions } from "discord.js";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
-import { config } from "../../../naoko/Config";
+import Config from "../../../naoko/Config";
 import { singleton } from "@triptyk/tsyringe";
 import { PluginManager } from "../../../plugins/PluginManager";
 
@@ -9,18 +9,19 @@ import { PluginManager } from "../../../plugins/PluginManager";
 export default class ParseCommand extends AbstractPipelineElement {
   constructor(
     private pluginManager: PluginManager,
+    private config: Config,
   ) {
     super();
   }
 
   async execute(payload: MessageCreatePayload): Promise<boolean> {
     const message = payload.get('message');
-    if (message.content.lastIndexOf(config.prefix) !== 0 || message.author.bot) {
+    if (message.content.lastIndexOf(this.config.prefix) !== 0 || message.author.bot) {
       return false;
     }
 
     // Remove all Mentions -> Remove the Prefix -> Split the message on every whitespace
-    const args = this.removeMentions(message.content).slice(config.prefix.length).trim().split(/ +/);
+    const args = this.removeMentions(message.content).slice(this.config.prefix.length).trim().split(/ +/);
     const commandName = args.shift() || '';
 
     const command = this.pluginManager.getCommand(commandName);
@@ -30,7 +31,7 @@ export default class ParseCommand extends AbstractPipelineElement {
         await message
           .reply(
             "That command doesn't exist!\n" +
-            `There's this however \`${config.prefix + closestCommand.commandData.usage}\``
+            `There's this however \`${this.config.prefix}${closestCommand.commandData.name} ${closestCommand.commandData.usage}\``
           );
         return false;
       }

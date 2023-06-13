@@ -29,6 +29,7 @@ class AmethystInfoCommand extends AbstractCommand {
   public get commandData(): CommandData {
     return {
       name: "amethyst",
+      aliases: ["ame"],
       category: "UTILITY",
       usage: "",
       description: "Create an embed with information about amethyst",

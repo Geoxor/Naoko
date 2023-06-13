@@ -1,7 +1,6 @@
 import { EmojiIdentifierResolvable } from "discord.js";
 
 export const GEOXOR_GUILD_ID = "385387666415550474";
-export const TESTING_GUILD_ID = "558316518602178561";
 
 // Channel
 export const GEOXOR_GENERAL_CHANNEL_ID = "1018685216317001738";
@@ -11,7 +10,7 @@ export const GEOXOR_LEAVE_LOG_CHANNEL_ID = "823403109522866217";
 export const GEOXOR_VOICE_CHAT_LOG_CHANNEL_ID = "755597803102928966";
 
 // User
-export const SHAII_ID = "870496144881492069";
+export const NAOKO_ID = "870496144881492069";
 
 export const GEOXOR_ID = "153274351561605120";
 export const N1KO_ID = "251270690160771072";
@@ -24,13 +23,9 @@ export const MUTED_ROLE_ID = "737011597217628231";
 export const GHOSTS_ROLE_ID = "736285344659669003";
 export const GEOBOTS_ROLE_ID = "720006137151488121";
 
-export const RESTRICTED_CHANNELS: string[] = [GEOXOR_GENERAL_CHANNEL_ID];
-
-// TODO: These links seem to be broken
-export const INVENTORY_ICON = "https://cdn.discordapp.com/attachments/806300597338767450/872917164091396126/unknown.png";
-export const WINDOWS_LOGO = "https://cdn.discordapp.com/attachments/816028632269979668/878984332025397258/windows.png";
-export const LINUX_LOGO = "https://cdn.discordapp.com/attachments/816028632269979668/878984391936847882/LINUX-LOGO.png";
-export const SHAII_LOGO = "https://cdn.discordapp.com/avatars/870496144881492069/0d0f5a8cd8ad5e0e0a5eec0d40d2e2a5.webp";
+export const WINDOWS_LOGO = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Windows_logo_-_2012.png/438px-Windows_logo_-_2012.png";
+export const LINUX_LOGO = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/405px-Tux.svg.png";
+export const NAOKO_LOGO = "https://cdn.discordapp.com/avatars/870496144881492069/fcb2aa2c14ca602c662f5d6a2c511bc8.webp?size=256";
 
 export const HISTORY_TYPES = ["nickname_history", "username_history", "status_history"] as const;
 

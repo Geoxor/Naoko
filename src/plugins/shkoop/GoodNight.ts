@@ -2,7 +2,7 @@ import Discord, { GuildMember, Message } from "discord.js";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import plugin from "../../decorators/plugin";
 import { CommandExecuteResponse } from "../../types";
-import { GEOXOR_GUILD_ID, MUTED_ROLE_ID, SHAII_LOGO } from "../../constants";
+import { GEOXOR_GUILD_ID, MUTED_ROLE_ID, NAOKO_LOGO } from "../../constants";
 import Naoko from "../../naoko/Naoko";
 import { User } from '../../naoko/Database';
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
@@ -69,7 +69,7 @@ class GoodNightCommand extends AbstractCommand {
         { name: 'Explanation', value: 'To be unmuted at any time, just dm the bot ~gm' },
         { name: 'Duration', value: this.timeFormatter.msToFullTime(parseInt(duration)), inline: true },
         { name: 'Reason', value: reason, inline: true },
-      ]).setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
+      ]).setFooter({ text: Naoko.version, iconURL: NAOKO_LOGO })
       .setColor("#FF0000");
   }
 
@@ -126,7 +126,7 @@ class GoodMorningCommand extends AbstractCommand {
       .setThumbnail(targetUser.user.avatarURL() || message.author.defaultAvatarURL)
       .setTimestamp()
       .addFields([{ name: 'Reason', value: reason || "No reason given", inline: true }])
-      .setFooter({ text: Naoko.version, iconURL: SHAII_LOGO })
+      .setFooter({ text: Naoko.version, iconURL: NAOKO_LOGO })
       .setColor("#00FF00");
 
     return message.channel.send({ embeds: [embed] });

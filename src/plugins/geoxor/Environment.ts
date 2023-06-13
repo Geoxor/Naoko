@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import { SHAII_LOGO, WINDOWS_LOGO, LINUX_LOGO } from "../../constants";
+import { NAOKO_LOGO, WINDOWS_LOGO, LINUX_LOGO } from "../../constants";
 import Naoko from "../../naoko/Naoko";
 import { CommandExecuteResponse } from "../../types";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
@@ -83,7 +83,8 @@ class Env extends AbstractCommand {
     const totalRam = systemInfo.memLayout.reduce((acc, mem) => acc + mem.size, 0);
 
     const embed = new EmbedBuilder()
-      .setAuthor({ name: `Naoko v${Naoko.version}`, iconURL: SHAII_LOGO })
+      .setAuthor({ name: `Naoko v${Naoko.version}`, iconURL: NAOKO_LOGO })
+      .setTitle("Environment")
       .setColor("#FF00B6")
       .setThumbnail(platform === "win32" || platform === "win64" ? WINDOWS_LOGO : LINUX_LOGO)
       .addFields(

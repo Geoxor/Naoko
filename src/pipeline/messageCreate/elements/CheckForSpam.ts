@@ -2,12 +2,13 @@ import { singleton } from "@triptyk/tsyringe";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
 import Logger from "../../../naoko/Logger";
+import SpamCheckService from "../../../service/SpamCheckService";
 
-// TODO: This can be handled by the auto moderator
 @singleton()
 export default class CheckForSpam extends AbstractPipelineElement {
   constructor(
     private logger: Logger,
+    private spamChecker: SpamCheckService,
   ) {
     super();
   }
@@ -21,9 +22,10 @@ export default class CheckForSpam extends AbstractPipelineElement {
       return true;
     }
 
-    if (this.isDiscordInvite(content) || this.isFreeNitro(content)) {
+    const spamResult = this.spamChecker.checkForSpam(content);
+    if (spamResult.isSpam) {
       await message.delete();
-      this.logger.error(`SpamCheck failed for ${message.author.username}`);
+      this.logger.error(`SpamCheck ${spamResult.failedCheck} failed for ${message.author.username}`);
       return false;
     }
 

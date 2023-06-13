@@ -4,7 +4,6 @@ import 'reflect-metadata';
 console.clear();
 
 import chalk from "chalk";
-import packageJson from "../package.json" assert { type: 'json' };
 import Naoko from './naoko/Naoko.js';
 import { container } from '@triptyk/tsyringe';
 import { fileURLToPath } from 'node:url';
@@ -16,18 +15,18 @@ const logger = container.resolve(Logger);
 
 // Print log
 logger.print(
-  chalk.hex("#FF33A7")(`              
-          -%#-          
-         *@@@@*         
-        -@@%%@@-        
-  :====:-@@@@@@=:====:  
+  chalk.hex("#FF33A7")(`
+          -%#-
+         *@@@@*
+        -@@%%@@-
+  :====:-@@@@@@=:====:
 *@@@@@@@@*+##@#+@@@@@@@*
- #@@@#@%##%.++=#%@*@@@#  by Geoxor & Friends v${packageJson.version}
-  -*@@%***-  :%@@@@@*-   .▄▄ ·   ▄  .▄  ▄▄▄· ▪   ▪  
-     :#@@%+-%+****:      ▐█ ▀.  ██▪ ▐█ ▐█ ▀█ ██  ██ 
-    -@@@@%@-@@%@@@@-     ▄▀▀▀█▄ ██▀ ▐█ ▄█▀▀█ ▐█· ▐█·
-    #@@%%@@=+@@@%@@#     ▐█▄▪▐█ ██▌ ▐▀ ▐█ ▪▐▌▐█▌ ▐█▌
-    #@@@@*:  :#@@@@#      ▀▀▀▀  ▀▀▀  ·  ▀  ▀ ▀▀▀ ▀▀▀
+ #@@@#@%##%.++=#%@*@@@#  by Geoxor & Friends v${Naoko.version}
+  -*@@%***-  :%@@@@@*-    ▐ ▄  ▄▄▄·       ▄ •▄
+     :#@@%+-%+****:      •█▌▐█▐█ ▀█ ▪     █▌▄▌▪▪
+    -@@@@%@-@@%@@@@-     ▐█▐▐▌▄█▀▀█  ▄█▀▄ ▐▀▀▄· ▄█▀▄
+    #@@%%@@=+@@@%@@#     ██▐█▌▐█ ▪▐▌▐█▌.▐▌▐█.█▌▐█▌.▐▌
+    #@@@@*:  :#@@@@#     ▀▀ █▪ ▀  ▀  ▀█▄▀▪·▀  ▀ ▀█▄▀▪
 \n`)
 );
 
