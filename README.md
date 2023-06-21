@@ -20,7 +20,7 @@ sudo apt install -y build-essential g++-10 libxi-dev libxext-dev libpixman-1-dev
 
 ### Windows
 
-1. Install Node versoin 16.x.x
+1. Install Node version 16.x.x
 2. Install MongoDB Community https://www.mongodb.com/try/download/community & follow default installation
 3. With administrator privileges, do `npm i` in the repository folder
 
@@ -33,3 +33,12 @@ Once all these are set up:
    Set url to mongodb (mongodb://127.0.0.1:27017 if hosting locally)
 2. In `constants/index.ts` replace guild & channel IDs with those of your test guild
 3. `npm run dev`
+
+### Docker
+
+If you have docker installed you can simple build the image and run the install from inside the docker container
+```shell
+docker compose run --rm -it node-cli yarn install
+```
+
+The compose file also includes the mongo server needed to run naoko

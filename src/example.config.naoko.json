@@ -1,7 +1,8 @@
 {
   "prefix": "~",
-  "musicDirectory": "<music_dir>",
-  "token": "<token>",
-  "chatLogChannel": "<log_channel_id>",
-  "mongo": "mongodb://localhost:27017"
+  "token": "BOT TOKEN",
+  "mongo": "mongodb://localhost:27017",
+  "//debug": {
+    "overwriteChannel": ""
+  }
 }

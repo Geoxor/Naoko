@@ -4,18 +4,16 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "ES2017",
+    "target": "ESNext",
     "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "outDir": "dist",
     "declaration": false,
-    "module": "commonjs",
+    "module": "ESNext",
     "rootDirs": ["./src"],
-    "baseUrl": "./",
-    "paths": {
-      "src/*": ["src/*"]
-    },
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["./src", "./src/assets/*"],
+  "include": ["./src", "./src/assets/*", "./src/config.naoko.json"],
   "exclude": ["src/setup.naoko.ts"]
 }

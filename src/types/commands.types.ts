@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { EmbedBuilder } from "discord.js";
 import { DatabaseUser } from "./database.types";
 import { COMMAND_CATEGORIES_RAW } from "../constants";
 
@@ -8,13 +8,11 @@ export interface IMessage extends Discord.Message {
   databaseUser: DatabaseUser;
 }
 
-export type CommandExecuteRespones = string | Discord.ReplyMessageOptions | void
+export type CommandExecuteResponse = string | Discord.MessageReplyOptions | EmbedBuilder | void;
 
-export type CommandExecute = (
-  message: IMessage
-) => Promise<CommandExecuteRespones> | CommandExecuteRespones;
+export type CommandExecute = (message: IMessage) => Promise<CommandExecuteResponse> | CommandExecuteResponse;
 
-export type CommandCategories = typeof COMMAND_CATEGORIES_RAW[number];
+export type CommandCategories = (typeof COMMAND_CATEGORIES_RAW)[number];
 
 export interface CommandDefinition {
   /**

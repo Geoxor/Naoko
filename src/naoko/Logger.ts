@@ -1,14 +1,18 @@
 import chalk from "chalk";
 import MultiProgress from "multi-progress";
-import quotes from "../assets/quotes.json";
-import { getCurrentMemoryHeap, randomChoice } from "../logic/logic";
+import quotes from "../assets/quotes.json" assert { type: "json" };
+import { singleton } from "@triptyk/tsyringe";
+import CommonUtils from "../service/CommonUtils";
 
 /**
  * Main logging wrapper that creates beautiful colors and emojis
  * for logging what the bot is currently doing
  * @author Geoxor
  */
-class Logger {
+@singleton()
+export default class Logger {
+  constructor(private commonUtils: CommonUtils) {}
+
   private emoji: string = "🌸";
   private color: string = "#FF90E0";
   private errorColor: string = "#FF0";
@@ -16,7 +20,7 @@ class Logger {
   public logHistory: string[] = [];
   public multiProgress: MultiProgress = new MultiProgress(process.stdout);
 
-  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${randomChoice(quotes)}\n`));
+  public inspiration = () => console.log(chalk.hex("#32343F")(`  ${this.commonUtils.randomChoice(quotes)}\n`));
 
   protected pushToLogHistory(string: string) {
     if (this.logHistory.length > 20) this.logHistory.shift();
@@ -45,8 +49,8 @@ class Logger {
    * @author Geoxor
    */
   public print(log: string): void {
-    this.pushToLogHistory(`${getCurrentMemoryHeap()}  [${this.time()}] ${this.emoji}  ${log}`);
-    console.log(chalk.hex(this.color)(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji}  ${log}`));
+    this.pushToLogHistory(`${this.getCurrentMemoryHeap()}  [${this.time()}] ${this.emoji}  ${log}`);
+    console.log(chalk.hex(this.color)(`  ${this.getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji}  ${log}`));
   }
 
   /**
@@ -55,9 +59,9 @@ class Logger {
    * @author Geoxor
    */
   public error(log: string): void {
-    this.pushToLogHistory(`${getCurrentMemoryHeap()}  [${this.time()}] ${this.errorEmoji}  ${log}`);
+    this.pushToLogHistory(`${this.getCurrentMemoryHeap()}  [${this.time()}] ${this.errorEmoji}  ${log}`);
     console.log(
-      chalk.hex(this.errorColor)(`  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`)
+      chalk.hex(this.errorColor)(`  ${this.getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`)
     );
   }
 
@@ -66,7 +70,7 @@ class Logger {
    */
   public progress(name: string, tickCount: number) {
     return this.multiProgress.newBar(
-      `  ${getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji} ${chalk.hex(this.color)(name)}${chalk.hex(
+      `  ${this.getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji} ${chalk.hex(this.color)(name)}${chalk.hex(
         this.color
       )("[:bar]")} :etas :percent `,
       {
@@ -82,6 +86,12 @@ class Logger {
     bar.update(value);
     bar.tick();
   }
-}
 
-export const logger = new Logger();
+  private getCurrentMemoryHeap() {
+    const mem = process.memoryUsage();
+    const used = mem.heapUsed / 1000 / 1000;
+    const total = mem.heapTotal / 1000 / 1000;
+
+    return `${used.toFixed(2)}/${total.toFixed(2)}MB`;
+  }
+}
