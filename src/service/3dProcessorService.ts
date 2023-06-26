@@ -2,7 +2,7 @@ import { fileTypeFromBuffer } from "file-type";
 import { GifFrame, GifUtil } from "gifwrap";
 import Jimp from "jimp";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
-import { createCanvas, NodeCanvasElement } from "node-canvas-webgl";
+import { createCanvas, NodeCanvasElement } from "@otiskujawa/node-canvas-webgl";
 import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json" assert { type: "json" };
 import cache from "../naoko/Cache";
