@@ -14,7 +14,7 @@ import gifenc from "gifenc";
 
 @singleton()
 export default class ThreeDProcessorService {
-  private processors: Record<string, (buffer: Buffer) => Awaitable<Buffer>>;
+  private processors: Record<string, (buffer: Buffer, args?: string) => Awaitable<Buffer>>;
 
   constructor() {
     this.processors = {

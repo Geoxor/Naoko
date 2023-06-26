@@ -417,6 +417,14 @@
   dependencies:
     semver "^7.3.5"
 
+"@otiskujawa/node-canvas-webgl@^0.2.7":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@otiskujawa/node-canvas-webgl/-/node-canvas-webgl-0.2.9.tgz#bf368951305dba626db53cc34df75755eb6685a0"
+  integrity sha512-GCJixbZ/Qljja2J9sMGv6W94Mu4wMld/STDojxAHrOzhRtTYZdOI9hcj0rwYB0ym5655p2rA37shsKcXqkKA3Q==
+  dependencies:
+    canvas "^2.6.0"
+    gl "^6.0.0"
+
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
@@ -2473,13 +2481,6 @@ node-bitmap@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/node-bitmap/-/node-bitmap-0.0.1.tgz#180eac7003e0c707618ef31368f62f84b2a69091"
   integrity sha512-Jx5lPaaLdIaOsj2mVLWMWulXF6GQVdyLvNSxmiYCvZ8Ma2hfKX0POoR2kgKOqz+oFsRreq0yYZjQ2wjE9VNzCA==
-
-"node-canvas-webgl@https://github.com/akira-cn/node-canvas-webgl.git":
-  version "0.2.9"
-  resolved "https://github.com/akira-cn/node-canvas-webgl.git#535c10e888cee882fe5e56798d2cdfccac8d9511"
-  dependencies:
-    canvas "^2.6.0"
-    gl "^6.0.0"
 
 node-fetch@^2.6.1, node-fetch@^2.6.7:
   version "2.6.11"

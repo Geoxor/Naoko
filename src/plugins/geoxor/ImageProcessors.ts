@@ -163,7 +163,7 @@ class SingleImageProcessor extends AbstractCommand {
     const commandName = payload.get("commandName");
     const args = payload.get("args");
 
-    const allImageProcessors: Record<string, (buffer: Buffer) => Awaitable<Buffer>> = {
+    const allImageProcessors = {
       ...this.imageProcessorService.getProcessors(),
       ...this.threeDProcessorService.getProcessors(),
     };
@@ -173,14 +173,14 @@ class SingleImageProcessor extends AbstractCommand {
     }
 
     const buffer = await this.messageImageParser.parseBufferFromMessage(message, args);
-    const resultBuffer = await processor(buffer);
+    const resultBuffer = await processor(buffer, args.join(' '));
     const mimetype = await fileTypeFromBuffer(resultBuffer);
     const attachment = new AttachmentBuilder(resultBuffer, { name: `shit.${mimetype?.ext}` });
     return { files: [attachment] };
   }
 
   public get commandData(): CommandData {
-    const allImageProcessors: Record<string, (buffer: Buffer) => Awaitable<Buffer>> = {
+    const allImageProcessors = {
       ...this.imageProcessorService.getProcessors(),
       ...this.threeDProcessorService.getProcessors(),
     };
