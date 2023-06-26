@@ -17,9 +17,9 @@ export default class RestrictedChannel extends AbstractPipelineElement {
       return true;
     }
 
-    // Check if user is a mod, admin or has admin perms if not, return
+    // Check if user is a mod, admin has bypass role or admin perms if not, return
     if (
-      message.member.roles.cache.some((role) => role.id === MOD_ROLE_ID || role.id === ADMIN_ROLE_ID) ||
+      message.member.roles.cache.some((role) => role.id === MOD_ROLE_ID || role.id === ADMIN_ROLE_ID || role.id === RESTRICT_BYPASS_ROLE_ID ) ||
       message.member.permissions.has("Administrator")
     ) {
       return true;
