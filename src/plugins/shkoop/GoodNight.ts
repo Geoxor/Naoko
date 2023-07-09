@@ -97,7 +97,7 @@ class GoodMorningCommand extends AbstractCommand {
       if (!targetUser) throw new Error("No User");
 
       // Unget rekt
-      await targetUser.timeout(0);
+      await targetUser.timeout(null);
       await this.unSelfMute(targetUser);
 
       // Keep track of the unmute
