@@ -8,7 +8,8 @@
     "dev": "nodemon ./src/naoko.ts",
     "setup": "ts-node ./src/setup.naoko.ts",
     "first-time-setup": "npm ci && npm run prettify && ts-node ./src/setup.naoko.ts",
-    "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\""
+    "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\"",
+    "test": "echo No tests defined"
   },
   "repository": {
     "type": "git",
