@@ -39,7 +39,7 @@ class DickSizeCommand extends AbstractCommand {
             name: "battle.txt",
             attachment: Readable.from(
               `${challenger}'s long dong:\n 8${"=".repeat(dickSize)}D\n\n` +
-                `${target}'s long dong:\n 8${"=".repeat(enemyDickSize)}D\n`
+                `${target}'s long dong:\n 8${"=".repeat(enemyDickSize)}D\n`,
             ),
           },
         ],

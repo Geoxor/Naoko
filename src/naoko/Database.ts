@@ -93,7 +93,7 @@ schema.statics.mute = async function (
   muter_id: string,
   mutee_id: string,
   duration: string = "Infinity",
-  reason: string = "No reason given"
+  reason: string = "No reason given",
 ) {
   const mutee = await User.findOne({ discord_id: mutee_id });
   if (!mutee) return;

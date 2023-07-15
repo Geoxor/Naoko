@@ -21,7 +21,7 @@ class FunFactCommand extends AbstractCommand {
         this.commonUtils.randomChoice([
           "https://wiki.hypixel.net/images/0/0a/SkyBlock_items_enchanted_book_and_quill.gif",
           "https://wiki.hypixel.net/images/4/4e/SkyBlock_items_enchanted_book.gif",
-        ])
+        ]),
       )
       .addFields({
         name: "Fun fact:",

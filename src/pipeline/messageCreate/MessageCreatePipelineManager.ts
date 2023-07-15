@@ -21,7 +21,7 @@ export default class MessageCreatePipelineManager {
     restrictedChannel: RestrictedChannel,
     parseCommand: ParseCommand,
     loadDbUser: LoadDbUser,
-    executeCommand: ExecuteCommand
+    executeCommand: ExecuteCommand,
   ) {
     this.pipeline = [ensureGhostRole, checkForSpam, restrictedChannel, parseCommand, loadDbUser, executeCommand];
   }

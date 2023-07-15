@@ -61,7 +61,7 @@ export default class Logger {
   public error(log: string): void {
     this.pushToLogHistory(`${this.getCurrentMemoryHeap()}  [${this.time()}] ${this.errorEmoji}  ${log}`);
     console.log(
-      chalk.hex(this.errorColor)(`  ${this.getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`)
+      chalk.hex(this.errorColor)(`  ${this.getCurrentMemoryHeap()}  ${this.timeColored()} ${this.errorEmoji}  ${log}`),
     );
   }
 
@@ -71,14 +71,14 @@ export default class Logger {
   public progress(name: string, tickCount: number) {
     return this.multiProgress.newBar(
       `  ${this.getCurrentMemoryHeap()}  ${this.timeColored()} ${this.emoji} ${chalk.hex(this.color)(name)}${chalk.hex(
-        this.color
+        this.color,
       )("[:bar]")} :etas :percent `,
       {
         complete: "#",
         incomplete: "~",
         width: 64,
         total: tickCount,
-      }
+      },
     );
   }
 

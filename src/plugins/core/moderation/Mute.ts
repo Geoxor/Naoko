@@ -11,7 +11,10 @@ import { singleton } from "@triptyk/tsyringe";
 
 @singleton()
 export class Mute extends AbstractCommand {
-  constructor(private timeFormatter: TimeFormattingService, private logger: Logger) {
+  constructor(
+    private timeFormatter: TimeFormattingService,
+    private logger: Logger,
+  ) {
     super();
   }
 
@@ -51,7 +54,7 @@ export class Mute extends AbstractCommand {
     message: Message,
     targetUser: Discord.GuildMember,
     duration: string,
-    reason: string
+    reason: string,
   ): Promise<Discord.Message> {
     const embed = new Discord.EmbedBuilder()
       .setTitle(`Mute - ${targetUser.user.username}`)
@@ -112,7 +115,7 @@ export class Unmute extends AbstractCommand {
 
     // Keep track of the unmute
     await User.unmute(message.author.id, targetUser.id, reason).catch(() =>
-      this.logger.error("Unmute database update failed")
+      this.logger.error("Unmute database update failed"),
     );
 
     // Send the embed

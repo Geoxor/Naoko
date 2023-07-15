@@ -43,7 +43,10 @@ class LogsCommand extends AbstractCommand {
 
 @plugin()
 class Logging extends AbstractPlugin {
-  constructor(private logger: Logger, private config: Config) {
+  constructor(
+    private logger: Logger,
+    private config: Config,
+  ) {
     super();
   }
 
@@ -78,7 +81,7 @@ class Logging extends AbstractPlugin {
         {
           name: `Link`,
           value: `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`,
-        }
+        },
       )
       .setTimestamp();
 
@@ -117,7 +120,7 @@ class Logging extends AbstractPlugin {
         {
           name: `Link`,
           value: `https://canary.discord.com/channels/${newMessage.guildId}/${newMessage.channelId}/${newMessage.id}`,
-        }
+        },
       )
       .setTimestamp();
 

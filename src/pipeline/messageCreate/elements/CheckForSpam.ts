@@ -6,7 +6,10 @@ import SpamCheckService from "../../../service/SpamCheckService";
 
 @singleton()
 export default class CheckForSpam extends AbstractPipelineElement {
-  constructor(private logger: Logger, private spamChecker: SpamCheckService) {
+  constructor(
+    private logger: Logger,
+    private spamChecker: SpamCheckService,
+  ) {
     super();
   }
 

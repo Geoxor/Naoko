@@ -57,7 +57,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
     this.logger.print(
       `${executionTime}ms - Command: ${commandData.name} - User: ${message.author.username} - Guild: ${
         message.guild?.name || "dm"
-      }`
+      }`,
     );
 
     // If the command returns void we just return
