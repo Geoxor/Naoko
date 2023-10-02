@@ -36,7 +36,7 @@ export default class Naoko {
     private pluginManager: PluginManager,
     private messageCreatePipeline: MessageCreatePipelineManager,
     private logger: Logger,
-    private config: Config
+    private config: Config,
   ) {}
 
   public async run(): Promise<void> {

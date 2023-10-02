@@ -61,7 +61,7 @@ export default class Config {
     const channel = client.channels.cache.get(channelId);
     if (!channel || !channel.isTextBased()) {
       throw new Error(
-        `Could not find channel with Id: ${channelId}. If your on testing be sure to use debug.overwriteChannel config option`
+        `Could not find channel with Id: ${channelId}. If your on testing be sure to use debug.overwriteChannel config option`,
       );
     }
     return channel;

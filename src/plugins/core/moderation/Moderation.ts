@@ -14,7 +14,11 @@ import Logger from "../../../naoko/Logger";
 
 @plugin()
 class Moderation extends AbstractPlugin {
-  constructor(private commonUtils: CommonUtils, private spamChecker: SpamCheckService, private logger: Logger) {
+  constructor(
+    private commonUtils: CommonUtils,
+    private spamChecker: SpamCheckService,
+    private logger: Logger,
+  ) {
     super();
   }
 

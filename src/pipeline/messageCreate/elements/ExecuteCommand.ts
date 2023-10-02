@@ -31,7 +31,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
 
     let processingMessage, typingLock;
     if (commandData.requiresProcessing) {
-      [processingMessage, typingLock] = await this.startTypeing(message.channel);
+      [processingMessage, typingLock] = await this.startTyping(message.channel);
     }
 
     let result: CommandExecuteResponse | undefined;
@@ -57,7 +57,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
     this.logger.print(
       `${executionTime}ms - Command: ${commandData.name} - User: ${message.author.username} - Guild: ${
         message.guild?.name || "dm"
-      }`
+      }`,
     );
 
     // If the command returns void we just return
@@ -84,9 +84,10 @@ export default class ExecuteCommand extends AbstractPipelineElement {
     return true;
   }
 
-  private async startTypeing(channel: TextBasedChannel): Promise<[Message, NodeJS.Timer]> {
-    if (this.typingLocks.has(channel.id)) {
-      clearInterval(channel.id);
+  private async startTyping(channel: TextBasedChannel): Promise<[Message, NodeJS.Timer]> {
+    const globalLock = this.typingLocks.get(channel.id);
+    if (globalLock) {
+      clearInterval(globalLock);
       this.typingLocks.delete(channel.id);
     }
 

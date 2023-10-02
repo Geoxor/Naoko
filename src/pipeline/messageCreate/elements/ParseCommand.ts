@@ -7,7 +7,10 @@ import { PluginManager } from "../../../plugins/PluginManager";
 
 @singleton()
 export default class ParseCommand extends AbstractPipelineElement {
-  constructor(private pluginManager: PluginManager, private config: Config) {
+  constructor(
+    private pluginManager: PluginManager,
+    private config: Config,
+  ) {
     super();
   }
 
@@ -27,7 +30,7 @@ export default class ParseCommand extends AbstractPipelineElement {
       if (closestCommand) {
         await message.reply(
           "That command doesn't exist!\n" +
-            `There's this however \`${this.config.prefix}${closestCommand.commandData.name} ${closestCommand.commandData.usage}\``
+            `There's this however \`${this.config.prefix}${closestCommand.commandData.name} ${closestCommand.commandData.usage}\``,
         );
         return false;
       }

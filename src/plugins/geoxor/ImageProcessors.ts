@@ -18,7 +18,7 @@ class Transform extends AbstractCommand {
     private messageImageParser: ImageUtilService,
     private imageProcessorService: ImageProcessorService,
     private threeDProcessorService: ThreeDProcessorService,
-    private logger: Logger
+    private logger: Logger,
   ) {
     super();
   }
@@ -78,7 +78,7 @@ class Stack extends AbstractCommand {
   constructor(
     private messageImageParser: ImageUtilService,
     private imageProcessors: ImageProcessorService,
-    private logger: Logger
+    private logger: Logger,
   ) {
     super();
   }
@@ -96,7 +96,7 @@ class Stack extends AbstractCommand {
     const resultBuffer = await this.createStack(
       processorFunctionName,
       buffer,
-      this.DEFAULT_STACK_COUNT[processorFunctionName]
+      this.DEFAULT_STACK_COUNT[processorFunctionName],
     );
 
     const mimetype = await fileTypeFromBuffer(resultBuffer);
@@ -153,7 +153,7 @@ class SingleImageProcessor extends AbstractCommand {
   constructor(
     private messageImageParser: ImageUtilService,
     private imageProcessorService: ImageProcessorService,
-    private threeDProcessorService: ThreeDProcessorService
+    private threeDProcessorService: ThreeDProcessorService,
   ) {
     super();
   }
@@ -163,7 +163,7 @@ class SingleImageProcessor extends AbstractCommand {
     const commandName = payload.get("commandName");
     const args = payload.get("args");
 
-    const allImageProcessors: Record<string, (buffer: Buffer) => Awaitable<Buffer>> = {
+    const allImageProcessors = {
       ...this.imageProcessorService.getProcessors(),
       ...this.threeDProcessorService.getProcessors(),
     };
@@ -173,14 +173,14 @@ class SingleImageProcessor extends AbstractCommand {
     }
 
     const buffer = await this.messageImageParser.parseBufferFromMessage(message, args);
-    const resultBuffer = await processor(buffer);
+    const resultBuffer = await processor(buffer, args.join(" "));
     const mimetype = await fileTypeFromBuffer(resultBuffer);
     const attachment = new AttachmentBuilder(resultBuffer, { name: `shit.${mimetype?.ext}` });
     return { files: [attachment] };
   }
 
   public get commandData(): CommandData {
-    const allImageProcessors: Record<string, (buffer: Buffer) => Awaitable<Buffer>> = {
+    const allImageProcessors = {
       ...this.imageProcessorService.getProcessors(),
       ...this.threeDProcessorService.getProcessors(),
     };

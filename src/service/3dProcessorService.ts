@@ -14,7 +14,7 @@ import gifenc from "gifenc";
 
 @singleton()
 export default class ThreeDProcessorService {
-  private processors: Record<string, (buffer: Buffer) => Awaitable<Buffer>>;
+  private processors: Record<string, (buffer: Buffer, args?: string) => Awaitable<Buffer>>;
 
   constructor() {
     this.processors = {
@@ -250,7 +250,7 @@ abstract class SceneProcessor {
     public width: number = 256,
     public height: number = 256,
     public fps: number = 25,
-    shading: boolean = false
+    shading: boolean = false,
   ) {
     this.canvas = createCanvas(this.width, this.height);
     this.scene = new THREE.Scene();
@@ -289,7 +289,7 @@ abstract class SceneProcessor {
       renderedFrames.map((frame) => frame.data),
       renderedFrames[0].width,
       renderedFrames[0].height,
-      ~~(1000 / this.fps)
+      ~~(1000 / this.fps),
     );
   }
 }
@@ -316,7 +316,7 @@ class MediaMaterial {
       await getRGBAUintArray(image),
       image.bitmap.width,
       image.bitmap.height,
-      THREE.RGBAFormat
+      THREE.RGBAFormat,
     );
     dataTexture.wrapS = THREE.ClampToEdgeWrapping;
     dataTexture.wrapT = THREE.ClampToEdgeWrapping;
@@ -360,7 +360,7 @@ class MediaMaterial {
   public async next() {
     if (!this.material || !this.animated) return;
     this.texture = await this.createTextureFromBuffer(
-      await this.getBufferFromGifFrame(this.frames[this.idx % this.frames.length])
+      await this.getBufferFromGifFrame(this.frames[this.idx % this.frames.length]),
     );
     this.material.map = this.texture;
     this.material.needsUpdate = true;
@@ -378,7 +378,7 @@ class GeometryScene extends SceneProcessor {
     width?: number,
     height?: number,
     fps?: number,
-    shading: boolean = false
+    shading: boolean = false,
   ) {
     super(width, height, fps, shading);
   }

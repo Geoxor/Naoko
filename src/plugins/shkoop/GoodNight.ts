@@ -13,7 +13,10 @@ import { singleton } from "@triptyk/tsyringe";
 
 @singleton()
 class GoodNightCommand extends AbstractCommand {
-  constructor(private logger: Logger, private timeFormatter: TimeFormattingService) {
+  constructor(
+    private logger: Logger,
+    private timeFormatter: TimeFormattingService,
+  ) {
     super();
   }
 
@@ -97,7 +100,7 @@ class GoodMorningCommand extends AbstractCommand {
       if (!targetUser) throw new Error("No User");
 
       // Unget rekt
-      await targetUser.timeout(0);
+      await targetUser.timeout(null);
       await this.unSelfMute(targetUser);
 
       // Keep track of the unmute

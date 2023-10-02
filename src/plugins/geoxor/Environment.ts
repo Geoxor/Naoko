@@ -88,7 +88,7 @@ class Env extends AbstractCommand {
         { name: "CPU", value: `x${cores} ${cpuManufacturer} ${brand}` },
         { name: "RAM", value: `${~~(totalRam / 1024 / 1024 / 1024)}GB` },
         { name: "Motherboard", value: `${moboManufacturer} ${model}` },
-        { name: "Uptime", value: this.timeFormatter.msToFullTime(client.uptime || 0) }
+        { name: "Uptime", value: this.timeFormatter.msToFullTime(client.uptime || 0) },
       );
     if (gpuModel && vram) {
       embed.addFields({ name: "GPU", value: `${gpuModel} ${vram}MB` });

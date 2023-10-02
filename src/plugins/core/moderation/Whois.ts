@@ -120,7 +120,7 @@ export class WhoIs extends AbstractCommand {
     for (const action of history) {
       const newHistoryString = `${this.timeFormatter.timeSince(action.timestamp)} ago - ${action.value.replace(
         /`/g,
-        "\\`"
+        "\\`",
       )}`;
       if ((newHistoryString + historyString).length > 500) {
         break;
