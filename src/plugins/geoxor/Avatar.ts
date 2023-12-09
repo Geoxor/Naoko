@@ -25,7 +25,7 @@ class AvatarCommand extends AbstractCommand {
   public get commandData(): CommandData {
     return {
       name: "avatar",
-      aliases: ["pfp"],
+      aliases: ["pfp", "av"],
       category: "UTILITY",
       usage: "[<@user> | <user-id>]",
       description: "Get the avatar of a user or yours",
