@@ -50,7 +50,6 @@
     "mongoose": "^7.3.4",
     "multi-progress": "^4.0.0",
     "music-metadata": "^8.1.4",
-    "node": "20.4.0",
     "pet-pet-gif": "^1.0.9",
     "progress": "^2.0.3",
     "rcon.js": "^1.0.0",
