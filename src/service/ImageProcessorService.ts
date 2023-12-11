@@ -57,7 +57,7 @@ export default class ImageProcessorService {
   }
 
   async pat(image: Buffer): Promise<Buffer> {
-    return await petPetGif(image);
+    return petPetGif(image);
   }
 
   async invert(texture: Buffer) {
@@ -168,24 +168,24 @@ export default class ImageProcessorService {
     const image = await Jimp.read(texture);
     const { width, height } = image.bitmap;
     image.resize(width, height * 3);
-    return await image.getBufferAsync("image/png");
+    return image.getBufferAsync("image/png");
   }
 
   async squish(texture: Buffer) {
     const image = await Jimp.read(texture);
     const { width, height } = image.bitmap;
     image.resize(width * 3, height);
-    return await image.getBufferAsync("image/png");
+    return image.getBufferAsync("image/png");
   }
 
   async flip(texture: Buffer) {
     const image = await Jimp.read(texture);
-    return await image.flip(true, false).getBufferAsync("image/png");
+    return image.flip(true, false).getBufferAsync("image/png");
   }
 
   async scale(texture: Buffer) {
     const image = await Jimp.read(texture);
-    return await image.scale(4).getBufferAsync("image/png");
+    return image.scale(4).getBufferAsync("image/png");
   }
 
   async haah(texture: Buffer) {
@@ -201,7 +201,7 @@ export default class ImageProcessorService {
     const image = await Jimp.create(width, height);
 
     image.blit(left, 0, 0).blit(right, halfWidth, 0);
-    return await image.getBufferAsync("image/png");
+    return image.getBufferAsync("image/png");
   }
 
   async fishEye(texture: Buffer) {
@@ -209,7 +209,7 @@ export default class ImageProcessorService {
     // The type declerations say this is supposed to be "fishEye" instead of "fisheye"
     // @ts-ignore
     image.fisheye({ r: 2 });
-    return await image.getBufferAsync("image/png");
+    return image.getBufferAsync("image/png");
   }
 
   async christmas(texture: Buffer) {
@@ -218,6 +218,6 @@ export default class ImageProcessorService {
     let border = await this.loadAsset("christmas-border.png");
     border = border.resize(image.getWidth(), image.getHeight());
     const combined = image.composite(border, 0, 0);
-    return await combined.getBufferAsync("image/png");
+    return combined.getBufferAsync("image/png");
   }
 }
