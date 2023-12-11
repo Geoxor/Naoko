@@ -27,7 +27,12 @@
           libGL
           nodePackages.typescript-language-server
           nodePackages.prettier
+          libuuid
         ];
+        APPEND_LIBRARY_PATH = with pkgs; "${lib.makeLibraryPath [ libGL libuuid ]}";
+        shellHook = ''
+          export LD_LIBRARY_PATH="$APPEND_LIBRARY_PATH:$LD_LIBRARY_PATH"
+        '';
       };
     });
 }
