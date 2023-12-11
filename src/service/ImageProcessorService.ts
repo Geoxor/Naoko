@@ -1,6 +1,7 @@
 import { singleton } from "@triptyk/tsyringe";
 import { Awaitable } from "discord.js";
 import Jimp from "jimp";
+import { ColorActionName } from "@jimp/plugin-color";
 import { join } from "path";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import petPetGif from "pet-pet-gif";
@@ -30,6 +31,7 @@ export default class ImageProcessorService {
       scale: this.scale.bind(this),
       haah: this.haah.bind(this),
       fisheye: this.fishEye.bind(this),
+      chriastmas: this.christmas.bind(this),
     };
   }
 
@@ -208,5 +210,14 @@ export default class ImageProcessorService {
     // @ts-ignore
     image.fisheye({ r: 2 });
     return await image.getBufferAsync("image/png");
+  }
+
+  async christmas(texture: Buffer) {
+    let image = await Jimp.read(texture);
+    image = image.color([{ apply: ColorActionName.MIX, params: ["#ff566d", 30] }]);
+    let border = await this.loadAsset("christmas-border.png");
+    border = border.resize(image.getWidth(), image.getHeight());
+    const combined = image.composite(border, 0, 0);
+    return await combined.getBufferAsync("image/png");
   }
 }
