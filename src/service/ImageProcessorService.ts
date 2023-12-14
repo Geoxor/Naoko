@@ -1,17 +1,19 @@
 import { singleton } from "@triptyk/tsyringe";
 import { Awaitable } from "discord.js";
 import Jimp from "jimp";
+import { ColorActionName } from "@jimp/plugin-color";
 import { join } from "path";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import petPetGif from "pet-pet-gif";
 import { fileURLToPath } from "url";
+import CommonUtils from "./CommonUtils";
 
 @singleton()
 export default class ImageProcessorService {
   private assetCache: Record<string, Jimp> = {};
   private processors: Record<string, (buffer: Buffer) => Awaitable<Buffer>>;
 
-  constructor() {
+  constructor(private commonUtils: CommonUtils) {
     this.processors = {
       autocrop: this.autoCrop.bind(this),
       pat: this.pat.bind(this),
@@ -30,6 +32,7 @@ export default class ImageProcessorService {
       scale: this.scale.bind(this),
       haah: this.haah.bind(this),
       fisheye: this.fishEye.bind(this),
+      jolly: this.jolly.bind(this),
     };
   }
 
@@ -40,6 +43,7 @@ export default class ImageProcessorService {
   private async loadAsset(assetName: string): Promise<Jimp> {
     if (!this.assetCache[assetName]) {
       const assetPath = fileURLToPath(new URL("../assets/images", import.meta.url));
+      console.log(join(assetPath, assetName))
       this.assetCache[assetName] = await Jimp.read(join(assetPath, assetName));
     }
     return this.assetCache[assetName];
@@ -55,7 +59,7 @@ export default class ImageProcessorService {
   }
 
   async pat(image: Buffer): Promise<Buffer> {
-    return await petPetGif(image);
+    return petPetGif(image);
   }
 
   async invert(texture: Buffer) {
@@ -166,24 +170,24 @@ export default class ImageProcessorService {
     const image = await Jimp.read(texture);
     const { width, height } = image.bitmap;
     image.resize(width, height * 3);
-    return await image.getBufferAsync("image/png");
+    return image.getBufferAsync("image/png");
   }
 
   async squish(texture: Buffer) {
     const image = await Jimp.read(texture);
     const { width, height } = image.bitmap;
     image.resize(width * 3, height);
-    return await image.getBufferAsync("image/png");
+    return image.getBufferAsync("image/png");
   }
 
   async flip(texture: Buffer) {
     const image = await Jimp.read(texture);
-    return await image.flip(true, false).getBufferAsync("image/png");
+    return image.flip(true, false).getBufferAsync("image/png");
   }
 
   async scale(texture: Buffer) {
     const image = await Jimp.read(texture);
-    return await image.scale(4).getBufferAsync("image/png");
+    return image.scale(4).getBufferAsync("image/png");
   }
 
   async haah(texture: Buffer) {
@@ -199,7 +203,7 @@ export default class ImageProcessorService {
     const image = await Jimp.create(width, height);
 
     image.blit(left, 0, 0).blit(right, halfWidth, 0);
-    return await image.getBufferAsync("image/png");
+    return image.getBufferAsync("image/png");
   }
 
   async fishEye(texture: Buffer) {
@@ -207,6 +211,30 @@ export default class ImageProcessorService {
     // The type declerations say this is supposed to be "fishEye" instead of "fisheye"
     // @ts-ignore
     image.fisheye({ r: 2 });
-    return await image.getBufferAsync("image/png");
+    return image.getBufferAsync("image/png");
+  }
+
+  async jolly(texture: Buffer) {
+    const christmasFramePath = "christmas/frames/" + this.commonUtils.randomChoice([
+      "border1.png",
+      "border2.png",
+      "border3.png",
+      "border4.png",
+      "border5.png",
+      "border6.png",
+    ])
+    const snowOverlayPath = "christmas/snowflakes/" + this.commonUtils.randomChoice([
+      "overlay1.png",
+      "overlay2.png",
+      "overlay3.png",
+    ])
+    let image = await Jimp.read(texture);
+    let border = await this.loadAsset(christmasFramePath);
+    let overlay = await this.loadAsset(snowOverlayPath);
+    border = border.resize(image.getWidth(), image.getHeight(), Jimp.RESIZE_NEAREST_NEIGHBOR);
+    image = image.composite(border, 0, 0);
+    image = image.composite(overlay, 0, 0);
+    image = image.color([{ apply: ColorActionName.MIX, params: ["#ff3838", 10] }]);
+    return image.getBufferAsync("image/png");
   }
 }

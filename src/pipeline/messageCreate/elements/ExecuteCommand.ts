@@ -11,7 +11,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
     super();
   }
 
-  private typingLocks: Map<string, NodeJS.Timer> = new Map();
+  private typingLocks: Map<string, ReturnType<typeof setInterval>> = new Map();
 
   async execute(payload: MessageCreatePayload): Promise<boolean> {
     const message = payload.get("message");
@@ -110,7 +110,8 @@ export default class ExecuteCommand extends AbstractPipelineElement {
 
     const globalLock = this.typingLocks.get(processingMessage.channel.id);
     if (globalLock === typingLock) {
-      clearInterval(typingLock);
+      // HACK: somehow the typingLock got broken and not entirely clear why
+      clearInterval(typingLock as any);
       this.typingLocks.delete(processingMessage.channel.id);
     }
   }
