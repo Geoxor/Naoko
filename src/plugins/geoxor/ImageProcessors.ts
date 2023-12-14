@@ -73,6 +73,7 @@ class Stack extends AbstractCommand {
     wasted: 90,
     vignette: 90,
     fuckyou: 90,
+    jolly: 90,
   } as const;
 
   constructor(
