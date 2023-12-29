@@ -22,6 +22,7 @@ export const OVERPERM_ROLE_ID = "422444741527994368";
 export const MUTED_ROLE_ID = "737011597217628231";
 export const GHOSTS_ROLE_ID = "736285344659669003";
 export const GEOBOTS_ROLE_ID = "720006137151488121";
+export const GEOXOR_DEV_ROLE_ID = "834695360387612683";
 
 export const WINDOWS_LOGO =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Windows_logo_-_2012.png/438px-Windows_logo_-_2012.png";
