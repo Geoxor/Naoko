@@ -117,7 +117,7 @@ export class WhoIs extends AbstractCommand {
     if (history.length === 0) return;
 
     let historyString = "";
-    for (const action of history) {
+    for (const action of history.reverse()) {
       const newHistoryString = `${this.timeFormatter.timeSince(action.timestamp)} ago - ${action.value.replace(
         /`/g,
         "\\`",
