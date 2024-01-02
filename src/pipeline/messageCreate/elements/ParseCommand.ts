@@ -14,10 +14,10 @@ export default class ParseCommand extends AbstractPipelineElement {
     super();
   }
 
-  async execute(payload: MessageCreatePayload): Promise<boolean> {
+  async execute(payload: MessageCreatePayload) {
     const message = payload.get("message");
     if (message.content.lastIndexOf(this.config.prefix) !== 0 || message.author.bot) {
-      return false;
+      return message.author.bot ? "Message was sent by a bot" : "Message did not start with the prefix";
     }
 
     // Remove all Mentions -> Remove the Prefix -> Split the message on every whitespace
@@ -32,16 +32,16 @@ export default class ParseCommand extends AbstractPipelineElement {
           "That command doesn't exist!\n" +
             `There's this however \`${this.config.prefix}${closestCommand.commandData.name} ${closestCommand.commandData.usage}\``,
         );
-        return false;
+      } else {
+        await message.reply("That command doesn't exist");
       }
 
-      await message.reply("That command doesn't exist");
-      return false;
+      return `Command "${command}" not found`;
     }
 
     payload.set("args", args);
     payload.set("commandName", commandName);
-    payload.set("comand", command);
+    payload.set("command", command);
 
     return true;
   }
