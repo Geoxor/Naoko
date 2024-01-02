@@ -16,7 +16,7 @@ class SayCommand extends AbstractCommand {
     }
 
     await message.delete();
-    return args.join(" ");
+    await message.channel.send(args.join(" "))
   }
 
   get commandData(): CommandData {
