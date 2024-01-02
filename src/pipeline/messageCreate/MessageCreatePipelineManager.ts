@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { Message } from "discord.js";
 import MessageCreatePayload from "./MessageCreatePayload";
 import AbstractPipelineElement from "../AbstractPipelineElement";

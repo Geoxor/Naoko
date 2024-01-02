@@ -2,7 +2,7 @@ import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
 import { GEOXOR_GUILD_ID, GHOSTS_ROLE_ID } from "../../../constants";
 import Logger from "../../../naoko/Logger";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export default class EnsureGhostRole extends AbstractPipelineElement {

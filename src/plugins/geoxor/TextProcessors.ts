@@ -4,7 +4,7 @@ import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayl
 import TextProcessingService from "../../service/TextProcessingService";
 import { CommandExecuteResponse } from "../../types";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
 
 @singleton()

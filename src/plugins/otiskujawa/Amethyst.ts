@@ -4,7 +4,7 @@ import AbstractPlugin, { PluginData } from "../AbstractPlugin";
 import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 class AmethystInfoCommand extends AbstractCommand {

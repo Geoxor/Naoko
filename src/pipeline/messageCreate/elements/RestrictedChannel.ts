@@ -2,7 +2,7 @@ import { Awaitable } from "discord.js";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
 import { MOD_ROLE_ID, ADMIN_ROLE_ID, GEOXOR_GENERAL_CHANNEL_ID, GEOXOR_DEV_ROLE_ID } from "../../../constants";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export default class RestrictedChannel extends AbstractPipelineElement {

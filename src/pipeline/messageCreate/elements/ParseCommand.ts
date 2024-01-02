@@ -2,7 +2,7 @@ import { MessageMentions } from "discord.js";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
 import Config from "../../../naoko/Config";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { PluginManager } from "../../../plugins/PluginManager";
 
 @singleton()

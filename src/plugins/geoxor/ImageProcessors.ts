@@ -8,7 +8,7 @@ import Jimp from "jimp";
 import ThreeDProcessorService from "../../service/3dProcessorService";
 import ImageUtilService from "../../service/ImageUtilService";
 import plugin from "../../decorators/plugin";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
 import Logger from "../../naoko/Logger";
 

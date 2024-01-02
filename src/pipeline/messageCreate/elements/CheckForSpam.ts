@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
 import Logger from "../../../naoko/Logger";

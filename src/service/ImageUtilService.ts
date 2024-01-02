@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import axios from "axios";
 import { ImageURLOptions, Message } from "discord.js";
 import Jimp from "jimp";

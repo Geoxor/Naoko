@@ -5,7 +5,7 @@ import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayl
 import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
 import AbstractPlugin, { PluginData } from "../AbstractPlugin";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 class VoteCommand extends AbstractCommand {

@@ -1,4 +1,4 @@
-import { container, injectAll, singleton } from "@triptyk/tsyringe";
+import { container, injectAll, singleton } from "tsyringe";
 import AbstractPlugin from "./AbstractPlugin";
 import { Client } from "discord.js";
 import AbstractCommand from "./AbstractCommand";

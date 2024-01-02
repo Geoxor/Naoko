@@ -5,7 +5,7 @@ import { GEOXOR_GUILD_ID, GEOXOR_STAFF_CHANNEL_ID } from "../../constants";
 import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 class ReportCommand extends AbstractCommand {

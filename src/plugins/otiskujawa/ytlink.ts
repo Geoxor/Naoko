@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../types";

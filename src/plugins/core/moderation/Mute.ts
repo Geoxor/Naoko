@@ -7,7 +7,7 @@ import { User } from "../../../naoko/Database";
 import AbstractCommand, { CommandData } from "../../AbstractCommand";
 import TimeFormattingService from "../../../service/TimeFormattingService";
 import Logger from "../../../naoko/Logger";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export class Mute extends AbstractCommand {

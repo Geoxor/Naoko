@@ -1,7 +1,7 @@
 import { DiscordAPIError, EmbedBuilder, Message, TextBasedChannel, codeBlock } from "discord.js";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { CommandExecuteResponse } from "../../../types";
 import Logger from "../../../naoko/Logger";
 

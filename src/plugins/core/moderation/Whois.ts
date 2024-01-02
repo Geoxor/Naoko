@@ -5,7 +5,7 @@ import Naoko from "../../../naoko/Naoko";
 import AbstractCommand, { CommandData } from "../../AbstractCommand";
 import { User as UserDb } from "../../../naoko/Database";
 import TimeFormattingService from "../../../service/TimeFormattingService";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export class WhoIs extends AbstractCommand {

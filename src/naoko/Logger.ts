@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import MultiProgress from "multi-progress";
 import quotes from "../assets/quotes.json" assert { type: "json" };
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import CommonUtils from "../service/CommonUtils";
 
 /**

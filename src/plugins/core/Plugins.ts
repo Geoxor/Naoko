@@ -1,4 +1,4 @@
-import { inject, delay, singleton } from "@triptyk/tsyringe";
+import { inject, delay, singleton } from "tsyringe";
 import { COMMAND_CATEGORIES, NAOKO_LOGO } from "../../constants";
 import plugin from "../../decorators/plugin";
 import { CommandExecuteResponse } from "../../types";
