@@ -2,7 +2,7 @@ import Discord from "discord.js";
 import mongoose from "mongoose";
 import { ActionHistory, HistoryTypes, IBattleUserRewards, IUser } from "../types";
 import Config from "./Config";
-import { container } from "@triptyk/tsyringe";
+import { container } from "tsyringe";
 
 const config = container.resolve(Config);
 

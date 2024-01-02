@@ -5,7 +5,7 @@ import plugin from "../../decorators/plugin";
 import { CommandExecuteResponse } from "../../types";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
 import CommonUtils from "../../service/CommonUtils";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 class FunFactCommand extends AbstractCommand {

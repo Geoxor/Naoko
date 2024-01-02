@@ -8,7 +8,7 @@ import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import TimeFormattingService from "../../service/TimeFormattingService";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 class Ping extends AbstractCommand {

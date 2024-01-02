@@ -7,7 +7,7 @@ import * as THREE from "three";
 import comicSans from "../assets/comic_sans_font.json" assert { type: "json" };
 import cache from "../naoko/Cache";
 import { Coords, GeometrySceneOptions } from "../types";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { Awaitable } from "discord.js";
 // @ts-ignore this doesn't have types :whyyyyyyyyyyy:
 import gifenc from "gifenc";

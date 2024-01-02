@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { Awaitable } from "discord.js";
 import Jimp from "jimp";
 import { ColorActionName } from "@jimp/plugin-color";
@@ -43,7 +43,6 @@ export default class ImageProcessorService {
   private async loadAsset(assetName: string): Promise<Jimp> {
     if (!this.assetCache[assetName]) {
       const assetPath = fileURLToPath(new URL("../assets/images", import.meta.url));
-      console.log(join(assetPath, assetName))
       this.assetCache[assetName] = await Jimp.read(join(assetPath, assetName));
     }
     return this.assetCache[assetName];
@@ -226,15 +225,43 @@ export default class ImageProcessorService {
     const snowOverlayPath = "christmas/snowflakes/" + this.commonUtils.randomChoice([
       "overlay1.png",
       "overlay2.png",
-      "overlay3.png",
     ])
+    const spriteCount = Math.floor(Math.random() * 8)
+    const spritePaths = Array.from({ length: spriteCount }, () =>
+      `christmas/sprites/${this.commonUtils.randomChoice([
+        "sprite1.png",
+        "sprite2.png",
+        "sprite3.png",
+      ])}`
+    )
     let image = await Jimp.read(texture);
+    const width = image.getWidth()
+    const height = image.getHeight()
     let border = await this.loadAsset(christmasFramePath);
     let overlay = await this.loadAsset(snowOverlayPath);
-    border = border.resize(image.getWidth(), image.getHeight(), Jimp.RESIZE_NEAREST_NEIGHBOR);
+    border = border.resize(width, height, Jimp.RESIZE_NEAREST_NEIGHBOR);
+
+    console.log(spritePaths)
+    // composite each sprite in a random part of the image
+    for (let i = 0; i < spritePaths.length; i++) {
+      let spriteAsset = await this.loadAsset(spritePaths[i])
+      const spriteH = spriteAsset.getHeight()
+      const spriteW = spriteAsset.getWidth()
+      const minH = height / 4
+      const maxH = height / 2
+      const newH = Math.floor(Math.random() * (maxH - minH) + minH)
+      // scale based on aspect ratio
+      const newW = Math.floor(spriteW * (newH / spriteH))
+      spriteAsset = spriteAsset.resize(newW, newH, Jimp.RESIZE_BILINEAR)
+      const x = Math.floor(Math.random() * width)
+      const y = Math.floor(Math.random() * height)
+      console.log({ newH, newW, x, y })
+      image = image.composite(spriteAsset, x, y)
+    }
+
     image = image.composite(border, 0, 0);
     image = image.composite(overlay, 0, 0);
-    image = image.color([{ apply: ColorActionName.MIX, params: ["#ff3838", 10] }]);
+    image = image.color([{ apply: ColorActionName.TINT, params: [10] }]);
     return image.getBufferAsync("image/png");
   }
 }

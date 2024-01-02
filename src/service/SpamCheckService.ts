@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 type SpamCheckResult = {
   isSpam: boolean;

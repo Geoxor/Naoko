@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { Message } from "discord.js";
 import MessageCreatePayload from "./MessageCreatePayload";
 import AbstractPipelineElement from "../AbstractPipelineElement";
@@ -32,12 +32,12 @@ export default class MessageCreatePipelineManager {
     for (const element of this.pipeline) {
       try {
         const canContinue = await element.execute(payload);
-        if (!canContinue) {
-          this.logger.print(`MessageCreatePipeline ended after ${element.constructor.name}`);
+        if (canContinue !== true) {
+          this.logger.print(`MessageCreatePipeline ended after "${element.constructor.name}" - Info: "${canContinue}" - Author: "${message.author.displayName}"`);
           return;
         }
       } catch (error) {
-        this.logger.error(`Error in messageCreatePipeline. Element: ${element.constructor.name}, Error: "${error}"`);
+        this.logger.error(`Error in MessageCreatePipeline - Element: ${element.constructor.name} - Error: "${error}"`);
         return;
       }
     }

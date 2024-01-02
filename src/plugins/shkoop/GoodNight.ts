@@ -9,7 +9,7 @@ import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayl
 import Logger from "../../naoko/Logger";
 import AbstractCommand, { CommandData } from "../AbstractCommand";
 import TimeFormattingService from "../../service/TimeFormattingService";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 class GoodNightCommand extends AbstractCommand {

@@ -1,15 +1,14 @@
-import { Awaitable } from "discord.js";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
 import { MOD_ROLE_ID, ADMIN_ROLE_ID, GEOXOR_GENERAL_CHANNEL_ID, GEOXOR_DEV_ROLE_ID } from "../../../constants";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export default class RestrictedChannel extends AbstractPipelineElement {
   private readonly RESTRICTED_CHANNELS = [GEOXOR_GENERAL_CHANNEL_ID];
   private readonly WHITELISTED_ROLES = [MOD_ROLE_ID, ADMIN_ROLE_ID, GEOXOR_DEV_ROLE_ID];
 
-  execute(payload: MessageCreatePayload): Awaitable<boolean> {
+  execute(payload: MessageCreatePayload) {
     const message = payload.get("message");
 
     // Do not allow Commands in RestrictedChannels
@@ -25,6 +24,6 @@ export default class RestrictedChannel extends AbstractPipelineElement {
     ) {
       return true;
     }
-    return false;
+    return `"${message.member.displayName}" tried to execute a command in a restricted channel`;
   }
 }

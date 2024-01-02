@@ -2,7 +2,7 @@ import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
 import { GEOXOR_GUILD_ID, GHOSTS_ROLE_ID } from "../../../constants";
 import Logger from "../../../naoko/Logger";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export default class EnsureGhostRole extends AbstractPipelineElement {
@@ -10,7 +10,7 @@ export default class EnsureGhostRole extends AbstractPipelineElement {
     super();
   }
 
-  async execute(payload: MessageCreatePayload): Promise<boolean> {
+  async execute(payload: MessageCreatePayload): Promise<true> {
     const message = payload.get("message");
 
     if (message.member && message.guild?.id === GEOXOR_GUILD_ID) {
@@ -18,7 +18,7 @@ export default class EnsureGhostRole extends AbstractPipelineElement {
         try {
           await message.member.roles.add(GHOSTS_ROLE_ID);
         } catch (error) {
-          this.logger.error(`Couldn't give Ghosts role to the member: ${error}`);
+          this.logger.error(`Couldn't give Ghosts role to "${message.member.displayName}": ${error}`);
         }
       }
     }

@@ -1,7 +1,7 @@
 import { DiscordAPIError, EmbedBuilder, Message, TextBasedChannel, codeBlock } from "discord.js";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { CommandExecuteResponse } from "../../../types";
 import Logger from "../../../naoko/Logger";
 
@@ -13,9 +13,9 @@ export default class ExecuteCommand extends AbstractPipelineElement {
 
   private typingLocks: Map<string, ReturnType<typeof setInterval>> = new Map();
 
-  async execute(payload: MessageCreatePayload): Promise<boolean> {
+  async execute(payload: MessageCreatePayload) {
     const message = payload.get("message");
-    const command = payload.get("comand");
+    const command = payload.get("command");
     const commandData = command.commandData;
     const timeStart = Date.now();
 
@@ -24,7 +24,7 @@ export default class ExecuteCommand extends AbstractPipelineElement {
       for (const perm of commandData.permissions) {
         if (!message.member?.permissions.has(perm)) {
           await message.reply(`You don't have the \`${perm}\` perm cunt`).catch(() => {});
-          return false;
+          return `"${message.member?.displayName}" does not have permission to execute "${commandData.name}", missing "${perm}"`;
         }
       }
     }
@@ -39,7 +39,6 @@ export default class ExecuteCommand extends AbstractPipelineElement {
       result = await command.execute(payload);
     } catch (error: any) {
       this.logger.error(`Command ${commandData.name} failed to execute with error: ${error}`);
-      console.error(error);
       await message.reply({
         embeds: [
           {
@@ -75,10 +74,10 @@ export default class ExecuteCommand extends AbstractPipelineElement {
         await message.reply({
           embeds: [new EmbedBuilder().setColor("#ffcc4d").setDescription("⚠️ when the upload speed")],
         });
-        return false;
+        return "Failed to reply to user: Discord API status code 500";
       }
       await message.reply(codeBlock(String(error)));
-      return false;
+      return `Failed to reply to user: ${error}`;
     }
 
     return true;

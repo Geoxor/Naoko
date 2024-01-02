@@ -8,7 +8,7 @@ type Payload = {
   dbUser?: DatabaseUser;
   commandName?: string;
   args?: string[];
-  comand?: AbstractCommand;
+  command?: AbstractCommand;
 };
 
 export default class MessageCreatePayload extends AbstractPipelinePayload<Payload> {}
