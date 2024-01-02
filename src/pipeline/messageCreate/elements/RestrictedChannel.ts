@@ -1,12 +1,13 @@
 import { Awaitable } from "discord.js";
 import AbstractPipelineElement from "../../AbstractPipelineElement";
 import MessageCreatePayload from "../MessageCreatePayload";
-import { MOD_ROLE_ID, ADMIN_ROLE_ID, GEOXOR_GENERAL_CHANNEL_ID } from "../../../constants";
+import { MOD_ROLE_ID, ADMIN_ROLE_ID, GEOXOR_GENERAL_CHANNEL_ID, GEOXOR_DEV_ROLE_ID } from "../../../constants";
 import { singleton } from "@triptyk/tsyringe";
 
 @singleton()
 export default class RestrictedChannel extends AbstractPipelineElement {
   private readonly RESTRICTED_CHANNELS = [GEOXOR_GENERAL_CHANNEL_ID];
+  private readonly WHITELISTED_ROLES = [MOD_ROLE_ID, ADMIN_ROLE_ID, GEOXOR_DEV_ROLE_ID];
 
   execute(payload: MessageCreatePayload): Awaitable<boolean> {
     const message = payload.get("message");
@@ -19,7 +20,7 @@ export default class RestrictedChannel extends AbstractPipelineElement {
 
     // Check if user is a mod, admin or has admin perms if not, return
     if (
-      message.member.roles.cache.some((role) => role.id === MOD_ROLE_ID || role.id === ADMIN_ROLE_ID) ||
+      message.member.roles.cache.some((role) => this.WHITELISTED_ROLES.includes(role.id)) ||
       message.member.permissions.has("Administrator")
     ) {
       return true;

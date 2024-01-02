@@ -1,6 +1,6 @@
 {
   "name": "naoko",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "Naoko is Geoxor's Discord Bot",
   "exports": "./src/naoko.ts",
   "scripts": {
