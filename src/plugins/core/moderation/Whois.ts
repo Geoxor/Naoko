@@ -5,7 +5,7 @@ import Naoko from "../../../naoko/Naoko";
 import AbstractCommand, { CommandData } from "../../AbstractCommand";
 import { User as UserDb } from "../../../naoko/Database";
 import TimeFormattingService from "../../../service/TimeFormattingService";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export class WhoIs extends AbstractCommand {
@@ -117,7 +117,7 @@ export class WhoIs extends AbstractCommand {
     if (history.length === 0) return;
 
     let historyString = "";
-    for (const action of history) {
+    for (const action of history.reverse()) {
       const newHistoryString = `${this.timeFormatter.timeSince(action.timestamp)} ago - ${action.value.replace(
         /`/g,
         "\\`",

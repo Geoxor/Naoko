@@ -1,4 +1,4 @@
-import { container, injectable } from "@triptyk/tsyringe";
+import { container, injectable } from "tsyringe";
 import AbstractPlugin from "../plugins/AbstractPlugin";
 
 type constructor<T = AbstractPlugin> = {

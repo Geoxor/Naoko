@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { Awaitable } from "discord.js";
 import Jimp from "jimp";
 import { ColorActionName } from "@jimp/plugin-color";

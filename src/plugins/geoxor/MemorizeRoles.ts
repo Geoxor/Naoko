@@ -27,6 +27,7 @@ class MemorizeRoles extends AbstractPlugin {
     }
 
     const user = await User.findOneOrCreate(member);
+    console.log(member.roles.cache.keys());
     await user.updateRoles(Array.from(member.roles.cache.keys()));
   }
 
@@ -36,7 +37,7 @@ class MemorizeRoles extends AbstractPlugin {
     for (const roleId of user.roles) {
       // TODO: Should we also check if the role has moderation permissions and not give them those roles?
       const role = member.guild.roles.cache.get(roleId);
-      if (role) {
+      if (role && role.name !== "@everyone") {
         try {
           await member.roles.add(role);
           addedRoles.push(role.name);
@@ -47,7 +48,7 @@ class MemorizeRoles extends AbstractPlugin {
     }
 
     if (addedRoles.length > 0) {
-      this.logger.print(`Added ${addedRoles.length} old roles to ${member.displayName}. Roles: ${addedRoles.join(", ")}`);
+      this.logger.print(`Added ${addedRoles.length} old roles to ${member.displayName}. Roles: "${addedRoles.join(", ")}"`);
     }
   }
 }

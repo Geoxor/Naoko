@@ -5,7 +5,7 @@ import Naoko from "../../../naoko/Naoko";
 import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../../types";
 import AbstractCommand, { CommandData } from "../../AbstractCommand";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export class Kick extends AbstractCommand {

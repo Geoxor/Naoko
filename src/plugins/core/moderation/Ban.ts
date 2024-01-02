@@ -6,7 +6,7 @@ import Naoko from "../../../naoko/Naoko";
 import { User } from "../../../naoko/Database";
 import AbstractCommand, { CommandData } from "../../AbstractCommand";
 import Logger from "../../../naoko/Logger";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export class Ban extends AbstractCommand {

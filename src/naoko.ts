@@ -5,7 +5,7 @@ console.clear();
 
 import chalk from "chalk";
 import Naoko from "./naoko/Naoko.js";
-import { container } from "@triptyk/tsyringe";
+import { container } from "tsyringe";
 import { fileURLToPath } from "node:url";
 import "./naoko/Database";
 import { glob } from "glob";

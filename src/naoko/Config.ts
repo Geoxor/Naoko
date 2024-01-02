@@ -8,7 +8,7 @@ import {
   GEOXOR_LEAVE_LOG_CHANNEL_ID,
   GEOXOR_VOICE_CHAT_LOG_CHANNEL_ID,
 } from "../constants";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 interface ConfigType {
   prefix: string;

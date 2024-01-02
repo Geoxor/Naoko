@@ -2,7 +2,7 @@ import Discord, { Partials } from "discord.js";
 import packageJson from "../../package.json" assert { type: "json" };
 import { NAOKO_ID } from "../constants";
 import { GatewayIntentBits } from "discord.js";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { PluginManager } from "../plugins/PluginManager";
 import MessageCreatePipelineManager from "../pipeline/messageCreate/MessageCreatePipelineManager";
 import Logger from "./Logger";

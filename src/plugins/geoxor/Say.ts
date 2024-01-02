@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import plugin from "../../decorators/plugin";
 import MessageCreatePayload from "../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../types";
@@ -16,7 +16,7 @@ class SayCommand extends AbstractCommand {
     }
 
     await message.delete();
-    return args.join(" ");
+    await message.channel.send(args.join(" "))
   }
 
   get commandData(): CommandData {

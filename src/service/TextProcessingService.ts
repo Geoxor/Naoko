@@ -1,4 +1,4 @@
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 import { Awaitable } from "discord.js";
 
 type TextProcessingFunction = (sentence: string) => Awaitable<string>;

@@ -35,10 +35,19 @@ Once all these are set up:
 3. `yarn dev`
 
 ### Docker
-_TODO: update if needed
+
 If you have docker installed you can simple build the image and run the install from inside the docker container
+
 ```shell
 docker compose run --rm -it node-cli yarn install
 ```
 
 The compose file also includes the mongo server needed to run naoko
+
+```shell
+# Start the mongo server. The node-cli container will exit on start
+docker compose up -d
+```
+
+Then start Naoko using `yarn run start` outside the container.
+Starting Naoko inside the Docker container will cause problems with the 3D processing commands.

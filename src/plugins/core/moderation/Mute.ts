@@ -1,5 +1,5 @@
 import Discord, { EmbedBuilder, Message } from "discord.js";
-import { NAOKO_LOGO, MUTED_ROLE_ID } from "../../../constants";
+import { NAOKO_LOGO } from "../../../constants";
 import Naoko from "../../../naoko/Naoko";
 import MessageCreatePayload from "../../../pipeline/messageCreate/MessageCreatePayload";
 import { CommandExecuteResponse } from "../../../types";
@@ -7,7 +7,7 @@ import { User } from "../../../naoko/Database";
 import AbstractCommand, { CommandData } from "../../AbstractCommand";
 import TimeFormattingService from "../../../service/TimeFormattingService";
 import Logger from "../../../naoko/Logger";
-import { singleton } from "@triptyk/tsyringe";
+import { singleton } from "tsyringe";
 
 @singleton()
 export class Mute extends AbstractCommand {
@@ -27,7 +27,6 @@ export class Mute extends AbstractCommand {
     if (targetUser.id === message.author.id) return "You can't mute yourself";
     if (targetUser.permissions.has("Administrator") || targetUser.permissions.has("ModerateMembers"))
       return "You can't mute other admins";
-    if (targetUser.roles.cache.has(MUTED_ROLE_ID)) return "This user is already muted";
 
     let duration = args[0];
     if (!duration || !duration.match(/^(\d{1,2})([sS|mM|hH|dD]$)/m))
@@ -110,8 +109,7 @@ export class Unmute extends AbstractCommand {
     const reason = payload.get("args").join(" ");
 
     // Unget rekt
-    await targetUser.roles.remove(MUTED_ROLE_ID);
-    await targetUser.timeout(0 && Date.now(), reason);
+    await targetUser.timeout(1, reason);
 
     // Keep track of the unmute
     await User.unmute(message.author.id, targetUser.id, reason).catch(() =>

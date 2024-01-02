@@ -1,4 +1,4 @@
-import { inject, delay, singleton } from "@triptyk/tsyringe";
+import { inject, delay, singleton } from "tsyringe";
 import { COMMAND_CATEGORIES, NAOKO_LOGO } from "../../constants";
 import plugin from "../../decorators/plugin";
 import { CommandExecuteResponse } from "../../types";
@@ -77,7 +77,10 @@ class Help extends AbstractCommand {
       helpEmbed.setTitle(`Command: ${commandName}`);
       helpEmbed.setDescription(commandData.description);
       helpEmbed.setColor("#fca103");
-      helpEmbed.setImage(NAOKO_LOGO);
+      helpEmbed.setFooter({
+        text: `Naoko ${Naoko.version}`,
+        iconURL: NAOKO_LOGO,
+      });
       if (commandData.usage) {
         helpEmbed.addFields({ name: "Usage", value: `\`${commandName} ${commandData.usage}\`` });
       } else {
